@@ -1,0 +1,124 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+}
+
+<div class="page_title">
+    <div class="counter_section">
+        <h1>Envios a almacen</h1>
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="nav nav-tabs">
+                    <li class="active"> <a data-toggle="tab" href="#admin_prec">Administear precargas<i class="fa fa-list fa-2x ml-2"></i></a></li>
+                    <li> <a data-toggle="tab" href="#new_prec">Nueva precarga<i class="fa fa-plus fa-2x ml-2"></i></a></li>
+                    <li class="active"> <a data-toggle="tab" href="#hist_prec">Historial de precargas<i class="fa fa-folder fa-2x ml-2"></i></a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="column2 counter_section">
+    <div class="tab-content">
+        <div id="admin_prec" class="tab-pane fade in active show">
+            <button class="btn btn_beta" onclick="ConsultarPrecargasRealizadas(1);">Actualizar</button>
+            <button style="position: absolute; right:5rem; " class="btn btn_beta" onclick="GenerarFormatoPrecargas();">Generar formato</button>
+            <h3 class="text-center">Administrar precargas</h3>
+            <div class="row">
+                <div class="col-md-2 text-center">
+                    <strong>TODAS</strong>
+                    <br />
+                    <input type="checkbox" value="" id="check_todas" class="form-control" style="height: 25px; min-height:25px;" />
+                </div>
+            </div>
+            <hr />
+            <div id="div_precargas_realizadas"></div>
+        </div>
+        
+        <div id="new_prec" class="tab-pane fade">
+            <h3 class="text-center">Nueva precarga</h3>
+            <hr />
+            <div class="row">
+                <div class="col-md-3">
+                    <strong>Orden de compra</strong>
+                    <input type="text" class="form-control solo-numeros" id="id_orden_compra_buscar" />
+                </div>
+
+                <div class="col-md-5" style="padding-top:14px">
+                    <button class="btn btn_beta_icon" onclick="ConsultarOrdenEspecificaPrecarga();"><i class="fa fa-search"></i></button>
+                </div>
+            </div>
+            <div id="div_ordenes_precarga"></div>
+            <br />
+            <div class="row">
+                <div class="col-md-4">
+                    <strong>Empleado repartidor</strong>
+                    <br />
+                    <select class="form-control" id="id_empleado_repartidor">
+                        @{ Html.RenderAction("ConsultarEmpleadosSelect", "CATALOGOS", new { status = "A" }); }
+
+                    </select>
+                </div>
+            </div>
+        </div>
+
+
+        <div id="hist_prec" class="tab-pane fade">
+            <h3 class="text-center">Historial de precargas</h3>
+            <div class="row">
+                <div class="col-md-3">
+                    <strong>Fecha inicio</strong>
+                    <input type="date" class="form-control" id="fecha_i_recepciones_historial" />
+                </div>
+                <div class="col-md-3">
+                    <strong>Fecha fin</strong>
+                    <input type="date" class="form-control" id="fecha_f_recepciones_historial" />
+                </div>
+                <div class="col-md-3" style="padding-top:14px">
+                    <button class="btn btn_beta_icon" onclick="ConsultarPecargasRecepcionesHistorial();"><i class="fa fa-search"></i></button>
+                </div>
+            </div>
+            <hr />
+            <div class="table-responsive">
+                <div id="div_precargas_historial"></div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+    @Scripts.Render("~/bundles_Propiedades/js")
+    @Scripts.Render("~/bundles_Inventario/js")
+
+    <script>
+        $(window).on("load", function () {
+            CaracteresControl();
+            ConsultarPrecargasRealizadas(1);
+        });
+
+        $("#id_empleado_repartidor").select2({
+            placeholder: 'Selecciona un ingrediente',
+            //dropdownParent: $("#tabulador")
+        });
+
+        $("#id_orden_compra_buscar").on("keypress", function (e) {
+            if (e.which === 13) { // 13 = tecla Enter
+                e.preventDefault(); // evita que envíe formulario si está dentro de uno
+                ConsultarOrdenEspecificaPrecarga();
+            }
+        });
+
+        $("#check_todas").on("click", function (e) {
+            if ($(this).is(":checked")) {
+                $(".checks_precargas_g").prop("checked", true);
+            }
+            else {
+                $(".checks_precargas_g").prop("checked", false);
+            }
+        });
+
+    </script>
+
+
+

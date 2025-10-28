@@ -1,0 +1,92 @@
+﻿@model List<Beta_System.Models.C_bascula_fichas>
+
+@if (Model.Count() > 0)
+{
+    <table class="table table-striped table-bordered table-sm table-condensed" id="datatable_reporte_moviemintos_proveedor">
+        <tr class="text-center bg-beta">
+            <th>Proveedor</th>
+            <th>Fecha</th>
+            <th>Establo</th>
+            <th>Ficha</th>
+            <th>Alimento</th>
+            <th>Toneladas</th>
+            <th>Factura</th>
+            <th>P.U FORRAJE</th>
+            <th>Importe FORRAJE</th>
+            <th>Moneda</th>
+        </tr>
+        @foreach (var data in Model)
+        {
+            decimal toneladas_bascula = (decimal)data.peso_t / 1000;
+            decimal toneladas_fact = 0;
+
+            string fecha_fact = "";
+            string factura = "";
+            string P_U = "0";
+            decimal importe = 0;
+            string valor_importe = "0";
+            string moneda = "";
+
+            if (data.C_alimentacion_forrajes_facturas_d != null)
+            {
+                var valid_fact = data.C_alimentacion_forrajes_facturas_d.Where(x => x.activo == true).FirstOrDefault();
+                if (valid_fact != null)
+                {
+                    toneladas_fact = (decimal)valid_fact.toneladas_ficha;
+                    fecha_fact = string.Format(valid_fact.C_alimentacion_forrajes_facturas_g.fecha_factura.Value.ToShortDateString(), "dd/MM/yyyy");
+                    factura = valid_fact.C_alimentacion_forrajes_facturas_g.folio_factura;
+                    P_U = valid_fact.precio_ficha.ToString();
+                    importe = Convert.ToDecimal(P_U) * toneladas_fact;
+                    valor_importe = importe.ToString("N2");
+                    moneda = valid_fact.C_tipos_moneda.clave_fiscal;
+                }
+
+                <tr>
+                    <td>@data.C_compras_proveedores.razon_social</td>
+                    <td>@string.Format(data.fecha_registo.Value.ToShortDateString(), "dd/MM/yyyy")</td>
+                    <td>@data.C_establos.siglas.ToUpper()</td>
+                    <td>@data.id_bascula_ficha</td>
+                    <td>@data.C_articulos_catalogo.nombre_articulo</td>
+                    @if (toneladas_fact != 0)
+                    {
+                        <td>@toneladas_fact.ToString("N3")</td>
+                    }
+                    else
+                    {
+                        <td></td>
+                    }
+
+                    <td>@factura</td>
+
+                    @if (P_U != "0")
+                    {
+                        <td>@P_U</td>
+                    }
+                    else
+                    {
+                        <td></td>
+                    }
+
+                    @if (valor_importe != "0")
+                    {
+                        <td>@valor_importe</td>
+                    }
+                    else
+                    {
+                        <td></td>
+                    }
+
+                    <td>@moneda</td>
+                </tr>
+            }
+        }
+    </table>
+}
+else
+{
+    <table class="table table-striped table-bordered">
+        <tr>
+            <td>No se encontraron registros</td>
+        </tr>
+    </table>
+}

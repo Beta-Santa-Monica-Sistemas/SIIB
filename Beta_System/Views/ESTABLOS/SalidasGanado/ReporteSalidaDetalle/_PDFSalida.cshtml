@@ -1,0 +1,154 @@
+﻿@model IEnumerable<Beta_System.Models.C_salida_ganado_d>
+
+@{
+    var salida = Model.FirstOrDefault().C_salida_ganado_g;
+    decimal total_cant = 0;
+    decimal total_kilos = 0;
+}
+
+<style>
+    .div_pdf {
+        padding: 15px;
+        border: 1px solid black;
+        background-color: white;
+    }
+
+    .subrayado {
+        text-decoration: underline;
+    }
+</style>
+
+<div class="div_pdf">
+    <img src="~/Content/img_layout/logo_beta_new.png" width="300" style="float:right;margin-top:20px;" />
+    <h1 class="text-center"><strong style="font-size:36px;">Establo @salida.C_salida_ganado_establos.establo</strong></h1>
+    <div class="row">
+        <div class="col-md-8">
+            <div class="col-md-12"><h2 style="font-size:30px;"><strong>SALIDA DE GANADO   #<strong class="ml-4 subrayado">@salida.folio</strong></strong></h2></div>
+            <br />
+            <br />
+            <div class="col-md-5">
+                <h3 style="font-size:30px;"><strong>FECHA   <strong class="ml-4 subrayado">@String.Format(salida.fecha.Value.ToShortDateString(), "dd/mm/aaaa")</strong></strong></h3>
+            </div>
+            <div class="col-md-4">
+                <h3 style="font-size:30px;"><strong>HORA   <strong class="ml-4 subrayado">@salida.hora</strong></strong></h3>
+            </div>
+        </div>
+        <div class="col-md-3 text-right" style="font-size:30px;">
+            <div class="row">
+                <h3 style="font-size:30px;"><strong>FICHA DE BASCULA <strong class="ml-4 subrayado">@salida.ficha</strong></strong></h3>
+            </div>
+
+        </div>
+    </div>
+    <br />
+    <br />
+    <table class="table">
+        <thead>
+            <tr class="text-center bg-dark text-white" style="font-size:30px;">
+                <th># Arete</th>
+                <th>Clasificación</th>
+                <th>Causa de la Baja</th>
+                <th>Sala</th>
+                <th>Condición</th>
+                <th>Edad</th>
+                <th>Peso</th>
+                <th>Cantidad</th>
+            </tr>
+        </thead>
+        <tbody style="border-bottom: 1px solid black;">
+            @foreach (var item in Model)
+            {
+                total_cant += (decimal)item.cantidad;
+                total_kilos += (decimal)item.peso;
+
+                <tr class="text-center" style="font-size:30px;">
+                    <th>@item.arete</th>
+                    <th>@item.clasifica</th>
+                    <th>@item.causa_b</th>
+                    <th>@item.sala</th>
+                    <th>@item.cond_ind</th>
+                    <th>@item.edad</th>
+                    <th>@item.peso</th>
+                    <th>@item.cantidad</th>
+                </tr>
+            }
+            <tr class="text-center" style="font-size:30px;">
+                <th><h3 style="font-size:30px;"><strong>TOTAL</strong></h3></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th><h3 style="font-size:30px;"><strong>@total_kilos</strong></h3></th>
+                <th><h3 style="font-size:30px;"><strong>@total_cant</strong></h3></th>
+            </tr>
+        </tbody>
+    </table>
+    <br />
+
+    @if (salida.id_tipo_salida == 1) //LOTE
+    {
+        Html.RenderAction("ConsultarInfoFichaPDF", "SALIDASGANADO", new { id_establo = (int)salida.id_establo, ficha = salida.ficha.ToString() });
+    }
+    else  //DIARIO
+    {
+        <br />
+        <br />
+
+        <div class="row">
+            <div class="col-md-4 text-left">
+                <label style="font-size:22px;">CHOFER</label>
+                <strong class="ml-5" style="font-size:22px;">@salida.chofer</strong>
+            </div>
+
+            <div class="col-md-5 text-left">
+                <label style="font-size:22px;">COMPRADOR</label>
+                <strong class="ml-4" style="font-size:22px;">@salida.comprador</strong>
+                <br />
+                <label style="font-size:22px;">VEHICULO</label>
+                <strong class="ml-5" style="font-size:22px;">@salida.vehiculo</strong>
+                <strong class="ml-2" style="font-size:22px;">@salida.placas</strong>
+            </div>
+
+            <div class="col-md-3 text-center">
+                <br />
+                <br />
+                <div style="border-bottom:1px solid black; width:350px;"></div>
+                <label style="font-size:22px;">RECIBO CHOFER (FIRMA)</label>
+            </div>
+        </div>
+        <label style="font-size:22px;">FIRMAS AUTORIZADAS DE SALIDA DE GANADO:</label>
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+
+        <div class="row">
+            <div class="col-md-3 text-center">
+                <br />
+                <br />
+                <div style="border-bottom:1px solid black; width:100%;"></div>
+                <label style="font-size:22px;">ENCARGADO DE ESTABLO</label>
+            </div>
+            <div class="col-md-3 text-center">
+                <br />
+                <br />
+                <div style="border-bottom: 1px solid black; width: 100%;"></div>
+                <label style="font-size:22px;">PESADOR</label>
+            </div>
+            <div class="col-md-3 text-center">
+                <br />
+                <br />
+                <div style="border-bottom: 1px solid black; width: 100%;"></div>
+                <label style="font-size:22px;">MEDICO</label>
+            </div>
+            <div class="col-md-3 text-center">
+                <br />
+                <br />
+                <div style="border-bottom: 1px solid black; width: 100%;"></div>
+                <label style="font-size:22px;">AUTORIZACION</label>
+            </div>
+        </div>
+    }
+</div>

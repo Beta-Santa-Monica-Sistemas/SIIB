@@ -1,0 +1,191 @@
+﻿@model IEnumerable<Beta_System.Models.C_nomina_beta_d_areas>
+
+<style>
+    .table tbody tr {
+        height: 2px;
+        min-height: 2px;
+    }
+</style>
+
+@if (Model.Count() > 0)
+{
+    int no_empleados = (int)Model.Sum(x => x.no_empleados);
+    int modo = ViewBag.modo;
+    string clase = "";
+    if (modo == 1 || no_empleados >= 27) { clase = "page-break"; }
+
+    List<Beta_System.Models.C_nomina_conceptos> conceptos = Session["ConceptosNominaFormato"] as List<Beta_System.Models.C_nomina_conceptos>;
+    DateTime nomina_inicio = (DateTime)Model.FirstOrDefault().C_nomina_beta_g.fecha_inicio;
+    DateTime nomina_fin = (DateTime)Model.FirstOrDefault().C_nomina_beta_g.fecha_fin;
+
+    var nomina_g = Model.FirstOrDefault().C_nomina_beta_g;
+    decimal importe_final_nomina = 0;
+    foreach (var area in Model)
+    {
+        decimal importe_area = (decimal)area.C_nomina_beta_d_areas_empleados.Sum(x => x.importe_final);
+        importe_final_nomina += importe_area;
+    }
+
+    if (modo == 1)
+    {
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <div class="row">
+            <div class="col-md-3"></div>
+            <div class="col-md-6">
+                <img src="~/Content/img_layout/logo_beta_new.png" class="img-responsive" />
+            </div>
+            <div class="col-md-3"></div>
+        </div>
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <div class="row">
+            <br />
+            <br />
+            <div class="col-md-5 text-center" style="text-align:justify;">
+                <br style="margin:0px;" />
+                <h2 style="margin:0px; font-size:16px;">Sistema Integral de Información BETA</h2>
+                <h2 style="margin:0px; font-size: 16px;" class="text_beta">Módulo de administración de recursos humanos</h2>
+                <h2 style="margin:0px; font-size:16px;"><strong>Nómina aplicada del:</strong></h2>
+                <h2 style="margin:0px; font-size:16px;"><strong><strong class="text_beta">@string.Format(nomina_g.fecha_inicio.Value.ToShortDateString(), "dd/mm/yyyy")</strong> al <strong class="text_beta">@string.Format(nomina_g.fecha_fin.Value.ToShortDateString(), "dd/mm/yyyy")</strong></strong></h2>
+            </div>
+            <div class="col-md-3 text-center" style="text-align:justify;">
+                <br style="margin:0px;" />
+                <h2 style="margin:0px; font-size:16px;">Fecha registro: <label class="text_beta">@string.Format(nomina_g.fecha_registro.Value.ToShortDateString(), "dd/mm/yyyy")</label></h2>
+                <h2 style="margin:0px; font-size:16px;">Total de empleados: </h2>
+                <h2 style="margin:0px; font-size:16px;" class="text_beta">#@no_empleados</h2>
+            </div>
+            <div class="col-md-4 text-center" style="text-align:justify;">
+                <br style="margin:0px;" />
+                <h2 style="margin:0px; font-size:16px;"><strong>Del <strong class="text_beta">@string.Format(nomina_g.fecha_inicio.Value.ToShortDateString(), "dd/mm/yyyy")</strong> al <strong class="text_beta">@string.Format(nomina_g.fecha_fin.Value.ToShortDateString(), "dd/mm/yyyy")</strong></strong></h2>
+                <h2 style="margin:0px; font-size:16px;">Generada por: <label class="text_beta">@nomina_g.C_usuarios_corporativo.C_empleados.nombres @nomina_g.C_usuarios_corporativo.C_empleados.apellido_paterno</label></h2>
+                <h2 style="margin:0px; font-size:16px;">Importe total de la nómina: </h2>
+                <h2 style="margin:0px; font-size:16px;" class="text_beta">$@importe_final_nomina.ToString("#,##0.00")</h2>
+            </div>
+        </div>
+    }
+    @*else
+        {
+            <div class="row">
+                <div class="col-md-1 text-left">
+                    <br />
+                    <img src="~/Content/img_layout/logo_beta_new.png" class="img-responsive" />
+                </div>
+                <div class="col-md-4 text-left">
+                    <h5 style="margin:0px; font-size:12px;">Sistema Integral de Información BETA</h5>
+                    <strong style="font-size: 12px;">Módulo de administración de recursos humanos</strong>
+                </div>
+                <div class="col-md-3 text-left">
+                    <h5 style="margin:0px; font-size:12px;"><strong>Semana: @nomina_g.no_semana</strong></h5>
+                    <strong style="font-size: 12px;">Nomina aplicada del @string.Format(nomina_inicio.ToShortDateString(), "dd/MM/yyyy") al @string.Format(nomina_fin.ToShortDateString(), "dd/MM/yyyy")</strong>
+                </div>
+                <div class="col-md-4 text-left">
+                    <h5 style="margin:0px; font-size:12px;">Total de empleados: <label class="text_beta">#@Model.Sum(x => x.no_empleados)</label></h5>
+                    <h5 style="margin:0px; font-size:12px;">Importe total de la nómina: <label class="text_beta">$@importe_final_nomina.ToString("#,##0.00")</label></h5>
+                </div>
+            </div>
+        }*@
+
+
+    foreach (var nomina_area in Model.GroupBy(x => x.id_departamento).OrderBy(x => x.FirstOrDefault().C_nomina_departamentos.nombre_departamento))
+    {
+        int colspan = conceptos.Count()+1 + 7;
+        <table class="table table-sm table-condensed small table-bordered pdf-table pdf-content @clase" >
+            <tr class="text-left">
+                <td colspan="@colspan.ToString()">
+                    <h5 style="margin:0px; font-size:15px;" class="bg-beta p-1">Depto: @nomina_area.FirstOrDefault().C_nomina_departamentos.nombre_departamento</h5>
+                </td>
+            </tr>
+
+            <tr class="text-center bg-dark text-white" style="font-size: 12px; padding: 0px;">
+                <th>ID</th>
+                <th style="width:25%;min-width:25%;">Empleado</th>
+                <th>NSS/Cuenta</th>
+                <th>Días</th>
+                <th>Salario diario</th>
+                <th>S N</th>
+                <th>7mo Dia</th>
+                @foreach (var concepto in conceptos)
+                {
+                    <th style="width:5%;min-width:5%;">
+                        <strong>@concepto.nombre_abreviacion</strong>
+                    </th>
+                }
+                <th>PERCEP</th>
+            </tr>
+            @foreach (var nomina_empleado in nomina_area.FirstOrDefault().C_nomina_beta_d_areas_empleados.OrderBy(x => x.C_nomina_empleados.Nombres))
+            {
+                decimal sueldo_normal = (decimal)nomina_empleado.dias_laborados * (decimal)nomina_empleado.salario_diario;
+                decimal septimo_dia = sueldo_normal / 6;
+                <tr style="font-size:10px; padding:0px;">
+                    <td>@nomina_empleado.C_nomina_empleados.Numero</td>
+                    <td style="width:25%;min-width:25%;" class="text-left">
+                        <strong>@nomina_empleado.C_nomina_empleados.Nombres @nomina_empleado.C_nomina_empleados.Apellido_paterno @nomina_empleado.C_nomina_empleados.Apellido_materno</strong><br />
+                        <label style="margin:0px;">Puesto: </label><strong> @nomina_empleado.C_nomina_puestos.nombre_puesto.Replace("?", "Ñ")</strong>
+                    </td>
+                    <td class="text-left">
+                        <strong>@nomina_empleado.nss</strong><br />
+                        <strong> @nomina_empleado.cuenta_bancaria</strong>
+                    </td>
+                    
+                    <td>@nomina_empleado.dias_laborados</td>
+                    <td>@nomina_empleado.salario_diario.Value.ToString("#,##0.00")</td>
+                    <td>@sueldo_normal.ToString("#,##0.00")</td>
+                    <td>@septimo_dia.ToString("#,##0.00")</td>
+                    @foreach (var concepto in conceptos)
+                    {
+                        var valid_concepto = nomina_empleado.C_nomina_beta_d_areas_empleados_conceptos.Where(x => x.id_nomina_d_area_empleado == nomina_empleado.id_nomina_d_area_empleado && x.id_concepto_nomina == concepto.id_concepto_nomina).FirstOrDefault();
+                        if (valid_concepto != null)
+                        {
+                            string clave_concepto = valid_concepto.C_nomina_conceptos.clave_concepto;
+                            decimal valor_salario = (decimal)valid_concepto.valor * (decimal)nomina_empleado.salario_diario;
+
+                            <td style="width:5%;min-width:5%;">
+                                @if (clave_concepto == "102")  //Septimo día
+                                {<strong>$@valid_concepto.valor.Value.ToString("#,##0.00")</strong>}
+
+                                else if (clave_concepto == "101")  //Salario normal
+                                {<strong>$@valor_salario.ToString("#,##0.00")</strong> }
+
+                                else if (clave_concepto == "DIA")  //Dia festivo
+                                {<strong>$@valor_salario.ToString("#,##0.00")</strong> }
+
+                                else if (clave_concepto == "des")  //Descanso trabajado
+                                {<strong>$@valor_salario.ToString("#,##0.00")</strong> }
+
+                                @*else if (clave_concepto == "HE")  //Descanso trabajado
+                                {<strong>$@valid_concepto.ToString("#,##0.00")</strong> }*@
+                                
+                                else
+                                { 
+                                    <strong>$@valid_concepto.valor.Value.ToString("#,##0.00")</strong>}
+                            </td>
+                         }
+                        else
+                        {
+                            <td style="width:5%;min-width:5%;"></td>
+                        }
+
+                        }
+                        <td style="width:5%;min-width:5%;"><strong>@nomina_empleado.importe_final.Value.ToString("N2")</strong></td>
+                    </tr>
+            }
+        </table>
+    }
+
+}
+
+
+

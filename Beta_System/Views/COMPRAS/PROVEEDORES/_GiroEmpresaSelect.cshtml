@@ -1,0 +1,6 @@
+﻿@model IEnumerable<Beta_System.Models.C_compras_proveedores_giros>
+
+@foreach (var item in Model)
+{
+    <option value="@item.id_giro_proveedor">@item.nombre_giro</option>
+}

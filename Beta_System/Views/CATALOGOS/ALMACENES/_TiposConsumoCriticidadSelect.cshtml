@@ -1,0 +1,12 @@
+﻿@model List<Beta_System.Models.C_almacen_criticidad_tipos_consumos>
+
+@if (Model.Count() > 0)
+{
+    foreach (var item in Model)
+    {
+        <option value="@item.id_criticidad_tipo_consumo">@item.siglas - @item.tipo_consumo</option>
+    }
+}
+
+
+

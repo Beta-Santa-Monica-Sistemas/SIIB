@@ -1,0 +1,79 @@
+﻿@model IEnumerable<Beta_System.Models.C_compras_cotizaciones_confirmadas_d>
+<div class="accordion" id="accordionSolicitudes">
+    @foreach (var item in Model.GroupBy(x => x.id_cotizacion_confirmada_g))
+    {
+        var confirmacion_g = item.FirstOrDefault();
+        var status_solicitud = confirmacion_g.C_compras_cotizaciones_confirmadas_g.C_compras_cotizaciones_confirmadas_status;
+        <div class="">
+            <div class="" id="heading_@confirmacion_g.id_cotizacion_confirmada_d">
+                <div class="w-100 collapsed" style="border: 1px solid black; background-color: rgb(236, 244, 251); height:95px;">
+                    <div class="row">
+                        <div class="col-md-6 p-3 text-left">
+                            @if (status_solicitud.id_status_cotizacion_confirmada == 1) //PENDEINTE DE AUTORIZAR
+                            {
+                                <h4 class="text-left" style="margin:2px;"><i class="fa fa-clock-o" style="color:@status_solicitud.color;"></i> @confirmacion_g.C_compras_cotizaciones_confirmadas_g.nombre_suborden</h4>
+                            }
+                            //AUTORIZADA
+                            else
+                            { <h4 class="text-left" style="margin:2px;"><i class="fa fa-check" style="color:@status_solicitud.color;"></i> @confirmacion_g.C_compras_cotizaciones_confirmadas_g.nombre_suborden</h4>}
+
+                            <span>(@confirmacion_g.C_compras_cotizaciones_confirmadas_g.correo_proveedor_suborden)</span>
+                            <br />
+                            <small class="text-success" style="font-size:14px;"><strong>Total: $@item.Select(x => x.C_compras_cotizaciones_requisiciones.cantidad_surtir * x.C_compras_cotizaciones_requisiciones.C_compras_cotizaciones_articulos.precio_final).Sum().Value.ToString("N9")</strong></small>
+                        </div>
+                        <div class="col-md-3 text-center">
+                            <h4 class="text-left" style="margin:2px;">@String.Format(confirmacion_g.C_compras_cotizaciones_confirmadas_g.fecha_registro.Value.ToShortDateString(), "dd/mm/aaaa")</h4>
+                            <span>@confirmacion_g.C_compras_cotizaciones_confirmadas_g.C_compras_ordenes_ubicaciones_entrega.nombre_ubicacion</span>
+                        </div>
+                        <div class="col-md-1">
+                            <button class="btn btn_beta_icon" data-toggle="collapse" data-target="#collapse_@confirmacion_g.id_cotizacion_confirmada_d" aria-expanded="false" aria-controls="collapse_@confirmacion_g.id_cotizacion_confirmada_d"><i class="fa fa-bars"></i></button>
+                        </div>
+                        @if (item.FirstOrDefault().C_compras_cotizaciones_confirmadas_g.id_status_cotizacion_confirmada == 1 && item.FirstOrDefault().C_compras_cotizaciones_requisiciones.orden_generada == null &&
+                            item.FirstOrDefault().C_compras_cotizaciones_confirmadas_g.solicita_autorizacion == false)
+                        {
+                            <div class="col-md-1">
+                                <button class="btn btn_beta_icon btn_beta_danger" onclick="EliminarSolicitudCompra(@confirmacion_g.id_cotizacion_confirmada_g, '@confirmacion_g.C_compras_cotizaciones_confirmadas_g.nombre_suborden', @confirmacion_g.C_compras_cotizaciones_confirmadas_g.id_requisicion_articulo_g)"><i class="fa fa-remove"></i></button>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+            <div id="collapse_@confirmacion_g.id_cotizacion_confirmada_d" class="collapse" aria-labelledby="heading_@confirmacion_g.id_cotizacion_confirmada_d" data-parent="#accordionSolicitudes">
+                <div class="table-responsive" style="border: 1px solid black; background-color: rgb(236, 244, 251);">
+                    <table class="table table-sm table-condensed small table-bordered table-striped">
+                        <thead>
+                            <tr class="bg-beta">
+                                <th>Articulo</th>
+                                <th>Descripción</th>
+                                <th>Proveedor</th>
+                                <th>Cantidad cotizada</th>
+                                <th>Precio unitario</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var detalle in item)
+                            {
+                                var cotizacion = detalle.C_compras_cotizaciones_requisiciones.C_compras_cotizaciones_articulos;
+                                <tr>
+                                    <th>@cotizacion.C_articulos_catalogo.clave</th>
+                                    <th>@cotizacion.C_articulos_catalogo.nombre_articulo.ToUpper()</th>
+                                    <th>@cotizacion.C_compras_proveedores.razon_social</th>
+                                    <th>@detalle.C_compras_cotizaciones_requisiciones.cantidad_surtir</th>
+                                    <th>$@cotizacion.precio_unitario.Value.ToString("N9")</th>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+
+
+
+
+
+
+

@@ -1,0 +1,142 @@
+﻿@model List<Beta_System.Models.C_bascula_fichas>
+
+@if (Model.Count() > 0)
+{
+    <div class="row">
+        <div class="col-md-2 text-left">
+            <img src="~/Content/img_layout/logo_beta_new.png" class="img-responsive" />
+        </div>
+        <div class="col-md-4">
+            <h2 style="margin:3px;">Sistema de Información Integral Beta</h2>
+            <h4 style="margin:3pX;">MOVIMIENTOS POR PROVEEDOR</h4>
+        </div>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered table-sm table-condensed" id="datatable_reporte_moviemintos_proveedor">
+            @foreach (var item in Model.GroupBy(x => x.id_compras_proveedor))
+            {
+                decimal total_toneladas_bascula = 0;
+                decimal total_toneladas_env = 0;
+                decimal total_precio = 0;
+                decimal total_importe = 0;
+
+                <tr class="text-left bg-beta">
+                    <th colspan="2">Proveedor</th>
+                    <th colspan="9">@item.FirstOrDefault().C_compras_proveedores.razon_social (@item.FirstOrDefault().C_compras_proveedores.C_tipos_moneda.clave_fiscal)</th>
+                </tr>
+                <tr class="text-center bg-dark text-white">
+                    <th colspan="5">RECEPCION</th>
+                    <th colspan="6">FACTURACION</th>
+                </tr>
+                <tr class="text-center bg-green">
+                    <th>Fecha</th>
+                    <th>Establo</th>
+                    <th>Ficha</th>
+                    <th>Alimento</th>
+                    <th>Toneladas</th>
+                    @*<th>Ton. Env.</th>*@
+                    <th>Fecha</th>
+                    <th>Factura</th>
+                    <th>Toneladas</th>
+                    <th>P.U</th>
+                    <th>Importe</th>
+                    <th>Moneda</th>
+                </tr>
+
+                foreach (var data in item)
+                {
+                    decimal toneladas_bascula = (decimal)data.peso_t / 1000;
+                    decimal toneladas_fact = 0;
+
+                    string fecha_fact = "";
+                    string factura = "";
+                    string P_U = "0";
+                    decimal importe = 0;
+                    string valor_importe = "0";
+                    string moneda = "";
+
+                    if (data.C_alimentacion_forrajes_facturas_d != null)
+                    {
+                        var valid_fact = data.C_alimentacion_forrajes_facturas_d.Where(x => x.activo == true).FirstOrDefault();
+                        if (valid_fact != null)
+                        {
+                            toneladas_fact = (decimal)valid_fact.toneladas_ficha;
+                            fecha_fact = string.Format(valid_fact.C_alimentacion_forrajes_facturas_g.fecha_factura.Value.ToShortDateString(), "dd/MM/yyyy");
+                            factura = valid_fact.C_alimentacion_forrajes_facturas_g.folio_factura;
+                            P_U = valid_fact.precio_ficha.ToString();
+                            importe = Convert.ToDecimal(P_U) * toneladas_fact;
+                            valor_importe = Math.Round(importe, 3).ToString();
+                            moneda = valid_fact.C_tipos_moneda.clave_fiscal;
+                        }
+
+                        total_toneladas_bascula += toneladas_bascula;
+                        total_toneladas_env += toneladas_fact;
+                        total_precio += Convert.ToDecimal(P_U);
+                        total_importe += Convert.ToDecimal(valor_importe);
+                        <tr>
+                            <td>@string.Format(data.fecha_registo.Value.ToShortDateString(), "dd/MM/yyyy")</td>
+                            <td>@data.C_establos.siglas.ToUpper()</td>
+                            <td>@data.id_bascula_ficha</td>
+                            <td>@data.C_articulos_catalogo.nombre_articulo</td>
+                            <td>@toneladas_bascula</td>
+                            @*<td>0</td>*@
+                            <td>@fecha_fact</td>
+                            <td>@factura</td>
+
+                            @if (toneladas_fact != 0)
+                            {
+                                <td>@toneladas_fact</td>
+                            }
+                            else
+                            {
+                                <td></td>
+                            }
+
+                            @if (P_U != "0")
+                            {
+                                <td>@P_U</td>
+                            }
+                            else
+                            {
+                                <td></td>
+                            }
+
+                            @if (valor_importe != "0")
+                            {
+                                <td>@valor_importe</td>
+                            }
+                            else
+                            {
+                                <td></td>
+                            }
+
+                            <td>@moneda</td>
+                        </tr>
+                    }
+                }
+                <tr class="bg-green text-white">
+                    <td style="font-weight:800;">Total</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td style="font-weight:800;">@total_toneladas_bascula</td>
+                    @*<td>0</td>*@
+                    <td></td>
+                    <td></td>
+                    <td style="font-weight:800;">@total_toneladas_env</td>
+                    <td style="font-weight:800;">@total_precio</td>
+                    <td style="font-weight:800;">@total_importe</td>
+                    <td></td>
+                </tr>
+            }
+        </table>
+    </div>
+}
+else
+{
+    <table class="table table-striped table-bordered">
+        <tr>
+            <td>No se encontraron registros</td>
+        </tr>
+    </table>
+}

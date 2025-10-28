@@ -1,0 +1,25 @@
+﻿@model IEnumerable<Beta_System.Models.C_dispositivos_logs>
+
+<div style="overflow-x: auto; max-width: 100%;">
+    <table class="table table-striped table-bordered" id="dispositivos_logs_table" style="width:100%; table-layout: fixed;">
+        <thead>
+            <tr class="bg-beta text-center">
+                <th>MAC</th>
+                <th>Fecha</th>
+                <th>Accion</th>
+                <th>Detalle</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.mac_address</td>
+                    <td>@item.fecha</td>
+                    <td>@item.tipo_accion</td>
+                    <td>@item.detalle</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,69 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+}
+
+<div class="page_title">
+    <div class="counter_section">
+        <div class="row">
+            <div class="col-md-10 text-left">
+                <h1>Configurar ingredientes</h1>
+            </div>
+            <div class="col-md-2">
+                <select class="form-control id_establo_select" id="id_establo_ing" onchange="ConsultarArticulosTrackerTable(); ConsultarArticulosIngredientesTrackerTable();">
+                    @{ Html.RenderAction("ConsultarEstablosUsuarioSelect", "CATALOGOS", new { id_usuario = 0 }); }
+
+                </select>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="column2 counter_section">
+    <div class="row">
+
+        <div class="col-md-3">
+            <h3 class="text-center">ARTICULOS DE FORRAJE</h3>
+            <div id="div_articulos_forraje" class="table-responsive" style="height: 500px; min-height: 500px; overflow: auto; overflow-x:hidden;"></div>
+        </div>
+
+        <div class="col-md-4">
+            <h3 class="text-center">INGREDIENTES TRACKER</h3>
+            <div id="div_ingredientes_tracker" class="table-responsive" style="height: 500px; min-height: 500px; overflow: auto; overflow-x: hidden; "></div>
+        </div>
+
+        <div class="text-center">
+            <div style="margin-top: 15rem;"></div>
+            <button class="btn btn_beta_icon" onclick="AsociarArticuloIngrediente();">
+                <i class="fa fa-4x fa-arrow-right"></i>
+            </button>
+        </div>
+
+        <div class="col-md-4">
+            <h3 class="text-center">ASOCIACIONES</h3>
+            <div id="div_ingredientes_articulos" class="table-responsive" style="height: 500px; min-height: 500px; overflow: auto; overflow-x: hidden; "></div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<script>
+    var id_articulo_asociacion = 0;
+</script>
+
+@Scripts.Render("~/bundles_AlimentacionTracker/js")
+
+
+<script>
+
+    $(window).on("load", function () {
+        ConsultarArticulosForrajesTable();
+        ConsultarArticulosTrackerTable();
+        ConsultarArticulosIngredientesTrackerTable();
+    })
+
+</script>
+

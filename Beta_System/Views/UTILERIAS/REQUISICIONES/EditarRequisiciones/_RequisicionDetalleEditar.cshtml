@@ -1,0 +1,52 @@
+﻿@{
+    var count = ViewBag.count_tabla;
+}
+
+<tr id="row_@ViewBag.count_tabla" class="text-center">
+    @{
+        string precio_conv = ViewBag.precio.Replace("$", "").Replace(",", "");
+        double precio = Convert.ToDouble(precio_conv);
+        double cantidad = Convert.ToDouble(@ViewBag.cantidad);
+    }
+    <td style="display:none;"><label class="id_articulos" id="">@ViewBag.id_articulo</label></td>
+    <td>@ViewBag.clave_articulo</td>
+    <td>
+        <label class="nombre_articulo" id="">@ViewBag.articulo</label>
+        @if (ViewBag.id_tipo_requi == 2)
+        {
+            <br />
+            <strong>Proveedor: @ViewBag.nombre_proveedor</strong>
+        }
+    </td>
+
+    <td style="display:none;">
+        @if (ViewBag.new_cotizacion == true)
+        {
+            <label class="id_cotizacion">0</label>
+            <label class="id_proveedor">@ViewBag.id_proveedor</label>
+            <label class="id_tipo_moneda">@ViewBag.id_tipo_moneda</label>
+        }
+        else
+        {
+            if (ViewBag.id_tipo_requi == 2)
+            {
+                {
+                    <label class="id_cotizacion">@ViewBag.id_cotizacion</label>
+                    <label class="id_proveedor">@ViewBag.id_proveedor</label>
+                    <label class="id_tipo_moneda">@ViewBag.id_tipo_moneda</label>
+                }
+            }
+        }
+    </td>
+
+    <td><label class="cantidads" id="">@string.Format("{0:0.00}", cantidad)</label></td>
+    <td><label class="medidas" id="">@ViewBag.medida</label></td>
+    <td><label class="precios" id="">@precio.ToString("C")</label></td>
+    <td style="display:none;"><label class="id_unidad_medidas" id="">@ViewBag.id_unidad_medida</label></td>
+    <td><label class="observacions" id="">@ViewBag.observacion</label></td>
+    <td style="display:none;"><label class="id_centros_g" id="">@ViewBag.id_centro_g</label></td>
+    <td><label class="cargo" id="">@ViewBag.cargo_contable</label></td>
+    <td style="display:none;"><label class="id_cargos_contable" id="">@ViewBag.id_cargo_contable</label></td>
+    <td style="display:none;"><label class="id_cuentas_contable_g" id="">@ViewBag.id_cuenta_contable_g</label></td>
+    <td><button class="btn btn_beta_icon" onclick="EditarArticuloRequisicionUtileria(@ViewBag.id_requi_d, @ViewBag.id_cargo_contable, @ViewBag.id_cuenta_contable_g,@cantidad, '@ViewBag.observacion', '@ViewBag.articulo');"><i class="fa fa-edit"></i></button></td>
+</tr>

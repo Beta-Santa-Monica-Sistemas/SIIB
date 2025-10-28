@@ -1,0 +1,41 @@
+﻿@model IEnumerable<Beta_System.Models.C_compras_ordenes_d>
+
+@if (Model.Count() > 0)
+{
+    int modo = ViewBag.modo;
+    string name_modo = "";
+    if (modo == 1) { name_modo = "check_mover_orden_1"; }
+    if (modo == 2) { name_modo = "check_mover_orden_2"; }
+    <table class="table table-bordered table-striped table-sm">
+        <thead>
+            <tr class="bg-beta text-center">
+                <th>Mover</th>
+                <th>Clave</th>
+                <th>Artículo</th>
+                <th>Unidad</th>
+                <th>Cantidad</th>
+                <th>Precio</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr class="text-center">
+                    <td>
+                        <input type="checkbox" name="@name_modo" value="@item.id_compras_orden_d" class="form-control" style="height: 25px;" />
+                    </td>
+                    <td>@item.C_articulos_catalogo.clave</td>
+                    <td class="text-left">@item.C_articulos_catalogo.nombre_articulo.ToUpper()</td>
+                    <td>@item.C_unidades_medidas.unidad_medida</td>
+                    <td>@item.cantidad_compra.Value.ToString("N2")</td>
+                    <td>@item.precio_unitario.Value.ToString("N2")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+}
+else
+{
+    <h3 class="text-center">NO SE ENCONTRÓ INFORMACIÓN</h3>
+}

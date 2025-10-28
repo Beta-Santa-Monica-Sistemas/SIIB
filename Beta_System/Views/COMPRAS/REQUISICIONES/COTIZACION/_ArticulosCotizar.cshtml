@@ -1,0 +1,66 @@
+﻿@model IEnumerable<Beta_System.Models.C_compras_requi_g>
+
+<table class="table table-bordered table-striped table-sm table-condensed small" id="datatable_articulos" >
+    <thead>
+        <tr class="bg-beta text-center" style="font-size: 14px;">
+            <th>Prioridad</th>
+            <th>Tipo</th>
+            <th>Días espera</th>
+            <th>Fecha</th>
+            @*<th>Entregado</th>*@
+            <th>Centro</th>
+            <th>Requisición</th>
+            <th style="width:40%;">Concepto</th>
+            <th>Valido</th>
+            <th>Artículos</th>
+            <th>Pendientes</th>
+            <th>Cotizados</th>
+            <th>Confirmados</th>
+            <th>Recotizado</th>
+            <th>Ver</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            bool recotizado = false;
+            var confirmados = item.C_compras_requi_d.Where(x => x.cotizado == true).Count();
+            var cotizados = item.C_compras_cotizaciones_requisiciones.Where(x=>x.activo==true).GroupBy(x => x.id_articulo).Distinct().Count();
+            var articulos_count = item.C_compras_requi_d.Count();
+            var pendietes = articulos_count - cotizados;
+            <tr class="text-center" style="font-size: 14px;">
+                <td><strong style="color:@item.C_prioridades_g.color;">@item.C_prioridades_g.nombre_prioridad</strong></td>
+                <th><strong style="color:@item.C_compras_requisiciones_tipos.color">@item.C_compras_requisiciones_tipos.tipo_requisicion</strong></th>
+                <td><strong style="font-size:16px;">@(Convert.ToInt32(Math.Floor((DateTime.Now.Subtract(item.fecha_registro ?? DateTime.Now)).TotalDays)))</strong></td>
+                <td>@String.Format(item.fecha_registro.Value.ToShortDateString(), "dd/mm/aaaa")</td>
+                @*@if (item.entregada == true)
+                {
+                    <td>SI</td>
+                }
+                else
+                {
+                    <td>NO</td>
+                }*@
+                <td>@item.C_centros_g.siglas</td>
+                <td>@item.id_requisicion_articulo_g</td>
+                <td>@item.concepto</td>
+                <td>@item.C_usuarios_corporativo.usuario</td>
+                <td><strong style="font-size:16px;">@articulos_count</strong></td>
+                <td><strong style="font-size:16px;">@pendietes</strong></td>
+                <td><strong style="font-size:16px;">@cotizados</strong></td>
+                <td><strong style="font-size:16px;"></strong></td>
+                <td>
+                    @foreach (var articulo in item.C_compras_requi_d)
+                    {
+                        if (articulo.recotizado == true) { recotizado = true; }
+                    }
+                    @if (recotizado == true) { <strong class="text-danger" style="font-size:16px;">SI</strong> }
+                </td>
+
+                <td class="text-center">
+                    <button class="btn btn_beta_icon" onclick="ConsultarArticuloPorRequisicion(@item.id_requisicion_articulo_g);"><i class="fa fa-bars"></i></button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

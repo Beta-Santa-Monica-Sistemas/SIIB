@@ -1,0 +1,36 @@
+﻿@model IEnumerable<Beta_System.Models.C_centros_g>
+
+<table class="table table-striped table-bordered" id="datatable_centros">
+    <thead>
+        <tr class="bg-beta">
+            <th>Siglas</th>
+            <th>Nombre del centro</th>
+            <th class="text-center">Editar</th>
+            <th class="text-center">Estatus</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var centro in Model)
+        {
+            <tr>
+                <td><strong>@centro.siglas</strong></td>
+                <td>@centro.nombre_centro</td>
+                <td class="text-center">
+                    <button class="btn btn_beta_icon" onclick="EditarCentro('@centro.siglas','@centro.nombre_centro', @centro.id_centro_g);"><i class="fa fa-edit"></i></button>
+                </td>
+                <td class="text-center">
+                    @if (centro.activo == true)
+                    {
+                        <i class="fa fa-3x fa-toggle-on" onclick="OnOffCentro(@centro.id_centro_g, false,'@centro.nombre_centro');" style="color:lightgreen;"></i>
+                    }
+                    else
+                    {
+
+                        <i class="fa fa-3x fa-toggle-on" onclick="OnOffCentro(@centro.id_centro_g, true, '@centro.nombre_centro');" style="color:gray;"></i>
+                    }
+
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

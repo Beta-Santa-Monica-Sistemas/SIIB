@@ -1,0 +1,69 @@
+﻿@model List<Beta_System.Models.CapturaInventarioDiferencias>
+
+<style>
+    table, td, th {
+        border: 1px solid;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+</style>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Cve</th>
+            <th>Articulo</th>
+            <th>Almacen</th>
+            <th>Tipo</th>
+            <th>Unid. medida</th>
+            <th>Ultimo inventario</th>
+            <th>Ent. compra</th>
+            <th>Ent. traspaso</th>
+            <th>Ent. ajuste</th>
+            <th>Devoluciones</th>
+
+            <th>Sal. compra</th>
+            <th>Sal. traspaso</th>
+            <th>Sal. ajuste</th>
+
+            <th>Precio</th>
+            <th>Existencia</th>
+            <th>Importe</th>
+            <th>Ubicación</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Clave</td>
+                <td>@item.Nombre_articulo</td>
+                <td>@item.Almacen</td>
+                <td>@item.Tipo_articulo</td>
+                <td>@item.Unidad_medida</td>
+                <td>@item.Ultima_Cap</td>
+
+                <td>@item.Entradas.ToString("N2")</td>
+                <td>@item.Entradas_trasp.ToString("N2")</td>
+                <td>@item.Entradas_ajuste.ToString("N2")</td>
+                <td>@item.Entradas_devolucion.ToString("N2")</td>
+
+                <td>@item.Salidas.ToString("N2")</td>
+                <td>@item.Salidas_trasp.ToString("N2")</td>
+                <td>@item.Salidas_ajuste.ToString("N2")</td>
+
+                <td>$@item.Precio.ToString("N2")</td>
+
+                <td>$@item.Cantidad_sistema.ToString("N2")</td>
+                <td>$@item.Total.ToString("N2")</td>
+
+                <td>@item.Ubicacion</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+

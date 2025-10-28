@@ -1,0 +1,30 @@
+﻿@model IEnumerable<Beta_System.Models.C_envios_leche_cliente_destinos>
+<table class="table table-striped table-bordered" id="tabla_asociacion" width="100%">
+    <thead>
+        <tr class="bg-beta text-center">
+            <th>Cliente</th>
+            <th>Destino</th>
+            <th>Eliminar</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            int groupCounter = 1;
+        }
+        @foreach (var item in Model.GroupBy(x => x.id_destino_envio_leche))
+        {
+            var backgroundColor = (groupCounter % 2 == 0) ? "background-color: rgb(241, 247, 252);" : "background-color: rgb(225, 238, 246);";
+            foreach (var items in item)
+            {
+                <tr class="text-center" style="@backgroundColor">
+                    <td>@items.C_envios_leche_clientes.nombre_comercial</td>
+                    <td>@items.C_envios_leche_destinos.nombre_destino</td>
+                    <td>
+                        <button class="btn btn_beta_danger" onclick="EliminarAsociarClienteDestino(@items.id_cliente_destino);"><i class="fa fa-remove"></i></button>
+                    </td>
+                </tr>
+            }
+            groupCounter++;
+        }
+    </tbody>
+</table>

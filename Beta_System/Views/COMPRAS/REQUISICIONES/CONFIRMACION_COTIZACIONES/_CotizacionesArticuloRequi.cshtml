@@ -1,0 +1,174 @@
+﻿@model IEnumerable<Beta_System.Models.C_compras_cotizaciones_requisiciones>
+
+@if (Model != null)
+{
+    var requi_d = Model.FirstOrDefault().C_compras_requi_d;
+    decimal cantidad_surtir = Convert.ToDecimal(requi_d.cantidad);
+    decimal cantidad_restante = 0;
+    if (Model.FirstOrDefault().C_compras_requi_d.cantidad_cotizada != null)
+    {
+        cantidad_restante = (decimal)Model.FirstOrDefault().C_compras_requi_d.cantidad_cotizada;
+        cantidad_surtir = cantidad_surtir - cantidad_restante;
+    }
+    <div class="text-left bg-beta p-3" style="border-radius: 20px;">
+        <strong id="cantidad_solicitada_requi" style="display:none !important;">@cantidad_surtir.ToString("00.00")</strong>
+        <strong id="acepta_decimales_lbl" style="display:none !important;">@requi_d.C_unidades_medidas.acepta_decimal</strong>
+        <div class="row">
+            <div class="col-md-12">
+                <h3 style="color:white; margin:0px;">
+                    <strong><label style="color: #F1F1F1 ">Articulo:</label> @requi_d.C_articulos_catalogo.nombre_articulo</strong><label>  </label>
+                    <strong><label style="color: #F1F1F1 ">Cantidad requerida:</label> @cantidad_surtir.ToString("#,##0.00") @requi_d.C_unidades_medidas.unidad_medida</strong>
+                </h3>
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-12 text-right">
+            <button type="button" class="btn btn_beta_warning text-white" onclick="CerrarCotiRequi(@Model.FirstOrDefault().id_requisicion_articulo_d);" id="btn_cerrar_coti">
+                <h5>Terminar cotización <i class="fa fa-warning ml-2 text-dark"></i></h5>
+            </button>
+        </div>
+        <div class="col-md-12">
+            <br />
+        </div>
+        @foreach (var item in Model)
+        {
+            var prov = item.C_compras_cotizaciones_articulos.C_compras_proveedores;
+            var cotizacion = item.C_compras_cotizaciones_articulos;
+            decimal subtotal = (decimal)cotizacion.precio_final * cantidad_surtir;
+            <div class="col-md-4 p-2 coti_card" style="background-color:lightgray; border-radius: 15px; border: 1px black solid; "
+                 id="cotizacion_card_@item.id_cotizacion_requisicion">
+                <div onclick="SelectCardCotizacion(@item.id_cotizacion_requisicion);" style="cursor: pointer;">
+                    <div class="text-lg-center">
+                        <input id="radioCoti_@item.id_cotizacion_requisicion" type="checkbox" class="form-control checks_disabled checks_cotizaciones" style="height:30px;"
+                               onclick="SelectCardCotizacion(@item.id_cotizacion_requisicion);" hidden />
+                    </div>
+                    <div class="row">
+                        <div class="col-md-10">
+                            <h2 class="text-left" style="color:#2e87d7; margin:0px;"><strong>#@item.id_compra_articulo_cotizacion</strong></h2>
+                        </div>
+                    </div>
+                    <h3 style="margin:5px;"><strong>Proveedor</strong></h3>
+                    <table>
+                        <tr>
+                            <td><strong style="color:#2e87d7;">Clave Proveedor</strong></td>
+                            <td><strong style="color:#2e87d7;">@prov.id_proveedor_microsip</strong></td>
+                        </tr>
+                        <tr>
+                            <td style="width:40%;"><label>Nombre Comercial</label></td>
+                            <td><label>@prov.razon_social</label></td>
+                        </tr>
+                        <tr>
+                            <td style="width:40%;"><label>Direccion</label></td>
+                            <td><label>@prov.direccion_1_prov</label></td>
+                        </tr>
+                        <tr>
+                            <td style="width:40%;"><label>Nombre del Contacto</label></td>
+                            <td><label>@prov.contacto_nombre_1</label></td>
+                        </tr>
+                        <tr>
+                            <td style="width:40%;"><label>Teléfono Oficina</label></td>
+                            <td><label>@prov.tel_prov</label></td>
+                        </tr>
+                        <tr>
+                            <td style="width:40%;"><label>Teléfono Celular</label></td>
+                            <td><label>@prov.contacto_tel_1</label></td>
+                        </tr>
+                        <tr>
+                            <td style="width:40%;"><label>Correo Electrónico</label></td>
+                            <td><label>@prov.contacto_correo_1</label></td>
+                        </tr>
+                    </table>
+                    <h3 style="margin:5px;"><strong>Condiciones</strong></h3>
+                    <table>
+                        <tr>
+                            <td style="width:80%;"><label>Unidad de Medida</label></td>
+                            <td><label>@cotizacion.C_unidades_medidas.unidad_medida</label></td>
+                        </tr>
+                        <tr>
+                            <td style="width:80%;"><label>Marca</label></td>
+                            <td><label>@cotizacion.marca</label></td>
+                        </tr>
+                        <tr>
+                            <td style="width:80%;"><label>Presentacion</label></td>
+                            <td><label>@cotizacion.presentacion</label></td>
+                        </tr>
+                        <tr>
+                            <td style="width:80%;"><label>Tiempo de Entrega</label></td>
+                            <td><strong>@cotizacion.dias_entrega Días</strong></td>
+                        </tr>
+                        <tr>
+                            <td style="width:80%;"><label>Crédito</label></td>
+                            <td><strong>@prov.dias_pago Días</strong></td>
+                        </tr>
+                    </table>
+                    <h3 style="margin:5px;"><strong>Cotización</strong></h3>
+                    <table>
+                        <tr>
+                            <td style="width:70%;"><label>Fecha Cotización</label></td>
+                            <td><label>@String.Format(cotizacion.fecha_cotizacion.Value.ToShortDateString(), "dd/mm/aaaa")</label></td>
+                        </tr>
+                        <tr>
+                            <td style="width:70%;"><label>Fecha Vigencia</label></td>
+                            <td><label>@String.Format(cotizacion.fecha_vigencia.Value.ToShortDateString(), "dd/mm/aaaa")</label></td>
+                        </tr>
+                        <tr>
+                            <td style="width:70%;"><label>Fecha de Actualización</label></td>
+                            <td><label>@String.Format(cotizacion.fecha_actualizacion.Value.ToShortDateString(), "dd/mm/aaaa")</label></td>
+                        </tr>
+                    </table>
+                    <h3 style="margin:5px;"><strong>Totales</strong></h3>
+                    <table>
+                        <tr>
+                            <td style="width:60%;"><label>Precio Unitario</label></td>
+                            <td><label>$@cotizacion.precio_unitario.Value.ToString("N9")</label></td>
+                        </tr>
+                        <tr>
+                            <td style="width:60%;"><label>Descuento</label></td>
+                            <td><label>@cotizacion.porcentaje_descuento%</label></td>
+                        </tr>
+                    </table>
+                    <h3 style="margin:5px;"><strong>Subtotal: $@subtotal.ToString("N9") @cotizacion.C_tipos_moneda.clave_fiscal</strong></h3>
+                    <hr />
+                </div>
+                <div class="row">
+                    <div class="col-md-8 mt-3"><strong>Cantidad a Surtir</strong></div>
+                    <div class="col-md-4">
+                        <input class="form-control input_coti_@item.id_cotizacion_requisicion cant_surtir_inputs" type="text" id="cant_surtir_@item.id_cotizacion_requisicion" disabled @*onkeyup="ValidarCantidadSurtir(@item.id_cotizacion_requisicion);"*@ />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-8 mt-3"><strong>Días de Entrega</strong></div>
+                    <div class="col-md-4">
+                        <input class="form-control input_coti_@item.id_cotizacion_requisicion dias_entrega_inputs solo-numeros-spunto" type="text" id="dias_entrega_@item.id_cotizacion_requisicion" disabled onkeyup="ValidarDiasEntrega(@item.id_cotizacion_requisicion);" value="@cotizacion.dias_entrega" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-5 mt-3">
+                        <strong>Comentarios</strong>
+                        <br />
+                        <span style="color:#969696; font-size:12px;">(opcional)</span>
+                    </div>
+                    <div class="col-md-7">
+                        <input class="form-control input_coti_@item.id_cotizacion_requisicion" type="text" id="comentarios_@item.id_cotizacion_requisicion" disabled />
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+    <br />
+    <div class="text-right">
+        <div class="row">
+            <div class="col-md-12 text-right">
+                <button class="btn btn_beta" onclick="GuardarConfirmacionCotizacionArticuloRequisicion(@Model.FirstOrDefault().id_requisicion_articulo_d, @Model.FirstOrDefault().id_requisicion_articulo_g, '@Model.FirstOrDefault().C_articulos_catalogo.nombre_articulo');">Confirmar datos <i class="fa fa-check"></i></button>
+            </div>
+        </div>
+
+    </div>
+    <script>ValidarUnidadMedida(); CaracteresControl();</script>
+}
+else
+{
+    <h1 class="text-danger text-center">OCURRIÓ UN ERROR EN LA CONSULTA</h1>
+}

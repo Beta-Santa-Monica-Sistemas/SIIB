@@ -1,0 +1,16 @@
+﻿@model IEnumerable<Beta_System.Models.C_envios_leche_tipos_tanques>
+
+<div class="col-md-4">
+    @foreach (var item in Model)
+    {
+        <strong>@item.tipo_tanque</strong>
+    }
+</div>
+<div class="col-md-8 text-left">
+    @foreach (var item in Model)
+    {
+        <input id="radio_leche_@item.id_tipo_tanque_pipa" class="ml-2 radio_tipo_tanque leche_mostrar" type="radio" name="radio_tipo_tanque" value="@item.id_tipo_tanque_pipa" style="height:20px; min-height:20px;width:20px;" onclick="TipoConfirmacionEnvioLeche(@item.numero_pipas);" />
+        <br />
+    }
+</div>
+

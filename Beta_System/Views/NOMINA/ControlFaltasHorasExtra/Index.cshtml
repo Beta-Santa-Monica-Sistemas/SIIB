@@ -1,0 +1,133 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+}
+<div class="page_title">
+    <div class="counter_section">
+        <h1>Control de asistencias y horas extras</h1>
+    </div>
+</div>
+
+<div class="column2 counter_section">
+    <div class="row">
+        <div class="col-md-5 text-left" @*style="display:none"*@>
+            <h3 style="margin: 5px;">NOMINA</h3>
+            <h3 style="margin: 5px;">@{ Html.RenderAction("ConsultarFechaInicioFinNomina", "NOMINA"); }</h3>
+        </div>
+        <div class="col-md-3">
+            <strong>Areas:</strong>
+            <select class="form-control" id="id_areas_prenomina_usuario"></select>
+        </div>
+        <div class="col-md-2 text-center">
+            <button class="btn btn_beta_icon" onclick="ConsultarJornadaArea();"><i class="fa fa-search"></i></button>
+        </div>
+        <div class="col-md-12">
+            <br />
+        </div>
+        <div class="col-md-12">
+            <div id="div_jornada_laboral">
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal ACCIONES CHECADOR-->
+<div class="modal fade" id="m_accion_checador" tabindex="-1" role="dialog" aria-labelledby="m_accion_checador" aria-hidden="true">
+    <div class="modal-dialog" role="document" style="min-width:6%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="m_accion_checador_lbl">Control de entrada y salida</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12" style="display:none;">
+                        <label id="entrada_hora_oculto"></label>
+                        <br />
+                        <label id="entrada_minuto_oculto"></label>
+                        <br />
+                        <label id="entrada_zona_oculto"></label>
+                        <br />
+                        <label id="salida_hora_oculto"></label>
+                        <br />
+                        <label id="salida_minuto_oculto"></label>
+                        <br />
+                        <label id="salida_zona_oculto"></label>
+                        <br />
+                    </div>
+                    <div class="col-md-12 text-center">
+                        <strong style="font-size:16px;">DIA</strong><br />
+                        <strong style="font-size:16px;" id="fecha_checador"></strong>
+                    </div>
+                    <div class="col-md-12">
+                        <hr />
+                    </div>
+                    <div class="col-md-4">
+                        <strong>Hora</strong>
+                        <select class="form-control" id="hora">
+                            @for (int i = 1; i <= 12; i++)
+                            {
+                                <option value="@i">@i</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <strong>Minutos</strong>
+                        <select class="form-control" id="minutos">
+                            @for (int i = 0; i <= 59; i++)
+                            {
+                                <option value="@i">@i</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <strong>Uso horario</strong>
+                        <select class="form-control" id="horario">
+                            <option value="AM">A.M.</option>
+                            <option value="PM">P.M.</option>
+                        </select>
+                    </div>
+                    <div class="col-md-12">
+                        <br />
+                    </div>
+                    <div class="col-md-12 text-center">
+                        <button class="btn btn_beta" id="accion_checador">Confirmar</button>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@Scripts.Render("~/bundles_Prenomina/js")
+
+
+<script>
+    $(window).on("load", function () {
+        ConsultarDepartamentosUsuarioSelect();
+        //LupaChecadorEmpleados(2);
+        ObtenerNumeroSemanas();
+
+        $('#m_accion_checador').on('hidden.bs.modal', function () {
+            $("#hora").val(1);
+            $("#minutos").val('00');
+            $("#horario").val('AM');
+            $("#entrada_hora_oculto").text('');
+            $("#entrada_minuto_oculto").text('');
+            $("#entrada_zona_oculto").text('');
+            $("#salida_hora_oculto").text('');
+            $("#salida_minuto_oculto").text('');
+            $("#salida_zona_oculto").text('');
+        });
+    });
+</script>
+

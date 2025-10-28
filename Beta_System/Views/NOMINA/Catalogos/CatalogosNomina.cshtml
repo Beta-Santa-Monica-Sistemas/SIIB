@@ -1,0 +1,272 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+    List<int> permisos = Session["PermisosModulo"] as List<int>;
+}
+
+<style>
+    tr {
+        font-size: 12px;
+    }
+
+    #m_empleados {
+        z-index: 1500;
+    }
+
+    #m_lupa_checador {
+        z-index: 1590;
+    }
+</style>
+
+<div class="page_title">
+    <div class="counter_section">
+        <h1>Administración de catálogos nómina</h1>
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="nav nav-tabs">
+                    <li class="active"> <a data-toggle="tab" href="#tab_puestos_nomina" onclick=""><strong style="padding-left:6px;">PUESTOS</strong><i class="fa fa-briefcase fa-2x ml-2"></i></a></li>
+                    <li class="active"> <a data-toggle="tab" href="#tab_departamentos_nomina" onclick=""><strong style="padding-left:6px;">DEPARTAMENTOS</strong><i class="fa fa-outdent fa-2x ml-2"></i></a></li>
+                    <li class="active"> <a data-toggle="tab" href="#tab_reg_patronal_nomina" onclick=""><strong style="padding-left:6px;">REGIMEN PATRONAL</strong><i class="fa fa-bank fa-2x ml-2"></i></a></li>
+                    <li class="active"> <a data-toggle="tab" href="#tab_empleados" onclick=""><strong style="padding-left:6px;">EMPLEADOS</strong><i class="fa fa-user fa-2x ml-2"></i></a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row column2 counter_section">
+    <div class="tab-content">
+        <div id="tab_puestos_nomina" class="tab-pane fade in active show">
+            <h2>Administración de puestos</h2>
+            <div class="col-md-12 text-right">
+                <button class="btn btn_beta" onclick="PuestoAccion(1);">Registrar puestos</button>
+            </div>
+            <div class="table-responsive" id="div_tabla_puesto">
+            </div>
+        </div>
+
+        <div id="tab_departamentos_nomina" class="tab-pane">
+            <h2>Administración de departamentos</h2>
+            <div class="col-md-12 text-right">
+                <button class="btn btn_beta" onclick="DepartamentoAccion(1);">Registrar departamentos</button>
+            </div>
+            <div class="table-responsive" id="div_tabla_departamento">
+            </div>
+        </div>
+
+        <div id="tab_reg_patronal_nomina" class="tab-pane">
+            <h2>Administración de regimen patronal</h2>
+            <div class="table-responsive" id="div_tabla_regimen_patronal">
+            </div>
+        </div>
+        <div id="tab_empleados" class="tab-pane">
+            <h2>Administración de empleados</h2>
+            <div class="col-md-12">
+                <div class="col-md-3">
+                    <strong>Estatus</strong>
+                    <select class="form-control limpiar_select" id="estatus_buscar">
+                        <option value="T">Todos</option>
+                        <option value="A">Activo</option>
+                        <option value="B">Baja</option>
+                        <option value="I">Inactivo</option>
+                    </select>
+                </div>
+                <div class="col-md-2" style="padding-top:14px">
+                    <button class="btn btn_beta_icon" onclick="EmpleadoTable();"><i class="fa fa-search"></i></button>
+                </div>
+                @*<div class="col-md-7 text-right">
+                    <button class="btn btn_beta" onclick="ModalEmpleados(2);">Registrar empleado</button>
+                </div>*@
+
+            </div>
+            <div class="table-responsive" id="div_tabla_empleados">
+            </div>
+        </div>
+    </div>
+
+</div>
+
+@*------------ MODAL DE PUESTOS*@
+<div class="modal fade" id="m_puesto_nomina" tabindex="-1" role="dialog" aria-labelledby="m_puesto_nomina" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document" style="min-width: 25%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="lbl_puesto_nomina">Informacion del puesto</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12" id="div_mostrar_puesto">
+                        <div class="col-md-8">
+                            <strong>Nombre del puesto</strong>
+                            <input type="text" class="form-control obligatorio_puesto" id="puesto_nombre" onkeyup="" />
+                        </div>
+                        <div class="col-md-2">
+                            <strong>Salario diario</strong>
+                            <input type="text" class="form-control solo-numeros obligatorio_puesto" id="salario" onkeyup="" />
+                        </div>
+                        <div class="col-md-2 text-center" id="div_activo_nomina">
+                            <strong>Salario máximo</strong>
+                            <input type="text" class="form-control solo-numeros obligatorio_puesto" id="salario_maximo" onkeyup="" />
+                        </div>
+
+
+                        <div class="col-md-6 text-right" style="padding-top:10px;">
+                            <button class="btn btn_beta" id="emp_puesto"><i class="fa fa-plus"></i></button>
+                        </div>
+                        <div class="col-md-6" id="div_regresar" style="padding-top:10px;">
+                            <button type="button" class="btn btn_beta_danger" onclick="RegresarPuesto();">Regresar</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+@*------------ MODAL DE DEPARTAMENTOS*@
+<div class="modal fade" id="m_departamento" tabindex="-1" role="dialog" aria-labelledby="m_departamento" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document" style="min-width: 25%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="lbl_departamento">Informacion del departamento</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12" id="div_mostrar_departamento">
+                        <div class="col-md-12">
+                            <strong>Nombre del departamento</strong>
+                            <input type="text" class="form-control" id="departamento_nombre" />
+                        </div>
+                        <div class="col-md-6 text-right" style="padding-top:10px;">
+                            <button class="btn btn_beta" id="emp_departamento"><i class="fa fa-plus"></i></button>
+                        </div>
+                        <div class="col-md-6" id="div_regresar" style="padding-top:10px;">
+                            <button type="button" class="btn btn_beta_danger" onclick="RegresarDepartamentos()">Regresar</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+@*------------ MODAL DE REGIMEN PATRONAL*@
+<div class="modal fade" id="m_regimen_patronal" tabindex="-1" role="dialog" aria-labelledby="m_regimen_patronal" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document" style="min-width: 25%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="lbl_regimen_patronal">Informacion del regimen patronal</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-2">
+                        <strong>Clave</strong>
+                        <input type="text" class="form-control" id="clave_rp" onkeyup="" disabled />
+                    </div>
+                    <div class="col-md-3">
+                        <strong>Número R.P.</strong>
+                        <input type="text" class="form-control" id="numero_rp" onkeyup="" disabled />
+                    </div>
+                    <div class="col-md-3">
+                        <strong>Descripcion</strong>
+                        <input type="text" class="form-control" id="descripcion_rp" onkeyup="" disabled />
+                    </div>
+                    <div class="col-md-2">
+                        <strong>Riesgo sat</strong>
+                        <input type="text" class="form-control" id="clase_riesgo_sat_rp" onkeyup="" disabled />
+                    </div>
+                    <div class="col-md-2">
+                        <strong>Prima riesgo</strong>
+                        <input type="text" class="form-control" id="prima_riesgo_rp" onkeyup="" disabled />
+                    </div>
+                    <div class="col-md-12"><br /></div>
+                    <div class="col-md-3">
+                        <strong>Ciudad</strong>
+                        <input type="text" class="form-control" id="ciudad_rp" onkeyup="" disabled />
+                    </div>
+                    <div class="col-md-2">
+                        <strong>Tipo de ISN</strong>
+                        <input type="text" class="form-control" id="isn_rp" onkeyup="" disabled />
+                    </div>
+                    <div class="col-md-12 text-center" id="div_regresar" style="padding-top:10px;">
+                        <button type="button" class="btn btn_beta_danger" onclick="RegresarDepartamento();">Regresar</button>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+@*------------ MODAL DE EMPLEADOS*@
+<div class="modal fade" id="m_empleados" tabindex="-1" role="dialog" aria-labelledby="m_empleados" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document" style="min-width: 80%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="lbl_empleados">Informacion del empleado</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="div_empleado_informacion"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!--Modal LUPA ASOSIACIÓN CHECADOR-->
+<div class="modal fade" id="m_lupa_checador" tabindex="1" role="dialog" aria-labelledby="m_lupa_checador" aria-hidden="true">
+    <div class="modal-dialog" role="document" style="min-width:40%; max-height:80%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="m_lupa_checador_lbl">Lista de empleados</h2>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="div_lupa_checador_empleados"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@Scripts.Render("~/bundles_Nomina/js")
+@Scripts.Render("~/bundles_Propiedades/js")
+@Scripts.Render("~/bundles_EmpleadoChecador/js")
+<script>
+    $(window).on("load", function () {
+        CaracteresControl();
+        DepartamentoTable();
+        PuestoTable();
+        RegimenPatronalTable();
+        $("#estatus_buscar").val("A");
+        EmpleadoTable();
+
+        $('#m_lupa_checador').on('hidden.bs.modal', function () {
+            $('#m_empleados').focus();
+            $('#m_empleados').css('overflow', 'auto');
+        });;
+        $("#jornada_emp").val("8");
+    });
+</script>

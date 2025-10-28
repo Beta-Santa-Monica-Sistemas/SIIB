@@ -1,0 +1,44 @@
+﻿@{
+    var count = ViewBag.count_tabla;
+
+    var cantidad_dias = ViewBag.cantidad_dias_programacion;
+    var cantidad_dias_json = Newtonsoft.Json.JsonConvert.SerializeObject(cantidad_dias);
+
+    var id_cliente_programacion = ViewBag.id_cliente_programacion;
+    var id_destino_programacion = ViewBag.id_destino_programacion;
+    var id_establo_programacion = ViewBag.id_establo_programacion;
+    var id_cliente_destino_programacion = ViewBag.id_cliente_destino_programacion;
+    var establo_programacion = ViewBag.nombre_establo_programacion;
+    var cliente_programacion = ViewBag.nombre_cliente_programacion;
+    var destino_programacion = ViewBag.nombre_destino_programacion;
+    var id_estimacion = ViewBag.id_estimacion_semanal;
+
+    var contador = 1;
+    var establo = "_" + id_establo_programacion + "_";
+}
+
+<tr id="row_@ViewBag.count_tabla" class="text-center">
+    <td style="display:none;"><label class="establo_programacion informacion_guardar">@ViewBag.id_establo_programacion</label></td>
+    <td style="display:none;"><label class="cliente_programacion informacion_guardar">@ViewBag.id_cliente_programacion</label></td>
+    <td style="display:none;"><label class="destino_programacion informacion_guardar">@ViewBag.id_destino_programacion</label></td>
+    <td style="display:none;"><label class="proveedor_programacion informacion_guardar">@id_cliente_destino_programacion</label></td>
+    <td style="display:none;"><label class="id_estimacion_programacion informacion_guardar">@id_estimacion</label></td>
+    <td><label>@cliente_programacion</label></td>
+    <td><label>@destino_programacion</label></td>
+    <td><label>@establo_programacion</label></td>
+    @foreach (var item in cantidad_dias)
+    {
+        var contado = "_" + contador;
+        var proovedor = "_" + id_cliente_programacion;
+        var id_dia = "_" + item;
+        <td>
+            <div contenteditable="true" class="produccion_dia_cliente_@item@establo produccion_cliente_@id_cliente_programacion@establo@id_destino_programacion resumen_@id_cliente_programacion@id_dia divEditable  informacion_guardar"
+                 oninput="TablaEntero(this);" onkeyup="CalcularTotalProgramacionSemanal(@id_cliente_programacion, @cantidad_dias_json, @id_establo_programacion, '@establo_programacion', @id_cliente_programacion, '@cliente_programacion', @id_destino_programacion);"></div>
+        </td>
+        contador++;
+    }
+    <td>
+        <div contenteditable="false" class="divEditable" oninput="TablaEntero(this);" id="programacion_produccion_t_@id_cliente_programacion@establo@id_destino_programacion"></div>
+    </td>
+    <td><button class="btn btn_beta_danger" onclick="EliminarFilaDetalle(@count,@ViewBag.id_establo_programacion); CalcularTotalProgramacionSemanal(@id_cliente_programacion, @cantidad_dias_json, @id_establo_programacion, '@establo_programacion', @id_cliente_programacion, '@cliente_programacion');"><i class="fa fa-remove"></i></button></td>
+</tr>

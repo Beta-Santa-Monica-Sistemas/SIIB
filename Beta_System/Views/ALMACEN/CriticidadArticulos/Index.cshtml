@@ -1,0 +1,70 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+}
+
+<div class="page_title">
+    <div class="counter_section">
+        <div class="row">
+            <div class="col-md-5">
+                <h1>Configurar criticidad de artículo</h1>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class=" column2 counter_section">
+    <div class="row">
+        <div class="col-md-3 text-center">
+            <strong>Almacen:</strong>
+            <select class="form-control" id="id_almacen" onchange="ShowHideEstabloCriticos(1);">
+                @{ Html.RenderAction("ConsultarAlmacenesUsuarioSelect", "CATALOGOS", new { id_usuario = (int)Session["LoggedId"] }); }
+            </select>
+        </div>
+        <div id="div_cambiar_establo_ajust" class="col-md-1" style="display: none;">
+            <br />
+            <button class="btn btn_beta_danger" onclick="ShowHideEstabloCriticos(2);">CAMBIAR</button>
+        </div>
+
+        <div class="col-md-4 text-center">
+            <strong>Tipo/Familia</strong>
+            <select id="id_articulo_tipo" class="form-control">
+                @{ Html.RenderAction("ConsultarTiposArticulosSelect", "CATALOGOS");}
+            </select>
+        </div>
+        <div class="col-md-3">
+            <strong>Tipo vista</strong>
+            <br /><br />
+            <input type="radio" name="tipo_vista" value="0" checked /><strong>Configuración</strong>
+            <br />
+            <input type="radio" name="tipo_vista" value="1" /><strong>Consulta</strong>
+        </div>
+        <div class="col-md-1 text-center">
+            <br />
+            <button class="btn btn_beta_icon" onclick="ConsultarArticulosCriticidadAlmacen();"><i class="fa fa-search"></i></button>
+        </div>
+    </div>
+    <hr />
+    <div id="div_criticidad_articulos"></div>
+
+</div>
+
+<script>
+    var options_tipos_consumo_criticidad;
+    var options_tipos_operacion_criticidad;
+</script>
+
+@Scripts.Render("~/bundles_Inventario/js")
+
+<script>
+    $(window).on("load", function () {
+        ConsultarTiposConsumoCriticidadSelect();
+        ConsultarTiposOperacionCriticidadSelect();
+    });
+
+</script>
+
+
+

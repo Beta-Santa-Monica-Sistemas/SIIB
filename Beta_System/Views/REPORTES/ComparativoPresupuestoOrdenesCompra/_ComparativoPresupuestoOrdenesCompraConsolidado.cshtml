@@ -1,0 +1,215 @@
+﻿@model IEnumerable<Beta_System.Models.PresupuestosOrdenCompra>
+
+@{
+    List<Beta_System.Models.C_presupuestos_meses> meses_presupuesto = Session["ReporteMesesPresupuestoAlmacen"] as List<Beta_System.Models.C_presupuestos_meses>;
+
+    int id_anio = (int)ViewBag.id_anio_reporte;
+    int anio_numero = Convert.ToInt32(ViewBag.anio_numero);
+
+    List<int> permisos = Session["PermisosModulo"] as List<int>;
+}
+
+@if (Model != null)
+{
+    <div class="table-responsive">
+        <table class="table table-sm table-condensed small table-bordered table-striped" id="datatable_consolidado">
+            <tr class="bg-beta text-center">
+                <th>Clave</th>
+                <th>Cuenta</th>
+                @foreach (var mes in meses_presupuesto)
+                {
+                    <th colspan="3">@mes.mes</th>
+                }
+            </tr>
+            <tr class="text-center bg-dark text-white">
+                <td></td>
+                <td></td>
+
+                <td>Presupuesto</td>
+                <td>Ejercido</td>
+                <td>Disponible</td>
+
+                <td>Presupuesto</td>
+                <td>Ejercido</td>
+                <td>Disponible</td>
+
+                <td>Presupuesto</td>
+                <td>Ejercido</td>
+                <td>Disponible</td>
+
+                <td>Presupuesto</td>
+                <td>Ejercido</td>
+                <td>Disponible</td>
+
+                <td>Presupuesto</td>
+                <td>Ejercido</td>
+                <td>Disponible</td>
+
+                <td>Presupuesto</td>
+                <td>Ejercido</td>
+                <td>Disponible</td>
+
+                <td>Presupuesto</td>
+                <td>Ejercido</td>
+                <td>Disponible</td>
+
+                <td>Presupuesto</td>
+                <td>Ejercido</td>
+                <td>Disponible</td>
+
+                <td>Presupuesto</td>
+                <td>Ejercido</td>
+                <td>Disponible</td>
+
+                <td>Presupuesto</td>
+                <td>Ejercido</td>
+                <td>Disponible</td>
+
+                <td>Presupuesto</td>
+                <td>Ejercido</td>
+                <td>Disponible</td>
+
+                <td>Presupuesto</td>
+                <td>Ejercido</td>
+                <td>Disponible</td>
+            </tr>
+
+            @foreach (var cargo_contable in Model.GroupBy(x => x.id_cargo_contable).Distinct())
+            {
+                int id_cargo_contable = cargo_contable.FirstOrDefault().id_cargo_contable;
+                string nombre_cargo = cargo_contable.FirstOrDefault().nombre_cargo;
+
+                <tr class="text-center bg-dark text-white">
+                    <td>@nombre_cargo</td>
+                    <td></td>
+
+                    <td></td>
+                    <td></td>
+                    <td></td>
+
+                    <td></td>
+                    <td></td>
+                    <td></td>
+
+                    <td></td>
+                    <td></td>
+                    <td></td>
+
+                    <td></td>
+                    <td></td>
+                    <td></td>
+
+                    <td></td>
+                    <td></td>
+                    <td></td>
+
+                    <td></td>
+                    <td></td>
+                    <td></td>
+
+                    <td></td>
+                    <td></td>
+                    <td></td>
+
+                    <td></td>
+                    <td></td>
+                    <td></td>
+
+                    <td></td>
+                    <td></td>
+                    <td></td>
+
+                    <td></td>
+                    <td></td>
+                    <td></td>
+
+                    <td></td>
+                    <td></td>
+                    <td></td>
+
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+
+
+                foreach (var items in Model.Where(x => x.id_cargo_contable == id_cargo_contable).Distinct())
+                {
+                    foreach (var item in Model.Where(x => x.cuenta == items.cuenta).Distinct())
+                    {
+                        <tr class="text-center">
+                            <td>@items.cuenta_string</td>
+                            <td>@items.descripcion</td>
+
+                            <td>@string.Format("{0:C}", @item.ene_asignado)</td>
+                            <td>@string.Format("{0:C}", @item.ene_consumido)</td>
+                            <td>@string.Format("{0:C}", @item.ene_disponible)</td>
+
+
+                            <td>@string.Format("{0:C}", @item.feb_asignado)</td>
+                            <td>@string.Format("{0:C}", @item.feb_consumido)</td>
+                            <td>@string.Format("{0:C}", @item.feb_disponible)</td>
+
+
+                            <td>@string.Format("{0:C}", @item.mar_asignado)</td>
+                            <td>@string.Format("{0:C}", @item.mar_consumido)</td>
+                            <td>@string.Format("{0:C}", @item.mar_disponible)</td>
+
+                            <td>@string.Format("{0:C}", @item.abr_asignado)</td>
+                            <td>@string.Format("{0:C}", @item.abr_consumido)</td>
+                            <td>@string.Format("{0:C}", @item.abr_disponible)</td>
+
+                            <td>@string.Format("{0:C}", @item.mayo_asignado)</td>
+                            <td>@string.Format("{0:C}", @item.mayo_consumido)</td>
+                            <td>@string.Format("{0:C}", @item.mayo_disponible)</td>
+
+                            <td>@string.Format("{0:C}", @item.jun_asignado)</td>
+                            <td>@string.Format("{0:C}", @item.jun_consumido)</td>
+                            <td>@string.Format("{0:C}", @item.jun_disponible)</td>
+
+                            <td>@string.Format("{0:C}", @item.jul_asignado)</td>
+                            <td>@string.Format("{0:C}", @item.jul_consumido)</td>
+                            <td>@string.Format("{0:C}", @item.jul_disponible)</td>
+
+                            <td>@string.Format("{0:C}", @item.ago_asignado)</td>
+                            <td>@string.Format("{0:C}", @item.ago_consumido)</td>
+                            <td>@string.Format("{0:C}", @item.ago_disponible)</td>
+
+                            <td>@string.Format("{0:C}", @item.sep_asignado)</td>
+                            <td>@string.Format("{0:C}", @item.sep_consumido)</td>
+                            <td>@string.Format("{0:C}", @item.sep_disponible)</td>
+
+
+                            <td>@string.Format("{0:C}", @item.oct_asignado)</td>
+                            <td>@string.Format("{0:C}", @item.oct_consumido)</td>
+                            <td>@string.Format("{0:C}", @item.oct_disponible)</td>
+
+
+                            <td>@string.Format("{0:C}", @item.nov_asignado)</td>
+                            <td>@string.Format("{0:C}", @item.nov_consumido)</td>
+                            <td>@string.Format("{0:C}", @item.nov_disponible)</td>
+
+                            <td>@string.Format("{0:C}", @item.dic_asignado)</td>
+                            <td>@string.Format("{0:C}", @item.dic_consumido)</td>
+                            <td>@string.Format("{0:C}", @item.dic_disponible)</td>
+
+                        </tr>
+                    }
+                }
+            }
+
+        </table>
+    </div>
+
+
+
+
+
+}
+else
+{
+    <div class="col-md-12 text-center">
+        <h1 style="color:red">ES NECESARIO ASIGNAR PRESUPUESTO A LA CUENTA CONTABLE</h1>
+        <h2 style="color:red">(La cuenta contable no cuenta con un presupuesto asignado)</h2>
+    </div>
+}

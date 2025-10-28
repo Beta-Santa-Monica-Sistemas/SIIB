@@ -1,0 +1,591 @@
+﻿
+@{
+    ViewBag.Title = "MovimientosNomina";
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+    List<int> permisos = Session["PermisosModulo"] as List<int>;
+}
+
+<style>
+    tr {
+        font-size: 12px;
+    }
+
+    #m_incidencia_nomina {
+        z-index: 1500;
+    }
+
+    #m_lupa_empleado {
+        z-index: 1590;
+    }
+</style>
+<div class="page_title">
+    <div class="counter_section">
+        <h1>Administración de movimientos de nómina</h1>
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="nav nav-tabs">
+                    <li class="active">
+                        <a data-toggle="tab" href="#tab_incidencias_nomina" onclick="">
+                            <strong style="padding-left:6px;">INCIDENCIAS</strong>
+                            <i class="fa fa-exclamation-circle fa-2x ml-2"></i>
+                        </a>
+                    </li>
+                    <li>
+                        <a data-toggle="tab" href="#tab_inasistencia_nomina">
+                            <strong style="padding-left:6px;">FALTAS</strong>
+                            <i class="fa fa-2x fa-calendar-times-o ml-2"></i>
+                        </a>
+                    </li>
+                    @if (permisos.Contains(4038))
+                    {
+                        <li>
+                            <a data-toggle="tab" href="#tab_cambio_salario_nomina">
+                                <strong style="padding-left:6px;">CAMBIO DE SALARIOS</strong>
+                                <i class="fa fa-2x fa-money ml-2"></i>
+                            </a>
+                        </li>
+                    }
+
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="column2 counter_section">
+    <div class="tab-content">
+
+        <!--INCIDENCIA-->
+        <div id="tab_incidencias_nomina" class="tab-pane fade in active show">
+            <h3 class="text-center mt-4">Administración de Incidencias</h3>
+            <div class="row">
+                <div class="col-md-2" style="padding-top:14px;">
+                    <strong>Tipo de incidencia</strong>
+                    <select class="form-control limpiar_select" id="incidencia_reporte" onchange="TipoIncidenciaAccion();">
+                        <option value="0">TODAS</option>
+                        @{ Html.RenderAction("ConsultarTipoIncidenciaNominaSelect", "CATALOGOS"); }
+                    </select>
+                </div>
+                <div class="col-md-2" style="padding-top:14px;">
+                    <strong>Fecha inicial</strong>
+                    <input class="form-control limpiar_datetime" type="date" id="fecha_incidencia_reporte1" />
+                </div>
+                <div class="col-md-2" style="padding-top:14px;">
+                    <strong>Fecha final</strong>
+                    <input class="form-control limpiar_datetime" type="date" id="fecha_incidencia_reporte2" />
+                </div>
+                <div class="col-md-1" style="padding-top:22px">
+                    <button class="btn btn_beta_icon" onclick="ConsultarReporteIncidencias();"><i class="fa fa-search"></i></button>
+                </div>
+                <div class="col-md-3 text-left" style="padding-top:22px">
+                    <button class="btn btn_beta" onclick="ExportarIncidenciasExcel(1);"><i class="fa fa-print"></i>GENERAR REPORTE EXCEL</button>
+                </div>
+                @if (permisos.Contains(4039))
+                {
+                    <div class="col-md-2 text-right" style="padding-top:22px">
+                        <button class="btn btn_beta" onclick="ModalIncidencias(1);"><i class="fa fa-plus"></i> Nueva incidencia</button>
+                    </div>
+                }
+
+                <div class="col-md-12">
+                    <br /><hr />
+                </div>
+                <div class="col-md-12">
+                    <div id="div_reporte_empleado_incidencias">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--FALTAS-->
+        <div id="tab_inasistencia_nomina" class="tab-pane fade">
+            <ul class="nav nav-tabs">
+                <li class="active"> <a data-toggle="tab" href="#tab_nomina_faltas">ADMINISTRACION DE FALTAS<i class="fa fa-2x fa-calendar ml-2"></i></a></li>
+                <li><a data-toggle="tab" href="#tab_nomina_faltas_reporte">REPORTE DE FALTAS<i class="fa fa-2x fa-search ml-2"></i></a></li>
+            </ul>
+
+            <div class="tab-content">
+                <div id="tab_nomina_faltas" class="tab-pane fade in active show">
+                    <h3 class="text-center mt-4">Administración de faltas</h3>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <strong>Areas</strong>
+                            <select class="form-control limpiar_select" id="area_inasistencia_emp">
+                                @*<option value="-1">NINGUNO</option>*@
+                                <option value="0">TODOS</option>
+                                @{ Html.RenderAction("ConsultarDepartamentoNominaSelect", "CATALOGOS"); }
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <strong style="display:block">Fecha inicio</strong>
+                            <strong style="display: block; font-size: 16px; padding-top:8px;" id="fecha_inicio_area"></strong>
+                        </div>
+                        <div class="col-md-2">
+                            <strong style="display:block">Fecha fin</strong>
+                            <strong style="display: block; font-size: 16px; padding-top: 8px;" id="fecha_fin_area"></strong>
+                        </div>
+                        <div class="col-md-1" style="padding-top:18px">
+                            <button class="btn btn_beta_icon" onclick="MostrarInasistenciaEmpleadoGeneralTable();"><i class="fa fa-search"></i></button>
+                        </div>
+                        @if (permisos.Contains(4040))
+                        {
+                            <div class="col-md-3 text-right">
+                                <button class="btn btn_beta" onclick="ModalInasistencia(1);"><i class="fa fa-plus"></i> Registrar falta</button>
+                            </div>
+                        }
+
+                        <div class="table-responsive" id="div_tabla_inasistencia_general">
+                        </div>
+                    </div>
+                </div>
+
+                <div id="tab_nomina_faltas_reporte" class="tab-pane fade">
+                    <h3 class="text-center mt-4">Reporte de faltas</h3>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <strong>Areas</strong>
+                            <select class="form-control limpiar_select" id="area_inasistencia_emp_reporte">
+                                <option value="0">TODOS</option>
+                                @{ Html.RenderAction("ConsultarDepartamentoNominaSelect", "CATALOGOS"); }
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <strong>Fecha inicio</strong>
+                            <input type="date" class="form-control" id="fecha_inicio" />
+                        </div>
+                        <div class="col-md-2">
+                            <strong>Fecha fin</strong>
+                            <input type="date" class="form-control" id="fecha_fin" />
+                        </div>
+                        <div class="col-md-1" style="padding-top:18px">
+                            <button class="btn btn_beta_icon" onclick="ReporteFaltasEmpleado();"><i class="fa fa-search"></i></button>
+                        </div>
+                        <div class="col-md-3 text-right">
+                            <button class="btn btn_beta" onclick="GenerarFormatoReporte();"><strong><i class="fa fa-download"></i> GENERAR REPORTE PDF</strong></button>
+                        </div>
+                    </div>
+                    <hr />
+                    <div id="div_reporte_empleado_inasistencia">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--CAMBIO DE SALARIO MASIVO-->
+        <div id="tab_cambio_salario_nomina" class="tab-pane fade">
+            <h3 class="text-center">CAMBIO DE SALARIO MASIVO</h3>
+            <hr />
+            <div class="row">
+                <div class="col-md-2">
+                    <h5 class="text-left"><strong>Buscar por:</strong></h5>
+
+                    <input type="radio" name="radio_tipo_busqueda" value="1" style="height: 20px; min-height: 20px; width: 20px; min-width: 20px;" onclick="MostrarFiltrosConceptosMasivos();" />
+                    <strong>Puesto</strong>
+                    <br />
+                    <input type="radio" name="radio_tipo_busqueda" value="2" style="height: 20px; min-height: 20px; width: 20px; min-width: 20px;" onclick="MostrarFiltrosConceptosMasivos();" />
+                    <strong>Salario</strong>
+                </div>
+
+                <div class="col-md-4 formulario_puesto" style="display:none;">
+                    <div class="row">
+                        <div class="col-md-10">
+                            <strong>Selecciona un puesto:</strong>
+                            <select class="form-control" id="id_puesto_cambio_salario">
+                                @{ Html.RenderAction("ConsultarPuestosNominaActivosSelect", "CATALOGOS"); }
+                            </select>
+                        </div>
+                        <div class="coi-md-2">
+                            <br />
+                            <button class="btn btn_beta_icon" onclick="ConsultarEmpleadosCambioSalarioMasivo(1)"><i class="fa fa-search"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4 formulario_salario" style="display:none;">
+                    <div class="row">
+                        <div class="col-md-10">
+                            <strong>Salario diario:</strong>
+                            <input type="number" class="form-control" id="salario_diario_cambio_salario" />
+                        </div>
+                        <div class="coi-md-2">
+                            <br />
+                            <button class="btn btn_beta_icon" onclick="ConsultarEmpleadosCambioSalarioMasivo(2)"><i class="fa fa-search"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-5 formulario_nuevo_salario" style="display:none;">
+                    <div class="row">
+                        <div class="col-md-10">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <strong>Nuevo salario diario:</strong>
+                                    <input type="number" class="form-control" id="salario_diario_masivo" onkeyup="CalcularSalarioHora();" />
+                                </div>
+                                <div class="col-md-6">
+                                    <strong>Salario por hora (8hrs):</strong>
+                                    <input type="number" class="form-control" id="salario_hora_masivo" readonly disabled />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2 text-center">
+                            <br />
+                            <button class="btn btn_beta" onclick="CambiarSalariosMasivosEmpleados();"><i class="fa fa-refresh"></i> Cambiar salarios</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <br />
+            <div id="div_empleados_cambio_salario_empleados" class="table-responsive" style="height: 500px; min-height:500px; overflow:scroll; overflow-x:hidden;"></div>
+
+
+
+        </div>
+
+    </div>
+</div>
+
+
+
+<!--MODAL INASISTENCIA-->
+<div class="modal fade" id="m_inasistencia_nomina" tabindex="-1" role="dialog" aria-labelledby="m_inasistencia_nomina" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document" style="min-width: 50%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="row" style="display:contents;">
+                    <div class="col-md-8 mt-3">
+                        <h3 class="modal-title" id="lbl_inasistencia_nomina">Registro de faltas</h3>
+                    </div>
+                    <div class="col-md-2 text-right" style="padding-top:14px;" id="div_empleado_btn">
+                        <button class="btn btn_beta" onclick="EmpleadoModal(2);"><i class="fa fa-search"></i>Buscar empleado</button>
+                    </div>
+                    <div class="col-md-1">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="modal-body">
+                <div class="col-md-12" style="display:none">
+                    <label id="empleado_inasistencia_estatus"></label>
+                </div>
+                <div class="col-md-12" style="display:none">
+                    <label id="empleado_inasistencia_id"></label>
+                </div>
+                <div class="col-md-12" style="display:none">
+                    <label id="empleado_depa_inasistencia_id"></label>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 text-center div_ocultar">
+                        <h2>Información del empleado</h2>
+                    </div>
+                    <div class="col-md-4 text-center div_ocultar" style="padding-top:14px;">
+                        <strong style="font-size:16px;">Empleado</strong>
+                        <strong id="empleado_inasistencia_emp" style="display: block; font-size: 16px;"></strong>
+                    </div>
+                    <div class="col-md-4 text-center div_ocultar" style="padding-top:14px;">
+                        <strong style="display: block; font-size: 16px;">Puesto</strong>
+                        <strong id="empleado_puesto_emp" style="display: block; font-size: 16px;"></strong>
+                    </div>
+                    <div class="col-md-4 text-center div_ocultar" style="padding-top:14px;">
+                        <strong style="display: block; font-size: 16px;">Departamento</strong>
+                        <strong id="empleado_departamento_emp" style="display: block; font-size: 16px;"></strong>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <br />
+                </div>
+                <div class="col-md-12 div_ocultar" id="div_dias_inasistencia" style="padding-top:5%;">
+
+                </div>
+                <div class="col-md-12 text-center div_ocultar" style="padding-top:14px" id="div_btn_accion_inasistencia">
+                    <button class="btn_beta btn  btn-success" onclick="ConfirmarInasistencias();">Confirmar</button>
+                </div>
+                <div class="col-md-12">
+                    <br />
+                </div>
+                <div class="col-md-12 table-responsive div_ocultar" id="div_empleado_inasistencia">
+
+                </div>
+
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+<!--MODAL INASISTENCIA DETALLE-->
+<div class="modal fade" id="m_inasistencia_nomina_detalle" tabindex="-1" role="dialog" aria-labelledby="m_inasistencia_nomina_detalle" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document" style="min-width: 50%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Desglose de faltas</h2>
+            </div>
+            <div class="modal-body">
+                <div class="col-md-12">
+                    <div class="table-responsive" id="div_tabla_inasistencia_general_detalle">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+@*------------ MODAL DE INCIDENCIA*@
+<div class="modal fade" id="m_incidencia_nomina" tabindex="-1" role="dialog" aria-labelledby="m_incidencia_nomina" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document" style="min-width: 60%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="lbl_incidencia_nomina">Incidencia</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12" style="display:none">
+                        <label id="lista_negra"></label>
+                    </div>
+                    <div class="col-md-12" style="display:none">
+                        <label id="empleado_id"></label>
+                    </div>
+                    <div class="col-md-12" style="display:none">
+                        <label id="empleado_estatus_incidencia"></label>
+                    </div>
+                    <div class="col-md-12" style="padding-top:14px;"><h2>General</h2></div>
+                    <div class="col-md-6" style="padding-top:14px;">
+                        <strong>Tipo de incidencia</strong>
+                        <select class="form-control limpiar_select" id="incidencia_emp" onchange="TipoIncidenciaAccion();">
+                            @{ Html.RenderAction("ConsultarTipoIncidenciaNominaSelect", "CATALOGOS"); }
+                        </select>
+                    </div>
+                    <div class="col-md-6" style="padding-top:14px;">
+                        <strong>Fecha</strong>
+                        <input class="form-control limpiar_datetime" type="date" id="fecha_incidencia_emp" />
+                    </div>
+                    <div class="col-md-7" style="padding-top:14px;" id="div_empleado">
+                        <strong>Empleado</strong>
+                        <input type="text" id="empleado_emp" class="form-control limpiar_input" disabled />
+                    </div>
+                    <div class="col-md-1" style="padding-top:28px;" id="div_empleado_btn">
+                        <button class="btn btn_beta_icon" onclick="AsignarLupaEmpleado();"><i class="fa fa-plus"></i></button>
+                    </div>
+                    <div class="col-md-4" style="padding-top:14px;" id="div_actual_patronal">
+                        <strong>Regimen patronal</strong>
+                        <select class="form-control limpiar_select" id="registro_patronal_emp" disabled>
+                            @{ Html.RenderAction("ConsultarRegimenPatronalNominaSelect", "CATALOGOS"); }
+                        </select>
+                    </div>
+                    <div class="col-md-6" style="padding-top:14px;" id="div_nuevo_patronal">
+                        <strong>Nuevo regimen patronal</strong>
+                        <select class="form-control limpiar_select" id="nuevo_registro_patronal_emp">
+                            @{ Html.RenderAction("ConsultarRegimenPatronalNominaSelect", "CATALOGOS"); }
+                        </select>
+                    </div>
+                    <div class="col-md-12"><hr /></div>
+                    <div class="col-md-12" id="div_salarios_incidencias">
+                        <div class="col-md-6">
+                            <div class="col-md-12" style="padding-top:14px;"><h2>Informacion actual</h2></div>
+                            <div class="col-md-12" style="padding-top:14px;">
+                                <strong>Puesto:</strong>
+                                <select class="form-control limpiar_select" id="puesto_emp_anterior" disabled>
+                                    @{ Html.RenderAction("ConsultarPuestoNominaSelect", "CATALOGOS"); }
+                                </select>
+                            </div>
+                            <div class="col-md-12" style="padding-top:14px;">
+                                <strong>Departamento:</strong>
+                                <select class="form-control limpiar_select" id="departamento_anterior" disabled>
+                                    @{ Html.RenderAction("ConsultarDepartamentoNominaSelect", "CATALOGOS"); }
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="col-md-12" style="padding-top:14px;"><h2>Informacion nueva</h2></div>
+                            <div class="col-md-12" style="padding-top:14px;">
+                                <strong>Puesto:</strong>
+                                <select class="form-control limpiar_select" id="puesto_emp_nuevo">
+                                    @{ Html.RenderAction("ConsultarPuestoNominaSelect", "CATALOGOS"); }
+                                </select>
+                            </div>
+                            <div class="col-md-12" style="padding-top:14px;">
+                                <strong>Departamento: </strong>
+                                <select class="form-control limpiar_select" id="departamento_emp_nuevo">
+                                    @{ Html.RenderAction("ConsultarDepartamentoNominaSelect", "CATALOGOS"); }
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="col-md-12" style="padding-top:14px;"><h2>Salario Actual</h2></div>
+                            <div class="col-md-12" style="padding-top:14px;">
+                                <strong>Sueldo diario</strong>
+                                <input type="text" id="sueldo_diario_actual_emp" class="form-control limpiar_input solo-numeros" disabled />
+                            </div>
+                            <div class="col-md-12" style="padding-top:14px;">
+                                <strong>Sueldo por hora</strong>
+                                <input type="text" id="sueldo_hora_actual_emp" class="form-control limpiar_input solo-numeros" disabled />
+                            </div>
+                            <div class="col-md-12" style="padding-top:14px;">
+                                <strong>Sueldo integrado</strong>
+                                <input type="text" id="sueldo_integrado_actual_emp" class="form-control limpiar_input solo-numeros" disabled />
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="col-md-12" style="padding-top:14px;"><h2>Salario Nuevo</h2></div>
+                            <div class="col-md-12" style="padding-top:14px;">
+                                <strong>Sueldo diario</strong>
+                                <input type="text" id="sueldo_diario_nuevo_emp" class="form-control limpiar_input solo-numeros" onkeyup="CalcularCambioSalarial();" />
+                            </div>
+                            <div class="col-md-12" style="padding-top:14px;">
+                                <strong>Sueldo por hora</strong>
+                                <input type="text" id="sueldo_hora_nuevo_emp" class="form-control limpiar_input solo-numeros" disabled />
+                            </div>
+                            <div class="col-md-12" style="padding-top:14px;">
+                                <strong>Sueldo integrado</strong>
+                                <input type="text" id="sueldo_integrado_nuevo_emp" class="form-control limpiar_input solo-numeros" disabled />
+                            </div>
+                        </div>
+
+                        <div class="col-md-12"><hr /></div>
+
+                        <div class="col-md-6" style="padding-top:14px;">
+                            <strong>Tipo de salario</strong>
+                            <input type="text" id="tipo_salario" class="form-control" disabled />
+                        </div>
+                        <div class="col-md-6" style="padding-top:14px;">
+                            <strong>Porcentaje integracion</strong>
+                            <input type="text" id="porcentaje_integracion" class="form-control limpiar_input" disabled />
+                        </div>
+
+                        <div class="col-md-12" style="padding-top:14px;">
+                            <strong>Observaciones</strong>
+                            <input type="text" id="observaciones_incidencia" class="form-control limpiar_input" />
+                        </div>
+                    </div>
+
+                    <div class="col-md-12" id="div_baja_empleado" style="padding-top:14px;">
+                        <div class="col-md-12">
+                            <strong>Causa de la baja</strong>
+                            <select class="form-control limpiar_select" id="causa_baja_empleado">
+                                <option>Término del contrato</option>
+                                <option>Separacion voluntaria</option>
+                                <option>Abandono de empleo</option>
+                                <option>Defuncion</option>
+                                <option>Clausura</option>
+                                <option>Otras</option>
+                            </select>
+                        </div>
+                        <div class="col-md-10" style="padding-top:14px;">
+                            <strong>Observaciones</strong>
+                            <input type="text" id="observaciones_incidencia_baja" class="form-control limpiar_input" />
+                        </div>
+                        <div class="col-md-2 text-center"  style="padding-top:14px;">
+                            <strong>Lista negra</strong>
+                            <input type="checkbox" class="form-control text-center" id="lista_negra_chk" style="height:30px;" />
+                        </div>
+                    </div>
+
+                </div>
+                <div class="col-md-12 text-center" style="padding-top:14px" id="div_btn_accion">
+                    <button class="btn btn_beta" onclick="ConfirmarIncidencia();">Confirmar</button>
+                </div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Modal LUPA EMPLEADO FILTRO-->
+<div class="modal fade" id="m_lupa_empleado" tabindex="1" role="dialog" aria-labelledby="m_lupa_empleado" aria-hidden="true">
+    <div class="modal-dialog" role="document" style="min-width:60%; max-height:60%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="m_lupa_empleaado_lbl">Lista de empleados</h2>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        <strong>Areas</strong>
+                        <select class="form-control limpiar_select" id="depta_emp">
+                            <option value="-1">NINGUNO</option>
+                            @*<option value="0">TODOS</option>*@
+                            @{ Html.RenderAction("ConsultarDepartamentosUsuarioSelect", "CATALOGOS"); }
+                        </select>
+                    </div>
+                    <div class="col-md-4" id="filtro_lupa">
+                        <strong>Estatus: </strong>
+                        <select class="form-control limpiar_select" id="estatus_emp">
+                            <option value="0">TODOS</option>
+                            <option value="A">ACTIVO</option>
+                            <option value="I">INACTIVO</option>
+                            <option value="B">BAJA</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-1" style="padding-top:18px">
+                        <button class="btn btn_beta_icon" onclick="LupaEmpleados();" id="buscador_empleado"><i class="fa fa-search"></i></button>
+                    </div>
+                    <div class="col-md-12"><br /></div>
+                    <div class="col-md-12">
+                        <div id="div_lupa_empleados"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@Scripts.Render("~/bundles_Nomina/js")
+@Scripts.Render("~/bundles_Prenomina/js")
+@Scripts.Render("~/bundles_Propiedades/js")
+
+<script>
+    $(window).on("load", function () {
+        $('#fecha_incidencia_reporte1').val(last_week);
+        $('#fecha_incidencia_reporte2').val(today);
+
+
+        CaracteresControl();
+        ConsultarIncidenciasNominaTable();
+        TipoIncidenciaAccion();
+        ObtenerLunesSabadoActual();
+        $('#m_lupa_empleado').on('hidden.bs.modal', function () {
+            $('#m_incidencia_nomina').focus();
+            $('#m_incidencia_nomina').css('overflow', 'auto');
+
+            $('#m_inasistencia_nomina').focus();
+            $('#m_inasistencia_nomina').css('overflow', 'auto');
+        });
+
+        $('#m_inasistencia_nomina').on('hidden.bs.modal', function () {
+            MostrarInasistenciaEmpleadoGeneralTable();
+            $("#empleado_inasistencia_id").text('')
+            $("#detalle_empleado_inasistencia").text('');
+        });
+
+        $('#m_inasistencia_nomina_detalle').on('hidden.bs.modal', function () {
+            MostrarInasistenciaEmpleadoGeneralTable();
+            $("#empleado_inasistencia_id").text('')
+            $("#detalle_empleado_inasistencia").text('');
+            $("#div_tabla_inasistencia_general_detalle").html("");
+        });
+        MostrarInasistenciaEmpleadoGeneralTable();
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>

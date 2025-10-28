@@ -1,0 +1,111 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+}
+
+<div class="page_title">
+    <div class="counter_section">
+        <div class="row">
+            <div class="col-md-6">
+                <h1>Quick view articulos</h1>
+            </div>
+            <div class="col-md-3">
+                <strong>Almacen:</strong>
+                <select id="id_almacen_g" class="form-control">
+                    @{ Html.RenderAction("ConsultarAlmacenesUsuarioSelect", "CATALOGOS", new { id_usuario = (int)Session["LoggedId"] }); }
+                </select>
+            </div>
+            <div class="col-md-3">
+                <strong>Articulo tipo/almacén:</strong>
+                <select class="form-control " id="id_tipo_articulos">
+                    <option value="0">TODOS</option>
+                    @{ Html.RenderAction("ConsultarTiposArticulosSelect", "CATALOGOS"); };
+                </select>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class=" column2 counter_section">
+    <strong>Articulo:</strong>
+    <input type="text" class="form-control " id="clave_nombre" name="clave_nombre" placeholder="Ingresa la clave o el nombre del articulos" />
+    <input type="number" id="id_articulo_quick_view" style="display:none;" />
+</div>
+
+
+
+<!-- Modal QUICK VIEW articulo-->
+<div class="modal fade" id="m_quick_view_articulo" tabindex="-1" role="dialog" aria-labelledby="m_quick_view_articuloLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document" style="width: 90%; min-width:90%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="m_quick_view_articuloLabel">QUICK VIEW</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="div_quick_view_articulo"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn_beta_danger" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@Scripts.Render("~/bundles_ReportesAlmacen/js")
+@Scripts.Render("~/bundles_OrdenesCompra/js")
+
+<script>
+    $('#m_quick_view_articulo').on('hidden.bs.modal', function (e) {
+        $("#clave_nombre").val('');
+        $("#clave_nombre").focus();
+    });
+
+    $("#clave_nombre").autocomplete({
+        source: function (request, response) {
+            $.ajax({
+                type: "POST",
+                async: false,
+                url: "../ALMACEN/ConsultarArticulosQuickView",
+                data: {
+                    clave_nombre: $("#clave_nombre").val(),
+                    id_tipo_articulos: 0
+                },
+                success: function (data) {
+                    var data2 = $.parseJSON(data);
+                    response($.map(data2, function (item) {
+                        $("#id_articulo_quick_view").val(item.id_articulo);
+                        return { label: item.nombre_articulo + " | " + item.clave, value: item.nombre_articulo + " | " + item.clave };
+                    }))
+                },
+                error: function (xhr, status, error) {
+                    //alert(error);
+                }
+            });
+        }
+    });
+
+    $('#clave_nombre').on('keydown', function (event) {
+        if ($("#clave_nombre").val() != '') {
+            //var clave_nombre = $("#clave_nombre").val().split('|')[1].trim();
+            if (event.keyCode === 13 || event.keyCode === 9) {
+                ConsultarQuickViewArticulo();
+            }
+        }
+        else if (event.keyCode === 13 || event.keyCode === 9) {
+            iziToast.warning({
+                title: 'Aviso',
+                message: 'Ingresa el nombre o la clave de articulo para buscar.',
+            });
+        }
+    });
+
+    $("#ui-id-1").on('click', function (event) {
+        ConsultarQuickViewArticulo();
+    });
+</script>

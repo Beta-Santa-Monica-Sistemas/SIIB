@@ -1,0 +1,52 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+}
+
+<div class="page_title">
+    <div class="counter_section">
+        <h1>Reporte de Ordenes de compra</h1>
+    </div>
+</div>
+
+
+<div class=" column2 counter_section">
+    <div class="row">
+        <div class="col-md-2">
+            <strong>Fecha inicio:</strong>
+            <input type="date" class="form-control" id="fecha_inicio" />
+        </div>
+        <div class="col-md-2">
+            <strong>Fecha fin:</strong>
+            <input type="date" class="form-control" id="fecha_fin" />
+        </div>
+        <div class="col-md-4">
+            <strong>Clasificaciones:</strong>
+            <select class="form-control select_multiple" id="id_clasificaciones" multiple>
+                @{ Html.RenderAction("MostrarClasificacionSelect", "CATALOGOS"); }
+            </select>
+        </div>
+
+        <div class="col-md-3">
+            <br />
+            <button class="btn btn_beta_icon" onclick="ConsultarReporteOrdenesCompraTable();"><i class="fa fa-search"></i></button>
+        </div>
+
+    </div>
+
+    <div class="table-responsive" id="div_reporte_ordenes_compra" ></div>
+</div>
+
+@Scripts.Render("~/bundles_ReportesCompras/js")
+
+<script>
+    $(window).on("load", function () {
+        $('#fecha_inicio').val(last_week);
+        $('#fecha_fin').val(today);
+
+        $('.fecha_inicio').val(last_week);
+        $('.fecha_fin').val(today);
+    });
+</script>
+

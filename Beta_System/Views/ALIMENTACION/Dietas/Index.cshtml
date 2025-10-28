@@ -1,0 +1,369 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+    List<int> permisos = Session["PermisosModulo"] as List<int>;
+}
+
+
+<div class="page_title">
+    <div class="counter_section">
+        <h1>Administración de dietas</h1>
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="nav nav-tabs">
+                    @if (permisos.Contains(4060))
+                    {
+                        <li> <a data-toggle="tab" href="#consultar_dietas_tab">Consultar dietas <i class="fa fa-2x fa-search ml-2"></i></a> </li>
+                    }
+
+                    @if (permisos.Contains(4055))
+                    {
+                        <li> <a data-toggle="tab" href="#dietas_edicion_tab">En edición <i class="fa fa-2x fa-edit ml-2"></i></a> </li>
+                    }
+                    @if (permisos.Contains(4062))
+                    {
+                        <li> <a data-toggle="tab" href="#dietas_revision_tab">En revisión <i class="fa fa-2x fa-check ml-2"></i></a> </li>
+                    }
+
+                    @if (permisos.Contains(4056))
+                    {
+                        <li> <a data-toggle="tab" href="#dietas_autorizar_tab">Por autorizar <i class="fa fa-2x fa-clock-o ml-2"></i></a> </li>
+                    }
+                    @if (permisos.Contains(4057))
+                    {
+                        <li> <a data-toggle="tab" href="#dietas_aplicar_tab">Por aplicar <i class="fa fa-2x fa-check ml-2"></i></a> </li>
+                    }
+                    @if (permisos.Contains(4058))
+                    {
+                        <li> <a data-toggle="tab" href="#registrar_dieta">Registra nueva dieta <i class="fa fa-2x fa-plus ml-2"></i></a> </li>
+                    }
+                </ul>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<div class="column2 counter_section">
+    <div class="tab-content">
+
+        @* DIETAS AUTORIZADAS *@
+        @if (permisos.Contains(4060))
+        {
+            <div id="consultar_dietas_tab" class="tab-pane fade in active show">
+                <h3 class="text-center">CONSULTAR DIETAS</h3>
+                <hr />
+                <div class="row">
+                    <div class="col-md-3">
+                        <strong>Establo</strong>
+                        <select class="id_establo_select form-control" id="id_establo_consultar_dietas"></select>
+                    </div>
+                    <div class="col-md-3">
+                        <strong>Estatus:</strong>
+                        <select class="form-control" id="id_status_consultar_dietas">
+                            @{ Html.RenderAction("ConsultarEstatusDietasSelect", "CATALOGOS"); }
+
+                        </select>
+                    </div>
+                    <div class="col-md-1 text-center">
+                        <br />
+                        <button class="btn btn_beta_icon" onclick="ConsultarDietasGeneralTable();"><i class="fa fa-search"></i></button>
+                    </div>
+                </div>
+                <div class="table-responsive" id="datatable_dietas_autorizadas">
+                    @*@{ Html.RenderAction("ConsultarDietasEstatusTable", "ALIMENTACION", new { id_status = 4 }); }*@
+                </div>
+            </div>
+        }
+
+        @* DIETAS EN EDICION *@
+        @if (permisos.Contains(4055))
+        {
+            <div id="dietas_edicion_tab" class="tab-pane">
+                <h3 class="text-center">DIETAS EN EDICIÓN</h3>
+                <hr />
+                <div class="table-responsive" id="datatable_dietas_edicion">
+                    @{ Html.RenderAction("ConsultarDietasEstatusTable", "ALIMENTACION", new { id_status = 1 }); }
+                </div>
+            </div>
+        }
+
+        @* DIETAS POR AUTORIZAR *@
+        @if (permisos.Contains(4056))
+        {
+            <div id="dietas_autorizar_tab" class="tab-pane fade">
+                <h3 class="text-center">DIETAS POR AUTORIZAR</h3>
+                <hr />
+                <div class="table-responsive" id="datatable_dietas_autorizacion">
+                    @{ Html.RenderAction("ConsultarDietasEstatusTable", "ALIMENTACION", new { id_status = 2 }); }
+                </div>
+            </div>
+        }
+
+        @* DIETAS POR APLICAR *@
+        @if (permisos.Contains(4057))
+        {
+            <div id="dietas_aplicar_tab" class="tab-pane fade">
+                <h3 class="text-center">DIETAS POR APLICAR</h3>
+                <hr />
+                <div class="table-responsive" id="datatable_dietas_aplicar">
+                    @{ Html.RenderAction("ConsultarDietasEstatusTable", "ALIMENTACION", new { id_status = 3 }); }
+                </div>
+            </div>
+        }
+
+
+        @* DIETAS EN REVISIÓN *@
+        @if (permisos.Contains(4062))
+        {
+            <div id="dietas_revision_tab" class="tab-pane fade">
+                <h3 class="text-center">DIETAS EN REVISIÓN</h3>
+                <hr />
+                <div class="table-responsive" id="datatable_dietas_revision">
+                    @{ Html.RenderAction("ConsultarDietasEstatusTable", "ALIMENTACION", new { id_status = 6 }); }
+                </div>
+            </div>
+        }
+
+        
+
+
+        @* REGISTRAR DIETA *@
+        @if (permisos.Contains(4058))
+        {
+            <div id="registrar_dieta" class="tab-pane fade">
+                <h3 class="text-center">REGISTRAR DIETA</h3>
+                <hr />
+                <div class="row" id="div_registro_dieta_header">
+                    <div class="col-md-3">
+                        <strong>Establo</strong>
+                        <select class="id_establo_select form-control" id="id_establo_new_dieta"></select>
+                    </div>
+                    <div class="col-md-3">
+                        <strong>Grupo</strong>
+                        <select class="form-control" id="grupo_new_dieta">
+                            @{ Html.RenderAction("ConsultarGruposDietasSelect", "CATALOGOS"); }
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <strong>Inicio planeado</strong>
+                        <input type="date" class="form-control" id="inicio_new_dieta" />
+                    </div>
+                    <div class="col-md-3">
+                        <strong>Final planeado</strong>
+                        <input type="date" class="form-control" id="fin_new_dieta" />
+                    </div>
+
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-5">
+                        <strong>Dieta:</strong>
+                        <input type="text" class="form-control input_clear" id="nombre_new_dieta" />
+                    </div>
+                    <div class="col-md-7">
+                        <strong>Descripción</strong>
+                        <input type="text" class="form-control input_clear" id="desc_new_dieta" />
+                    </div>
+                </div>
+                <h3 class="text-center">INGREDIENTES</h3>
+                <div class="row">
+                    <div class="col-md-8"></div>
+                    <div class="col-md-4 text-center">
+                        <strong>Copiar dieta:</strong>
+                        <div class="row">
+                            <div class="col-md-9">
+                                <select class="form-control" id="id_dieta_new_copia">
+                                    <option value="0">Ninguna</option>
+                                    @{ Html.RenderAction("ConsultarDietasAutorizadasSelect", "CATALOGOS", new { id_status = 4 }); }
+                                </select>
+                            </div>
+                            <div class="col-md-3 row">
+                                <button class="btn btn_beta_warning" id="btn_cancelar_copia_dieta" onclick="ShowHideCopiarInformacionDieta(2);" style="display:none">Cancelar</button>
+                                <button class="btn btn_beta" id="btn_aceptar_copia_dieta" onclick="CopiarInforamcionDietaNewDieta(); ShowHideCopiarInformacionDieta(1)">Copiar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered table-hover">
+                        <thead>
+                            <tr class="bg-beta text-center">
+                                <th style="display:none;">ID</th>
+                                <th style="width:38%;">Ingrediente</th>
+                                <th>% MS</th>
+                                <th>Kg MS</th>
+                                <th>Kg BH</th>
+                                <th>Precio</th>
+                                <th>Costo BH</th>
+                                <th>MS Original</th>
+                                <th>Diferencia</th>
+                                <th>Eliminar</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbody_new_dieta" class="text-center">
+                        </tbody>
+                        <tfoot>
+                            <tr class="text-center bg-beta">
+                                <td colspan="2" class="text-left"><strong>Total</strong></td>
+                                <td><strong id="total_kg_ms"></strong></td>
+                                <td><strong id="total_kg_bh"></strong></td>
+                                <td></td>
+                                <td><strong id="total_costo_bh"></strong></td>
+                                <td colspan="4"></td>
+                            </tr>
+                            <tr class="text-center bg-green">
+                                <td colspan="5" class="text-left"><strong>Costo Kg MS</strong></td>
+                                <td><strong id="total_costo_kg_bh"></strong></td>
+                                <td colspan="4"></td>
+                            </tr>
+
+                            <tr class="text-center">
+                                <td style="display:none;" id="new_id_alimento"></td>
+                                <td style="width:400px;">
+                                    <select class="form-control" id="new_nombre_alimento" onchange="ConsultarPrecioAlimento(1); ConsultarUltimoMSAlimento(1);">
+                                        @{ Html.RenderAction("ConsultarArticulosBasculaTiposSelect", "CATALOGOS", new { tipo_ficha = 2 });}
+                                    </select>
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control input_valid_new solo-numeros-spunto" id="new_porc_ms" onkeyup="CalcularKgBH(1);" />
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control input_valid_new solo-numeros" id="new_kg_ms" onkeyup="CalcularKgBH(1);" />
+                                </td>
+                                <td>
+                                    <strong id="new_kg_bh"></strong>
+                                </td>
+                                <td>
+                                    <strong id="new_precio"></strong>
+                                </td>
+                                <td>
+                                    <strong id="new_costo_bh"></strong>
+                                </td>
+                                <td colspan="3" class="text-center">
+                                    <button class="btn btn_beta_icon" onclick="AgregarNewIngredienteDieta()"><i class="fa fa-plus"></i></button>
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                    <i class="fa fa-2x fa-square" aria-hidden="true" style="background-color: #ffeb9c; color:#ffeb9c;"></i><strong class="ml-1">Valor modificado de la dieta que se tomó como base</strong>
+                </div>
+                <hr />
+                <div class="row">
+                    <div class="col-md-8 text-left">
+                        <h3 class="text-center">COMENTARIOS</h3>
+                        <textarea rows="5" class="form-control" id="comentario_new_dieta"></textarea>
+                    </div>
+                    <div class="col-md-4 text-right">
+                        <button class="btn btn_beta" onclick="GuardarNewDieta();">GUARDAR DIETA</button>
+                    </div>
+                </div>
+
+            </div>
+        }
+    </div>
+</div>
+
+
+
+
+<!-- Modal CONSULTAR DIETA-->
+<div class="modal fade" id="m_detalle_dieta" tabindex="-1" role="dialog" aria-labelledby="m_consultar_dietaLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document" style="min-width: 97%; width: 97%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="m_consultar_dietaLabel">CONSULTAR DIETA</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="div_detalle_dieta"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn_beta_danger" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal EDITAR INFORMACION GENERAL DIETA -->
+<div class="modal" id="m_editar_info_dieta_general" tabindex="-1" role="dialog" aria-labelledby="m_editar_info_dieta_generalLabel" aria-hidden="true" style="z-index: 999999;">
+    <div class="modal-dialog" role="document" style="min-width: 70%; width: 70%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="m_editar_info_dieta_generalLabel">EDITAR DIETA</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <h3 class="text-center">Editar información general</h3>
+                <div class="row">
+                    <div class="col-md-5">
+                        <strong>Dieta:</strong>
+                        <input type="text" class="form-control input_clear" id="nombre_edit_dieta" />
+                    </div>
+                    <div class="col-md-7">
+                        <strong>Descripción</strong>
+                        <input type="text" class="form-control input_clear" id="desc_edit_dieta" />
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-3">
+                        <strong>Inicio planeado</strong>
+                        <input type="date" class="form-control" id="inicio_edit_dieta" />
+                    </div>
+                    <div class="col-md-3">
+                        <strong>Final planeado</strong>
+                        <input type="date" class="form-control" id="fin_edit_dieta" />
+                    </div>
+                </div>
+                <hr />
+                <div class="text-center">
+                    <button id="btn_actualizar_dieta_general" class="btn btn_beta">ACTUALIZAR</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@Scripts.Render("~/bundles_AlimentacionDietas/js")
+@Scripts.Render("~/bundles_Propiedades/js")
+
+<script>
+    $(window).on("load", function () {
+        ConsultarEstablosUsuarioSelect(0);
+        ConsultarPrecioAlimento(1);
+
+        $('input[type="date"]').val(today);
+        $('.fechas_inicio').val(last_2_months);
+
+        try {
+            $("#new_nombre_alimento").select2({
+                placeholder: 'Selecciona un ingrediente',
+                //dropdownParent: $("#tabulador")
+            });
+        }
+        catch (ex) { }
+        $('.id_establo_select option[value="4"]').remove();
+
+        const todos_option = $('<option>', { value: '0', text: 'Todos' });
+        $(".id_establo_select").prepend(todos_option);
+        $("#id_status_consultar_dietas").prepend(todos_option);
+        CaracteresControl();
+    });
+
+</script>
+
+
+
+
+
+

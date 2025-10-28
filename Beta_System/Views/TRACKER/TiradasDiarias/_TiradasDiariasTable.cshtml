@@ -1,0 +1,199 @@
+﻿@model List<Beta_System.Models.Tracker.TiradasDiarias>
+
+@if (Model.Count() > 0)
+{
+    var data_mezcla = ViewBag.data_mezcla as List<Beta_System.Models.Tracker.TiradasDiarias>;
+
+    decimal total_prod_ptto = 0;
+    decimal total_prod_real = 0;
+
+    decimal total_seca_ptto = 0;
+    decimal total_seca_real = 0;
+
+    decimal total_reto_ptto = 0;
+    decimal total_reto_real = 0;
+
+    decimal total_otros_ptto = 0;
+    decimal total_otros_real = 0;
+
+    decimal sumatoria_total_ptto = 0;
+    decimal sumatoria_total_real = 0;
+
+    decimal total_MEZRET = 0;
+    decimal total_MEREVQ = 0;
+    decimal total_MESECA = 0;
+    decimal total_MEZSUA = 0;
+    decimal total_REMOHU = 0;
+    decimal sumatoria_mezclas = 0;
+
+    <h2 class="text-left">Cargas por Ingrediente:</h2>
+    <table class="table table-striped table-bordered" id="datatable_tiradas_diarias">
+        <thead>
+            <tr class="text-center bg-beta">
+                <th colspan="2"></th>
+                <th colspan="2">Producción</th>
+                <th colspan="2">Secas</th>
+                <th colspan="2">Reto</th>
+                <th colspan="2">Otros</th>
+                <th colspan="2">Total</th>
+            </tr>
+            <tr class="text-center bg-green">
+                <th>Clave</th>
+                <th>Ingrediente</th>
+
+                <th>Ppto</th>
+                <th>Real</th>
+
+                <th>Ppto</th>
+                <th>Real</th>
+
+                <th>Ppto</th>
+                <th>Real</th>
+
+                <th>Ppto</th>
+                <th>Real</th>
+
+                <th>Ppto</th>
+                <th>Real</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Select(x => x.id_ing).Distinct())
+            {
+                var data_ing = Model.Where(x => x.id_ing == item).FirstOrDefault();
+                decimal prod_ppto = Model.Where(x => x.id_ing == data_ing.id_ing && x.tipo == "PRODUCCION").Select(x => x.ppto).Sum();
+                decimal prod_real = Model.Where(x => x.id_ing == data_ing.id_ing && x.tipo == "PRODUCCION").Select(x => x.real).Sum();
+
+                decimal sec_ptto = Model.Where(x => x.id_ing == data_ing.id_ing && x.tipo == "SECAS").Select(x => x.ppto).Sum();
+                decimal sec_real = Model.Where(x => x.id_ing == data_ing.id_ing && x.tipo == "SECAS").Select(x => x.real).Sum();
+
+                decimal reto_ptto = Model.Where(x => x.id_ing == data_ing.id_ing && x.tipo == "RETO").Select(x => x.ppto).Sum();
+                decimal reto_real = Model.Where(x => x.id_ing == data_ing.id_ing && x.tipo == "RETO").Select(x => x.real).Sum();
+
+                decimal otro_ptto = Model.Where(x => x.id_ing == data_ing.id_ing && x.tipo == "OTRO").Select(x => x.ppto).Sum();
+                decimal otro_real = Model.Where(x => x.id_ing == data_ing.id_ing && x.tipo == "OTRO").Select(x => x.real).Sum();
+
+                decimal total_ptto = prod_ppto + sec_ptto + reto_ptto + otro_ptto;
+                decimal total_real = prod_real + sec_real + reto_real + otro_real;
+
+                total_prod_ptto += prod_ppto;
+                total_prod_real += prod_real;
+
+                total_seca_ptto += sec_ptto;
+                total_seca_real += sec_real;
+
+                total_reto_ptto += reto_ptto;
+                total_reto_real += reto_real;
+
+                total_otros_ptto += otro_ptto;
+                total_otros_real += otro_real;
+
+                sumatoria_total_ptto += total_ptto;
+                sumatoria_total_real += total_real;
+
+                <tr class="text-right">
+                    <td class="text-center">@data_ing.clave</td>
+                    <td class="text-center">@data_ing.ingrediente</td>
+
+                    <td class="text-center">@Convert.ToInt32(prod_ppto).ToString("N2")</td>
+                    <td class="text-center">@Convert.ToInt32(prod_real).ToString("N2")</td>
+
+                    <td class="text-center">@Convert.ToInt32(sec_ptto).ToString("N2")</td>
+                    <td class="text-center">@Convert.ToInt32(sec_real).ToString("N2")</td>
+
+                    <td class="text-center">@Convert.ToInt32(reto_ptto).ToString("N2")</td>
+                    <td class="text-center">@Convert.ToInt32(reto_real).ToString("N2")</td>
+
+                    <td class="text-center">@Convert.ToInt32(otro_ptto).ToString("N2")</td>
+                    <td class="text-center">@Convert.ToInt32(otro_real).ToString("N2")</td>
+
+                    <td class="text-center">@Convert.ToInt32(total_ptto).ToString("N2")</td>
+                    <td class="text-center">@Convert.ToInt32(total_real).ToString("N2")</td>
+                </tr>
+            }
+            <tr class="text-right bg-beta">
+                <td class="text-center"><strong>Totales</strong></td>
+                <td class="text-center"></td>
+
+                <td class="text-center">@Convert.ToInt32(total_prod_ptto).ToString("N2")</td>
+                <td class="text-center">@Convert.ToInt32(total_prod_real).ToString("N2")</td>
+
+                <td class="text-center">@Convert.ToInt32(total_seca_ptto).ToString("N2")</td>
+                <td class="text-center">@Convert.ToInt32(total_seca_real).ToString("N2")</td>
+
+                <td class="text-center">@Convert.ToInt32(total_reto_ptto).ToString("N2")</td>
+                <td class="text-center">@Convert.ToInt32(total_reto_real).ToString("N2")</td>
+
+                <td class="text-center">@Convert.ToInt32(total_otros_ptto).ToString("N2")</td>
+                <td class="text-center">@Convert.ToInt32(total_otros_real).ToString("N2")</td>
+
+                <td class="text-center">@Convert.ToInt32(sumatoria_total_ptto).ToString("N2")</td>
+                <td class="text-center">@Convert.ToInt32(sumatoria_total_real).ToString("N2")</td>
+            </tr>
+        </tbody>
+    </table>
+
+
+    <h2 class="text-left">Preparación de Mezclas:</h2>
+    <table class="table table-striped table-bordered" id="datatable_prepaacion_mezclas">
+        <thead>
+            <tr class="text-center bg-beta">
+                <th>Clave</th>
+                <th>Ingrediente</th>
+                <th>MEZRET</th>
+                <th>MEREVQ</th>
+                <th>MESECA</th>
+                <th>MEZSUA</th>
+                <th>REMOHU</th>
+                <th>TOTAL</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var mezcla in data_mezcla.Select(x => x.id_ing).Distinct())
+            {
+                var data_ing = data_mezcla.Where(x => x.id_ing == mezcla).FirstOrDefault();
+                decimal MEZRET = data_mezcla.Where(x => x.id_ing == data_ing.id_ing && x.tipo == "MEZRET").Select(x => x.real).Sum();
+                decimal MEREVQ = data_mezcla.Where(x => x.id_ing == data_ing.id_ing && x.tipo == "MEREVQ").Select(x => x.real).Sum();
+                decimal MESECA = data_mezcla.Where(x => x.id_ing == data_ing.id_ing && x.tipo == "MESECA").Select(x => x.real).Sum();
+                decimal MEZSUA = data_mezcla.Where(x => x.id_ing == data_ing.id_ing && x.tipo == "MEZSUA").Select(x => x.real).Sum();
+                decimal REMOHU = data_mezcla.Where(x => x.id_ing == data_ing.id_ing && x.tipo == "REMOHU").Select(x => x.real).Sum();
+                decimal total = MEZRET + MEREVQ + MESECA + MEZSUA + REMOHU;
+
+                total_MEZRET += MEZRET;
+                total_MEREVQ += MEREVQ;
+                total_MESECA += MESECA;
+                total_MEZSUA += MEZSUA;
+                total_REMOHU += REMOHU;
+
+                sumatoria_mezclas += total;
+                <tr class="text-center">
+                    <td>@data_ing.clave</td>
+                    <td class="text-left">@data_ing.ingrediente</td>
+                    <td>@MEZRET.ToString("N2")</td>
+                    <td>@MEREVQ.ToString("N2")</td>
+                    <td>@MESECA.ToString("N2")</td>
+                    <td>@MEZSUA.ToString("N2")</td>
+                    <td>@REMOHU.ToString("N2")</td>
+                    <td>@total.ToString("N2")</td>
+                </tr>
+            }
+            <tr class="text-center bg-beta">
+                <td><strong>TOTALES</strong></td>
+                <td class="text-left"></td>
+                <td>@total_MEZRET.ToString("N2")</td>
+                <td>@total_MEREVQ.ToString("N2")</td>
+                <td>@total_MESECA.ToString("N2")</td>
+                <td>@total_MEZSUA.ToString("N2")</td>
+                <td>@total_REMOHU.ToString("N2")</td>
+                <td>@sumatoria_mezclas.ToString("N2")</td>
+            </tr>
+        </tbody>
+    </table>
+}
+else
+{
+    <h4 class="text-center">No se encontró información</h4>
+}
+
+

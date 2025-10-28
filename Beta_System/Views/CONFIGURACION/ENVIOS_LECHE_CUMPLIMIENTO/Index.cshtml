@@ -1,0 +1,113 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+}
+
+<div class="page_title">
+    <div class="counter_section">
+        <h1>Configuracion de compromiso envio leche</h1>
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="nav nav-tabs">
+                    <li class="active"> <a data-toggle="tab" href="#tabCompromiso">Compromiso<i class="fa fa-truck fa-2x ml-2"></i></a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row column2 counter_section">
+    <div class="tab-content">
+        <div id="tabCompromiso" class="tab-pane show active">
+            <h3 class="text-center">Administracion de compromisos</h3>
+            <div class="row">
+                <div class="col-md-2">
+                    <strong>Año</strong>
+                    <select class="form-control" id="selectAnioTabla">
+                        <option value="0">TODOS</option>
+                        @{ Html.RenderAction("ConsultarAniosPresupuestoSelect", "COMPRAS"); }
+                    </select>
+                </div>
+                <div class="col-md-4 p-3">
+                    <button class="btn btn_beta_icon" onclick="TablaCompromisoClientes();"><i class="fa fa-search"></i></button>
+                </div>
+                <div class="col-md-6 text-right">
+                    <button class="btn_beta" onclick="ModalCompromiso();">Registrar</button>
+                </div>
+                <div class="col-md-12"><hr /></div>
+                <div class="col-md-12">
+                    <div class="table-responsive">
+                        <div id="div_compromiso_cliente"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<!--Modal Cumplimiento-->
+<div class="modal fade" id="modalCompromiso" tabindex="-1" role="dialog" aria-labelledby="modalCompromiso" aria-hidden="true">
+    <div class="modal-dialog" role="document" style="min-width:95%; max-height:700px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="modalCompromisolbl">Compromiso anual</h2>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row" id="rowRegistroCompromiso">
+                    <div class="col-md-1">
+                        <strong>Anio</strong>
+                        <select class="form-control" id="selectAnio">
+                            @{ Html.RenderAction("ConsultarAniosPresupuestoSelect", "COMPRAS"); }
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <strong>Cliente</strong>
+                        <select class="form-control select_autocomplete" id="selectCliente">
+                            <option value="0">Selecciona un cliente</option>
+                            @{Html.RenderAction("ConsultarClienteEnvioLecheSelect", "CATALOGOS");}
+                        </select>
+                    </div>
+                    <div class="col-md-2 p-3">
+                        <button class="btn btn_beta_icon" onclick="ValidarCargaCompromisoCliente();" id="btnCompromisoBuscar"><i class="fa fa-check"></i></button>
+                    </div>
+                    <div class="col-md-12" id="div_tablas_compromiso"></div>
+                </div>
+                <div class="row" id="rowMostrarCompromiso">
+                    <div class="col-md-12" id="div_tabla_mostrar_compromiso"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@Scripts.Render("~/bundles_Catalogos_EnviosLeche/js")
+
+<script type="text/javascript">
+    $(window).on("load", function () {
+        TablaCompromisoClientes();
+
+
+        $("#selectCliente").select2({
+            placeholder: 'Selecciona un cliente',
+            dropdownParent: $('#modalCompromiso'),
+            allowClear: true
+        });
+
+        $('#modalCompromiso').on('hidden.bs.modal', function () {
+            TablaCompromisoClientes();
+            $("#rowRegistroCompromiso").css("display", "none");
+            $("#rowMostrarCompromiso").css("display", "none");
+        });
+    });
+</script>

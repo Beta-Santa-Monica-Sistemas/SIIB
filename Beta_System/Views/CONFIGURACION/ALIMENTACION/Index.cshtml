@@ -1,0 +1,54 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+}
+
+<div class="page_title">
+    <div class="counter_section">
+        <h1>Catálogos de alimentación</h1>
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="nav nav-tabs">
+                    <li class="active"> <a data-toggle="tab" href="#precios_forraje_tab">PRECIOS FORRAJE<i class="fa fa-2x fa-money ml-2"></i></a> </li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="row column2 counter_section">
+    <div class="tab-content">
+        <div id="precios_forraje_tab" class="tab-pane fade in active show">
+            <div id="div_precios_forraje"></div>
+        </div>
+    </div>
+</div>
+
+
+
+
+@Scripts.Render("~/bundles_Catalogos_Forrajes/js")
+
+<script>
+    $(window).on("load", function () {
+        //ConsultarEstablosUsuarioSelect(0);
+        ConsultarPreciosArticulosForrajesTable();
+        $('input[type="date"]').val(today);
+        $('.fechas_inicio').val(last_2_months);
+
+        const todos_option = $('<option>', { value: '0', text: 'Todos' });
+        $(".id_establo_select").prepend(todos_option);
+
+        try {
+            $(".select_autocomplete").select2({
+                placeholder: 'Selecciona un proveedor',
+                //dropdownParent: $("#tabulador")
+            });
+        }
+        catch (ex) { }
+        $(".id_establo_select").val("0");
+    });
+
+</script>

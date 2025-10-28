@@ -1,0 +1,22 @@
+﻿@model IEnumerable<Beta_System.Models.C_bascula_fichas_tipos>
+@if (Model.Count() > 0)
+{
+    <h3 class="text-center">TIPO DE ARTICULO</h3>
+    <div class="d-flex justify-content-center">
+        @foreach (var item in Model)
+        {
+            <div class="col-md-2 text-center">
+                <strong>@item.tipo_ficha</strong><br />
+                <input id="check_tipo_articulo_@item.id_ficha_tipo" class="tipo_ficha_articulo" type="checkbox" style="width: 30px; height: 30px; display: inline-block;">
+            </div>
+        }
+        <div class="col-md-2 text-center">
+            <strong class="text-danger">Remover</strong><br />
+            <input id="check_tipo_articulo_0" class="tipo_ficha_articulo" type="checkbox" style="width: 30px; height: 30px; display: inline-block;">
+        </div>
+    </div>
+}
+else
+{
+    <h2 class="text-center" style="color:red">NO SE ENCONTRARON LOS TIPOS DE ARTICULOS</h2>
+}

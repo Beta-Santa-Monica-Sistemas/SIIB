@@ -1,0 +1,1092 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+    List<int> permisos = Session["PermisosModulo"] as List<int>;
+}
+<style>
+    .leche_boton {
+        background-color: #1E90FF;
+        font-size: 14px;
+        color: #FFFFFF;
+        width: 60px;
+    }
+
+    .leche_strong {
+        background-color: #1E90FF;
+        font-size: 16px;
+        color: #FFFFFF;
+    }
+
+    .col-md-custom {
+        margin-bottom: 13px;
+    }
+</style>
+
+<div class="page_title">
+    <div class="counter_section">
+        <h1>Envios de Leche</h1>
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="nav nav-tabs">
+                    <li class="active"> <a data-toggle="tab" href="#consultar_envios_leche">Envios de leche<i class="fa fa-2x fa-truck ml-2"></i></a> </li>
+                    <li> <a data-toggle="tab" href="#estimacion_diaria">Estimacion de produccion diaria <i class="fa fa-2x fa-line-chart ml-2"></i></a> </li>
+                    <li> <a data-toggle="tab" href="#programacion_semanal">Programa de leche<i class="fa fa-2x fa-bar-chart ml-2"></i></a> </li>
+                    <li> <a data-toggle="tab" href="#confirmacion_envio_leche">Confirmacion de envios<i class="fa fa-2x fa-pie-chart ml-2"></i></a> </li>
+                    <li> <a data-toggle="tab" href="#lotes_envio_leche">Lotes de envio a factura<i class="fa fa-2x fa-usd ml-2"></i></a> </li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="row column2 counter_section">
+    <div class="tab-content">
+        @* ENVIO DE LECHE *@
+        <div id="consultar_envios_leche" class="tab-pane fade in active show">
+            <h3 class="text-center">CONTROL DEL ENVIO DE LECHE</h3>
+            <div class="row">
+                <div class="col-md-2" id="filtros_fecha1">
+                    <strong>Fecha inicial</strong>
+                    <input type="date" class="form-control" id="buscar_fecha_inicial" />
+                </div>
+
+                <div class="col-md-2" id="filtros_fecha2">
+                    <strong>Fecha final</strong>
+                    <input type="date" class="form-control" id="buscar_fecha_final" />
+                </div>
+
+                <div class="col-md-3">
+                    <strong>Folio</strong>
+                    <input type="text" id="buscar_folio" class="form-control" />
+                </div>
+                <div class="col-md-1" style="padding-top:12px">
+                    <button class="btn btn_beta_icon" onclick="ConsultarEnviosDeLecheTable();"><i class="fa fa-search"></i></button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-2">
+                    <strong>Establo:</strong>
+                    <select class="form-control id_establo_leche_select" id="buscar_establo">
+                    </select>
+                </div>
+                <div class="col-md-5">
+                    <strong>Destino:</strong>
+                    <select class="form-control select_autocomplete" id="buscar_destino">
+                        <option value="0">TODOS</option>
+                        @{ Html.RenderAction("ConsultarDestinoEnvLecheSelect", "CATALOGOS");}
+                    </select>
+                </div>
+
+
+                <div class="col-md-5">
+                    <strong>Cliente:</strong>
+                    <select class="form-control select_autocomplete" id="buscar_cliente">
+                        <option value="0">TODOS</option>
+                        @{ Html.RenderAction("ConsultarProveedoresTipoBasculaSelect", "CATALOGOS", new { tipo_ficha = 1 }); };
+                    </select>
+                </div>
+            </div>
+
+
+            <div class="col-md-12"><hr /></div>
+            <div class="table-responsive">
+                <div id="div_envios_leche"></div>
+            </div>
+        </div>
+        @* ESTIMACION DIARIA *@
+        <div id="estimacion_diaria" class="tab-pane fade in">
+            <h3 class="text-center">PRODUCCIÓN DIARIA</h3>
+            <div class="row">
+                <div class="col-md-2">
+                    <strong>Establo:</strong>
+                    <select class="form-control id_establo_leche_select" id="establo_consulta_estimacion">
+                    </select>
+                </div>
+                <div class="col-md-1">
+                    <strong>Año:</strong>
+                    <select class="form-control" id="ano_consulta_estimacion" onchange="ObtenerSemanasFechaMensualIndexEstimacion();">
+                        <option value="0">TODOS</option>
+                        @{ Html.RenderAction("ConsultarAniosPresupuestoSelect", "COMPRAS"); }
+                    </select>
+                </div>
+                <div class="col-md-5">
+                    <div class="col-md-4">
+                        <strong>Mes:</strong>
+                        <select class="form-control" id="mes_consulta_estimacion" onchange="ObtenerSemanasFechaMensualIndexEstimacion();">
+                            <option value="0">TODOS</option>
+                            @{ Html.RenderAction("ConsultarMesesSelet", "COMPRAS"); }
+                        </select>
+                    </div>
+                    <div class="col-md-8">
+                        <strong>Semana:</strong>
+                        <select class="form-control" id="semana_consulta_estimacion"></select>
+                    </div>
+                </div>
+
+                <div class="col-md-1" style="padding-top:13px">
+                    <button class="btn btn_beta_icon" onclick="ConsultaEstimacionDiariaTable();"><i class="fa fa-search"></i></button>
+                </div>
+                <div class="col-md-3 text-right" style="padding-top:9px">
+                    <button class="btn btn_beta" onclick="ModalEstimacionDiaria();"><i class="fa fa-plus"></i> REGISTRAR PRODUCCION</button>
+                </div>
+                <div class="col-md-12"><hr /></div>
+                <div class="col-md-12">
+                    <div id="div_estimacion_diaria_consulta"></div>
+                </div>
+            </div>
+        </div>
+        @* PROGRAMACION SEMANAL *@
+        <div id="programacion_semanal" class="tab-pane fade in">
+            <h3 class="text-center">PROGRAMACIÓN SEMANAL</h3>
+            <div class="row">
+                <div class="col-md-1">
+                    <strong>Año:</strong>
+                    <select class="form-control" id="ano_consulta_programacion" onchange="ObtenerSemanasFechaMensualIndexPrograma();">
+                        <option value="0">TODOS</option>
+                        @{ Html.RenderAction("ConsultarAniosPresupuestoSelect", "COMPRAS"); }
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <strong>Mes:</strong>
+                    <select class="form-control" id="mes_consulta_programacion" onchange="ObtenerSemanasFechaMensualIndexPrograma();">
+                        <option value="0">TODAS</option>
+                        @{ Html.RenderAction("ConsultarMesesSelet", "COMPRAS"); }
+                    </select>
+                </div>
+                <div class="col-md-5">
+                    <strong>Semana:</strong>
+                    <select class="form-control" id="semana_consulta_programacion">
+                    </select>
+                </div>
+
+                <div class="col-md-1" style="padding-top:13px">
+                    <button class="btn btn_beta_icon" onclick="ConsultaProgramacionSemanalTable();"><i class="fa fa-search"></i></button>
+                </div>
+                <div class="col-md-3 text-right" style="padding-top:9px">
+                    <button class="btn btn_beta" onclick="ModalProgramacionSemanal();"><i class="fa fa-plus"></i> NUEVA PROGRAMACION</button>
+                </div>
+
+                <div class="col-md-12"><br /></div>
+                <div class="table-responsive" id="div_programacion_semanal_consulta">
+                </div>
+            </div>
+        </div>
+        @* CONFIRMACION ENVIO LECHE *@
+        <div id="confirmacion_envio_leche" class="tab-pane fade in">
+            <h3 class="text-center">CONFIRMACION DE ENVIOS</h3>
+            <div class="row">
+                <div class="col-md-2">
+                    <strong>Fecha Inicial</strong>
+                    <input type="date" class="form-control" id="confirmacion_fecha1" />
+                </div>
+                <div class="col-md-2">
+                    <strong>Fecha Final</strong>
+                    <input type="date" class="form-control" id="confirmacion_fecha2" />
+                </div>
+                <div class="col-md-1" style="padding-top:13px">
+                    <button class="btn btn_beta_icon" onclick="ConsultaConfirmacionLecheTable();"><i class="fa fa-search"></i></button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-2">
+                    <strong>Establo</strong>
+                    <select class="form-control id_establo_leche_select" id="confirmacion_establo">
+                    </select>
+                </div>
+                <div class="col-md-5">
+                    <strong>Destino:</strong>
+                    <select class="form-control select_autocomplete" id="confirmacion_destino">
+                        <option value="0">TODOS</option>
+                        @{ Html.RenderAction("ConsultarDestinoEnvLecheSelect", "CATALOGOS");}
+                    </select>
+                </div>
+
+                <div class="col-md-5">
+                    <strong>Cliente:</strong>
+                    <select class="form-control select_autocomplete" id="confirmacion_cliente">
+                        <option value="0">TODOS</option>
+                        @{ Html.RenderAction("ConsultarProveedoresTipoBasculaSelect", "CATALOGOS", new { tipo_ficha = 1 }); };
+                    </select>
+                </div>
+                <div class="col-md-12"><hr /></div>
+                <div class="col-md-12">
+                    <div id="div_tabla_confirmacion_leche" class="table-responsive"></div>
+                </div>
+            </div>
+        </div>
+        @* AGRUPACION - LOTES *@
+        <div id="lotes_envio_leche" class="tab-pane fade in">
+            <h3 class="text-center">LOTES DE ENVIO A FACTURA</h3>
+            <div class="row">
+                <div class="col-md-4">
+                    <strong>Cliente:</strong>
+                    <select class="form-control" id="id_cliente_lote_leche">
+                        <option value="0">TODOS</option>
+                        @{ Html.RenderAction("ConsultarProveedoresTipoBasculaSelect", "CATALOGOS", new { tipo_ficha = 1 }); };
+                    </select>
+                </div>
+                <div class="col-md-5">
+                    <div class="col-md-4">
+                        <strong>Estatus</strong>
+                        <select class="form-control" id="estatus_lote_leche">
+                            <option value="0">TODOS</option>
+                            @{ Html.RenderAction("ConsultarEstatusLoteSelect", "CATALOGOS"); };
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <strong>Fecha Inicial</strong>
+                        <input type="date" class="form-control" id="fecha1_lote_leche" />
+                    </div>
+                    <div class="col-md-4">
+                        <strong>Fecha Final</strong>
+                        <input type="date" class="form-control" id="fecha2_lote_leche" />
+                    </div>
+                </div>
+                <div class="col-md-1" style="padding-top:13px">
+                    <button class="btn btn_beta_icon" onclick="ConsultaLoteAgrupacionLecheTable();"><i class="fa fa-search"></i></button>
+                </div>
+                <div class="col-md-1 p-2 text-right">
+                    <button class="btn btn_beta" onclick="ConsultaEnviosLecheAgrupacion();">AGRUPAR ENVIOS</button>
+                </div>
+                <div class="col-md-12"><hr /></div>
+                <div class="col-md-12">
+                    <div id="div_tabla_lote_leche" class="table-responsive"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<!-- MODAL AGREAGAR ENVIO DE LECHE -->
+<div class="modal fade" id="m_confirmar_envios_leche" tabindex="-1" role="dialog" aria-labelledby="m_confirmar_envios_leche" aria-hidden="true">
+    <div class="modal-dialog" role="document" style="min-width:90%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="m_confirmar_envios_leche_lbl">Confirmar envio de leche</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="col-md-4">
+                            <strong>Tipo de Tanque</strong><br />
+                            @{ Html.RenderAction("ConsultarTiposTanquesRadiorEscala", "CATALOGOS"); }
+                        </div>
+                        <div class="col-md-8">
+                            <strong>Establo:</strong>
+                            <select class="form-control leche_mostrar id_establo_leche_select" id="id_establo_envio">
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <strong>Destino</strong>
+                        <select class="form-control leche_mostrar" id="id_destino_leche">@{ Html.RenderAction("ConsultarDestinoEnvLecheSelect", "CATALOGOS"); };</select>
+                    </div>
+
+                    <div class="col-md-12">
+                        <hr />
+                    </div>
+                </div>
+
+                @* FICHA 1 *@
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="row ficha_leche_1">
+                            <div class="col-md-12" style="display:none"><label id="confirmacion_ficha1">0</label></div>
+                            <div class="col-md-12 leche_strong text-center"><strong>FICHA 1</strong></div>
+                            <div class="col-md-12">
+                                <strong>Ficha</strong>
+                                <input type="text" id="ficha1_leche" class="form-control limpiar_input leche_mostrar" />
+                            </div>
+                            @*<div class="col-md-3" style="padding-top:14px">
+                                    <button id="btn_leche_1" class="btn btn_beta_icon" onclick="AsignarInformacionFichaBascula(1);"><i id="icon_leche_1" class="fa fa-search"></i></button>
+                                </div>*@
+                            <div class="col-md-6">
+                                <strong>Folio</strong>
+                                <input type="text" id="folio1_leche" class="form-control limpiar_input solo-letras-numeros-espacio leche_mostrar" />
+                            </div>
+                            <div class="col-md-6">
+                                <strong>Peso Kg</strong>
+                                <input type="text" id="peso1_leche" class="form-control limpiar_input" disabled />
+                            </div>
+
+                            <div class="col-md-6">
+                                <strong>Litros</strong>
+                                <input type="text" id="litros1_leche" class="form-control limpiar_input" disabled />
+                            </div>
+                            <div class="col-md-12" style="display:none"><label id="fecha1_leche_completa"></label></div>
+                            <div class="col-md-6">
+                                <strong>Hora de la pesada</strong>
+                                <input type="text" id="fecha1_leche" class="form-control limpiar_input" disabled />
+                            </div>
+                            <div class="col-md-12">
+                                <strong>Tanque</strong>
+                                <input type="text" id="tanque1_leche" class="form-control limpiar_input leche_mostrar" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-9">
+                        <div class="row ficha_leche_1">
+                            <div class="col-md-12 leche_strong text-center">
+                                <strong>RESULTADOS DE CALIDAD</strong>
+                            </div>
+
+                            <div class="col-md-8">
+                                <strong>ID Muestra</strong>
+                                <input type="text" id="muestra1_leche" class="form-control limpiar_input" />
+                            </div>
+                            <div class="col-md-4">
+                                <strong>Sala</strong>
+                                <input type="text" id="sala1_leche" class="form-control limpiar_input solo-letras-numeros-espacio" />
+                            </div>
+
+                            <div class="col-md-2">
+                                <strong>Antibiotico</strong>
+                                <select class="form-control limpiar_select" id="antibiotico1_leche">
+                                    <option value="-1">(Ninguno)</option>
+                                    <option value="1">Positivo</option>
+                                    <option value="0">Negativo</option>
+                                </select>
+                            </div>
+                            <div class="col-md-2">
+                                <strong>Temperatura</strong>
+                                <input type="text" id="temperatura1_leche" class="form-control limpiar_input solo-numeros" />
+                            </div>
+                            <div class="col-md-2">
+                                <strong>Grasa</strong>
+                                <input type="text" id="grasa1_leche" class="form-control limpiar_input solo-numeros" />
+                            </div>
+                            <div class="col-md-2">
+                                <strong>Proteina</strong>
+                                <input type="text" id="proteina1_leche" class="form-control limpiar_input solo-numeros" />
+                            </div>
+                            <div class="col-md-2">
+                                <strong>Solidos no grasos</strong>
+                                <input type="text" id="solidos_grasos1" class="form-control limpiar_input solo-numeros" />
+                            </div>
+                            <div class="col-md-2">
+                                <strong>Solidos totales</strong>
+                                <input type="text" id="solidos_totales1" class="form-control limpiar_input solo-numeros" />
+                            </div>
+
+
+                            <div class="col-md-2">
+                                <strong>Lactosa</strong>
+                                <input type="text" id="lactosa1_leche" class="form-control limpiar_input solo-numeros" />
+                            </div>
+                            <div class="col-md-2">
+                                <strong>Caseina</strong>
+                                <input type="text" id="caseina1_leche" class="form-control limpiar_input solo-numeros" />
+                            </div>
+                            <div class="col-md-2">
+                                <strong>Acidez</strong>
+                                <input type="text" id="acidez1_leche" class="form-control limpiar_input solo-numeros" />
+                            </div>
+
+
+                            <div class="col-md-2">
+                                <strong>Crioscopia</strong>
+                                <input type="text" id="crioscopia1_leche" class="form-control limpiar_input solo-numeros" />
+                            </div>
+                            <div class="col-md-2">
+                                <strong>Urea</strong>
+                                <input type="text" id="urea1_leche" class="form-control limpiar_input" solo-numeros />
+                            </div>
+                            <div class="col-md-2">
+                                <strong>CCS</strong>
+                                <input type="text" id="css1_leche" class="form-control limpiar_input solo-numeros" />
+                            </div>
+                            <div class="col-md-2">
+                                <strong>Betalactamicos</strong>
+                                <select class="form-control limpiar_select" id="betalactamicos1_leche">
+                                    <option value="-1">(Ninguno)</option>
+                                    <option value="1">Positivo</option>
+                                    <option value="0">Negativo</option>
+                                </select>
+                            </div>
+                            <div class="col-md-2">
+                                <strong>Tetraciclina</strong>
+                                <select class="form-control limpiar_select" id="tetraciclina1_leche">
+                                    <option value="-1">(Ninguno)</option>
+                                    <option value="1">Positivo</option>
+                                    <option value="0">Negativo</option>
+                                </select>
+                            </div>
+                            <div class="col-md-2">
+                                <strong>Aflatoxinas</strong>
+                                <select class="form-control limpiar_select" id="aflatoxinas1_leche">
+                                    <option value="-1">(Ninguno)</option>
+                                    <option value="1">Positivo</option>
+                                    <option value="0">Negativo</option>
+                                </select>
+                            </div>
+                            <div class="col-md-2">
+                                <strong>Sulfasimas</strong>
+                                <select class="form-control limpiar_select" id="sulfasimas1_leche">
+                                    <option value="-1">(Ninguno)</option>
+                                    <option value="1">Positivo</option>
+                                    <option value="0">Negativo</option>
+                                </select>
+                            </div>
+                            <div class="col-md-2">
+                                <strong>Alcohol 75%</strong>
+                                <select class="form-control limpiar_select" id="alcohol1_leche">
+                                    <option value="-1">(Ninguno)</option>
+                                    <option value="1">Positivo</option>
+                                    <option value="0">Negativo</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-5">
+                        <strong>Cliente:</strong>
+                        <select class="form-control" id="cliente1_ficha" disabled>
+                            @{ Html.RenderAction("ConsultarProveedoresTipoBasculaSelect", "CATALOGOS", new { tipo_ficha = 1 }); };
+                        </select>
+                    </div>
+                    <div class="col-md-7">
+                        <strong>Sello</strong>
+                        <input type="text" id="sello1_leche" class="form-control limpiar_input solo-letras-numeros-espacio leche_mostrar" />
+                    </div>
+                </div>
+
+
+                <div class="col-md-12">
+                    <hr />
+                </div>
+
+                @* FICHA 2 *@
+
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="row ficha_leche_2">
+                            <div class="col-md-12" style="display:none"><label id="confirmacion_ficha2">0</label></div>
+                            <div class="col-md-12 leche_strong text-center"><strong>FICHA 2</strong></div>
+                            <div class="col-md-9">
+                                <strong>Ficha</strong>
+                                <input type="text" id="ficha2_leche" class="form-control limpiar_input2 leche_mostrar" />
+                            </div>
+                            <div class="col-md-3" style="padding-top:17px">
+                                <button id="btn_leche_2" class="btn btn_beta_icon" onclick="AsignarInformacionFichaBascula(2);"><i id="icon_leche_2" class="fa fa-search"></i></button>
+                            </div>
+                            <div class="col-md-6">
+                                <strong>Folio</strong>
+                                <input type="text" id="folio2_leche" class="form-control limpiar_input2 solo-letras-numeros-espacio leche_mostrar" />
+                            </div>
+                            <div class="col-md-6">
+                                <strong>Peso Kg</strong>
+                                <input type="text" id="peso2_leche" class="form-control limpiar_input2" disabled />
+                            </div>
+
+                            <div class="col-md-6">
+                                <strong>Litros</strong>
+                                <input type="text" id="litros2_leche" class="form-control limpiar_input2" disabled />
+                            </div>
+                            <div class="col-md-12" style="display:none"><label id="fecha2_leche_completa"></label></div>
+                            <div class="col-md-6">
+                                <strong>Hora de la pesada</strong>
+                                <input type="text" id="fecha2_leche" class="form-control limpiar_input2" disabled />
+                            </div>
+                            <div class="col-md-12">
+                                <strong>Tanque</strong>
+                                <input type="text" id="tanque2_leche" class="form-control limpiar_input2 leche_mostrar" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-9">
+                        <div class="row ficha_leche_2">
+                            <div class="col-md-12 leche_strong text-center">
+                                <strong>RESULTADOS DE CALIDAD</strong>
+                            </div>
+                            <div class="col-md-12"><br /></div>
+
+                            <div class="col-md-8">
+                                <strong>ID Muestra</strong>
+                                <input type="text" id="muestra2_leche" class="form-control limpiar_input2" />
+                            </div>
+                            <div class="col-md-4">
+                                <strong>Sala</strong>
+                                <input type="text" id="sala2_leche" class="form-control limpiar_input2 solo-letras-numeros-espacio" />
+                            </div>
+                            <div class="col-md-2">
+                                <strong>Antibiotico</strong>
+                                <select class="form-control limpiar_select2" id="antibiotico2_leche">
+                                    <option value="-1">(Ninguno)</option>
+                                    <option value="1">Positivo</option>
+                                    <option value="0">Negativo</option>
+                                </select>
+                            </div>
+                            <div class="col-md-2">
+                                <strong>Temperatura</strong>
+                                <input type="text" id="temperatura2_leche" class="form-control limpiar_input2 solo-numeros" />
+                            </div>
+                            <div class="col-md-2">
+                                <strong>Grasa</strong>
+                                <input type="text" id="grasa2_leche" class="form-control  limpiar_input2 solo-numeros" />
+                            </div>
+                            <div class="col-md-2">
+                                <strong>Proteina</strong>
+                                <input type="text" id="proteina2_leche" class="form-control  limpiar_input2 solo-numeros" />
+                            </div>
+                            <div class="col-md-2">
+                                <strong>Solidos no grasos</strong>
+                                <input type="text" id="solidos_grasos2" class="form-control  limpiar_input2 solo-numeros" />
+                            </div>
+                            <div class="col-md-2">
+                                <strong>Solidos totales</strong>
+                                <input type="text" id="solidos_totales2" class="form-control  limpiar_input2 solo-numeros" />
+                            </div>
+
+
+                            <div class="col-md-2">
+                                <strong>Lactosa</strong>
+                                <input type="text" id="lactosa2_leche" class="form-control  limpiar_input2 solo-numeros" />
+                            </div>
+                            <div class="col-md-2">
+                                <strong>Caseina</strong>
+                                <input type="text" id="caseina2_leche" class="form-control  limpiar_input2 solo-numeros" />
+                            </div>
+                            <div class="col-md-2">
+                                <strong>Acidez</strong>
+                                <input type="text" id="acidez2_leche" class="form-control  limpiar_input2 solo-numeros" />
+                            </div>
+
+
+                            <div class="col-md-2">
+                                <strong>Crioscopia</strong>
+                                <input type="text" id="crioscopia2_leche" class="form-control  limpiar_input2 solo-numeros" />
+                            </div>
+                            <div class="col-md-2">
+                                <strong>Urea</strong>
+                                <input type="text" id="urea2_leche" class="form-control  limpiar_input2 solo-numeros" />
+                            </div>
+                            <div class="col-md-2">
+                                <strong>CCS</strong>
+                                <input type="text" id="css2_leche" class="form-control  limpiar_input2 solo-numeros" />
+                            </div>
+                            <div class="col-md-2">
+                                <strong>Betalactamicos</strong>
+                                <select class="form-control limpiar_select2" id="betalactamicos2_leche">
+                                    <option value="-1">(Ninguno)</option>
+                                    <option value="1">Positivo</option>
+                                    <option value="0">Negativo</option>
+                                </select>
+                            </div>
+                            <div class="col-md-2">
+                                <strong>Tetraciclina</strong>
+                                <select class="form-control limpiar_select2" id="tetraciclina2_leche">
+                                    <option value="-1">(Ninguno)</option>
+                                    <option value="1">Positivo</option>
+                                    <option value="0">Negativo</option>
+                                </select>
+                            </div>
+                            <div class="col-md-2">
+                                <strong>Aflatoxinas</strong>
+                                <select class="form-control limpiar_select2" id="aflatoxinas2_leche">
+                                    <option value="-1">(Ninguno)</option>
+                                    <option value="1">Positivo</option>
+                                    <option value="0">Negativo</option>
+                                </select>
+                            </div>
+                            <div class="col-md-2">
+                                <strong>Sulfasimas</strong>
+                                <select class="form-control limpiar_select2" id="sulfasimas2_leche">
+                                    <option value="-1">(Ninguno)</option>
+                                    <option value="1">Positivo</option>
+                                    <option value="0">Negativo</option>
+                                </select>
+                            </div>
+                            <div class="col-md-2">
+                                <strong>Alcohol 75%</strong>
+                                <select class="form-control limpiar_select2" id="alcohol2_leche">
+                                    <option value="-1">(Ninguno)</option>
+                                    <option value="1">Positivo</option>
+                                    <option value="0">Negativo</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-5 ficha_leche_2">
+                        <strong>Cliente:</strong>
+                        <select class="form-control" id="cliente2_ficha" disabled>
+                            @{ Html.RenderAction("ConsultarProveedoresTipoBasculaSelect", "CATALOGOS", new { tipo_ficha = 1 }); };
+                        </select>
+                    </div>
+                    <div class="col-md-7 ficha_leche_2">
+                        <strong>Sello</strong>
+                        <input type="text" id="sello2_leche" class="form-control limpiar_input2 solo-letras-numeros-espacio leche_mostrar" />
+                    </div>
+                </div>
+
+
+                @* FINAL *@
+                <div class="col-md-12 ficha_leche_2">
+                    <hr />
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4 col-md-custom" style="padding-top:5px">
+                        <strong>Transportadora</strong>
+                        <select class="form-control" id="linea_trasp" disabled>
+                            @{ Html.RenderAction("ConsultarLineasTrasnportistasSelect", "CATALOGOS"); };
+                        </select>
+                    </div>
+
+                    <div class="col-md-1 col-md-custom" style="padding-top:5px">
+                        <strong>Placas</strong>
+                        <input type="text" id="placas_leche" class="form-control limpiar_input" disabled />
+                    </div>
+
+                    <div class="col-md-4 col-md-custom" style="padding-top:5px">
+                        <strong>Operador</strong>
+                        <input type="text" id="operador_leche" class="form-control limpiar_input" disabled />
+                    </div>
+
+                    <div class="col-md-2 col-md-custom" style="padding-top:5px">
+                        <strong>Kilos Totales</strong>
+                        <input type="text" id="kilos_totales_leche" class="form-control limpiar_input" disabled />
+                    </div>
+
+                    <div class="col-md-1 col-md-custom" style="padding-top:5px">
+                        <strong>Densidad</strong>
+                        <input type="text" id="densidad_leche" class="form-control limpiar_input" disabled />
+                    </div>
+                    <div class="col-md-1"></div>
+                    <div class="col-md-3">
+                        <strong>Litros Totales: </strong>
+                        <input type="text" id="litros_totales_leche" class="form-control limpiar_input" disabled />
+                    </div>
+                    <div class="col-md-2">
+                        <strong>Folio</strong>
+                        <input type="text" id="folio_total_leche" class="form-control limpiar_input solo-letras-numeros-espacio leche_mostrar" />
+                    </div>
+                    <div class="col-md-2">
+                        <strong>Remision del Cliente</strong>
+                        <input type="text" id="remision_total_leche" class="form-control limpiar_input solo-letras-numeros-espacio leche_mostrar" />
+                    </div>
+                    <div class="col-md-3">
+                        <strong>Orden de compra del Cliente</strong>
+                        <input type="text" id="orden_total_leche" class="form-control limpiar_input solo-letras-numeros-espacio leche_mostrar" />
+                    </div>
+                    <div class="col-md-12"> <br /></div>
+                    @if (permisos.Contains(4045))
+                    {
+                        <div class="col-md-12 text-center" id="leche_accion">
+                            <button class="btn btn_beta" onclick="PreConfirmacionEnvioLeche();" id="btn_leche_accion">CONFIRMAR</button>
+                        </div>
+                    }
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">CERRAR</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--MODAL ESTIMACION DE PRODUCCION DIARIA-->
+<div class="modal fade" id="m_produccion_diaria" tabindex="1" role="dialog" aria-labelledby="m_produccion_diaria" aria-hidden="true">
+    <div class="modal-dialog" role="document" style="min-width: 90%; max-width: 90%;">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h2 class="modal-title" id="m_produccion_diaria_lbl">Estimacion diaria</h2>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12" style="display:none">
+                        <label id="estimacion_inicio_semana"></label>
+                    </div>
+                    <div class="col-md-3">
+                        <strong>Establo:</strong>
+                        <select class="form-control" id="establo_produccion_diaria">
+                            @{ Html.RenderAction("ConsultarEstablosUsuarioLecheSelect", "CATALOGOS"); }
+                        </select>
+                    </div>
+                    <div class="col-md-9">
+                        <div class="col-md-2">
+                            <strong>Año:</strong>
+                            <select class="form-control" id="id_anio_estimacion_diaria" onchange="ObtenerSemanasFechaMensualEstimacion();">
+                                @{ Html.RenderAction("ConsultarAniosPresupuestoSelect", "COMPRAS"); }
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <strong>Mes:</strong>
+                            @*<select class="form-control" id="id_meses" onchange="ObtenerNumeroSemanasEstimacion(2);"> ObtenerSemanasFechaMensual*@
+                            <select class="form-control" id="id_meses" onchange="ObtenerSemanasFechaMensualEstimacion();">
+                                @{ Html.RenderAction("ConsultarMesesSelet", "COMPRAS"); }
+                            </select>
+                        </div>
+                        <div class="col-md-7">
+                            <strong>Semana:</strong>
+                            <select class="form-control" id="id_semana_mensual" onchange="ObtenerFechasPorSemanaEstimacion();"></select>
+                        </div>
+                    </div>
+                    <div class="col-md-12"><br /></div>
+                    <div id="div_tabla_estimacion_diaria" class="table-responsive"></div>
+                </div>
+
+
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn_beta" id="btn_estimacion_semanal"><i id="btn_icon_estimacion_semanal" class="fa fa-refresh"></i> Actualizar estimación</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--MODAL PROGRAMACION SEMANAL DE PRODUCCION DIARIA-->
+<div class="modal fade" id="m_produccion_semanal" tabindex="1" role="dialog" aria-labelledby="m_produccion_semanal" aria-hidden="true">
+    <div class="modal-dialog" role="document" style="min-width: 89%; max-width: 90%;">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h2 class="modal-title" id="m_produccion_semanal_lbl">Programacion semanal</h2>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <div class="col-md-12" style="display:none">
+                    <label id="disponible_programacion_semanal"></label>
+                </div>
+                <div class="row">
+                    <div class="col-md-2">
+                        <strong>Establo:</strong>
+                        <select class="form-control" id="establo_programacion">
+                            @{ Html.RenderAction("ConsultarEstablosUsuarioLecheSelect", "CATALOGOS"); }
+                        </select>
+                    </div>
+                    <div class="col-md-1">
+                        <strong>Año:</strong>
+                        <select class="form-control" id="id_anio_programacion" onchange="ObtenerSemanasFechaMensualPrograma();">
+                            @{ Html.RenderAction("ConsultarAniosPresupuestoSelect", "COMPRAS"); }
+                        </select>
+                    </div>
+                    <div class="col-md-1">
+                        <strong>Mes:</strong>
+                        <select class="form-control" id="id_meses_programacion" onchange="ObtenerSemanasFechaMensualPrograma();">
+                            @{ Html.RenderAction("ConsultarMesesSelet", "COMPRAS"); }
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <strong>Semana:</strong>
+                        <select class="form-control" id="id_semana_programacion" onchange="ConsultaProduccionEstimadaSemanaTable(1);"></select>
+                    </div>
+                    <div class="col-md-5">
+                        <strong>Destino:</strong>
+                        <select class="form-control" id="destino_programacion">
+                            @{ Html.RenderAction("ConsultarClienteDestinoLecheSelect", "CATALOGOS", new { modo = 1 }); }
+                        </select>
+                    </div>
+                    <div class="col-md-12 text-right" style="padding:15px">
+                        <button class="btn btn_beta" onclick="AgregarDetalleProgramacion();">Agregar</button>
+                    </div>
+
+                    <div class="col-md-12"><hr /></div>
+                    <div class="col-md-12">
+                        <h3>Produccion Estimada</h3>
+                        <div id="div_produccion_estimada" class=""></div>
+                    </div>
+
+                    <div class="col-md-12"><hr /></div>
+                    <div class="col-md-12">
+                        <h3>Envios programados</h3>
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered text-center" id="programacion_semanal_detalle" style="width:100%">
+                                <thead>
+                                    <tr class="text-center bg-beta">
+                                        <th style="width:12%; max-width:12%; min-width:12%;"><strong>Cliente</strong></th>
+                                        <th style="width: 12%; max-width: 12%; min-width: 12%; "><strong>Destino</strong></th>
+                                        <th style="width: 7%; max-width: 7%; min-width: 7%; "><strong>Establo</strong></th>
+                                        <th style="width: 8%; max-width: 8%; min-width: 8%; "><strong>Lunes</strong></th>
+                                        <th style="width: 8%; max-width: 8%; min-width: 8%; "><strong>Martes</strong></th>
+                                        <th style="width: 8%; max-width: 8%; min-width: 8%; "><strong>Miercoles</strong></th>
+                                        <th style="width: 8%; max-width: 8%; min-width: 8%; "><strong>Jueves</strong></th>
+                                        <th style="width: 8%; max-width: 8%; min-width: 8%; "><strong>Viernes</strong></th>
+                                        <th style="width: 8%; max-width: 8%; min-width: 8%; "><strong>Sabado</strong></th>
+                                        <th style="width: 8%; max-width: 8%; min-width: 8%; "><strong>Domingo</strong></th>
+                                        <th style="width: 8%; max-width: 8%; min-width: 8%; "><strong>Total</strong></th>
+                                        <th style="width: 5%; max-width: 5%; min-width: 5%; "><strong>Eliminar</strong></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbody_cliente_detalle">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12"><hr /></div>
+                    <div class="col-md-12">
+                        <h3>Saldo</h3>
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered text-center" id="programacion_saldo_detalle">
+                                <thead>
+                                    <tr class="text-center bg-beta">
+                                        <th style="width: 20%; max-width: 20%; min-width: 20%; ">Establo</th>
+                                        <th style="width: 10%; max-width: 10%; min-width: 10%; ">Lunes</th>
+                                        <th style="width: 10%; max-width: 10%; min-width: 10%; ">Martes</th>
+                                        <th style="width: 10%; max-width: 10%; min-width: 10%; ">Miercoles</th>
+                                        <th style="width: 10%; max-width: 10%; min-width: 10%; ">Jueves</th>
+                                        <th style="width: 10%; max-width: 10%; min-width: 10%; ">Viernes</th>
+                                        <th style="width: 10%; max-width: 10%; min-width: 10%; ">Sabado</th>
+                                        <th style="width: 10%; max-width: 10%; min-width: 10%; ">Domingo</th>
+                                        <th style="width: 10%; max-width: 10%; min-width: 10%; ">Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="thead_saldo_establo">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12"><hr /></div>
+                    <div class="col-md-12">
+                        <h3>Resumen</h3>
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered text-center" id="programacion_resumen_detalle">
+                                <thead>
+                                    <tr class="text-center bg-beta">
+                                        <th style="width: 20%; max-width: 20%; min-width: 20%; ">Cliente</th>
+                                        <th style="width: 10%; max-width: 10%; min-width: 10%; ">Lunes</th>
+                                        <th style="width: 10%; max-width: 10%; min-width: 10%; ">Martes</th>
+                                        <th style="width: 10%; max-width: 10%; min-width: 10%; ">Miercoles</th>
+                                        <th style="width: 10%; max-width: 10%; min-width: 10%; ">Jueves</th>
+                                        <th style="width: 10%; max-width: 10%; min-width: 10%; ">Viernes</th>
+                                        <th style="width: 10%; max-width: 10%; min-width: 10%; ">Sabado</th>
+                                        <th style="width: 10%; max-width: 10%; min-width: 10%; ">Domingo</th>
+                                        <th style="width: 10%; max-width: 10%; min-width: 10%; ">Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="thead_resumen_detalle">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+
+            <div class="modal-footer">
+                <div class="col-md-3">
+                    <div class="col-md-12 text-left" style="display:inline" id="detalle_programa_diario_div">
+                        <button class="btn btn_beta" id="btn_detalle_confirmacion">Detalle</button>
+                        <button class="btn btn_beta" id="btn_detalle_confirmacion_excel"><i class="fa fa-print"></i></button>
+                    </div>
+                </div>
+                <div class="col-md-9 text-right">
+                    <button class="btn btn_beta" onclick="ConfirmacionProgramacionDestino();" id="btn_confirmacion_semanal">Confirmar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!--MODAL PROGRAMACION SEMANAL DE PRODUCCION DIARIA DETALLE-->
+<div class="modal fade" id="m_produccion_semanal_detalle" tabindex="1" role="dialog" aria-labelledby="m_produccion_semanal_detalle" aria-hidden="true">
+    <div class="modal-dialog" role="document" style="min-width: 92%; max-width: 94%;">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h2 class="modal-title" id="m_produccion_semanal_detalle_lbl">Programacion semanal detalle</h2>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <label id="lbl_fecha_produccion_diaria" style="display:none"></label>
+                <div class="col-md-12" id="div_produccion_semanal_detalle"></div>
+            </div>
+
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--MODAL PROGRAMACION SEMANAL DE PRODUCCION DIARIA MOSTRAR-->
+<div class="modal fade" id="m_produccion_semanal_mostrar" tabindex="1" role="dialog" aria-labelledby="m_produccion_semanal_mostrar" aria-hidden="true">
+    <div class="modal-dialog" role="document" style="min-width: 89%; max-width: 90%;">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h2 class="modal-title" id="m_produccion_semanal_mostrar_lbl">Programacion semanal</h2>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12" id="div_produccion_mostrar"></div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--MODAL CONFIRMACION DE ENVIOS DE LECHE-->
+<div class="modal fade" id="m_confirmacion_leche" tabindex="1" role="dialog" aria-labelledby="m_confirmacion_leche" aria-hidden="true">
+    <div class="modal-dialog" role="document" style="min-width: 80%; max-width: 80%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="m_confirmacion_leche_lbl">Confirmacion de envio de leche</h2>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="div_fichas_confirmacion"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--LOTES DE ENVIOS DE LECHE-->
+<div class="modal fade" id="m_lotes_leche" tabindex="1" role="dialog" aria-labelledby="m_lotes_leche" aria-hidden="true">
+    <div class="modal-dialog" role="document" style="min-width: 95%; max-width: 95%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="m_lotes_leche_lbl">Agrupacion de envios de leche</h2>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div id="div_agrupacion_leche"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--LOTES COFIRIMACION DE FACTURA-->
+<div class="modal fade" id="m_lotes_factura" tabindex="1" role="dialog" aria-labelledby="m_lotes_factura" aria-hidden="true">
+    <div class="modal-dialog" role="document" style="min-width: 80%; max-width: 85%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="m_lotes_factura_lbl">Lote de Envios a Factura</h2>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div id="div_lote_factura_leche"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--COMPROMISO-->
+<div class="modal fade" id="m_compromiso_leche" tabindex="1" role="dialog" aria-labelledby="m_compromiso_leche" aria-hidden="true">
+    <div class="modal-dialog" role="document" style="min-width: 80%; max-width: 85%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="m_compromiso_leche_lbl">Compromiso envio de leche</h2>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div id="div_compromiso_leche"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@Scripts.Render("~/bundles_EmpleadoChecador/js")
+@Scripts.Render("~/bundles_Propiedades/js")
+@Scripts.Render("~/bundles_EnviosLeche/js")
+@Scripts.Render("~/bundles_ReportesEnviosLeche/js")
+
+<script>
+    $(window).on("load", function () {
+        setFechaInicialMesAtras($('#buscar_fecha_inicial'));
+        setFechaInicialMesAtras($('#confirmacion_fecha1'));
+        setFechaInicialMesAtras($('#fecha1_lote_leche'));
+        CaracteresControl();
+
+        //CONSULTAR ESTIMACION DIARIA LECHE SEMANAS
+        ObtenerNumeroSemanasEstimacion(1);
+        //CONSULTA PROGRAMA DE LECHE SEMANAS
+        ObtenerNumeroSemanasEstimacion(4);
+
+        $('#m_confirmar_envios_leche').on('hidden.bs.modal', function () {
+            LimpiarCamposEnvioLeche();
+            ConsultarEnviosDeLecheTable();
+            $("#btn_leche_accion").attr("onclick", "");
+            ConsultaEstimacionDiariaTable();
+        });
+
+
+        $('#m_lotes_factura').on('hidden.bs.modal', function () {
+            $("#div_lote_factura_leche").html();
+            ConsultaLoteAgrupacionLecheTable();
+        });
+
+        $('#m_lotes_leche').on('hidden.bs.modal', function () {
+            ConsultaLoteAgrupacionLecheTable();
+        });
+
+        $('#m_produccion_diaria').on('hidden.bs.modal', function () {
+            $("#btn_estimacion_semanal").attr("onclick", "");
+        });
+
+
+        $('#m_produccion_semanal_detalle').on('hidden.bs.modal', function () {
+            $('#m_produccion_semanal').focus();
+            $('#m_produccion_semanal').css('overflow', 'auto');
+        });
+
+        try {
+            $(".select_autocomplete").select2({
+                placeholder: 'Selecciona un proveedor',
+                //dropdownParent: $("#tabulador")
+            });
+        }
+        catch (ex) { }
+        ConsultarEnviosDeLecheTable();
+
+
+        /*ConsultaEstimacionDiariaTable();*/
+        ObtenerSemanasFechaMensualIndexEstimacion();
+
+
+        ConsultaConfirmacionLecheTable();
+        ConsultaLoteAgrupacionLecheTable();
+
+
+        ConsultarEstablosLecheUsuarioSelect();
+        ConsultaProgramacionSemanalTable();
+    });
+</script>

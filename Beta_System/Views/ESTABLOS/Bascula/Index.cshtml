@@ -1,0 +1,273 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+    List<int> permisos = Session["PermisosModulo"] as List<int>;
+}
+
+
+<div class="page_title">
+    <div class="counter_section">
+        <h1>Bascula</h1>
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="nav nav-tabs">
+                    @if (permisos.Contains(20))
+                    {
+                        <li class="active"> <a data-toggle="tab" href="#primera_pesada">PRIMERA PESADA <i class="fa fa-2x fa-plus-circle ml-2"></i></a> </li>
+                    }
+                    @if (permisos.Contains(21))
+                    {
+                        <li> <a data-toggle="tab" href="#segunda_pesada">SEGUNDA PESADA <i class="fa fa-2x fa-calculator ml-2"></i></a> </li>
+                        <li> <a data-toggle="tab" href="#envio_leche" onclick="ModalAgrupacionEnvioLeche();">ENVIO DE LECHE <i class="fa fa-2x fa-reply ml-2"></i></a> </li>
+                    }
+                    @if (permisos.Contains(22))
+                    {
+                        <li><a data-toggle="tab" href="#consultar_fichas">REPORTE DE FICHAS<i class="fa fa-2x fa-folder-open ml-2"></i></a></li>
+                    }
+                    <li onclick="ReImpresionFichaPDF(1);"><a data-toggle="tab" href="#">REIMPRESION<i class="fa fa-2x fa-paperclip ml-2"></i></a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="row column2 counter_section">
+    <div class="tab-content">
+        @* PRIMERA PESADA *@
+        @if (permisos.Contains(20))
+        {
+            <div id="primera_pesada" class="tab-pane fade in active show">
+                <h2>Genera tu ficha</h2>
+                <div class="row">
+                    <div class="col-md-2">
+                        <strong>Nueva ficha:</strong>
+                        <input type="text" class="form-control solo-numeros-spunto" id="id_ficha_g" readonly />
+                    </div>
+                    <div class="col-md-1 p-3">
+                        <button class="btn btn_beta" onclick="ConsultarUltimaFicha()">Nueva</button>
+                    </div>
+                    <div class="col-md-2">
+                        <strong>Establo:</strong><br />
+                        <select class="form-control" onchange="ConsultaGeneralSelectEstablo();" id="id_establo">
+                            @{ Html.RenderAction("ConsultarEstablosUsuarios", "BASCULA", new { id_usuario = (int)Session["LoggedId"] }); };
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <strong>Tipo de ficha:</strong><br />
+                        <select class="form-control" onchange="ConsultarFormatoFichaBascula();" id="id_tipo_ficha">
+                        </select>
+                    </div>
+
+                    <div class="col-md-3">
+                        <strong>Peso:</strong>
+                        <input type="text" class="form-control limpiar_p1" id="peso_bascula" readonly />
+                    </div>
+
+                    <div class="col-md-2">
+                        <div class="col-md-12 p-3 text-center">
+                            <button class="btn btn_beta" onclick="ObtenerPesoBascula(1)">Obtener peso</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12"><hr /></div>
+                <div id="div_tipo_ficha_pp"></div>
+            </div>
+        }
+
+        @if (permisos.Contains(21))
+        {
+            <div id="segunda_pesada" class="tab-pane fade in">
+                <h2>Segunda pesada</h2>
+                <label id="tipo_ficha_pesada" style="display:none"></label>
+                <div class="col-md-12 p-2" id="div_p2_pendientes">
+                    <button class="btn btn_beta" id="btn_p2_pendientes" onclick="ConsultarFichasPendientes();">Fichas pendientes</button>
+                </div>
+                <div class="row">
+                    <div class="col-md-2">
+                        <strong>Busca tu ficha:</strong>
+                        <input type="text" class="form-control solo-numeros-spunto" id="id_ficha_g_sp" />
+                    </div>
+                    <div class="col-md-1 p-3">
+                        <button class="btn btn_beta_icon limpiar_sp" id="btn_p2_consultar" onclick="ConsultarInfoFicha()"><i class="fa fa-search" id="icon_p2_consultar"></i></button>
+                    </div>
+                    <div class="col-md-2">
+                        <strong>Establo:</strong>
+                        <select class="form-control" id="id_establo_sp">
+                            @{ Html.RenderAction("ConsultarEstablosUsuarios", "BASCULA", new { id_usuario = (int)Session["LoggedId"] }); };
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <strong>Tipo de ficha:</strong>
+                        <input class="form-control limpiar_sp" type="text" id="id_tipo_ficha_sp" readonly />
+                    </div>
+
+                    <div class="col-md-3">
+                        <strong>Peso 2:</strong>
+                        <input type="text" class="form-control limpiar_sp" id="peso_bascula_sp" readonly />
+                    </div>
+
+                    <div class="col-md-2">
+                        <div class="col-md-12 p-3 text-center">
+                            <button class="btn btn_beta" onclick="ObtenerPesoBascula()" id="btn_segunda_pesada_peso" disabled>Obtener peso</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12"><hr /></div>
+                <div id="div_tipo_ficha_sp"></div>
+            </div>
+        }
+
+        @if (permisos.Contains(22))
+        {
+            <div id="consultar_fichas" class="tab-pane fade in">
+                <div class="row">
+                    <div class="col-md-2">
+                        <strong>Establo:</strong>
+                        <select class="form-control" id="id_establo_reporte">
+                            <option value="0">TODOS</option>
+                            @{ Html.RenderAction("ConsultarEstablosUsuarios", "BASCULA", new { id_usuario = (int)Session["LoggedId"] }); };
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <strong>Fecha inicio</strong>
+                        <input type="date" value="" class="form-control" id="fecha_i" />
+                    </div>
+                    <div class="col-md-2">
+                        <strong>Fecha fin</strong>
+                        <input type="date" value="" class="form-control" id="fecha_f" />
+                    </div>
+                    <div class="col-md-1 text-center" style="padding-top:13px">
+                        <button class="btn btn_beta_icon" onclick="ConsultarReporteFichas();"><i class="fa fa-search"></i></button>
+                    </div>
+                    <div class="col-md-5 text-right" style="padding-top:13px">
+                        <button class="btn btn_beta" onclick="ExportarFichasBasculaExcel();"><i class="fa fa-file"></i>  Exportar excel</button>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <br />
+                    <div id="div_fichas_reporte"></div>
+                </div>
+            </div>
+        }
+
+    </div>
+</div>
+@* MODAL FICHAS PENDIENTES *@
+<div class="modal fade" id="m_pendientes" tabindex="1" role="dialog" aria-labelledby="m_pendientes" aria-hidden="true">
+    <div class="modal-dialog" role="document" style="min-width:90%;">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h2 class="modal-title" id="m_pendientes_lbl">Fichas pendientes</h2>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <div class="table-responsive">
+                    <div id="div_ficha_pendiente"></div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn_beta_danger" data-dismiss="modal">Cerrar</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@* MODAL REIMPRESION DE FICHA *@
+<div class="modal fade" id="m_reimpresion" tabindex="1" role="dialog" aria-labelledby="m_reimpresion" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h2 class="modal-title" id="m_reimpresion_lbl">Reimpresion de fichas</h2>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <div class="rowº">
+                    <div class="col-md-12">
+                        <strong>Numero de ficha:</strong>
+                        <br />
+                        <input class="form-control solo-numeros-spunto" type="text" name="reimprecion_ficha" id="reimp_ficha" />
+                        <br />
+                        <strong>Establo:</strong>
+                        <select class="form-control" id="id_establo_reimp">@{ Html.RenderAction("ConsultarEstablosUsuarios", "BASCULASAB", new { id_usuario = (int)Session["LoggedId"] }); };</select>
+                        <hr />
+                        <button class="btn btn_beta btn-block" onclick="ReImpresionFichaPDF(2);"><i class="fa fa-print"></i> REIMPRIMIR</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn_beta_danger" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@* MODAL FICHAS LECHE PENDIENTES AGRUPAR*@
+<div class="modal fade" id="m_envio_leche" tabindex="1" role="dialog" aria-labelledby="m_envio_leche" aria-hidden="true">
+    <div class="modal-dialog" role="document" style="min-width:70%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="m_envio_leche_lbl">Agrupacion de envio de leche</h2>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="table-responsive">
+                    <div class="col-md-12" id="div_agrupacion_leche_filtro">
+                        <div class="col-md-2">
+                            <strong>Establo:</strong>
+                            <select class="form-control id_establo_leche_select" id="id_establo_fichas_leche">
+                            </select>
+                        </div>
+                        <div class="col-md-1 p-3">
+                            <button class="btn btn_beta_icon" onclick="EnvioLecheFichasTable()"><i class="fa fa-search"></i></button>
+                        </div>
+                        <div class="col-md-9 p-2 text-right">
+                            <button class="btn btn_beta" onclick="AgrupacionFichasLeche();" id="btn_agrupar_ficha_leche">AGRUPAR ENVIO</button>
+                        </div>
+                    </div>
+                    <div id="div_envio_fichas"></div>
+                    <div class="col-md-12">
+                        <div id="div_agrupacion_ficha"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@Scripts.Render("~/bundles_Bascula/js")
+@Scripts.Render("~/bundles_Propiedades/js")
+
+<script>
+    $(window).on("load", function () {
+        ConsultarUltimaFicha();
+        ConsultarPozosEstablo();
+        ConsultaGeneralSelectEstablo();
+        CaracteresControl();
+        ConsultarFormatoFichaBascula();
+    });
+
+    try {
+        $("#select_proveedor").select2({
+            placeholder: 'Selecciona un proveedor',
+        });
+        $("#select_articulo").select2({
+            placeholder: 'Selecciona un artículo'
+        });
+    }
+    catch (ex) { }
+</script>

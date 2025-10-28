@@ -1,0 +1,28 @@
+﻿@{
+    var count = ViewBag.count_tabla;
+    int saldo_id_establo = ViewBag.saldo_id_establo;
+    string nombre_establo = ViewBag.saldo_nombre_establo;
+    int[] saldo_cantidad_dias = ViewBag.saldo_cantidad_dias;
+    decimal[] saldo_destino_establo = ViewBag.saldo_destino_establo;
+    decimal[] saldo_establo_estimacion = ViewBag.saldo_establo_estimacion;
+    decimal total = 0;
+
+
+}
+
+<tr id="row_@ViewBag.count_tabla" class="text-center">
+    <td style="display:none;"><label class="saldo_establo_produccion" id="">@saldo_id_establo</label></td>
+    <td style="display:none;"><label class="resumen_cliente" id=""></label></td>
+    <td>@nombre_establo</td>
+    @for (int i = 0; i < saldo_cantidad_dias.Length; i++)
+    {
+        var disponible = saldo_establo_estimacion[i] - saldo_destino_establo[i];
+        <td>
+            <label>@disponible</label>
+        </td>
+        total = total + disponible;
+    }
+    <td>
+        <label>@total</label>
+    </td>
+</tr>

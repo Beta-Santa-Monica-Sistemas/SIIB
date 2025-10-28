@@ -1,0 +1,78 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+}
+
+<div class="page_title">
+    <div class="counter_section">
+        <h1>Requisiciones a validar-autorizar</h1>
+    </div>
+</div>
+
+<div class=" column2 counter_section">
+    <div class="row">
+        <div class="col-md-4">
+            <strong>Centro</strong>
+            <select class="form-control" id="id_centro_search">
+                <option value="0">Todas</option>
+                @{ Html.RenderAction("CentrosUsuariosSelect", "CATALOGOS", new { id_usuario = (int)Session["LoggedId"] }); }
+            </select>
+        </div>
+        <div class="col-md-2">
+            <strong>Folio</strong>
+            <input class="form-control solo-letras-numeros" id="requi_search" type="text" />
+        </div>
+        <div class="col-md-2 text-center">
+            <br />
+            <button class="btn btn_beta_icon" onclick="ConsultarRequisiciones(2);"><i class="fa fa-search"></i></button>
+        </div>
+    </div>
+    <div class="table-responsive">
+        <div id="div_requis_revision"></div>
+    </div>
+</div>
+
+
+<!-- Modal REVISION DE REQUI-->
+<div class="modal fade" id="m_detalle_requi_revision" tabindex="-1" role="dialog" aria-labelledby="m_detalle_requi_revision" aria-hidden="true">
+    <div class="modal-dialog" role="document" style="min-width:90%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="m_detalle_requi_revision_lbl">Detalle de requisición</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="div_requis_revision_detalle"></div>
+                <br />
+                <hr />
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+@Scripts.Render("~/bundles_Requisiciones/js")
+@Scripts.Render("~/bundles_Propiedades/js")
+
+<script>
+
+    $(window).on("load", function () {
+        ConsultarRequisiciones(2);
+    });
+
+
+</script>
+
+
+

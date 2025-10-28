@@ -1,0 +1,33 @@
+﻿@model IEnumerable<Beta_System.Models.UsuariosAlmacenes>
+@{
+    var id_usuario = ViewBag.id_usuario;
+}
+
+
+<table class="table table-striped table-bordered">
+    <thead>
+        <tr class="bg-beta text-center">
+            @foreach (var item in Model.Select(x => x.c_almacenes).Distinct())
+            {
+                <th><h3 class="text-white">@item.nombre_almacen</h3></th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            @foreach (var item in Model.Select(x => x.c_almacenes).Distinct())
+            {
+                var valid = item.C_almacen_almacenes_usuarios.Where(x => x.id_almacen_g == item.id_almacen_g && x.id_usuario == id_usuario).FirstOrDefault();
+                if (valid != null)
+                {
+                    <th> <input type="checkbox" class="form-control check_almacen" style="height:40px;" name="@item.id_almacen_g" checked /></th>
+                }
+                else
+                {
+                    <th> <input type="checkbox" class="form-control check_almacen" style="height:40px;" name="@item.id_almacen_g" /></th>
+                }
+            }
+        </tr>
+    </tbody>
+</table>
+

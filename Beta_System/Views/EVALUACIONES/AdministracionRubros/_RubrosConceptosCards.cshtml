@@ -1,0 +1,48 @@
+﻿@model List<Beta_System.Models.C_evaluaciones_rubros>
+
+@if (Model.Count() > 0)
+{
+    <div class="porcentaje-container row">
+        @foreach (var rubro in Model)
+        {
+            <div class="col-md-4">
+                <div class="porcentaje-card">
+                    <div style="position: absolute; left:5%;">
+                        @if (rubro.activo == true)
+                        {<i class="fa fa-3x fa-toggle-on" style="color: lightgreen" onclick="OnOffRubro(@rubro.id_evaluacion_rubro, false);"></i> }
+                        else
+                        { <i class="fa fa-3x fa-toggle-on" style="color:grey;" onclick="OnOffRubro(@rubro.id_evaluacion_rubro, true);"></i>}
+                    </div>
+
+                    <h3 style="margin:5px;">@rubro.nombre_rubro</h3>
+                    <label class="porcentaje">@Convert.ToInt32(rubro.porcentaje)%</label>
+                    <div class="table-responsive" style="overflow:auto; overflow-x:hidden; height:200px; min-height:200px;">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Concepto</th>
+                                    <th>Porcentaje</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var concepto in rubro.C_evaluaciones_conceptos_rubros.Where(x => x.activo == true))
+                                {
+                                    <tr>
+                                        <td>@concepto.nombre_concepto</td>
+                                        <td>@Convert.ToInt32(concepto.porcentaje)%</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    <hr />
+                    <button class="btn btn_beta_icon" onclick="AddEditRubro(2, @rubro.id_evaluacion_rubro, '@rubro.nombre_rubro', @rubro.porcentaje);"><i class="fa fa-edit"></i></button>
+                </div>
+            </div>
+        }
+    </div>
+}
+else
+{
+    <h3 class="text-center text-danger">NO SE ENCONTRARON REGISTROS</h3>
+}

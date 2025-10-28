@@ -1,0 +1,330 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+    List<int> permisos = Session["PermisosModulo"] as List<int>;
+}
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
+
+
+<div class="page_title">
+    <div class="counter_section">
+        <h1>Prenómina</h1>
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="nav nav-tabs">
+                    @if (permisos.Contains(4028))
+                    {
+                        <li class="active"> <a data-toggle="tab" href="#tab_generar_prenomina" onclick="CheckOutAreasPrenominaGenerada();"><strong data-toggle="modal" data-target="#m_generar_prenomina">GENERAR PRENÓMINA</strong> <i class="fa fa-calculator fa-2x ml-2" data-toggle="modal" data-target="#m_generar_prenomina"></i></a></li>
+                    }
+
+
+                    @if (permisos.Contains(4029))
+                    {
+                        <li class="active"> <a data-toggle="tab" href="#tab_consular_prenominas">CONSULTAR PRENÓMINAS<i class="fa fa-search fa-2x ml-2"></i></a></li>
+                    }
+                    @if (permisos.Contains(4030))
+                    {
+                        <li class="active"> <a data-toggle="tab" href="#tab_prenominas_finalizadas" id="tab_nominas_generadas">CONSULTAR NÓMINAS<i class="fa fa-search fa-2x ml-2"></i></a></li>
+                    }
+
+
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="column2 counter_section">
+    <div class="tab-content">
+        @if (permisos.Contains(4029))
+        {
+            <div id="tab_consular_prenominas" class="tab-pane fade in active show">
+                <h3 class="text-center">PRENÓMINAS</h3>
+                <div class="row">
+                    <div class="col-md-3">
+                        <strong>Establo:</strong>
+                        <select class="form-control id_establo_select" id="id_establo_prenomina_consulta" onchange="ConsultarNominasGeneradasSelect();"></select>
+                    </div>
+                    <div class="col-md-1">
+                        <strong>Año:</strong>
+                        <select class="form-control" id="id_anio_prenomina_consulta" onchange="ConsultarNominasGeneradasSelect();">
+                            @{ Html.RenderAction("ConsultarAniosPresupuestoSelect", "COMPRAS"); }
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <strong>Prenómina:</strong>
+                        <select class="form-control" id="id_prenomina_g_consulta" onchange="LimpiarPrenominaFont();"></select>
+                    </div>
+                    <div class="col-md-3">
+                        <strong>Areas:</strong>
+                        <select class="form-control" id="id_areas_prenomina_consulta"></select>
+                    </div>
+                    <div class="col-md-2 text-center">
+                        <button class="btn btn_beta_icon" onclick="ConsultarNominasAreasTable();"><i class="fa fa-search"></i></button>
+                    </div>
+                </div>
+                <hr />
+                <div id="div_nominas_areas">
+
+                </div>
+            </div>
+        }
+
+        @if (permisos.Contains(4030))
+        {
+            <div id="tab_prenominas_finalizadas" class="tab-pane fade">
+                <h3 class="text-center">PRENÓMINAS CERRADAS</h3>
+                <div class="row">
+                    <div class="col-md-3">
+                        <strong>Establo:</strong>
+                        <select class="form-control id_establo_select" id="id_establo_prenomina_finalizadas" onchange="ConsultarNominasFinalizadasSelect();"></select>
+                    </div>
+                    <div class="col-md-1">
+                        <strong>Año:</strong>
+                        <select class="form-control" id="id_anio_prenomina_finalizadas" onchange="ConsultarNominasFinalizadasSelect();">
+                            @{ Html.RenderAction("ConsultarAniosPresupuestoSelect", "COMPRAS"); }
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <strong>Mes:</strong>
+                        <select class="form-control" id="id_mes_prenomina_finalizadas" onchange="ConsultarNominasFinalizadasSelect();">
+                            @{ Html.RenderAction("ConsultarMesesSelet", "COMPRAS"); }
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <strong>Prenóminas:</strong>
+                        <select class="form-control" id="id_prenomina_finalizadas"></select>
+                    </div>
+                    <div class="col-md-2 text-center">
+                        <button class="btn btn_beta_icon" onclick="ConsultarNominasFinalizadas();"><i class="fa fa-search"></i></button>
+                    </div>
+                </div>
+                <hr />
+                <div id="div_nominas_terminadas">
+
+                </div>
+
+                <div id="div_formato_nomina" @*style="display:none;"*@></div>
+            </div>
+        }
+    </div>
+</div>
+
+
+<!-- Modal CONCEPTOS DE EMPLEADOS-->
+<div class="modal fade" id="m_conceptos_empleado" tabindex="-1" role="dialog" aria-labelledby="m_conceptosLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document" style="width: 98%; min-width:98%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="m_conceptosLabel">Conceptos del empleado</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-6" style="border-left:#2e87d7 !important">
+                        <h2 class="text-center">Modificar nómina</h2>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <strong>Concepto:</strong>
+                                <select class="form-control input_hide" id="id_concepto_nuevo" onchange="ValidarTipoConceptoLabel()">
+                                    <option value="0" selected>Selecciona un concepto</option>
+                                    @{ Html.RenderAction("ConsultarConceptosNominaSelect", "CATALOGOS"); }
+                                </select>
+                                <br />
+                                <strong id="lblTipoConcepto">Valor:</strong>
+                                <input type="number" class="form-control input_hide" id="valor_concepto_nuevo" />
+                                <br />
+                            </div>
+                            <div class="col-md-6">
+                                <strong>Comentarios</strong><span class="text-secondary"> (opcional)</span>
+                                <textarea rows="1" class="form-control input_hide" id="comentarios_concepto_nuevo"></textarea>
+                                <br />
+                                <div class="row">
+                                    <div class="col-md-4"></div>
+                                    <div class="col-md-4">
+                                        <br />
+                                        <button class="btn btn_beta" id="btn_agregar_concepto">Agregar concepto</button>
+                                    </div>
+                                    <div class="col-md-4"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <br />
+                        <br />
+                        <br />
+                        <hr />
+                        <div class="table-responsive" id="div_faltas_empleado_concepto"></div>
+
+                    </div>
+
+
+                    <div class="col-md-6" id="div_conceptos_empleado"></div>
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn_beta_danger" data-dismiss="modal">Regresar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal GENERAR PRENOMINA-->
+<div class="modal fade" id="m_generar_prenomina" tabindex="-1" role="dialog" aria-labelledby="m_generar_prenominaTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="m_generar_prenominaTitle">GENERAR PRENÓMINA</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="div_generar_prenomina"></div>
+            </div>
+            @*<div class="modal-footer">
+                    <button type="button" class="btn btn_beta_danger" data-dismiss="modal">Cerrar</button>
+                </div>*@
+        </div>
+    </div>
+</div>
+
+
+
+<!-- Modal CONCEPTO MASIVO-->
+<div class="modal fade" id="m_conceptos_masivos" tabindex="-1" role="dialog" aria-labelledby="m_conceptos_masivosLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document" style="width: 90%; min-width:90%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="m_conceptos_masivosLabel">AGREGAR CONCEPTO MASIVO</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <h3 class="text-left"><strong>Buscar por:</strong></h3>
+                <div class="row">
+                    <div class="col-md-3">
+
+                        <input type="radio" name="radio_tipo_busqueda" value="1" style="height: 20px; min-height: 20px; width: 20px; min-width: 20px;" onclick="MostrarFiltrosConceptosMasivos();" />
+                        <strong>Puesto</strong>
+                        <br />
+                        <input type="radio" name="radio_tipo_busqueda" value="2" style="height: 20px; min-height: 20px; width: 20px; min-width: 20px;" onclick="MostrarFiltrosConceptosMasivos();" />
+                        <strong>Salario</strong>
+                    </div>
+
+                    <div class="col-md-6 formulario_puesto" style="display:none;">
+                        <div class="row">
+                            <div class="col-md-10">
+                                <strong>Selecciona un puesto:</strong>
+                                <select class="form-control" id="id_puesto_conceptos_masivos">
+                                    @{ Html.RenderAction("ConsultarPuestosNominaActivosSelect", "CATALOGOS"); }
+                                </select>
+                            </div>
+                            <div class="coi-md-2">
+                                <br />
+                                <button class="btn btn_beta_icon" onclick="ConsultarEmpleadosMasivos(1)"><i class="fa fa-search"></i></button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 formulario_salario" style="display:none;">
+                        <div class="row">
+                            <div class="col-md-10">
+                                <strong>Salario diario:</strong>
+                                <input type="number" class="form-control" id="salario_diario_conceptos_masivos"/>
+                            </div>
+                            <div class="coi-md-2">
+                                <br />
+                                <button class="btn btn_beta_icon" onclick="ConsultarEmpleadosMasivos(2)"><i class="fa fa-search"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br />
+
+                <div id="div_empleados_conceptos_masivos" class="table-responsive" style="height: 400px; min-height:400px; overflow:scroll; overflow-x:hidden;"></div>
+                <br />
+                <div class="row formulario_conceptos" style="display:none;">
+                    <input type="text" id="id_nomina_g_masivo" style="display:none;" />
+
+                    <div class="col-md-3">
+                        <strong>Concepto:</strong>
+                        <select class="form-control input_hide" id="id_concepto_nuevo_masivo" onchange="ValidarTipoConceptoMasivoLabel()">
+                            <option value="0" selected>Selecciona un concepto</option>
+                            @{ Html.RenderAction("ConsultarConceptosNominaSelect", "CATALOGOS"); }
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <strong id="lblTipoConceptoMasivo">Valor:</strong>
+                        <input type="number" class="form-control input_hide" id="valor_concepto_nuevo_masivo" />
+                    </div>
+                    <div class="col-md-3">
+                        <strong>Comentarios</strong><span class="text-secondary"> (opcional)</span>
+                        <textarea rows="1" class="form-control input_hide" id="comentarios_concepto_nuevo_masivo"></textarea>
+                    </div>
+                    <div class="col-md-3">
+                        <br />
+                        <button class="btn btn_beta_warning" id="btn_agregar_concepto_masivo" onclick="AgregarConceptoMasivoNominaEmpleado();">Agregar concepto masivo</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    var id_nomina_d_area_semaforo = 0;
+    var refesh_nomina = false;
+</script>
+
+
+
+@Scripts.Render("~/bundles_Nomina/js")
+@Scripts.Render("~/bundles_Prenomina/js")
+<script>
+    $(window).on("load", function () {
+        ConsultarEstablosUsuarioSelect(0);
+
+        $('#m_conceptos_empleado').on('hidden.bs.modal', function (e) {
+            if (id_nomina_d_area_semaforo > 0) { ConsultarNominasAreaTable(id_nomina_d_area_semaforo); }
+        });
+    });
+
+    $('#m_conceptos_masivos').on('hidden.bs.modal', function (e) {
+        if (refesh_nomina == true) { ConsultarNominasAreasTable(); refesh_nomina = false; }
+    });
+</script>
+
+
+
+
+@if (permisos.Contains(4029))
+{
+    <script>
+        $(window).on("load", function () {
+            //ConsultarNominasAreasTable();
+            ConsultarNominasGeneradasSelect();
+        });
+    </script>
+}
+
+@if (permisos.Contains(4030))
+{
+
+    <script>
+        $(window).on("load", function () {
+            $("#tab_nominas_generadas").click();
+            //ConsultarNominasFinalizadas();
+            ConsultarNominasFinalizadasSelect();
+        });
+    </script>
+
+}
+

@@ -1,0 +1,30 @@
+﻿@model IEnumerable<Beta_System.Models.C_compras_cotizaciones_articulos>
+
+@{
+    var fecha = Model.FirstOrDefault();
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <h2>Cambio de vigencia</h2>
+        <label id="requi_vigencia_d" style="display:none"></label>
+        <br />
+    </div>
+    <div class="col-md-12">
+        <strong>Fecha inicial</strong><br />
+        <strong>@fecha.fecha_vigencia</strong>
+    </div>
+    <div class="col-md-12">
+        <br />
+        <strong>Fecha final</strong>
+        <input class="form-control solo-numeros" id="mod_fecha_final" type="date" onkeyup="" />
+        <br />
+    </div>
+    <div class="col-md-12 text-right">
+        <button class="btn btn_beta" onclick="ActualizarVigenciaProveedor(@fecha.id_compra_articulo_cotizacion);"><i class="fa fa-plus"></i> Guardar</button>
+    </div>
+</div>
+
+<script>
+    $("#mod_fecha_final").val(next_week);
+</script>

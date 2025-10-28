@@ -1,0 +1,20 @@
+﻿@model IEnumerable<Beta_System.Models.C_presupuestos_meses>
+
+@{
+    int no_mes = DateTime.Today.Month;
+}
+
+
+@foreach (var mes in Model)
+{
+    if (mes.id_mes_presupuesto == no_mes)
+    {
+        <option value="@mes.id_mes_presupuesto" selected>@mes.mes</option>
+    }
+    else
+    {
+
+        <option value="@mes.id_mes_presupuesto">@mes.mes</option>
+    }
+}
+

@@ -1,0 +1,94 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+    List<int> permisos = Session["PermisosModulo"] as List<int>;
+}
+
+
+<div class="page_title">
+    <div class="counter_section">
+        <h1>Pólizas contables de almacén</h1>
+    </div>
+</div>
+
+
+<div class=" column2 counter_section">
+    <div class="row">
+        <div class="col-md-2">
+            <strong>Almacen:</strong>
+            <select id="id_almacen_g_poliza" class="form-control select_multiple" multiple>
+                @{ Html.RenderAction("ConsultarAlmacenesUsuarioSelect", "CATALOGOS", new { id_usuario = (int)Session["LoggedId"] }); }
+            </select>
+        </div>
+        <div class="col-md-2">
+            <strong>Fecha inicio</strong>
+            <input type="date" class="form-control" id="fecha_inicio_poliza" />
+        </div>
+        <div class="col-md-2">
+            <strong>Fecha fin</strong>
+            <input type="date" class="form-control" id="fecha_fin_poliza" />
+        </div>
+        <div class="col-md-2">
+            <br />
+            <button class="btn btn_beta_icon" onclick="GenerarPolizasAlmacenSemanal(); GenerarPolizasAlmacenSemanalDetalle();"><i class="fa fa-search"></i></button>
+        </div>
+
+        <div class="col-md-4 text-right">
+            @if (permisos.Contains(4033))
+            {
+                <br />
+                <button class="btn btn_beta" onclick="GenerarPolizasContablesAlmacenTXT();">Descargar TXT de polizas para Microsip<i class="fa fa-download ml-2"></i></button>
+            }
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <ul class="nav nav-tabs">
+                <li class="active"> <a data-toggle="tab" href="#poliza_tab">Consolidado<i class="fa fa-2x fa-search ml-2"></i></a></li>
+                <li> <a data-toggle="tab" href="#poliza_detalle_tab">Auxiliar<i class="fa fa-2x fa-search ml-2"></i></a></li>
+
+            </ul>
+            <br />
+            <div class="tab-content">
+                <!--Consolidado -->
+                <div id="poliza_tab" class="tab-pane fade in active show">
+                    <div class="col-md-12"><br /></div>
+                    <div class="table-responsive" id="div_tabla_poliza_semanal">
+                    </div>
+                </div>
+                <!--Auxiliar-->
+                <div id="poliza_detalle_tab" class="tab-pane fade">
+                    <div class="col-md-12" style="max-height: 600px; overflow-y: auto; overflow-x:auto;">
+                        <div class="table-responsive" id="div_tabla_poliza_semanal_detalle">
+                            <div class="col-md-12"><br /></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <hr />
+    <div id="div_polizas_contables_almacen"></div>
+</div>
+
+
+
+@Scripts.Render("~/bundles_ReportesAlmacen/js")
+
+
+<script type="text/javascript">
+    $(window).on("load", function () {
+        $('input[type="date"]').val(today);
+        $("#fecha_inicio_poliza").val(last_week);
+    });
+</script>
+
+
+
+
+
+
+
+

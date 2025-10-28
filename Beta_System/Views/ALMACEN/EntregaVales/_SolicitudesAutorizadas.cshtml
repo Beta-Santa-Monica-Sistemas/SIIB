@@ -1,0 +1,53 @@
+﻿@model IEnumerable<Beta_System.Models.C_almacen_solicitudes_mercancia_g>
+
+<table class="table table-striped table-bordered" id="tabla_solicitudes_autorizadas" style="width:100%;">
+    <thead>
+        <tr class="bg-beta text-center">
+            <th>Folio</th>
+            <th>Cargo</th>
+            <th>Departamento</th>
+            <th>Almacén</th>
+            <th>Equipo</th>
+            <th>Fecha registro</th>
+            <th>Importe total ($)</th>
+            <th>Registró</th>
+            <th>Solicitante</th>
+            <th>Estatus</th>
+            <th>Ver</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr class="text-center">
+                <td><strong>@item.id_solicitud_mercancia_g</strong></td>
+                <td>@item.cargo_desc</td>
+                <td>@item.C_departamentos_g.nombre_departamento</td>
+                <td>@item.C_almacen_almacenes_g.nombre_almacen</td>
+                <td>
+                    <strong>(@item.C_establos_equipos.clave_equipo)</strong>
+                    <br />
+                    <label>@item.C_establos_equipos.nombre_equipo</label>
+                </td>
+                <td>@String.Format(item.fecha_registro.Value.ToShortDateString(), "dd/mm/aaaa")</td>
+                <td>$@item.total.Value.ToString("N2")</td>
+                <td>@item.C_empleados.nombres @item.C_empleados.apellido_paterno</td>
+                <td>
+                    @if (item.id_empleado_remitente != null)
+                    {
+                        <label>@item.C_nomina_empleados.Nombres.ToUpper() @item.C_nomina_empleados.Apellido_paterno.ToUpper()</label>
+                    }
+                    else
+                    {
+                        <label>@item.C_empleados.nombres @item.C_empleados.apellido_paterno</label>
+                    }
+                </td>
+                <td><button class="btn" style="font-weight:800;background-color:@item.C_almacen_solicitudes_status.color; color:white;">@item.C_almacen_solicitudes_status.nombre_status</button></td>
+                <td><button class="btn btn_beta_icon" onclick="ConsultarSolicitudDetalleAutorizar(@item.id_solicitud_mercancia_g);"><i class="fa fa-bars"></i></button></td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+

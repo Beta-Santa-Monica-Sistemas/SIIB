@@ -1,0 +1,135 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+}
+
+<div class="page_title">
+    <div class="counter_section">
+        <div class="row">
+            <div class="col-md-8">
+                <h1>Administración del Menú SIIB</h1>
+            </div>
+            <div class="col-md-4 text-right">
+                <button class="btn btn_beta" onclick="AddEditModulo();"><i class="fa fa-plus"></i> Nuevo módulo</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="column2 counter_section">
+    <div id="div_menu_admin"></div>
+</div>
+
+
+
+<!-- Modal INFO MODULO-->
+<div class="modal fade" id="m_info_modulo" tabindex="-1" role="dialog" aria-labelledby="m_info_moduloLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="m_info_moduloLabel">Editar Módulo</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="container text-center">
+                    <strong>Nombre módulo</strong>
+                    <input type="text" id="txt_nombre_modulo" class="form-control" />
+                    <br />
+
+                    <strong>Icono</strong>
+                    <input type="text" id="txt_icono_modulo" class="form-control" />
+                    <br />
+
+                    <button class="btn btn_beta" id="btn_add_edit_modulo">Agregar</button>
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn_beta_danger" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal INFO SUB - MODULO-->
+<div class="modal fade" id="m_info_submodulo" tabindex="-1" role="dialog" aria-labelledby="m_info_submoduloLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document" style="width: 45%; min-width: 45%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="m_info_submoduloLabel">Editar Sub - Módulo</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="container-fluid text-center">
+                    <strong>Comportamiento</strong>
+                    <div class="row">
+                        <div class="col-md-4 text-center">
+                            <input type="radio" name="check_aplica_subsubmenu" value="1" onclick="ConsultarFormularioComportamiento();"  id="radio_submenu" />
+                            <label>Sub-módulo</label>
+                        </div>
+                        <div class="col-md-4 text-center">
+                            <input type="radio" name="check_aplica_subsubmenu" value="2" onclick="ConsultarFormularioComportamiento();" id="radio_aplica_secundario" />
+                            <label>Menú secundario</label>
+                        </div>
+                        <div class="col-md-4 text-center">
+                            <input type="radio" name="check_aplica_subsubmenu" value="3" onclick="ConsultarFormularioComportamiento();"  id="radio_item_secundario" />
+                            <label>Item menú secundario</label>
+                        </div>
+                    </div>
+                    <br />
+
+                    <strong>Nombre Sub-módulo</strong>
+                    <input type="text" id="txt_nombre_submodulo" class="form-control" />
+                    <br />
+
+                    <strong>Módulo</strong>
+                    <select class="form-control" id="id_modulo_submenu" onchange="ConsultarSubModulosPrincipalesSelect();">
+                        @{ Html.RenderAction("ConsultarModulosSelect", "MODULOS"); }
+                    </select>
+                    <br />
+
+                    <div id="div_sub_modulo_g" style="display: none;">
+                        <strong>Sub-Módulo principal</strong>
+                        <select class="form-control" id="id_submodulo_principal"></select>
+                        <br />
+                    </div>
+
+                    <strong>Controlador</strong>
+                    <input type="text" onkeydown="return event.key !== ' '" id="txt_controlador_submodulo" class="form-control" />
+                    <br />
+
+                    <strong>Función/Método</strong>
+                    <input type="text" onkeydown="return event.key !== ' '" id="txt_funcion_submodulo" class="form-control" />
+                    <br />
+
+
+                    <button class="btn btn_beta" id="btn_add_edit_submodulo">Agregar</button>
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn_beta_danger" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@Scripts.Render("~/bundles_admin_siib/js")
+
+
+<script>
+    $(window).on("load", function () {
+        ConsultarMenuSIIBAmin();
+    });
+</script>
+
+
+

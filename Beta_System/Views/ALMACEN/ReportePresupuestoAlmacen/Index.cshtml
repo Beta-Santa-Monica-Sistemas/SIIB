@@ -1,0 +1,69 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+    List<int> permisos = Session["PermisosModulo"] as List<int>;
+}
+
+
+<style>
+    .divEditable {
+        padding: 3px;
+    }
+</style>
+
+<div class="page_title">
+    <div class="counter_section">
+        <h1>Reporte de presupuesto de almacen</h1>
+    </div>
+</div>
+
+
+<div class=" column2 counter_section">
+    <div class="row">
+        <div class="col-md-2">
+            <strong>Almacen:</strong>
+            <select class="form-control" id="id_almacen_presupuesto">
+                @{ Html.RenderAction("ConsultarAlmacenesSelect", "CATALOGOS", new { id_usuario = (int)Session["LoggedId"] }); }
+            </select>
+        </div>
+        <div class="col-md-1">
+            <strong>Año:</strong>
+            <select class="form-control" id="id_anio_presupuesto">
+                @{ Html.RenderAction("ConsultarAniosPresupuestoSelect", "COMPRAS"); }
+            </select>
+        </div>
+        <div class="col-md-3">
+            <strong>Cargo contable:</strong>
+            <select class="form-control" id="id_cargo_contable">
+                @{ Html.RenderAction("ConsultarCargosContables", "CATALOGOS");
+                }
+            </select>
+        </div>
+        <div class="col-md-6">
+            <br />
+            <button class="btn btn_beta_icon" onclick="ReportePresupuestosCargoAlmacen();"><i class="fa fa-search"></i></button>
+        </div>
+    </div>
+
+    <div class="table-responsive" id="div_reporte_presupuestos">
+    </div>
+
+
+    <!--Modal Seleccion Cuenta Contable Mensual-->
+    <div class="modal fade" id="m_cuenta_mensual" tabindex="99999" role="dialog" aria-labelledby="m_cuenta_mensual" aria-hidden="true">
+        <div class="modal-dialog" role="document" style="min-width:50%;">
+            <div class="modal-content">
+                <div class="modal-header">
+                </div>
+                <div class="modal-body">
+                    <div id="div_cuenta_mensual"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @Scripts.Render("~/bundles_Presupuestos/js")

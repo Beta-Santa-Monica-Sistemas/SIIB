@@ -1,0 +1,43 @@
+﻿@model List<Beta_System.Models.C_nomina_empleados>
+
+@if (Model.Count() > 0)
+{
+    <table class="table table-bordered table-striped" id="datatable_cambio_salario_empleados">
+        <thead>
+            <tr class="text-center bg-beta">
+                <th>Seleccionar</th>
+                <th>Clave</th>
+                <th>Nombre</th>
+                <th>Área</th>
+                <th>Puesto</th>
+                <th>Salario diario establo</th>
+                <th>Salario diario (Microsip)</th>
+                <th>Salario por hora</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.OrderBy(x => x.Nombres))
+            {
+                <tr class="text-center">
+                    <td><input type="checkbox" value="@item.Empleado_id" class="form-control check_cambio_salario_masivo" name="check_cambio_salario_masivo" style="height: 25px; min-height: 25px; width: 25px; min-width: 25px;" checked /></td>
+                    <td>@item.Numero</td>
+                    <td class="text-left">@item.Nombres @item.Apellido_paterno @item.Apellido_materno</td>
+                    <td>@item.C_nomina_departamentos.nombre_departamento</td>
+                    <td>@item.C_nomina_puestos.nombre_puesto</td>
+                    <td>$@item.Salario_diario_establo.Value.ToString("N2")</td>
+                    <td>$@item.Salario_diario.Value.ToString("N2")</td>
+                    <td>$@item.Salario_hora_establo.Value.ToString("N2")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <script>$(".formulario_nuevo_salario").css("display", "inline");</script>
+
+}
+else
+{
+    <h3 class="text-danger">NO SE ENCONTRARON REGISTROS</h3>
+    <script>$(".formulario_nuevo_salario").css("display", "none");</script>
+}

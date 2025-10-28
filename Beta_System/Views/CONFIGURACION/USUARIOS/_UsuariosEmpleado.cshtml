@@ -1,0 +1,49 @@
+﻿@model IEnumerable<Beta_System.Models.C_usuarios_corporativo>
+
+@{ 
+    List<int> permisos = Session["PermisosModulo"] as List<int>;
+}
+
+<table class="table table-striped">
+    <thead>
+        <tr class="bg-beta">
+            <th>Usuario</th>
+            <th>ROL</th>
+            <th>Editar</th>
+            <th>Resetear password</th>
+            <th>Estatus</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <th>@item.usuario</th>
+                <th>@item.C_usuarios_roles.nombre_rol</th>
+                <th>
+                    @if (permisos.Contains(10))
+                    { <button class="btn btn_beta_icon" onclick="EditarUsuario(@item.id_usuario_corporativo, '@item.usuario', @item.id_rol); AddEditUsuario(1);"><i class="fa fa-edit"></i></button> }
+                    </th>
+                <th>
+                    @if (permisos.Contains(6)) { <button class="btn btn_beta_icon" onclick="PasswordResetGeneral(@item.id_usuario_corporativo);" style="background-color: #E8CA22; "><i class="fa fa-warning"></i></button>}
+                </th>
+                <th>
+                    @if (permisos.Contains(7))
+                    {
+                        if (item.Activo == true)
+                        {
+                            <i class="fa fa-3x fa-toggle-on" style="color:#2e87d7;" onclick="OnOffUsuario(@item.id_usuario_corporativo, false);"></i>
+                        }
+                        else
+                        {
+                            <i class="fa fa-3x fa-toggle-off" style="color:gray;" onclick="OnOffUsuario(@item.id_usuario_corporativo, true);"></i>
+                        }
+                    }
+
+                </th>
+            </tr>
+        }
+    </tbody>
+</table>
+
+

@@ -1,0 +1,30 @@
+﻿@model IEnumerable<Beta_System.Models.C_compras_cotizaciones_confirmadas_d>
+
+@{
+    var requi = Model.FirstOrDefault();
+
+    var firma = ViewBag.firmas;
+    var monto = ViewBag.monto_usuario;
+}
+
+<table class="table table-striped table-bordered text-center" id="datatable_agrupamiento_general" style="width:100%;">
+    <thead>
+        <tr class="bg-beta text-center">
+            <th>Requisicion</th>
+            <th>Precio</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    $@item.C_compras_cotizaciones_requisiciones.C_compras_cotizaciones_articulos.precio_final.Value.ToString("N6");
+                </td>
+                <td>
+                    hello world!
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

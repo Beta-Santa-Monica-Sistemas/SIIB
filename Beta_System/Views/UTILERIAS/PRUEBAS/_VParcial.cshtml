@@ -1,0 +1,21 @@
+﻿@model Beta_System.Models.C_salida_ganado_d
+
+<tr id="row_@ViewBag.count">
+    <th><label class="aretes" id="arete_@ViewBag.count">@Model.arete</label></th>
+    <th><label class="clasificaciones" id="clasif_@ViewBag.count">@Model.clasifica</label></th>
+    <th><label class="causas" id="causa_@ViewBag.count">@Model.causa_b</label></th>
+    <th><label class="condiciones" id="condicion_@ViewBag.count">@Model.cond_ind</label></th>
+    <th><label class="salas" id="sala_@ViewBag.count">@Model.sala</label></th>
+    <th><label class="edades" id="edad_@ViewBag.count">@Model.edad</label></th>
+    <th><label class="cantidades" id="cantidad_@ViewBag.count">@Model.cantidad</label></th>
+    <th><label class="pesos" id="peso_@ViewBag.count">@Model.peso</label></th>
+    <th><label class="p_unitarios" id="p_unitario_@ViewBag.count">@Model.p_unitario</label></th>
+    <th><label class="importes_d" id="importe_@ViewBag.count">@ViewBag.importe</label></th>
+    <th>
+        @if (!string.IsNullOrEmpty(ViewBag.imagen_base64 as string))
+        {
+            <img id="img_vaca_@ViewBag.count" src="@ViewBag.imagen_base64" class="imagen_vaca" alt="Foto vaca" style="width: 160px; height: auto; border-radius: 5px;" />
+        }
+    </th>
+    <th><button class="btn btn_beta_danger" onclick="EliminarFilaSalida(@ViewBag.count);"><i class="fa fa-remove"></i></button></th>
+</tr>

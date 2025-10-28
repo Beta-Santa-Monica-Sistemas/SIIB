@@ -1,0 +1,111 @@
+﻿@model List<Beta_System.Models.C_evaluaciones_d_conceptos>
+
+@if (Model.Count() > 0)
+{
+    var empleado = Model.FirstOrDefault().C_evaluaciones_d_empleados.C_nomina_empleados;
+    var evaluacion = Model.FirstOrDefault();
+
+    var id_evaluacion_g = ViewBag.id_evaluacion_g;
+    var id_evaluacion_d_empleado = ViewBag.id_evaluacion_d_empleado;
+    var id_evaluacion_status = ViewBag.id_evaluacion_status;
+
+    var usuarios = Model.Where(x => x.activo == true).OrderBy(x => x.fecha_registro).Select(x => x.C_usuarios_corporativo).Distinct();
+
+    var rubros = Model.Select(x => x.C_evaluaciones_conceptos_rubros.C_evaluaciones_rubros).Distinct();
+
+    <div class="text-left">
+        <h3 class="porcentaje text-left" style="margin:2px;">@empleado.Apellido_paterno @empleado.Apellido_materno @empleado.Nombres</h3>
+    </div>
+    <div style="overflow-x:hidden; overflow:auto; height:500px; min-height:500px;">
+        @foreach (var item in rubros)
+        {
+            var id_rubro = item.id_evaluacion_rubro;
+
+            <h3 class="text-left bg-dark text-white p-2 rubros_id_headers" style="margin:0px;" id="rubro_@id_rubro">
+                @item.nombre_rubro
+            </h3>
+            <div class="table-responsive">
+                <table class="table  table-bordered table-striped">
+                    <thead>
+                        <tr class="text-center bg-beta">
+                            <th style="width: 400px;"><h4 class="text-white">Concepto</h4></th>
+                            <th style="width: 200px;"><h4 class="text-white">Porcentaje máximo</h4></th>
+                            @foreach (var usuario in usuarios)
+                            {
+                                <th style="width: 200px;" class="text-center">
+                                    <strong class="text-white">@usuario.usuario</strong>
+                                    <br />
+                                    <strong class="text-white">(@string.Format(Model.Where(x => x.id_usuario_registra == usuario.id_usuario_corporativo).FirstOrDefault().fecha_registro.Value.ToShortDateString(), "dd/MM/yyyy"))</strong>
+                                </th>
+                            }
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var concepto in Model.Where(x => x.C_evaluaciones_conceptos_rubros.id_evaluacion_rubro == item.id_evaluacion_rubro && x.activo == true).Select(x => x.C_evaluaciones_conceptos_rubros).Distinct())
+                        {
+                            var id_concepto = concepto.id_evaluacion_concepto_rubro;
+
+                            <tr class="text-center">
+                                <td style="width: 400px;">@concepto.nombre_concepto</td>
+                                <td style="width: 200px;">
+                                    <strong class="porcentaje">@Convert.ToInt32(concepto.porcentaje)%</strong>
+                                    <label id="porcentaje_maximo_@id_concepto" style="display:none;">@Convert.ToInt32(concepto.porcentaje)</label>
+                                </td>
+                                @foreach (var usuario in usuarios)
+                                {
+                                    var data = Model.Where(x => x.id_usuario_registra == usuario.id_usuario_corporativo && x.id_evaluacion_concepto_rubro == id_concepto && x.activo == true).FirstOrDefault();
+                                    if (data != null)
+                                    {
+                                        <td style="width: 200px;">
+                                            <h4 class="text_beta" style="margin:3px;">@Convert.ToInt32(data.porcentaje_calificacion)% - @Convert.ToInt32(data.calificacion) pts</h4>
+                                            <label>@data.comentarios</label>
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td style="width: 200px;">ERROR</td>
+                                    }
+                                }
+                            </tr>
+                        }
+                    </tbody>
+                    <tfoot>
+                        <tr class="text-center bg-blue-sky">
+                            <td></td>
+                            <td>
+                                <h4 class="text-white">Calificacion total:</h4>
+                            </td>
+                            @foreach (var usuario in usuarios)
+                            {
+                                var data = Model.Where(x => x.id_usuario_registra == usuario.id_usuario_corporativo && x.C_evaluaciones_conceptos_rubros.C_evaluaciones_rubros.id_evaluacion_rubro == id_rubro && x.activo == true).ToList();
+                                if (data != null)
+                                {
+                                    <td style="width: 200px;">
+                                        <h4 class="text-white">@Convert.ToInt32(data.Sum(x => x.porcentaje_calificacion))%</h4>
+                                    </td>
+                                }
+                                else
+                                {
+                                    <td style="width: 200px;">ERROR</td>
+                                }
+                            }
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+            <hr />
+        }
+    </div>
+}
+else
+{
+    <h3 class="text-center text-danger">No se encontraron conceptos para evaluar</h3>
+}
+
+<script>
+    CalularTotalesRubros();
+</script>
+
+
+
+

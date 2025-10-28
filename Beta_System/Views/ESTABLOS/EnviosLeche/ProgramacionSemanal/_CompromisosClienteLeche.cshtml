@@ -1,0 +1,84 @@
+﻿@model IEnumerable<Beta_System.Models.CompromisoEntregaLeche>
+@{
+    int mes = ViewBag.MesCompromiso;
+    int anio = ViewBag.AnioCompromiso;
+    int nosemana = ViewBag.NoSemanaCompromiso;
+    int id_semanal = Model.FirstOrDefault().idCumplimientoSemanal;
+    string comentario = ViewBag.comentarioGeneral;
+}
+@if (Model.Count() > 0)
+{
+    <div class="row">
+        <div class="col-md-12">
+            <strong>Comentario</strong>
+            <textarea class="form-control" id="compromisoComentarioGeneral" rows="2" style="height: 90px">@comentario</textarea>
+        </div>
+        <div class="col-md-12 text-right">
+            <button class="btn btn_beta" onclick="ComentarioGeneralCompromiso(@id_semanal);"><i class="fa fa-save"></i>Guardar comentario</button>
+        </div>
+        <div class="col-md-12">
+            <table class="table table-striped table-bordered text-center" id="datatable_compromiso_leche" style="width:100%;">
+                <thead>
+                    <tr class="bg-beta text-center">
+                        <th style="min-width: 25%">Cliente</th>
+                        <th style="min-width: 10%">Full por semana</th>
+                        <th style="min-width: 10%">Full programado</th>
+                        <th style="min-width: 10%">Diferencia</th>
+                        <th style="min-width: 21%">Observacion</th>
+                        <th style="min-width: 21%">Nueva</th>
+                        <th style="min-width: 3%"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        decimal diferencia = item.fullProgramaSemanal - item.fullCompromisoSemanal;
+                        <tr>
+                            <td>@item.Cliente</td>
+                            <td>@item.fullCompromisoSemanal.ToString("N3")</td>
+                            <td>@item.fullProgramaSemanal.ToString("N3")</td>
+                            <td>@diferencia.ToString("N3")</td>
+                            <td class="text-left p-2">
+                                @if (item.observaciones != null)
+                                {
+                                    //P1-idCompromisoSemanal, P2-idObservacion, P3-Cliente, P4-Usuario, P5-Comentarios, P6-Fecha
+                                    foreach (var obs in item.observaciones)
+                                    {
+                                        <strong style="display:inline"> @obs[3]: </strong><label style="display:inline">@obs[4]</label><br />
+                                        <label style="display:inline">@obs[5]</label><br />
+                                    }
+                                }
+                            </td>
+                            @if (item.idCumplimientoSemanal != 0)
+                            {
+                                <td>
+                                    <input class="form-control" id="compromisoComentario_@item.idCumplimientoSemanal" />
+                                </td>
+                                <td>
+                                    <button class="btn btn_beta_icon" onclick="ConfirmacionComentariosCompromiso(@item.idCumplimientoSemanal,@anio,@nosemana,@mes);"><i class="fa fa-check"></i></button>
+                                </td>
+                            }
+                            else
+                            {
+                                <td></td>
+                                <td></td>
+                            }
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div class="col-md-6">
+            <button class="btn btn_beta" onclick="GenerarCumplimientoEnviosLecheGeneralPDF(@anio,@nosemana,@mes);"><i class="fa fa-print"></i>PDF</button>
+        </div>
+        <div class="col-md-6 text-right">
+            <button class="btn btn_beta" id="correo_leche_direccion">Enviar correo</button>
+        </div>
+    </div>
+}
+else
+{
+    <div class="col-md-12 text-right">
+        <h3 style="color:red">No se encontro informacionSSS</h3>
+    </div>
+}

@@ -1,0 +1,19 @@
+﻿@model IEnumerable<Beta_System.Models.C_envios_leche_cliente_destinos>
+@{
+    int modo = ViewBag.ModoClienteDestino;
+}
+
+@if (modo == 1)
+{
+    foreach (var item in Model)
+    {
+        <option value="@item.id_cliente_destino">@item.C_envios_leche_clientes.nombre_comercial - @item.C_envios_leche_destinos.nombre_destino</option>
+    }
+}
+else
+{
+    foreach (var item in Model.GroupBy(x=>x.id_envio_leche_cliente_ms))
+    {
+        <option value="@item.FirstOrDefault().id_envio_leche_cliente_ms">@item.FirstOrDefault().C_envios_leche_clientes.nombre_comercial</option>
+    }
+}

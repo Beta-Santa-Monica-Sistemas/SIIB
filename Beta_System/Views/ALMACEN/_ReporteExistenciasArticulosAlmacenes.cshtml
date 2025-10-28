@@ -1,0 +1,80 @@
+﻿@model List<Beta_System.Models.CapturaInventarioDiferencias>
+
+@{ 
+    var nombre_meses = Model.Select(x => x.Meses_consumo_nombre).ToArray();
+
+}
+
+
+<style>
+    table, td, th {
+        border: 1px solid;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+</style>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Clave</th>
+            <th>ARTICULO</th>
+            <th>TIPO</th>
+            <th>ALMACEN</th>
+            <th>PRECIO</th>
+            <th>EXISTENCIA</th>
+            <th>TOTAL</th>
+            <th>MÁXIMO</th>
+            <th>MINIMO</th>
+            <th>PROMEDIO</th>
+            <th>UBICACIÓN</th>
+            @for (int i = 0; i < nombre_meses[0].Count(); i++)
+            {
+                string nombre_mes = nombre_meses[0][i].ToString();
+                <th>@nombre_mes</th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Clave</td>
+                <td>@item.Nombre_articulo</td>
+                <td>@item.Tipo_articulo</td>
+                <td>@item.Almacen</td>
+                <td>$@item.Precio.ToString("N2")</td>
+                <td>@item.Cantidad_sistema.ToString("N2")</td>
+                <td>$@item.Total.ToString("N2")</td>
+
+                <td>
+                    @if (item.Maximo == -1) { <label>NO CAPTURADO</label> }
+                    else { <label>@item.Maximo.ToString("N2")</label>}
+                </td>
+                <td>
+                    @if (item.Minimo == -1)
+                    {<label>NO CAPTURADO</label> }
+                    else
+                    { <label>@item.Minimo.ToString("N2")</label>}
+                </td>
+                <td>
+                    @if (item.Promedio == -1)
+                    {<label>NO CAPTURADO</label> }
+                    else
+                    { <label>@item.Promedio.ToString("N2")</label>}
+                </td>
+                <td>@item.Ubicacion</td>
+                @foreach (var mes in item.Meses_consumo_valor)
+                {
+                    <td><label>@mes.ToString("N2")</label></td>
+                }
+
+            </tr>
+        }
+    </tbody>
+</table>
+
+

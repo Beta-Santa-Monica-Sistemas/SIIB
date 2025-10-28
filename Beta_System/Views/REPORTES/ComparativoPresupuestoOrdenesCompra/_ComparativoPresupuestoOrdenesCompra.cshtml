@@ -1,0 +1,285 @@
+﻿@model IEnumerable<Beta_System.Models.PresupuestosOrdenCompra>
+
+@{
+    List<Beta_System.Models.C_presupuestos_meses> meses_presupuesto = Session["ReporteMesesPresupuestoAlmacen"] as List<Beta_System.Models.C_presupuestos_meses>;
+
+    int id_anio = (int)ViewBag.id_anio_reporte;
+    int anio_numero = Convert.ToInt32(ViewBag.anio_numero);
+
+    List<int> permisos = Session["PermisosModulo"] as List<int>;
+}
+
+@if (Model != null)
+{
+    foreach (var cargo_contable in Model.GroupBy(x => x.id_cargo_contable).Distinct())
+    {
+        int id_cargo_contable = cargo_contable.FirstOrDefault().id_cargo_contable;
+        string nombre_cargo = cargo_contable.FirstOrDefault().nombre_cargo;
+
+
+        <div class="">
+            <div class="w-100 p-2 bg-beta" style="border: 1px solid black;">
+                <h2 style="color: white;" class="text-left"><strong>@cargo_contable.FirstOrDefault().nombre_cargo</strong></h2>
+            </div>
+        </div>
+
+        <div class="" id="heading_header">
+            <div class="w-100 collapsed p-2" style="border: 1px solid black; background-color: black;">
+                <div class="row">
+                    <div class="col-md-5 text-center">
+                        <h4 style="color: white;"><strong>CUENTA</strong></h4>
+                    </div>
+                    <div class="col-md-2 text-center">
+                        <h4 style="color: white;"><strong>PRESUPUESTO</strong></h4>
+                    </div>
+                    <div class="col-md-2 text-center">
+                        <h4 style="color: white;"><strong>CONSUMO</strong></h4>
+                    </div>
+                    <div class="col-md-2 text-center">
+                        <h4 style="color: white;"><strong>DISPONIBLE</strong></h4>
+                    </div>
+                    <div class="col-md-1 text-center">
+                        <h4 style="color: white;">Ver</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+        foreach (var items in Model.Where(x => x.id_cargo_contable == id_cargo_contable).Distinct())
+        {
+            <div class="">
+                <div class="" id="heading_@items.cuenta">
+                    <div class="w-100 collapsed" style="border: 1px solid black; background-color: rgb(236, 244, 251);">
+                        <div class="row">
+                            @{
+                                decimal diferencia = Convert.ToDecimal(items.total_asignado) - Convert.ToDecimal(items.total_consumido);
+                            }
+                            <div class="col-md-4 text-left mt-2">
+                                <strong class="ml-3">@items.descripcion</strong>
+                                <br />
+                                <label class="ml-3">@items.cuenta_string</label>
+                            </div>
+                            <div class="col-md-3 text-left mt-2">
+                                <strong>Presupuesto Anual: </strong>
+                                <br />
+                                <strong>@string.Format("{0:C}", items.total_asignado)</strong>
+                            </div>
+                            <div class="col-md-2 text-left mt-2">
+                                <strong>Consumo Anual: </strong>
+                                <br />
+                                <strong>@string.Format("{0:C}", items.total_consumido)</strong>
+                            </div>
+                            <div class="col-md-2 text-left mt-2">
+                                <strong>Disponible Anual: </strong>
+                                <br />
+                                <strong>@string.Format("{0:C}", diferencia)</strong>
+                            </div>
+                            <div class="col-md-1 text-center">
+                                <button class="btn btn_beta_icon" data-toggle="collapse" data-target="#collapse_@items.cuenta" aria-expanded="false" aria-controls="collapse_@items.cuenta">
+                                    <i class="fa fa-bars"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <script>
+                try {
+                    $("#datatable_@items.cuenta").dataTable().fnDestroy();
+                } catch (e) { }
+                </script>
+
+                <div id="collapse_@items.cuenta" class="collapse" aria-labelledby="heading_@items.cuenta" data-parent="#accordionSolicitudes">
+                    <div class="" style="border: 1px solid black; background-color: rgb(236, 244, 251);">
+                        <div class="" style="border: 1px solid black; background-color: rgb(236, 244, 251);">
+                            <div class="col-md-12">
+                                <table class="table table-sm table-condensed small table-bordered table-striped" id="datatable_@items.cuenta">
+                                    <thead>
+                                        <tr class="bg-beta text-center">
+                                            @foreach (var mes in meses_presupuesto)
+                                            {
+                                                <th>@mes.mes</th>
+                                            }
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var item in Model.Where(x => x.cuenta == items.cuenta).Distinct())
+                                        {
+                                            string clase_dif_enero = "text-success";
+                                            string clase_dif_febrero = "text-success";
+                                            string clase_dif_marzo = "text-success";
+                                            string clase_dif_abril = "text-success";
+                                            string clase_dif_mayo = "text-success";
+                                            string clase_dif_junio = "text-success";
+                                            string clase_dif_julio = "text-success";
+                                            string clase_dif_agosto = "text-success";
+                                            string clase_dif_septiembre = "text-success";
+                                            string clase_dif_octubre = "text-success";
+                                            string clase_dif_noviembre = "text-success";
+                                            string clase_dif_diciembre = "text-success";
+
+                                            if (item.ene_disponible <= 0) { clase_dif_enero = "text-danger"; }
+                                            if (item.feb_disponible <= 0) { clase_dif_febrero = "text-danger"; }
+                                            if (item.mar_disponible <= 0) { clase_dif_marzo = "text-danger"; }
+                                            if (item.abr_disponible <= 0) { clase_dif_abril = "text-danger"; }
+                                            if (item.mayo_disponible <= 0) { clase_dif_mayo = "text-danger"; }
+                                            if (item.jun_disponible <= 0) { clase_dif_junio = "text-danger"; }
+                                            if (item.jul_disponible <= 0) { clase_dif_julio = "text-danger"; }
+                                            if (item.ago_disponible <= 0) { clase_dif_agosto = "text-danger"; }
+                                            if (item.sep_disponible <= 0) { clase_dif_septiembre = "text-danger"; }
+                                            if (item.oct_disponible <= 0) { clase_dif_octubre = "text-danger"; }
+                                            if (item.nov_disponible <= 0) { clase_dif_noviembre = "text-danger"; }
+                                            if (item.dic_disponible <= 0) { clase_dif_diciembre = "text-danger"; }
+
+                                            <tr class="text-center">
+                                                <td onclick="ConsultarOrdenesEjericdasMesDetalle(@items.cuenta,1,@item.ene_consumido, @item.ene_asignado, @anio_numero, '@items.cuenta_string', '@items.descripcion', '@nombre_cargo')">
+                                                    <label>Presupuestado</label>
+                                                    <strong>@string.Format("{0:C}", item.ene_asignado)</strong>
+                                                    <label>Consumo</label>
+                                                    <strong>@string.Format("{0:C}", item.ene_consumido)</strong>
+                                                    <label>Disponible</label>
+                                                    <strong class="@clase_dif_enero">@string.Format("{0:C}", item.ene_disponible)</strong>
+                                                </td>
+
+                                                <td onclick="ConsultarOrdenesEjericdasMesDetalle(@item.cuenta,2,@item.feb_consumido, @item.feb_asignado, @anio_numero, '@items.cuenta_string', '@items.descripcion', '@nombre_cargo')">
+                                                    <label>Presupuestado</label>
+                                                    <strong>@string.Format("{0:C}", item.feb_asignado)</strong>
+                                                    <label>Consumo</label>
+                                                    <strong>@string.Format("{0:C}", item.feb_consumido)</strong>
+                                                    <label>Disponible</label>
+                                                    <strong class="@clase_dif_febrero">@string.Format("{0:C}", item.feb_disponible)</strong>
+                                                </td>
+
+                                                <td onclick="ConsultarOrdenesEjericdasMesDetalle(@item.cuenta,3,@item.mar_consumido, @item.mar_asignado, @anio_numero, '@items.cuenta_string', '@items.descripcion', '@nombre_cargo')">
+                                                    <label>Presupuestado</label>
+                                                    <strong>@string.Format("{0:C}", item.mar_asignado)</strong>
+                                                    <label>Consumo</label>
+                                                    <strong>@string.Format("{0:C}", item.mar_consumido)</strong>
+                                                    <label>Disponible</label>
+                                                    <strong class="@clase_dif_marzo">@string.Format("{0:C}", item.mar_disponible)</strong>
+                                                </td>
+
+                                                <td onclick="ConsultarOrdenesEjericdasMesDetalle(@item.cuenta,4,@item.abr_consumido, @item.abr_asignado, @anio_numero, '@items.cuenta_string', '@items.descripcion', '@nombre_cargo')">
+                                                    <label>Presupuestado</label>
+                                                    <strong>@string.Format("{0:C}", item.abr_asignado)</strong>
+                                                    <label>Consumo</label>
+                                                    <strong>@string.Format("{0:C}", item.abr_consumido)</strong>
+                                                    <label>Disponible</label>
+                                                    <strong class="@clase_dif_abril">@string.Format("{0:C}", item.abr_disponible)</strong>
+                                                </td>
+
+                                                <td onclick="ConsultarOrdenesEjericdasMesDetalle(@item.cuenta,5,@item.mayo_consumido, @item.mayo_asignado, @anio_numero, '@items.cuenta_string', '@items.descripcion', '@nombre_cargo')">
+                                                    <label>Presupuestado</label>
+                                                    <strong>@string.Format("{0:C}", item.mayo_asignado)</strong>
+                                                    <label>Consumo</label>
+                                                    <strong>@string.Format("{0:C}", item.mayo_consumido)</strong>
+                                                    <label>Disponible</label>
+                                                    <strong class="@clase_dif_mayo">@string.Format("{0:C}", item.mayo_disponible)</strong>
+                                                </td>
+
+                                                <td onclick="ConsultarOrdenesEjericdasMesDetalle(@item.cuenta,6,@item.jun_consumido, @item.jun_asignado, @anio_numero, '@items.cuenta_string', '@items.descripcion', '@nombre_cargo')">
+                                                    <label>Presupuestado</label>
+                                                    <strong>@string.Format("{0:C}", item.jun_asignado)</strong>
+                                                    <label>Consumo</label>
+                                                    <strong>@string.Format("{0:C}", item.jun_consumido)</strong>
+                                                    <label>Disponible</label>
+                                                    <strong class="@clase_dif_junio">@string.Format("{0:C}", item.jun_disponible)</strong>
+                                                </td>
+
+                                                <td onclick="ConsultarOrdenesEjericdasMesDetalle(@item.cuenta,7,@item.jul_consumido, @item.jul_asignado, @anio_numero, '@items.cuenta_string', '@items.descripcion', '@nombre_cargo')">
+                                                    <label>Presupuestado</label>
+                                                    <strong>@string.Format("{0:C}", item.jul_asignado)</strong>
+                                                    <label>Consumo</label>
+                                                    <strong>@string.Format("{0:C}", item.jul_consumido)</strong>
+                                                    <label>Disponible</label>
+                                                    <strong class="@clase_dif_julio">@string.Format("{0:C}", item.jul_disponible)</strong>
+
+                                                <td onclick="ConsultarOrdenesEjericdasMesDetalle(@item.cuenta,8,@item.ago_consumido, @item.ago_asignado, @anio_numero, '@items.cuenta_string', '@items.descripcion', '@nombre_cargo')">
+                                                    <label>Presupuestado</label>
+                                                    <strong>@string.Format("{0:C}", item.ago_asignado)</strong>
+                                                    <label>Consumo</label>
+                                                    <strong>@string.Format("{0:C}", item.ago_consumido)</strong>
+                                                    <label>Disponible</label>
+                                                    <strong class="@clase_dif_agosto">@string.Format("{0:C}", item.ago_disponible)</strong>
+                                                </td>
+
+                                                <td onclick="ConsultarOrdenesEjericdasMesDetalle(@item.cuenta,9,@item.sep_consumido, @item.sep_asignado, @anio_numero, '@items.cuenta_string', '@items.descripcion', '@nombre_cargo')">
+                                                    <label>Presupuestado</label>
+                                                    <strong>@string.Format("{0:C}", item.sep_asignado)</strong>
+                                                    <label>Consumo</label>
+                                                    <strong>@string.Format("{0:C}", item.sep_consumido)</strong>
+                                                    <label>Disponible</label>
+                                                    <strong class="@clase_dif_septiembre">@string.Format("{0:C}", item.sep_disponible)</strong>
+                                                </td>
+
+                                                <td onclick="ConsultarOrdenesEjericdasMesDetalle(@item.cuenta,10,@item.oct_consumido, @item.oct_asignado, @anio_numero, '@items.cuenta_string', '@items.descripcion', '@nombre_cargo')">
+                                                    <label>Presupuestado</label>
+                                                    <strong>@string.Format("{0:C}", item.oct_asignado)</strong>
+                                                    <label>Consumo</label>
+                                                    <strong>@string.Format("{0:C}", item.oct_consumido)</strong>
+                                                    <label>Disponible</label>
+                                                    <strong class="@clase_dif_octubre">@string.Format("{0:C}", item.oct_disponible)</strong>
+                                                </td>
+
+                                                <td onclick="ConsultarOrdenesEjericdasMesDetalle(@item.cuenta,11,@item.nov_consumido, @item.nov_asignado, @anio_numero, '@items.cuenta_string', '@items.descripcion', '@nombre_cargo')">
+                                                    <label>Presupuestado</label>
+                                                    <strong>@string.Format("{0:C}", item.nov_asignado)</strong>
+                                                    <label>Consumo</label>
+                                                    <strong>@string.Format("{0:C}", item.nov_consumido)</strong>
+                                                    <label>Disponible</label>
+                                                    <strong class="@clase_dif_noviembre">@string.Format("{0:C}", item.nov_disponible)</strong>
+                                                </td>
+
+                                                <td onclick="ConsultarOrdenesEjericdasMesDetalle(@item.cuenta,12, @item.dic_consumido, @item.dic_asignado, @anio_numero, '@items.cuenta_string', '@items.descripcion', '@nombre_cargo')">
+                                                    <label>Presupuestado</label>
+                                                    <strong>@string.Format("{0:C}", item.dic_asignado)</strong>
+                                                    <label>Consumo</label>
+                                                    <strong>@string.Format("{0:C}", item.dic_consumido)</strong>
+                                                    <label>Disponible</label>
+                                                    <strong class="@clase_dif_diciembre">@string.Format("{0:C}", item.dic_disponible)</strong>
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <script>
+            $('#datatable_@items.cuenta').DataTable({
+                keys: false,
+                ordering: false,
+                paging: false,
+                select: true,
+                dom: "Bfrtip",
+                buttons: [{}],
+                responsive: false,
+                seraching: false
+            });
+
+            $('#datatable_@items.cuenta').on('click', 'td', function () {
+                // Eliminar la clase y el color de fondo de la celda previamente seleccionada
+                $('td.success').removeClass('success');
+                $('td').css("background-color", "#fff");
+
+                // Agregar la clase y cambiar el color de fondo de la celda seleccionada
+                $(this).addClass('success');
+                $(this).css("background-color", "#rgb(153, 255, 204)");
+            });
+                </script>
+
+
+            </div>
+        }
+    }
+
+
+
+}
+else
+{
+    <div class="col-md-12 text-center">
+        <h1 style="color:red">ES NECESARIO ASIGNAR PRESUPUESTO A LA CUENTA CONTABLE</h1>
+        <h2 style="color:red">(La cuenta contable no cuenta con un presupuesto asignado)</h2>
+    </div>
+}

@@ -1,0 +1,292 @@
+﻿@model List<Beta_System.Models.ReciboNominaEmpleado>
+
+@if (Model != null)
+{
+    var info = Model.FirstOrDefault();
+    decimal pago_total = info.total_percepciones - info.total_retenciones;
+
+    <style>
+        .bg_ms {
+            background-color: #050379;
+            color: white !important;
+        }
+
+        .ajustar-texto {
+            width: 100%; /* o el ancho que necesites */
+            white-space: normal; /* permite saltos de línea */
+            word-wrap: break-word; /* divide las palabras largas si es necesario */
+            overflow-wrap: break-word; /* compatibilidad moderna */
+            font-size: 10px;
+        }
+
+        .text-black {
+            color: black !important;
+        }
+    </style>
+
+    <br />
+    <br />
+    <div class="p-3" style="border: 1px solid black;">
+        <img src="~/Content/img_layout/logo_beta_new.png" width="200" style="position: absolute;" />
+        <h2 class="text-center" style="margin:10px;">@ViewBag.NOMBRE_EMPRESA</h2>
+        <h5 class="text-center" style="margin:0px;">@ViewBag.DIRECCION</h5>
+        <br />
+        <div class="row">
+            <div class="col-md-4">
+                <h1 style="font-size: 3rem; font-weight:600; color: #050379;">Recibo de nómina</h1>
+            </div>
+
+            <div class="col-md-3 text-center">
+                <table class="table table-sm">
+                    <tr>
+                        <td class="text-left">RFC:</td>
+                        <td class="text-center">@ViewBag.RFC</td>
+                    </tr>
+                    <tr>
+                        <td class="text-left">Régimen patronal:</td>
+                        <td class="text-center">@ViewBag.IMSS</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="col-md-5 text-center">
+                <table class="table table-bordered table-sm">
+                    <tr class="bg_ms">
+                        <th class="text-center"><h3 style="font-weight: 600; color: white;">Frecuencia de pago</h3></th>
+                        <th class="text-center"><h3 style="font-weight: 600; color: white;">Fecha de pago</h3></th>
+                    </tr>
+                    <tr>
+                        <th class="text-center"><h3>@info.frec_pago</h3></th>
+                        <th class="text-center"><h3>@info.fecha_pago</h3></th>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="row mt-1">
+            <div class="col-md-7">
+                <table class="table table-bordered table-sm">
+                    <tr class="bg_ms">
+                        <th colspan="2" class="text-center"><h3 style="font-weight: 600; color: white;">Empleado</h3></th>
+                    </tr>
+                    <tr class="text-left">
+                        <td><h4>Nombre:</h4></td>
+                        <td><h4>@info.nombre</h4></td>
+                    </tr>
+                    <tr class="text-left">
+                        <td><h4>Puesto:</h4></td>
+                        <td><h4>@info.puesto</h4></td>
+                    </tr>
+
+                    <tr class="text-left">
+                        <td><h4>Departamento:</h4></td>
+                        <td><h4>@info.departamento</h4></td>
+                    </tr>
+
+                    <tr class="text-left">
+                        <td><h4>RFC:</h4></td>
+                        <td><h4>@info.RFC</h4></td>
+                    </tr>
+
+                    <tr class="text-left">
+                        <td><h4>CURP:</h4></td>
+                        <td><h4>@info.CURP</h4></td>
+                    </tr>
+
+                    @*<tr class="text-left">
+                        <td><h4>Periodo:</h4></td>
+                        <td><h4>@info.fecha_periodo</h4></td>
+                    </tr>*@
+
+                    @*<tr class="text-left">
+                            <td><h4>Domicilio fiscal:</h4></td>
+                            <td><h4>@info.Domicilio_fisc</h4></td>
+                        </tr>
+
+                        <tr class="text-left">
+                            <td><h4>Régimen fiscal:</h4></td>
+                            <td><h4>@info.Regimn_fisc</h4></td>
+                        </tr>*@
+
+
+                </table>
+            </div>
+            <div class="col-md-5">
+                <table class="table table-bordered table-sm">
+                    <tr class="bg_ms">
+                        <th colspan="2" class="text-center"><h3 style="font-weight: 600; color: white;">Seguridad social</h3></th>
+                    </tr>
+                    <tr class="text-left">
+                        <td><h4>IMSS:</h4></td>
+                        <td><h4>@info.registro_nss</h4></td>
+                    </tr>
+                    <tr class="text-left">
+                        <td><h4>Tipo de salario:</h4></td>
+                        <td><h4>@info.tipo_salario</h4></td>
+                    </tr>
+
+                    @*<tr class="text-left">
+                        <td><h4>Salario integrado:</h4></td>
+                        <td><h4>$@info.salario_integrado.ToString("N2") diario</h4></td>
+                    </tr>*@
+
+                    @*<tr class="text-left">
+                        <td><h4>Jornada:</h4></td>
+                        <td><h4>@info.jornada horas</h4></td>
+                    </tr>*@
+
+                    <tr class="text-left">
+                        <td><h4>Fecha de ingreso:</h4></td>
+                        <td><h4>@info.fecha_ingreso</h4></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="row mt-1" style="height: 400px; min-height: 400px;">
+            <div class="col-md-6 text-center">
+                <table class="table table-sm">
+                    <tr class="bg_ms text-center">
+                        <th>Percepción</th>
+                        <th>Monto</th>
+                        <th>Unidades</th>
+                    </tr>
+                    @foreach (var item in Model.Where(x => x.naturaleza_concepto == "P"))
+                    {
+                        <tr class="text-right">
+                            <td class="text-left">@item.concepto</td>
+                            <td>$@item.monto.ToString("N2")</td>
+                            <td>
+                                @if (item.unidades > 0)
+                                {
+                                    <label>@item.unidades</label>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </table>
+            </div>
+            <div class="col-md-6 text-center">
+                <table class="table table-sm">
+                    <tr class="bg_ms text-center">
+                        <th>Retención</th>
+                        <th>Monto</th>
+                        <th>Saldo</th>
+                    </tr>
+                    @foreach (var item in Model.Where(x => x.naturaleza_concepto == "R"))
+                    {
+                        <tr class="text-right">
+                            <td class="text-left">@item.concepto</td>
+                            <td>$@item.monto.ToString("N2")</td>
+                            <td>
+                                @*@if (item.saldo > 0)
+                                    {
+                                        <label>@item.unidades</label>
+                                    }*@
+                            </td>
+                        </tr>
+                    }
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="p-3" style="border: 1px solid black;">
+        <div class="row">
+            <div class="col-md-8">
+                <label class="text-black">
+                    Recibí de esta empresa la cantidad que señala este recibo de pago, estando conforme con las
+                    percepciones y las retenciones descritas, por lo que certifico que no se me adeuda cantidad alguna
+                    por ningún concepto.
+                </label>
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <div class="row">
+                    <div class="col-md-4"></div>
+                    <div class="col-md-4 text-center" style="border-top: 1px black solid;">
+                        <h4>Firma del Empleado</h4>
+                    </div>
+                    <div class="col-md-4"></div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <table class="table table-sm">
+                    <tr>
+                        <td>Total de percepciones:</td>
+                        <td>$@info.total_percepciones.ToString("N2")</td>
+                    </tr>
+                    <tr>
+                        <td>Total de retenciones:</td>
+                        <td>$@info.total_retenciones.ToString("N2")</td>
+                    </tr>
+                    <tr>
+                        <td>@info.forma_pago:</td>
+                        <td>$@pago_total.ToString("N2")</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+    if (info.UUID == "")
+    {
+        <div style="border: 1px solid black;" class="text-center">
+            <div style="margin: 8%;">
+                <strong>Este pago de nómina no cuenta con un CFDI generado y certificado</strong>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div style="border: 1px solid black;">
+            <div class="row">
+                <div class="col-md-2">
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <img src="@info.codigo_qr" alt="Código de Barras" style="width:100%; min-width:100%;" />
+                </div>
+
+                <div class="col-md-10 text-black pr-4">
+                    <br />
+                    <b class="text-black ajustar-texto">Cadena original del complemento de certificación digital del SAT:</b>
+                    <br />
+                    <label class="text-black ajustar-texto">@info.cadena_cfdi</label>
+
+                    <br />
+                    <b class="text-black ajustar-texto">Sello Digital del CFDI:</b>
+                    <br />
+                    <label class="text-black ajustar-texto">@info.sello_digital_cfdi</label>
+
+                    <br />
+                    <b class="text-black ajustar-texto">Sello Digital del SAT:</b>
+                    <br />
+                    <label class="text-black ajustar-texto">@info.sello_digital_sat</label>
+                </div>
+            </div>
+        </div>
+        <div style="border: 1px solid black;">
+            <div class="row" style="padding: 15px;">
+                <div class="col-md-6 text-left">
+                    <label class="text-black">Este documento es una representación impresa de un CFDI</label>
+                    <br />
+                    <label class="text-black">Folio del SAT: @info.UUID</label>
+                    <br />
+                    <label class="text-black">Lugar: @info.lugar_sat</label>
+                </div>
+                <div class="col-md-6 text-left">
+                    <label class="text-black">Régimen fiscal emisor: Actividades Agrícolas, Ganaderas, Silvícolas y Pesqueras</label>
+                    <br />
+                    <label class="text-black">Fecha de emisión: @info.fecha_emision_sat Fecha de certificación: @info.fecha_certificacion</label>
+                    <br />
+                    <label class="text-black">Certificado del SAT: @info.noCertificado_cfdi</label>
+                </div>
+            </div>
+        </div>
+    }
+}
+

@@ -1,0 +1,7 @@
+﻿@model IEnumerable<Beta_System.Models.C_centros_g>
+
+@foreach (var item in Model)
+{
+    <option value="@item.id_centro_g">@item.siglas - @item.nombre_centro</option>
+}
+

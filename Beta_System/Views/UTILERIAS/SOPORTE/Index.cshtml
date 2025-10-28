@@ -1,0 +1,194 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+}
+
+<div class="page_title">
+    <div class="counter_section">
+        <h1>Administrador de Soporte</h1>
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="nav nav-tabs">
+                    <li class="active"> <a data-toggle="tab" href="#dispositivos_activos">HISTORIAL DE SOPORTE<i class="fa fa-2x fa-paperclip ml-2"></i></a> </li>
+                    <li onclick="ModalNuevoSoporte();"><a data-toggle="tab" href="#" class="active show">REGISTRAR SOPORTE<i class="fa fa-2x fa-plus ml-2"></i></a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="counter_section">
+    <div class="tab-content">
+        <div id="dispositivos_activos" class="tab-pane fade in active show">
+            <div class="row">
+                <div class="col-md-3">
+                    <strong>Estatus:</strong><br />
+                    <select class="form-control" id="soporte_buscar_estatus">
+                        <option value="0">Todos</option>
+                        @{ Html.RenderAction("ConsultarEstatusSoporteSelect", "CATALOGOS"); };
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <strong>Prioridad:</strong><br />
+                    <select class="form-control" id="soporte_buscar_prioridad">
+                        <option value="0">Todos</option>
+                        @{ Html.RenderAction("ConsultarPrioridadSoporteSelect", "CATALOGOS"); };
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <strong>Fecha inicial</strong>
+                    <input type="date" class="form-control" id="fecha_soporte_buscar_1">
+                </div>
+                <div class="col-md-2">
+                    <strong>Fecha final</strong>
+                    <input type="date" class="form-control" id="fecha_soporte_buscar_2">
+                </div>
+                <div class="col-md-2 text-right p-3">
+                    <button class="btn btn_beta_icon" onclick="ConsultarHistorialSoporteTable();"><i class="fa fa-search"></i></button>
+                </div>
+                <div class="col-md-12"></div>
+                <div class="table-responsive">
+                    <div id="div_historial_soporte"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@* MODAL NUEVO SOPORTE *@
+<div class="modal fade" id="m_soporte" tabindex="1" role="dialog" aria-labelledby="m_soporte" aria-hidden="true">
+    <div class="modal-dialog" role="document" style="min-width:80%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="lbl_soporte">Registro de soporte</h2>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        <strong>Titulo:</strong>
+                        <input type="text" class="form-control" id="soporte_titulo" value="Soporte" />
+                    </div>
+                    <div class="col-md-4">
+                        <strong>Estatus:</strong><br />
+                        <select class="form-control" id="soporte_estatus_g">
+                            @{ Html.RenderAction("ConsultarEstatusSoporteSelect", "CATALOGOS"); };
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <strong>Prioridad:</strong><br />
+                        <select class="form-control" id="soporte_prioridad">
+                            @{ Html.RenderAction("ConsultarPrioridadSoporteSelect", "CATALOGOS"); };
+                        </select>
+                    </div>
+                    <div class="col-md-12">
+                        <strong>Descripcion:</strong>
+                        <input type="text" class="form-control" id="soporte_descripcion" value="soporte realizado por sistemas" />
+                    </div>
+                    <div class="col-md-12">
+                        <strong>Solicita:</strong>
+                        <select class="form-control" id="id_soporte_solicita">
+                            @{ Html.RenderAction("ConsultarUsuariosCorporativoSelect", "USUARIOS"); }
+                        </select>
+                    </div>
+
+                    <div class="col-md-12"><hr /></div>
+
+                    <div class="col-md-4">
+                        <strong>Categoria:</strong><br />
+                        <select class="form-control" id="soporte_categoria" onchange="ConsultarTipoSoporteSelect();">
+                            @{ Html.RenderAction("ConsultarCategoriaSoporteSelect", "CATALOGOS"); };
+                        </select>
+                    </div>
+
+                    <div class="col-md-5">
+                        <strong>Tipo:</strong><br />
+                        <select class="form-control" id="soporte_tipo">
+                        </select>
+                    </div>
+
+                    <div class="col-md-3">
+                        <strong>Estatus:</strong><br />
+                        <select class="form-control" id="soporte_estatus_d">
+                            @{ Html.RenderAction("ConsultarEstatusSoporteSelect", "CATALOGOS"); };
+                        </select>
+                    </div>
+
+                    <div class="col-md-12">
+                        <strong>Solicitud:</strong>
+                        <input type="text" class="form-control" id="soporte_solicitud" />
+                    </div>
+                    <div class="col-md-4">
+                        <strong>Fecha inicio</strong>
+                        <input type="datetime-local" id="soporte_fecha_1" class="form-control" min="2025-01-01T00:00" max="2030-12-31T23:59">
+                    </div>
+                    <div class="col-md-4">
+                        <strong>Fecha termino</strong>
+                        <input type="datetime-local" id="soporte_fecha_2" class="form-control" min="2025-01-01T00:00" max="2030-12-31T23:59">
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <div class="col-md-6 p-3">
+                    <button type="button" class="btn btn_beta_danger" data-dismiss="modal">Cerrar</button>
+                </div>
+                <div class="col-md-6 p-3 text-right">
+                    <button class="btn btn_beta" onclick="RegistrarSoporte();">Confirmar</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@* MODAL DESACTIVAR COMANDO *@
+<div class="modal fade" id="m_desactivar_comando" tabindex="1" role="dialog" aria-labelledby="m_desactivar_comando" aria-hidden="true">
+    <div class="modal-dialog" role="document" style="min-width:80%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Comando a ejecutar</h2>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <div class="col-md-12">
+                    <div class="row" id="div_desactivar_table"></div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <div class="col-md-12 p-3 text-right">
+                    <button type="button" class="btn btn_beta_danger" data-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@Scripts.Render("~/bundles_Propiedades/js")
+@Scripts.Render("~/bundles_UtileriaSoporte/js")
+
+<script type="text/javascript">
+    $(window).on("load", function () {
+        CaracteresControl();
+        FechaParametrosSoporte();
+    });
+    try {
+        $("#id_soporte_solicita").select2({
+            placeholder: 'Selecciona un usuario',
+            dropdownParent: $('#m_soporte')
+        });
+    }
+    catch (ex) { }
+</script>
+
+

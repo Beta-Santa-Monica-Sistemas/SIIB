@@ -1,0 +1,135 @@
+﻿@model IEnumerable<Beta_System.Models.C_envios_leche_d_fichas>
+    @{ 
+        string folio = ViewBag.FolioEnvLeche;
+    }
+@if (Model.Count() > 0)
+{
+    if (Model.Count() == 1)
+    {
+        <div class="col-md-12 text-center">
+            <h3>ENVIO SENCILLO</h3>
+        </div>
+    }
+    else
+    {
+        <div class="col-md-12 text-center">
+            <h3>ENVIO FULL</h3>
+        </div>
+    }
+    <div class="row p-2">
+        @foreach (var item in Model)
+        {
+            <div class="col-md-6 p-2">
+                <div class="col-md-12" style="border: solid 2px rgb(46, 135, 215); border-radius: 0.5rem; margin-right: 2rem; box-shadow: 5px 7px 0px rgba(0, 0, 0, 0.1);">
+                    <div class="row pt-2">
+                        <div class="col-md-12">
+                            <label style="display:none" class="id_ficha_d_leche">@item.id_envio_leche_d</label>
+                            <strong style="font-size:19px;" class="ficha_leche_agrupacion">Ficha #@item.id_ficha_bascula</strong><br /><hr />
+                        </div>
+                        <div class="col-md-6">
+                            <strong>Tanque</strong><br />
+                            <label>@item.C_bascula_fichas.observaciones</label>
+                        </div>
+                        <div class="col-md-3">
+                            <strong>Peso Kg</strong><br />
+                            <label>@item.kilos_ficha</label>
+                        </div>
+                        <div class="col-md-3">
+                            <strong>Litros</strong><br />
+                            <label>@item.litros_ficha.Value.ToString("N3")</label>
+                        </div>
+
+                        <div class="col-md-6">
+                            <strong>Fecha</strong><br />
+                            <label>@item.C_bascula_fichas.fecha_segunda_pesada</label>
+                        </div>
+                        <div class="col-md-6">
+                            <strong>Sello</strong><br />
+                            <label>@item.sello</label>
+                        </div>
+                        <div class="col-md-12"><br /></div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    <div class="row p-2">
+        <div class="col-md-1">
+            <strong>Placas</strong><br />
+            <label id="placas_ficha_leche">@Model.FirstOrDefault().C_bascula_fichas.placas</label>
+        </div>
+        <div class="col-md-4">
+            <strong>Operador</strong><br />
+            <label id="chofer_ficha_leche">@Model.FirstOrDefault().C_bascula_fichas.chofer</label>
+        </div>
+        <div class="col-md-2">
+            <strong>Articulo</strong><br />
+            <label>@Model.FirstOrDefault().C_bascula_fichas.C_articulos_catalogo.nombre_articulo</label>
+        </div>
+        <div class="col-md-5">
+            <div class="col-md-4">
+                <strong>Kg Totales</strong><br />
+                <label class="p-1" id="kilos_ficha_leche_agrupa">@Model.Sum(x => x.kilos_ficha).Value.ToString("N3")</label>
+            </div>
+            <div class="col-md-4">
+                <strong>Densidad Leche</strong><br />
+                <label class="p-1" id="densidad_ficha_leche_agrupa">1.02920</label>
+            </div>
+            <div class="col-md-4">
+                <strong>Litros Totales</strong><br />
+                <label class="p-1" id="litros_ficha_leche_agrupa">@Model.Sum(x => x.litros_ficha).Value.ToString("N3")</label>
+            </div>
+        </div>
+        <div class="col-md-5">
+            <strong>Cliente</strong><br />
+            <label>@Model.FirstOrDefault().C_bascula_fichas.C_envios_leche_clientes.razon_social</label>
+        </div>
+
+        <div class="col-md-5">
+            <strong>Transportadora</strong><br />
+            <label>@Model.FirstOrDefault().C_bascula_fichas.C_bascula_lineas_transportistas.nombre_linea</label>
+        </div>
+    </div>
+
+    <div style="display:none">
+        <label id="id_cliente_ficha_leche">@Model.FirstOrDefault().C_bascula_fichas.id_envio_leche_cliente_ms</label>
+        <label id="id_producto_ficha_leche">@Model.FirstOrDefault().C_bascula_fichas.id_articulo_bascula</label>
+        <label id="id_linea_ficha_leche">@Model.FirstOrDefault().C_bascula_fichas.id_linea_transportista</label>
+        <label id="fecha_ficha_leche">@Model.LastOrDefault().C_bascula_fichas.fecha_segunda_pesada</label>
+    </div>
+    <hr />
+    <div class="row p-2">
+        <div class="col-md-4">
+            <strong>Destino:</strong>
+            <select class="form-control" id="select_destino_agrupacion">
+            </select>
+        </div>
+        <div class="col-md-3">
+            <strong>Folio</strong>
+            <input class="form-control solo-numeros-spunto" id="folio_agrupar_ficha" value="@folio" readonly>
+        </div>
+        <div class="col-md-3">
+            <strong>Remision</strong>
+            <input class="form-control" id="remision_agrupar_ficha">
+        </div>
+    </div>
+    <div class="col-md-12">
+        <div class="col-md-6 p-2">
+            <button class="btn btn_beta_danger" onclick="EnvioLecheFichasTable();">Cancelar</button>
+        </div>
+        <div class="col-md-6 p-3 text-right">
+            <button class="btn btn_beta" onclick="ConfirmarAgrupacionFichasLeche();">Confirmar</button>
+        </div>
+    </div>
+}
+else
+{
+    <div class="row p-2">
+        <h2 class="text-center" style="color:red">NO SE ENCONTRO LA INFORMACION</h2>
+    </div>
+}
+
+<script>
+    CaracteresControl();
+</script>

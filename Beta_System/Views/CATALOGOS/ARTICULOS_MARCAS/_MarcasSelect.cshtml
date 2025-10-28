@@ -1,0 +1,6 @@
+﻿@model IEnumerable<Beta_System.Models.C_articulos_marcas>
+
+@foreach (var item in Model)
+{
+    <option value="@item.id_marca">@item.marca</option>
+}

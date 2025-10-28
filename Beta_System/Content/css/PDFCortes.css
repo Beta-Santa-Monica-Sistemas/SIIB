@@ -1,0 +1,61 @@
+﻿.page-break {
+    page-break-before: always;
+}
+
+.employee-record {
+    page-break-inside: avoid;
+    break-inside: avoid;
+    margin-bottom: 20px; /* Optional: Add some space between records */
+}
+
+.header-container {
+    background-color: black;
+    color: white;
+}
+
+.bg-beta {
+    background-color: #f2f2f2;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.avoid-break {
+    page-break-inside: avoid;
+    break-inside: avoid;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+    .table td, .table th {
+        border: 1px solid #ddd;
+        padding: 8px;
+    }
+
+.table-header th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    background-color: #f2f2f2;
+    text-align: center;
+}
+
+.table-row {
+    page-break-inside: avoid;
+    break-inside: avoid;
+}
+
+@media print {
+    .employee-record {
+        page-break-inside: avoid;
+        break-inside: avoid;
+    }
+
+    .table-row {
+        page-break-inside: avoid;
+        break-inside: avoid;
+    }
+}

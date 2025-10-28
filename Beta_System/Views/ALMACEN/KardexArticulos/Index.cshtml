@@ -1,0 +1,64 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+}
+
+<div class="page_title">
+    <div class="counter_section">
+        <h1>Kardex de articulos</h1>
+    </div>
+</div>
+
+<div class="column2 counter_section">
+    <div class="row">
+        <div class="col-md-2">
+            <strong>Almacen:</strong>
+            <select class="form-control" id="id_almacen_kardex">
+                @{ Html.RenderAction("ConsultarAlmacenesUsuarioSelect", "CATALOGOS", new { id_usuario = (int)Session["LoggedId"] }); }
+            </select>
+        </div>
+        <div class="col-md-2">
+            <strong>Fecha inicio</strong>
+            <input type="date" class="form-control" id="fecha_inicio_kardex" />
+        </div>
+        <div class="col-md-2">
+            <strong>Fecha fin</strong>
+            <input type="date" class="form-control" id="fecha_fin_kardex" />
+        </div>
+        <div class="col-md-3">
+            <strong>Articulo</strong>
+            <select class="form-control" id="id_articulo_kardex">
+                <option value="0">Todos</option>
+                @{ Html.RenderAction("ConsultarArticulosSistemaRubro", "ARTICULOS", new { id_rubro = 1, almacenable = 1 }); }
+            </select>
+        </div>
+        <div class="col-md-2">
+            <strong>Movimiento</strong>
+            <select class="form-control" id="id_tipo_mov_kardex">
+                <option value="0">TODOS</option>
+                @{ Html.RenderAction("ConsultarTipoMovInventarioSelect", "CATALOGOS"); }
+            </select>
+        </div>
+        <div class="col-md-1">
+            <br />
+            <button class="btn btn_beta_icon" onclick="ConsultarKardexArticulo();"><i class="fa fa-search"></i></button>
+        </div>
+    </div>
+    <br />
+    <div class="table-responsive" id="div_kardex_articulos"></div>
+</div>
+
+@Scripts.Render("~/bundles_ReportesAlmacen/js")
+
+<script>
+    $(window).on("load", function () {
+        $('#fecha_inicio_kardex').val(last_week);
+        $('#fecha_fin_kardex').val(today);
+
+        $("#id_articulo_kardex").select2({
+            placeholder: 'Selecciona un artículo'
+        });
+    });
+
+</script>

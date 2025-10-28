@@ -1,0 +1,50 @@
+﻿@model IQueryable<Beta_System.Models.C_compras_cotizaciones_requisiciones>
+
+
+@if (Model == null)
+{<h1><strong>Ocurrió un error en la consulta</strong></h1> }
+else
+{
+    <table class="table table-striped table-bordered" id="datatable_articulos_cotizados_pendientes">
+        <thead>
+            <tr class="bg-beta text-center">
+                <th>Artículo</th>
+                <th style="width: 40%;">Descripción</th>
+                <th>Unidad</th>
+                <th>Cantidad solicitada</th>
+                <th>Cantidad confirmada</th>
+                <th>Centro</th>
+                <th>Requisición</th>
+                <th>Cargo contable</th>
+                <th>Cuenta</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.GroupBy(x => x.id_requisicion_articulo_d))
+            {
+                <tr class="text-center" onclick="ConsultarCotizacionesArticuloRequi(@item.FirstOrDefault().C_compras_requi_d.id_requisicion_articulo_d);" id="tr_articulo_@item.FirstOrDefault().C_compras_requi_d.id_requisicion_articulo_d">
+                    <td>@item.FirstOrDefault().C_articulos_catalogo.clave</td>
+                    <td>@item.FirstOrDefault().C_articulos_catalogo.nombre_articulo.ToUpper()</td>
+                    <td>@item.FirstOrDefault().C_compras_cotizaciones_articulos.C_unidades_medidas.unidad_medida</td>
+                    <td><strong>@string.Format("{0:0.00}", item.FirstOrDefault().C_compras_requi_d.cantidad)</strong></td>
+                    <td>
+                        @if (item.FirstOrDefault().C_compras_requi_d.cantidad_cotizada == null)
+                        {<strong>0</strong> }
+                        else
+                        { <strong>@string.Format("{0:0.00}", item.FirstOrDefault().C_compras_requi_d.cantidad_cotizada) </strong>}
+                    </td>
+                    <td><strong>@item.FirstOrDefault().C_compras_requi_g.C_centros_g.siglas</strong></td>
+                    <td><strong>@item.FirstOrDefault().C_compras_requi_g.id_requisicion_articulo_g</strong></td>
+                    <td>@item.FirstOrDefault().C_compras_requi_d.C_cargos_contables_g.nombre_cargo</td>
+                    <td>@item.FirstOrDefault().C_compras_requi_d.C_cuentas_contables_g.nombre_cuenta</td>
+                </tr>
+            }
+
+        </tbody>
+    </table>
+}
+
+
+
+
+

@@ -1,0 +1,21 @@
+﻿@model IEnumerable<Beta_System.Models.C_nomina_departamentos>
+
+<table class="table table-striped table-bordered" id="tabla_departamento" data-toggle="table" data-search="true">
+    <thead>
+        <tr class="bg-beta text-center">
+            <th>Clave</th>
+            <th>Nombre</th>
+            <th>Editar</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.id_departamento_empleado</td>
+                <td>@item.nombre_departamento</td>
+                <td class="text-center"><button class="btn btn_beta_icon" onclick="MostrarInfoDepartamento(@item.id_departamento_empleado);"><i class="fa fa-edit"></i></button></td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,50 @@
+﻿@model IEnumerable<Beta_System.Models.C_inventario_almacen_captura_d>
+
+@if (Model.Count() > 0 || Model != null)
+{
+    var inventario = Model.FirstOrDefault().C_inventario_almacen_captura_g;
+    var empleado = inventario.C_usuarios_corporativo.C_empleados;
+    <div class="row">
+        <div class="col-md-7">
+            <h3 style="margin:5px;"><strong>Almacén: @inventario.C_almacen_almacenes_g.nombre_almacen</strong></h3>
+            <h4 style="margin:5px;">Fecha de registro: @String.Format(inventario.fecha_registro.Value.ToShortDateString(), "dd/mm/aaaa")</h4>
+            <h4 style="margin:5px;">Capturado por: @inventario.C_usuarios_corporativo.usuario | @empleado.nombres @empleado.apellido_materno @empleado.apellido_paterno</h4>
+        </div>
+        <div class="col-md-5 text-right">
+            <h4 style="margin:5px;">Tipo de inventario: @inventario.C_articulos_tipos.nombre_tipo</h4>
+            <button class="btn" style="margin:5px; background-color:@inventario.C_inventario_status.color; color:white;">@inventario.C_inventario_status.nombre_status</button>
+        </div>
+    </div>
+    <hr />
+    <div class="table-responsive" style="height: 400px; min-height:400px;">
+        <table id="tabla_inventario_capturado_detalle" class="table table-striped table-bordered">
+            <thead>
+                <tr class="bg-beta text-center">
+                    <th style="display:none;"></th>
+                    <th>Artículo</th>
+                    <th>Descripción</th>
+                    <th>Presentación</th>
+                    <th>Tipo</th>
+                    <th>Cantidad sistema</th>
+                    <th>Cantidad capturada</th>
+                    <th>Diferencia</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr class="text-center">
+                        <td style="display:none;"><strong>@item.C_articulos_catalogo.id_articulo</strong></td>
+                        <td><strong>@item.C_articulos_catalogo.clave</strong></td>
+                        <td>@item.C_articulos_catalogo.nombre_articulo </td>
+                        <td>@item.C_articulos_catalogo.C_unidades_medidas.unidad_medida </td>
+                        <td>@item.C_articulos_catalogo.C_articulos_tipos.nombre_tipo</td>
+                        <td>@item.cantidad_sistema.Value.ToString("N2")</td>
+                        <td>@item.cantidad_captura.Value.ToString("N2")</td>
+                        <td>@item.diferencia.Value.ToString("N2")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}

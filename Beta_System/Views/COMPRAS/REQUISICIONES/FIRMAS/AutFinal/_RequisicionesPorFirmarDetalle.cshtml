@@ -1,0 +1,216 @@
+﻿@model IEnumerable<Beta_System.Models.C_compras_requi_d>
+@{
+    var requi = Model.FirstOrDefault().C_compras_requi_g;
+    var firma = ViewBag.firmas;
+    double monto = ViewBag.monto_usuario;
+    decimal valor_dolar = Convert.ToDecimal(ViewBag.valor_dolar);
+
+    decimal total_requi = 0;
+    int id_tipo_requi = (int)requi.id_requisicion_tipo;
+    bool valid_firma = ViewBag.valid_firmar;
+
+    var modo = ViewBag.modo;
+
+    Html.RenderAction("ConsultarInformacionRequisicionHeader", "REQUISICIONES", new { id_requisicion = requi.id_requisicion_articulo_g });
+
+    string nombre_empleado = "";
+    string justificacion = "";
+    string fecha_registro = "";
+
+    List<Beta_System.Models.C_compras_requi_g_solicita_autorizacion> autorizacion_solicitud = null;
+
+    try
+    {
+        autorizacion_solicitud = requi.C_compras_requi_g_solicita_autorizacion.ToList();
+        if (autorizacion_solicitud.Count > 0)
+        {
+            try
+            {
+                var solicita_autorizacion = autorizacion_solicitud.OrderByDescending(x => x.fecha_registro).FirstOrDefault();
+                nombre_empleado = solicita_autorizacion.C_usuarios_corporativo.C_empleados.nombres + " " + solicita_autorizacion.C_usuarios_corporativo.C_empleados.apellido_paterno;
+                justificacion = solicita_autorizacion.justificacion;
+                fecha_registro = string.Format(solicita_autorizacion.fecha_registro.Value.ToShortDateString(), "dd/mm/yyyy");
+            }
+            catch (Exception) { }
+        }
+    }
+    catch (Exception) { }
+
+
+
+    List<bool> solicita_aut = new List<bool>();
+    if (modo == 1 || modo == 4) //USUARIO NORMAL
+    {
+        solicita_aut.Add(false);
+    }
+    else if (modo == 2) //DIRECIÓN
+    {
+        solicita_aut.Add(true);
+    }
+    else if (modo == 3) //USUARIO CON AMBOS PERMISOS
+    {
+        solicita_aut.Add(true);
+        solicita_aut.Add(false);
+    }
+
+}
+
+@if (modo == 2 || modo == 3 || modo == 4)
+{
+    if (autorizacion_solicitud.Count() > 0)
+    {
+        @*<h3 class="text-left">Solicitó autorización</h3>
+            <div class="row">
+                <div class="col-md-10">
+                    <div class="col-md-4">
+                        <label>Empleado: <strong> @nombre_empleado</strong></label><br />
+                        <label>Fecha registro: <strong>@fecha_registro</strong></label>
+                    </div>
+                    <div class="col-md-8">
+                        <label><strong>Justificacion: </strong></label>
+                        <br />
+                        <label style="text-align:justify;">@justificacion</label>
+                    </div>
+                </div>
+                <div class="col-md-2 text-center" style="font-size:20px;">
+                    <div class="p-2 bg-beta text-white" style="border: 1px solid white; border-radius: 2rem;">
+                        <strong>Ilimitado</strong>
+                    </div>
+                </div>
+                <div class="col-md-12"><br /></div>
+            </div>*@
+    }
+}
+
+<div class="row">
+    <div class="col-md-8 text-left">
+        <strong>Detalle de la requisición</strong>
+    </div>
+    @if (modo == 1 || modo == 3 || modo == 4)
+    {
+        <div class="col-md-4 text-center" style="font-size:20px;">
+            <div class="p-2 bg-beta text-white" style="border: 1px solid white; border-radius: 2rem;">
+                <strong>Monto de autorización: $@monto.ToString("#,##0.00") MXN</strong>
+            </div>
+        </div>
+    }
+</div>
+
+@foreach (var articulo in Model)
+{
+    total_requi += (decimal)articulo.precio;
+    <div class="mt-3">
+        <div class="" id="heading_@articulo.id_requisicion_articulo_d">
+            <div class="w-100 collapsed" style="border: 1px solid black; background-color: rgb(236, 244, 251);">
+                <div class="row">
+                    <div class="col-md-5 p-3">
+                        <h4 class="text-left">@articulo.C_articulos_catalogo.nombre_articulo</h4>
+                    </div>
+                    <div class="col-md-3 p-3">
+                        @*<h4 class="text-left">Cantidad: @articulo.C_compras_cotizaciones_requisiciones.Sum(x => x.cantidad_surtir).Value.ToString("#,##0.00")</h4>*@
+                        <h4 class="text-left">
+                            Cantidad: @string.Format("{0:0.00}", articulo.C_compras_cotizaciones_requisiciones.Where(x => x.agrupada == true && x.orden_generada == null &&
+                              solicita_aut.Contains((bool)x.C_compras_cotizaciones_confirmadas_d.FirstOrDefault().C_compras_cotizaciones_confirmadas_g.solicita_autorizacion)).Sum(x => x.cantidad_surtir))
+                            @*@try
+                                {
+                                    @articulo.C_compras_cotizaciones_requisiciones.Where(x => x.agrupada == true && x.orden_generada == null &&
+                                    solicita_aut.Contains((bool)x.C_compras_cotizaciones_confirmadas_d.FirstOrDefault().C_compras_cotizaciones_confirmadas_g.solicita_autorizacion)).FirstOrDefault().C_articulos_catalogo.C_unidades_medidas.unidad_medida
+                                }
+                                catch (Exception){}*@
+                        </h4>
+                    </div>
+                    <div class="col-md-3 p-3">
+                        <h4 class="text-left">Total: $@articulo.precio.Value.ToString("N2")</h4>
+                    </div>
+                    <div class="col-md-1">
+                        <button class="btn btn_beta_icon" data-toggle="collapse" data-target="#collapse_@articulo.id_requisicion_articulo_d" aria-expanded="false" aria-controls="collapse_@articulo.id_requisicion_articulo_d"><i class="fa fa-bars"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="collapse_@articulo.id_requisicion_articulo_d" class="collapse btn_detalle_requi_aut" aria-labelledby="heading_@articulo.id_requisicion_articulo_d" data-parent="#accordionSolicitudes">
+            <div class="table-responsive" style="border: 2px solid black; background-color: rgb(236, 244, 251);">
+                <table class="table table-sm table-condensed small table-bordered table-striped text-center">
+                    <thead>
+                        <tr class="bg-beta">
+                            <th>Proveedor</th>
+                            <th>Moneda</th>
+                            <th>Cantidad cotizada</th>
+                            @if (id_tipo_requi != 2)
+                            {
+                                <th>Precio unitario</th>
+                                <th>Descuento</th>
+                            }
+                            <th>Precio final</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var cotizacion in articulo.C_compras_cotizaciones_requisiciones.Where(x => x.fecha_registro != null && x.confirmada == true && x.agrupada == true && x.orden_generada == null &&
+                        solicita_aut.Contains((bool)x.C_compras_cotizaciones_confirmadas_d.FirstOrDefault().C_compras_cotizaciones_confirmadas_g.solicita_autorizacion)).GroupBy(x => x.id_compra_articulo_cotizacion))
+                        {
+                            var coti_requi = cotizacion.FirstOrDefault().C_compras_cotizaciones_articulos;
+                            var cantidad_surtir = cotizacion.Sum(x => x.cantidad_surtir);
+                            var precio_final = coti_requi.precio_final;
+                            var total_coti = cantidad_surtir * precio_final;
+                            <tr>
+                                <th>@coti_requi.C_compras_proveedores.razon_social</th>
+                                <th>
+                                    <label>@coti_requi.C_tipos_moneda.clave_fiscal</label>
+                                    @if (coti_requi.id_tipo_moneda != 1)
+                                    {
+                                        <strong>($@valor_dolar.ToString("N2"))</strong>
+                                    }
+                                </th>
+                                <th>@string.Format("{0:0.00}", cantidad_surtir.Value.ToString("#,##0.00"))</th>
+                                @if (id_tipo_requi != 2)
+                                {
+                                    <th>@coti_requi.precio_unitario.Value.ToString("N2")</th>
+                                    <th>@coti_requi.porcentaje_descuento %</th>
+                                }
+                                <th>$@coti_requi.precio_final.Value.ToString("N2")</th>
+                                <th>$@total_coti.Value.ToString("N2")</th>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+}
+<br />
+<strong id="firma_importe_total" style="display:none">@total_requi </strong>
+<h4 class="bg-dark text-white" style="padding:10px; margin:0px;"><strong>Importe Total <strong class="ml-3">@string.Format("{0:C}", total_requi)</strong></strong></h4>
+<hr />
+@{ Html.RenderAction("ConsultarResumenPresupuestoCuentasAutFinal", "REQUISICIONES", new { id_requi = requi.id_requisicion_articulo_g });
+}
+
+@if (valid_firma == true)
+{
+    <div id="div_botones_autorizacion" class="row" style="display:none; height:100px;">
+        <div class="col-md-3">
+            <button class="btn btn_beta" id="btn_aut_requi_ok" onclick="AutorizarRequisicionesFinal(@requi.id_requisicion_articulo_g, @modo)"><i class="fa fa-check"></i> AUTORIZAR</button>
+
+            @if (modo == 4) /*Nicte y Adolfo*/
+            {
+                <button class="btn btn_beta" onclick="ShowAutorizarJustificarAutFinal(@requi.id_requisicion_articulo_g, @modo, '@requi.concepto')" @*onclick="AutorizarRequisicionesFinal(@requi.id_requisicion_articulo_g, @modo)"*@><i class="fa fa-check"></i> AUTORIZAR Y AFECTAR PRESUPUESTO</button>
+            }
+
+        </div>
+        <div class="col-md-3">
+            <button class="btn btn_beta" id="btn_solicita_aut_final" onclick="ShowJustificacionSolicitaAutFinal(@requi.id_requisicion_articulo_g, @modo, '@requi.concepto');"><i class="fa fa-check"></i> SOLICITAR AUTORIZACION</button>
+        </div>
+        <div class="col-md-3">
+            <button class="btn btn_beta" id="btn_aut_requi_canc" onclick="ShowJustificacionRecotizarAutFinal(@requi.id_requisicion_articulo_g, @modo, '@requi.concepto');"><i class="fa fa-check"></i> CANCELAR</button>
+        </div>
+    </div>
+
+    if (modo == 3)  /*Horacio*/
+    {
+        <button class="btn btn_beta_warning" onclick="ShowAutorizarJustificarAutFinal(@requi.id_requisicion_articulo_g, @modo, '@requi.concepto')">Autorizar sin afectar presupuesto</button>
+    }
+}
+else
+{
+    <h2 class="text-center text-danger">Este usuario no puede autorizar requisiciones de servicio</h2>
+}

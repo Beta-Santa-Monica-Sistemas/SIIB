@@ -1,0 +1,141 @@
+﻿
+@{
+    ViewBag.Title = "AutorizacionRequisicionIndividual";
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+    var modo = ViewBag.modo;
+    var modo_real = modo;
+
+}
+<div class="page_title">
+    <div class="counter_section">
+        <h1 class="div_hide_master">Autorizar requisición: <strong>@ViewBag.folio</strong></h1>
+    </div>
+</div>
+
+<div class="column2 counter_section">
+    <h3 class="text-center div_hide_master">Detalle de la requisición</h3>
+
+    <div class="row w-100" id="requis_master" style="display:none;">
+        <div class="col-md-4">
+            <strong>Cargo contable</strong>
+            <select class="form-control" id="id_cargo_search_2">
+                <option value="0">TODOS</option>
+                @{ Html.RenderAction("CargoContableCuentaUsuariosSelect", "CATALOGOS", new { id_usuario = (int)Session["LoggedId"] }); }
+            </select>
+            <br />
+        </div>
+        <div class="col-md-2 text-center">
+            <br />
+            <button class="btn btn_beta_icon" onclick="ConsultarRequisicionesAutFinal(2);"><i class="fa fa-search"></i></button>
+        </div>
+
+        <div id="div_requisiciones_por_firmar" class="table-responsive" style="height:500px; min-height:500px; overflow:scroll; overflow-x:hidden; display:none;"></div>
+    </div>
+</div>
+
+
+
+<!-- Modal REVISION DE REQUI-->
+<div class="modal fade" id="m_detalle_requi_aut_final" tabindex="-1" role="dialog" aria-labelledby="m_detalle_requi_aut_finalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document" style="min-width:90%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="m_detalle_requi_aut_finalLabel">Detalle de requisición</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="div_requisiciones_detalle"></div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn_beta_danger" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal RECOTIZAR AUT FINAL-->
+<div class="modal fade" id="m_recotizar_aut_final" tabindex="-1" role="dialog" aria-labelledby="m_rechazar_aut_finallLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document" style="min-width:40%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="m_rechazar_aut_finallLabel">JUSTIFICACION</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <h3 class="text-center">Justificacion de rechazo</h3>
+                <br />
+                <div class="row">
+                    <div class="col-md-3">
+                        <strong>Asunto: </strong>
+                    </div>
+                    <div class="col-md-9">
+                        <input type="text" id="concepto_recotizar_aut_final" class="form-control" readonly />
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-3">
+                        <strong>Mensaje: </strong>
+                    </div>
+                    <div class="col-md-9">
+                        <textarea class="form-control" rows="4" id="justificacion_recotizar_aut_final"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn_beta" data-dismiss="modal">Regresar</button>
+                <button type="button" class="btn btn_beta_danger" id="btn_rechazar_aut_final">Recotizar requisicion</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@Scripts.Render("~/bundles_Requisiciones/js")
+
+<script>
+    $(window).on("load", function () {
+        ConsultarRequisicionesAutFinalDetalle(@ViewBag.id_requisicion, @modo);
+
+    });
+
+    function ConsultarRequisicionesAutFinalDetalle(id_requi_g, modo) {
+        $("#div_requisiciones_detalle").html("");
+        $.ajax({
+            type: "POST",
+            async: false,
+            url: "../REQUISICIONES/ConsultarRequisicionesAutFinalDetalle",
+            data: { id_requi_g: id_requi_g, modo: modo },
+            success: function (response) {
+                $("#div_requisiciones_detalle").html(response);
+                $("#m_detalle_requi_aut_final").modal("show");
+                if (modo == 1 || modo == 3) {
+                    ValidarCondiciones();
+                }
+                else {
+                    $("#btn_solicita_aut_final").css("display", "none");
+                    $("#div_botones_autorizacion").css("display", "block");
+                    $("#btn_aut_requi_canc").css("display", "block");
+                    $("#btn_aut_requi_ok").css("display", "block");
+                }
+
+                $(".btn_detalle_requi_aut").each(function () {
+                    $(this).addClass("show");
+                });
+
+            },
+            error: function (xhr, status, error) {
+                console.error(error);
+            }
+        });
+    }
+
+</script>
+
+
+
+

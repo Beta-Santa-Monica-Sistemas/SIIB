@@ -1,0 +1,6 @@
+﻿@model IEnumerable<Beta_System.Models.C_tipos_moneda>
+
+@foreach (var item in Model.OrderBy(x=>x.clave_fiscal))
+{
+    <option value="@item.id_moneda">@item.clave_fiscal</option>
+}

@@ -1,0 +1,6 @@
+﻿@model List<Beta_System.Models.C_alimentacion_dietas_grupos>
+
+@foreach (var item in Model)
+{
+    <option value="@item.id_dieta_grupo">@item.nombre_grupo</option>
+}

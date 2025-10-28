@@ -1,0 +1,73 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+}
+
+<div class="page_title">
+    <div class="counter_section">
+        <h1>Reporte comparativo de presupuesto vs compra/servicio</h1>
+    </div>
+</div>
+
+<div class="column2 counter_section">
+    <div class="row">
+        <div class="col-md-3">
+            <strong>Año</strong>
+            <select class="form-control" id="id_anio_presupuesto">
+                @{ Html.RenderAction("ConsultarAniosPresupuestoSelect", "COMPRAS"); }
+            </select>
+        </div>
+
+        <div class="col-md-3">
+            <strong>Cargo contable:</strong>
+            <select class="form-control" id="id_cargo_contable">
+                <option value="0">TODOS</option>
+                @*@{ Html.RenderAction("CargoContableCuentaUsuariosSelect", "CATALOGOS", new { id_usuario = (int)Session["LoggedId"] }); }*@
+                @{ Html.RenderAction("CargoContableCuentaUsuariosSelect", "CATALOGOS", new { id_usuario = (int)Session["LoggedId"] }); }
+            </select>
+        </div>
+        <div class="col-md-2">
+            <br />
+            <button class="btn btn_beta_icon" onclick="ConsultarComparativoCompraPresupuesto();"><i class="fa fa-search"></i></button>
+        </div>
+
+
+        <div class="col-md-4 text-right">
+            <br />
+            <button class="btn btn_beta" onclick="GetLinkDescargarConsolidadoExcel();">Descargar consolidado</button>
+        </div>
+    </div>
+    <hr />
+    @*<div id="div_consolidado"></div>*@
+
+    <div id="div_reporte"></div>
+
+</div>
+
+
+<!-- Modal DETALLE OC DEL MES-->
+<div class="modal fade" id="m_detalle_ordenes_mes" tabindex="-1" role="dialog" aria-labelledby="m_detalle_ordenes_mesLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document" style="width:95%; min-width:95%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="m_detalle_ordenes_mesLabel">DETALLE DEL MES</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="div_detalle_ordenes_mes"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn_beta_danger" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@Scripts.Render("~/bundles_ReportesCompras/js")
+
+
+

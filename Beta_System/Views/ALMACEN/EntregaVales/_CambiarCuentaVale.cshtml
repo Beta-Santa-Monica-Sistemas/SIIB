@@ -1,0 +1,42 @@
+﻿@model IEnumerable<Beta_System.Models.C_almacen_solicitudes_mercancia_d>
+@{
+    var vales = Model.FirstOrDefault();
+    var contador = Model.Count();
+}
+@if (contador != 0)
+{
+    <div class="row">
+        <label id="vale_g_id" style="display:none">@vales.id_solicitud_mercancia_g</label>
+        @foreach (var item in Model)
+        {
+            <div class="col-md-4">
+                <strong>Articulo</strong><br />
+                <label>@item.C_articulos_catalogo.nombre_articulo</label>
+            </div>
+            <div class="col-md-4">
+                <strong>Cargo contable:</strong><br />
+                <select class="form-control cargos" id="selectCargos_@item.id_solicitud_mercancia_d">
+                </select>
+            </div>
+            <div class="col-md-4">
+                <strong>Cuenta:</strong><br />
+                <select class="form-control cuentas" id="selectCuentas_@item.id_solicitud_mercancia_d"> </select>
+            </div>
+            <div class="col-md-12">
+                <hr />
+            </div>
+            <label style="display:none" id="selectRCargo_@item.id_solicitud_mercancia_d" class="cargoReal">@item.id_cargo_contable_g</label>
+            <label style="display:none" id="selectRCuenta_@item.id_solicitud_mercancia_d" class="cuentaReal">@item.id_cuenta_contable_g</label>
+        }
+        <div class="col-md-12 text-center">
+            <button type="button" class="btn btn_beta" onclick="ConfirmarCambioCuentaVale();" id="btn_confirmar_cambio"><i class="fa fa-check"></i>CONFIRMAR</button>
+        </div>
+    </div>
+}
+else { 
+    <div class="row">
+        <div class="col-md-12 text-center">
+            <strong style="color:red; font-size:24px;">¡No se puede cambiar la cuenta del vale, ya se entregaron articulos!</strong>
+        </div>
+    </div>
+}

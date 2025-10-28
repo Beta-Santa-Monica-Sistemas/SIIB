@@ -1,0 +1,79 @@
+﻿
+@model IEnumerable<Beta_System.Models.C_modulos_sub_permisos>
+
+@try
+{
+    var lista_submodulos = Session["submodulos"] as List<Beta_System.Models.SubmodulosUsuario>;
+    var lista_modulos = Session["modulos"] as List<Beta_System.Models.ModulosUsuario>;
+
+    foreach (var item in lista_modulos)
+    {
+        <ul class="list-unstyled components">
+            <li class="li_menu_slide">
+                <a href="#module_@item.Id_modulo" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle row">
+                    <lord-icon src="@item.Icono"
+                               trigger="in"
+                               delay="500"
+                               @*state="in-reveal"*@
+                               style="width:50px;height:32px">
+                    </lord-icon>
+
+                    <span>@item.Nombre_modulo</span>
+
+                </a>
+                <ul class="collapse list-unstyled" id="module_@item.Id_modulo">
+                    @foreach (var item2 in lista_submodulos.Where(x => x.Id_submodulo_item == 0))
+                    {
+                        try
+                        {
+                            if (item2.Id_modulo == item.Id_modulo)
+                            {
+                                if (item2.Aplica_submenu == true)
+                                {
+                                    var lista_subsubmodulos = lista_submodulos.Where(x => x.Id_modulo == item2.Id_modulo && x.Id_submodulo_item != 0);
+                                    if (lista_subsubmodulos.Count() > 0)
+                                    {
+                                        <div class="list-unstyled components">
+                                            <li class="li_menu_slide">
+                                                <a href="#submenu_@item2.Id_submodulo" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle row"><span>@item2.Nombre_submodulo</span></a>
+
+                                                <ul class="collapse list-unstyled" id="submenu_@item2.Id_submodulo">
+                                                    @foreach (var sub_menu_item in lista_subsubmodulos.Where(x => x.Id_submodulo_item == item2.Id_submodulo))
+                                                    {
+                                                        <li>@Html.ActionLink(sub_menu_item.Nombre_submodulo, sub_menu_item.Funcion, sub_menu_item.Controlador)</li>
+                                                    }
+                                                </ul>
+                                            </li>
+                                        </div>
+                                    }
+                                }
+                                else
+                                {
+                                    <li>
+                                        @Html.ActionLink(item2.Nombre_submodulo, item2.Funcion, item2.Controlador)
+                                    </li>
+                                }
+                            }
+                        }
+                        catch (Exception)
+                        {
+
+                        }
+                    }
+                </ul>
+            </li>
+        </ul>
+    }
+}
+catch (Exception)
+{
+    <script>
+        window.location.href = "@Url.Action("UsuarioLogin", "USUARIOLOGIN")";
+    </script>
+}
+
+
+
+
+
+

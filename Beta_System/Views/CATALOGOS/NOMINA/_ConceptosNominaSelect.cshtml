@@ -1,0 +1,7 @@
+﻿@model IEnumerable<Beta_System.Models.C_nomina_conceptos>
+
+@foreach (var concepto in Model)
+{
+    <option value="@concepto.id_concepto_nomina">@concepto.nombre_concepto</option>
+}
+

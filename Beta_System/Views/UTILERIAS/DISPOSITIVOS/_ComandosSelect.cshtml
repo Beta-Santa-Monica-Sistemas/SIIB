@@ -1,0 +1,6 @@
+﻿@model IEnumerable<Beta_System.Models.C_dispositivos_comandos_catalogo>
+
+@foreach (var item in Model)
+{
+    <option value="@item.id_comando">@item.descripcion</option>
+}

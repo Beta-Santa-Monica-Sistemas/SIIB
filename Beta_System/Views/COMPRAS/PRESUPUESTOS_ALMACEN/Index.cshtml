@@ -1,0 +1,61 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+    List<int> permisos = Session["PermisosModulo"] as List<int>;
+}
+
+
+<style>
+    .divEditable {
+        padding: 3px;
+    }
+</style>
+
+<div class="page_title">
+    <div class="counter_section">
+        <h1>Registro de presupuesto de almacenes</h1>
+    </div>
+</div>
+
+
+<div class=" column2 counter_section">
+    <div class="row">
+        <div class="col-md-2">
+            <strong>Almacen:</strong>
+            <select class="form-control" id="id_almacen_presupuesto">
+                @{ Html.RenderAction("ConsultarAlmacenesSelect", "CATALOGOS", new { id_usuario = (int)Session["LoggedId"] }); }
+            </select>
+        </div>
+        <div class="col-md-1">
+            <strong>Año:</strong>
+            <select class="form-control" id="id_anio_presupuesto">
+                @{ Html.RenderAction("ConsultarAniosPresupuestoSelect", "COMPRAS"); }
+            </select>
+        </div>
+        <div class="col-md-3">
+            <strong>Cargo contable:</strong>
+            <select class="form-control" id="id_cargo_contable">
+                @{ Html.RenderAction("ConsultarCargosContables", "CATALOGOS");
+                }
+            </select>
+        </div>
+        <div class="col-md-6">
+            <br />
+            @if (permisos.Contains(3018))
+            {<button class="btn btn_beta_icon" onclick="ConsultarPresupuestosCargoAlmacen();"><i class="fa fa-search"></i></button>}
+        </div>
+    </div>
+
+    <div class="table-responsive" id="div_presupuestos">
+
+    </div>
+    <br />
+    @if (permisos.Contains(3019))
+    {
+        <button class="btn btn_beta" onclick="GuardarPresupuestosAlmacen();">Guardar presupuestos</button>
+    }
+</div>
+
+
+@Scripts.Render("~/bundles_Presupuestos/js")

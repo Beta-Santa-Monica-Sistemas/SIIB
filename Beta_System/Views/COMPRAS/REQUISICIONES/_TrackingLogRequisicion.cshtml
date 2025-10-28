@@ -1,0 +1,38 @@
+﻿@model List<Beta_System.Models.C_compras_requisiciones_logs>
+
+@if (Model.Count() > 0)
+{
+    string icono = "";
+    string icono_color = "";
+    <h2 class="text-center bg-beta">BITÁCORA DE CAMBIOS</h2>
+    <div class="row">
+        @foreach (var item in Model@*.OrderBy(x => x.fecha_registro)*@ )
+        {
+            if (item.id_tipo_log == 3)
+            {  //--- SOLICITA AUTORIZACIÓN
+            icono = "fa-hand-paper-o";
+            icono_color = "#f7be16";
+        }
+
+        if (item.id_tipo_log == 4)
+        {  //--- RECOTIZACION
+            icono = "fa-repeat";
+            icono_color = "#ff5200";
+        }
+
+        if (item.id_tipo_log == 6)
+        {  //--- MODIFICACIÓN DE ORDEN
+            icono = "fa-edit";
+            icono_color = "#2e87d7";
+        }
+
+<div class="col-md-3 text-center" style="align-items: center; border-radius: 1rem; background: #fdfdfd; box-shadow: 2px 2px 6px 4px #c2c2c2; padding: 0.5rem; margin-left: 1rem;">
+    <i class="fa fa-2x @icono" style="color: @icono_color; cursor:auto;"></i>
+    <h4 class="color: @icono_color" style="margin: 5px;">@item.C_compras_requisiciones_logs_tipos.tipo_autorizacion.ToUpper() <h4 style="margin: 5px;">(@String.Format(item.fecha_registro.Value.ToShortDateString(), "dd/mm/yyyy"))</h4></h4>
+    <label>@item.justificacion.ToUpper()</label>
+    <br />
+    <i><strong>-@item.C_usuarios_corporativo.usuario</strong></i>
+</div>
+}
+    </div>
+}

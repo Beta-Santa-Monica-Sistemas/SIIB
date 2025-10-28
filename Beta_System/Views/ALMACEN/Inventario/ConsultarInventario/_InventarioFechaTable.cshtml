@@ -1,0 +1,90 @@
+﻿@model IEnumerable<Beta_System.Models.CapturaInventarioDiferencias>
+
+
+@if (Model != null)
+{
+    decimal total_inventario = 0;
+    <h3 class="text-right">Último inventario: @ViewBag.fecha_inventario</h3>
+
+    <table class="table table-striped table-bordered table-sm small" id="tabla_inventario_fecha_cons" style="width:100%">
+        <thead>
+            <tr class="bg-beta text-center">
+                <th>Clave</th>
+                <th class="text-left">Artículo</th>
+                <th>Unidad medida</th>
+                <th>Ubicación</th>
+
+                @*<th><strong>@ViewBag.fecha_corta</strong></th>*@
+                <th>Ult. inventario</th>
+                <th>Cant. inicial</th>
+                <th>Ent. compra (E)</th>
+                <th>Ent. traspaso (E)</th>
+                <th>Ent. ajuste (E)</th>
+                <th>Devoluciones (E)</th>
+                <th>Sal. vales (S)</th>
+                <th>Sal. traspaso (S)</th>
+                <th>Sal. ajuste (S)</th>
+                <th>Existencia</th>
+                <th>Precio</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.OrderBy(x => x.Nombre_articulo))
+            {
+                total_inventario = total_inventario + item.Total;
+                <tr class="text-center">
+                    <td><strong>@item.Clave</strong></td>
+                    <td class="text-left"><strong>@item.Nombre_articulo</strong></td>
+                    <td>@item.Unidad_medida</td>
+                    <th>@item.Ubicacion</th>
+
+                    <td>
+                        @if (item.Fecha_ultimo_inv == "01/07/2024")
+                        {<strong>N/A</strong> }
+                        else
+                        { <strong>@item.Fecha_ultimo_inv</strong>}
+                    </td>
+                    <td>@item.Ultima_Cap.ToString("N2")</td>
+                    <td>@item.Entradas.ToString("N2")</td>
+                    <td>@item.Entradas_trasp.ToString("N2")</td>
+                    <td>@item.Entradas_ajuste.ToString("N2")</td>
+                    <td>@item.Entradas_devolucion.ToString("N2")</td>
+                    <td>@item.Salidas.ToString("N2")</td>
+                    <td>@item.Salidas_trasp.ToString("N2")</td>
+                    <td>@item.Salidas_ajuste.ToString("N2")</td>
+
+                    <td>@item.Cantidad_sistema.ToString("N2")</td>
+                    <td>$@item.Precio.ToString("N2")</td>
+                    <td>$@item.Total.ToString("N2")</td>
+                </tr>
+            }
+
+            <tr class="bg-beta text-center">
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td><strong>TOTAL INVENTARIO:</strong></td>
+                <td><strong>$@total_inventario.ToString("N2")</strong></td>
+            </tr>
+        </tbody>
+    </table>
+}
+else
+{
+    <h2 class="text-center">OCURRIÓ UN PROBLEMA AL REALIZAR LOS CALCULOS</h2>
+    <br />
+    <label>@ViewBag.ex_msj</label>
+}
+

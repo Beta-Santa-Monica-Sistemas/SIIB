@@ -1,0 +1,60 @@
+﻿@model IEnumerable<Beta_System.Models.C_almacen_solicitudes_mercancia_g>
+
+<table class="table table-striped table-bordered" id="tabla_solicitudes_admin" style="width:100%;">
+    <thead>
+        <tr class="bg-beta text-center">
+            <th>Folio</th>
+            <th>Cargo</th>
+            <th>Departamento</th>
+            <th>Almacén</th>
+            <th>Equipo</th>
+            <th>Fecha registro</th>
+            <th>Importe total ($)</th>
+            <th>Registró</th>
+            <th>Solicitante</th>
+            <th>Estatus</th>
+            <th>Imprimir</th>
+            <th>Ver</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.OrderBy(x => x.id_status_solicitud))
+        {
+            <tr class="text-center">
+                <td><strong>@item.id_solicitud_mercancia_g</strong></td>
+                <td>@item.cargo_desc</td>
+                <td>@item.C_departamentos_g.nombre_departamento</td>
+                <td>@item.C_almacen_almacenes_g.nombre_almacen</td>
+                <td>@item.C_establos_equipos.nombre_equipo</td>
+                <td>@String.Format(item.fecha_registro.Value.ToShortDateString(), "dd/mm/aaaa")</td>
+
+                <td>@string.Format("{0:C}", @item.total)</td>
+
+                <td>@item.C_empleados.nombres @item.C_empleados.apellido_paterno</td>
+                <td>
+                    @if(item.id_empleado_remitente != null)
+                    {
+                        <label>@item.C_nomina_empleados.Nombres.ToUpper() @item.C_nomina_empleados.Apellido_paterno.ToUpper()</label>
+                    }
+                    else
+                    {
+                        <label>@item.C_empleados.nombres @item.C_empleados.apellido_paterno</label>
+                    }
+                </td>
+
+
+                <td><button class="btn" style="background-color:@item.C_almacen_solicitudes_status.color; color:white;">@item.C_almacen_solicitudes_status.nombre_status</button></td>
+                <td>
+                    @if (item.autorizada == true && (item.id_status_solicitud == 4 || item.id_status_solicitud == 2))  //AUTORIZADO o LEIDO
+                    {
+                        <button class="btn btn_beta_icon" onclick="GenerarValePDF(@item.id_solicitud_mercancia_g, 'div_solicitud_mercancia_vale');"><i class="fa fa-print"></i></button>
+                    }
+                </td>
+                <td><button class="btn btn_beta_icon" onclick="ConsultarSolicitudDetalle(@item.id_solicitud_mercancia_g);"><i class="fa fa-bars"></i></button></td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+

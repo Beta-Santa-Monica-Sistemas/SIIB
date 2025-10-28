@@ -1,0 +1,117 @@
+﻿@model IEnumerable<Beta_System.Models.C_nomina_beta_d_areas_empleados_conceptos>
+
+@{
+    decimal salario_diario = ViewBag.salario_diario;
+    int id_nomina_g = ViewBag.id_nomina_g;
+}
+
+<h1 style="margin:5px;" class="text_beta">@Model.FirstOrDefault().C_nomina_beta_d_areas_empleados.C_nomina_empleados.Nombres @Model.FirstOrDefault().C_nomina_beta_d_areas_empleados.C_nomina_empleados.Apellido_paterno @Model.FirstOrDefault().C_nomina_beta_d_areas_empleados.C_nomina_empleados.Apellido_materno</h1>
+<h3 style="margin:5px;">Puesto: @Model.FirstOrDefault().C_nomina_beta_d_areas_empleados.C_nomina_empleados.C_nomina_puestos.nombre_puesto</h3>
+<h2 style="margin:5px;">Salario diario: $@salario_diario.ToString("#,##0.00")</h2>
+
+<div class="table-responsive" style="height:350px; min-height:350px; overflow:scroll; overflow-x:auto;">
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr class="bg-beta">
+                <th>Clave</th>
+                <th>Concepto</th>
+                <th>Valor</th>
+                <th>Monto</th>
+                <th>Percep. /Ret.</th>
+                <th>Comentario</th>
+                <th>Eliminar</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var concepto in Model)
+            {
+                string clave_concepto = concepto.C_nomina_conceptos.clave_concepto;
+                decimal valor_salario = (decimal)concepto.valor * salario_diario;
+
+                <tr>
+                    <td>@concepto.C_nomina_conceptos.clave_concepto</td>
+                    <td>@concepto.C_nomina_conceptos.nombre_concepto</td>
+
+                    @* ---------------VALOR *@
+                    <td>
+                        @if (clave_concepto == "102")  //Septimo día
+                        {<strong>1</strong> }
+
+                        else if (clave_concepto == "203")  //Descuento
+                        {<strong>1</strong> }
+
+                        else if (clave_concepto == "comis")  //Comisión por viajes
+                        {<strong>1</strong> }
+
+                        else if (clave_concepto == "1de")  //Despensa
+                        {<strong>1</strong> }
+
+                        else if (clave_concepto == "est")  //Estimulo
+                        {<strong>1</strong> }
+
+                        else if (clave_concepto == "1pd")  //Prima dominical
+                        {<strong>1</strong> }
+
+                        else if (clave_concepto == "1re")  //Retroactivo
+                        {<strong>1</strong> }
+
+                        else if (clave_concepto == "HE")  //Horas extras
+                        {<strong>1</strong> }
+
+                        else if (clave_concepto == "1pv")  //Horas extras
+                        {<strong>1</strong> }
+
+                        else
+                        { <strong>@Convert.ToInt32(concepto.valor)</strong>}
+                    </td>
+
+
+                    @* ---------------MONTO *@
+                    <td>
+                        @if (clave_concepto == "102")  //Septimo día
+                        {<strong>$@concepto.valor.Value.ToString("#,##0.00")</strong>}
+
+                    else if (clave_concepto == "101")  //Salario normal
+                    {<strong>$@valor_salario.ToString("#,##0.00")</strong> }
+
+                else if (clave_concepto == "DIA")  //Dia festivo
+                {<strong>$@valor_salario.ToString("#,##0.00")</strong> }
+
+            else if (clave_concepto == "des")  //Descanso trabajado
+            {<strong>$@valor_salario.ToString("#,##0.00")</strong> }
+
+        else
+        { <strong>$@concepto.valor.Value.ToString("#,##0.00")</strong>}
+
+                    </td>
+
+                    <td>
+                        @if (concepto.C_nomina_conceptos.percepcion_retencion == "P")
+                        {
+                            <strong class="text-success">Percepción +</strong>
+                        }
+                        else
+                        {
+                            <strong class="text-danger">Retención -</strong>
+                        }
+                    </td>
+                    <td>@concepto.comentarios</td>
+                    <td class="text-center">
+                        @*@if (concepto.C_nomina_conceptos.fijo_excepcion == true && concepto.C_nomina_beta_g.id_nomina_status == 1)*@
+                        @if(concepto.C_nomina_conceptos.clave_concepto != "102" && concepto.C_nomina_conceptos.clave_concepto != "101" &&
+                            concepto.C_nomina_conceptos.clave_concepto != "HE" && concepto.C_nomina_conceptos.clave_concepto != "est" && concepto.C_nomina_beta_g.id_nomina_status == 1)
+                        {
+                            <button class="btn btn_beta_icon text-center btn-sm" style="background: #eb3c3c;" onclick="EliminarConceptoEmpleado(@concepto.id_nomina_empleado_concepto, @concepto.id_nomina_d_area_empleado, @id_nomina_g, @concepto.C_nomina_beta_d_areas_empleados.id_nomina_d_area);"><i class="fa fa-remove"></i></button>
+                        }
+                    </td>
+
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<hr />
+<h2 style="margin:5px;">Importe: $@ViewBag.importe.ToString("#,##0.00")</h2>
+
+

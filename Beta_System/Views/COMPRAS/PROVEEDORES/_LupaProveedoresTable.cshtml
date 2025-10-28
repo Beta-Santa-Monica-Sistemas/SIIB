@@ -1,0 +1,53 @@
+﻿@model IEnumerable<Beta_System.Models.C_compras_proveedores>
+
+@{
+    List<int> permisos = Session["PermisosModulo"] as List<int>;
+    var accion = ViewBag.proveedores;
+}
+
+<table class="table table-striped table-bordered w-100" id="tabla_proveedor_lupa" width="100%">
+    <thead>
+        <tr class="bg-beta text-center">
+            <th>Nombre comercial</th>
+            <th>Razón social</th>
+            <th>Correo</th>
+            <th>Moneda</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr class="text-center" style="font-size:13px">
+                <td>@item.contacto_nombre_1</td>
+                <td>@item.razon_social</td>
+                <td>@item.contacto_correo_1</td>
+                <th>@item.C_tipos_moneda.clave_fiscal</th>
+                @if (accion == 1)
+                {
+                    <td class="text-center">
+                        <button class="btn btn_beta_icon" onclick="InformacionLupaProveedor(@item.cve,1);"><i class="fa fa-plus"></i></button>
+                    </td>
+                }
+                else if (accion == 2)
+                {
+                    <td class="text-center">
+                        <button class="btn btn_beta_icon" onclick="InformacionLupaProveedor(@item.cve, 2);"><i class="fa fa-plus"></i></button>
+                    </td>
+                }
+                else
+                {
+                    <td class="text-center">
+                        <button class="btn btn_beta_icon" onclick="InformacionLupaProveedor(@item.id_compras_proveedor, 3, '@item.razon_social');"><i class="fa fa-plus"></i></button>
+                    </td>
+                }
+
+            </tr>
+        }
+    </tbody>
+</table>
+
+<script>
+    $(window).on("load", function () {
+    });    
+</script>

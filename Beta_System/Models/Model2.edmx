@@ -1,0 +1,1121 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="base_forrajesModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2005" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="areas">
+          <Key>
+            <PropertyRef Name="area" />
+          </Key>
+          <Property Name="area" Type="char" MaxLength="6" Nullable="false" />
+          <Property Name="des_area" Type="char" MaxLength="40" />
+          <Property Name="rstatus" Type="char" MaxLength="1" />
+          <Property Name="rtime" Type="datetime" />
+        </EntityType>
+        <EntityType Name="articulo">
+          <Key>
+            <PropertyRef Name="cveart" />
+          </Key>
+          <Property Name="cveart" Type="char" MaxLength="7" Nullable="false" />
+          <Property Name="desart" Type="char" MaxLength="60" />
+          <Property Name="unimed" Type="nvarchar" MaxLength="50" />
+          <Property Name="obsart" Type="nvarchar" MaxLength="50" />
+          <Property Name="rstatus" Type="char" MaxLength="1" />
+          <Property Name="rtime" Type="datetime" />
+          <Property Name="id_reg" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="cvecla" Type="char" MaxLength="3" />
+          <Property Name="codigo" Type="char" MaxLength="3" />
+        </EntityType>
+        <EntityType Name="camiones">
+          <Key>
+            <PropertyRef Name="placas" />
+            <PropertyRef Name="chofer" />
+          </Key>
+          <Property Name="placas" Type="char" MaxLength="25" Nullable="false" />
+          <Property Name="chofer" Type="char" MaxLength="40" Nullable="false" />
+          <Property Name="des_cam" Type="char" MaxLength="40" />
+          <Property Name="obs_cam" Type="char" MaxLength="40" />
+          <Property Name="rstatus" Type="char" MaxLength="1" />
+          <Property Name="rtime" Type="datetime" />
+          <Property Name="id_consecutivo" Type="int" />
+        </EntityType>
+        <EntityType Name="fichas_sg">
+          <Key>
+            <PropertyRef Name="ficha" />
+          </Key>
+          <Property Name="ficha" Type="char" MaxLength="25" Nullable="false" />
+          <Property Name="fecha" Type="datetime" />
+          <Property Name="placas" Type="char" MaxLength="25" />
+          <Property Name="user_id" Type="char" MaxLength="10" />
+          <Property Name="prov_cli" Type="char" MaxLength="3" />
+          <Property Name="producto" Type="char" MaxLength="7" />
+          <Property Name="chofer" Type="char" MaxLength="40" />
+          <Property Name="peso1" Type="numeric" Precision="18" Scale="0" />
+          <Property Name="peso2" Type="numeric" Precision="18" Scale="0" />
+          <Property Name="peso_t" Type="numeric" Precision="18" Scale="0" />
+          <Property Name="obs_p1" Type="char" MaxLength="200" />
+          <Property Name="obs_p2" Type="char" MaxLength="200" />
+          <Property Name="tmov" Type="char" MaxLength="1" />
+          <Property Name="termina" Type="bit" />
+          <Property Name="folio" Type="char" MaxLength="6" />
+          <Property Name="remision" Type="char" MaxLength="25" />
+          <Property Name="cvemov" Type="char" MaxLength="3" />
+          <Property Name="aplica" Type="bit" />
+          <Property Name="agrupada" Type="bit" />
+          <Property Name="observacio" Type="char" MaxLength="80" />
+          <Property Name="cesp" Type="char" MaxLength="3" />
+          <Property Name="folio_inv" Type="char" MaxLength="8" />
+          <Property Name="rstatus" Type="char" MaxLength="1" />
+          <Property Name="rtime" Type="datetime" />
+          <Property Name="rtime_p1" Type="datetime" />
+          <Property Name="rtime_p2" Type="datetime" />
+          <Property Name="noreg" Type="char" MaxLength="6" />
+          <Property Name="olor" Type="bit" />
+          <Property Name="matext_lib" Type="bit" />
+          <Property Name="particula" Type="char" MaxLength="15" />
+          <Property Name="empaque" Type="char" MaxLength="10" />
+          <Property Name="color" Type="char" MaxLength="20" />
+          <Property Name="humedad" Type="char" MaxLength="20" />
+          <Property Name="caducidad" Type="char" MaxLength="20" />
+          <Property Name="pacas" Type="numeric" Precision="9" Scale="0" />
+          <Property Name="corte" Type="numeric" Precision="3" Scale="0" />
+          <Property Name="repase" Type="bit" />
+          <Property Name="floracion5" Type="bit" />
+          <Property Name="descolorida" Type="bit" />
+          <Property Name="humedad18" Type="bit" />
+          <Property Name="humedad12" Type="bit" />
+          <Property Name="maleza" Type="bit" />
+          <Property Name="prhoja" Type="bit" />
+          <Property Name="d1tab" Type="char" MaxLength="3" />
+          <Property Name="d2tab" Type="char" MaxLength="3" />
+          <Property Name="d3tab" Type="char" MaxLength="3" />
+          <Property Name="d4tab" Type="char" MaxLength="3" />
+          <Property Name="d5tab" Type="char" MaxLength="3" />
+          <Property Name="d1pac" Type="numeric" Precision="9" Scale="0" />
+          <Property Name="d2pac" Type="numeric" Precision="9" Scale="0" />
+          <Property Name="d3pac" Type="numeric" Precision="9" Scale="0" />
+          <Property Name="d4pac" Type="numeric" Precision="9" Scale="0" />
+          <Property Name="d5pac" Type="numeric" Precision="9" Scale="0" />
+          <Property Name="peso_ori" Type="numeric" Precision="18" Scale="0" />
+          <Property Name="pozo" Type="char" MaxLength="10" />
+          <Property Name="p_matsec" Type="numeric" Precision="6" Scale="2" />
+          <Property Name="fic_prov" Type="char" MaxLength="25" />
+          <Property Name="Recibida" Type="bit" />
+          <Property Name="imp_p1" Type="numeric" Precision="4" Scale="0" />
+          <Property Name="imp_p2" Type="numeric" Precision="4" Scale="0" />
+          <Property Name="reimpresion" Type="numeric" Precision="4" Scale="0" />
+          <Property Name="rtime_ip1" Type="datetime" />
+          <Property Name="rtime_ip2" Type="datetime" />
+          <Property Name="rtime_rim" Type="datetime" />
+          <Property Name="terraplen" Type="char" MaxLength="10" />
+          <Property Name="arcina" Type="char" MaxLength="10" />
+          <Property Name="bunker" Type="char" MaxLength="10" />
+          <Property Name="consumo" Type="bit" />
+          <Property Name="maquilador" Type="varchar" MaxLength="100" />
+          <Property Name="sucursal" Type="varchar" MaxLength="100" />
+          <Property Name="propietario_camion" Type="varchar" MaxLength="100" />
+          <Property Name="predio_cliente" Type="varchar" MaxLength="100" />
+          <Property Name="destino" Type="varchar" MaxLength="100" />
+          <Property Name="tabla" Type="varchar" MaxLength="100" />
+          <Property Name="variedad" Type="varchar" MaxLength="100" />
+          <Property Name="ensilador" Type="varchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="fichas_si">
+          <Key>
+            <PropertyRef Name="ficha" />
+          </Key>
+          <Property Name="noreg" Type="char" MaxLength="6" />
+          <Property Name="ficha" Type="char" MaxLength="25" Nullable="false" />
+          <Property Name="fecha" Type="datetime" />
+          <Property Name="placas" Type="char" MaxLength="25" />
+          <Property Name="user_id" Type="char" MaxLength="10" />
+          <Property Name="prov_cli" Type="char" MaxLength="3" />
+          <Property Name="producto" Type="char" MaxLength="7" />
+          <Property Name="chofer" Type="char" MaxLength="40" />
+          <Property Name="peso1" Type="numeric" Precision="18" Scale="0" />
+          <Property Name="peso2" Type="numeric" Precision="18" Scale="0" />
+          <Property Name="peso_t" Type="numeric" Precision="18" Scale="0" />
+          <Property Name="obs_p1" Type="char" MaxLength="200" />
+          <Property Name="obs_p2" Type="char" MaxLength="200" />
+          <Property Name="tmov" Type="char" MaxLength="1" />
+          <Property Name="termina" Type="bit" />
+          <Property Name="folio" Type="char" MaxLength="12" />
+          <Property Name="remision" Type="char" MaxLength="25" />
+          <Property Name="cvemov" Type="char" MaxLength="3" />
+          <Property Name="aplica" Type="bit" />
+          <Property Name="agrupada" Type="bit" />
+          <Property Name="observacio" Type="char" MaxLength="80" />
+          <Property Name="cesp" Type="char" MaxLength="3" />
+          <Property Name="folio_inv" Type="char" MaxLength="8" />
+          <Property Name="rstatus" Type="char" MaxLength="1" />
+          <Property Name="rtime" Type="datetime" />
+          <Property Name="rtime_p1" Type="datetime" />
+          <Property Name="rtime_p2" Type="datetime" />
+          <Property Name="olor" Type="bit" />
+          <Property Name="matext_lib" Type="bit" />
+          <Property Name="particula" Type="char" MaxLength="15" />
+          <Property Name="empaque" Type="char" MaxLength="10" />
+          <Property Name="color" Type="char" MaxLength="20" />
+          <Property Name="humedad" Type="char" MaxLength="20" />
+          <Property Name="caducidad" Type="char" MaxLength="20" />
+          <Property Name="pacas" Type="numeric" Precision="9" Scale="0" />
+          <Property Name="corte" Type="numeric" Precision="3" Scale="0" />
+          <Property Name="repase" Type="bit" />
+          <Property Name="floracion5" Type="bit" />
+          <Property Name="descolorida" Type="bit" />
+          <Property Name="humedad18" Type="bit" />
+          <Property Name="humedad12" Type="bit" />
+          <Property Name="maleza" Type="bit" />
+          <Property Name="prhoja" Type="bit" />
+          <Property Name="d1tab" Type="char" MaxLength="3" />
+          <Property Name="d2tab" Type="char" MaxLength="3" />
+          <Property Name="d3tab" Type="char" MaxLength="3" />
+          <Property Name="d4tab" Type="char" MaxLength="3" />
+          <Property Name="d5tab" Type="char" MaxLength="3" />
+          <Property Name="d1pac" Type="numeric" Precision="9" Scale="0" />
+          <Property Name="d2pac" Type="numeric" Precision="9" Scale="0" />
+          <Property Name="d3pac" Type="numeric" Precision="9" Scale="0" />
+          <Property Name="d4pac" Type="numeric" Precision="9" Scale="0" />
+          <Property Name="d5pac" Type="numeric" Precision="9" Scale="0" />
+          <Property Name="peso_ori" Type="numeric" Precision="18" Scale="0" />
+          <Property Name="pozo" Type="char" MaxLength="20" />
+          <Property Name="p_matsec" Type="numeric" Precision="6" Scale="2" />
+          <Property Name="fic_prov" Type="char" MaxLength="25" />
+          <Property Name="Recibida" Type="bit" />
+          <Property Name="imp_p1" Type="numeric" Precision="4" Scale="0" />
+          <Property Name="imp_p2" Type="numeric" Precision="4" Scale="0" />
+          <Property Name="reimpresion" Type="numeric" Precision="4" Scale="0" />
+          <Property Name="rtime_ip1" Type="datetime" />
+          <Property Name="rtime_ip2" Type="datetime" />
+          <Property Name="rtime_rim" Type="datetime" />
+          <Property Name="terraplen" Type="char" MaxLength="10" />
+          <Property Name="arcina" Type="char" MaxLength="10" />
+          <Property Name="bunker" Type="char" MaxLength="10" />
+          <Property Name="consumo" Type="bit" />
+          <Property Name="maquilador" Type="varchar" MaxLength="100" />
+          <Property Name="sucursal" Type="varchar" MaxLength="100" />
+          <Property Name="propietario_camion" Type="varchar" MaxLength="100" />
+          <Property Name="predio_cliente" Type="varchar" MaxLength="100" />
+          <Property Name="destino" Type="varchar" MaxLength="100" />
+          <Property Name="tabla" Type="varchar" MaxLength="100" />
+          <Property Name="variedad" Type="varchar" MaxLength="100" />
+          <Property Name="ensilador" Type="varchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="fichas_sm">
+          <Key>
+            <PropertyRef Name="ficha" />
+          </Key>
+          <Property Name="ficha" Type="char" MaxLength="25" Nullable="false" />
+          <Property Name="fecha" Type="datetime" />
+          <Property Name="placas" Type="char" MaxLength="25" />
+          <Property Name="user_id" Type="char" MaxLength="10" />
+          <Property Name="prov_cli" Type="char" MaxLength="3" />
+          <Property Name="producto" Type="char" MaxLength="7" />
+          <Property Name="chofer" Type="char" MaxLength="40" />
+          <Property Name="peso1" Type="numeric" Precision="18" Scale="0" />
+          <Property Name="peso2" Type="numeric" Precision="18" Scale="0" />
+          <Property Name="peso_t" Type="numeric" Precision="18" Scale="0" />
+          <Property Name="obs_p1" Type="char" MaxLength="200" />
+          <Property Name="obs_p2" Type="char" MaxLength="200" />
+          <Property Name="tmov" Type="char" MaxLength="1" />
+          <Property Name="termina" Type="bit" />
+          <Property Name="folio" Type="char" MaxLength="12" />
+          <Property Name="remision" Type="char" MaxLength="25" />
+          <Property Name="cvemov" Type="char" MaxLength="3" />
+          <Property Name="aplica" Type="bit" />
+          <Property Name="agrupada" Type="bit" />
+          <Property Name="observacio" Type="char" MaxLength="80" />
+          <Property Name="cesp" Type="char" MaxLength="3" />
+          <Property Name="folio_inv" Type="char" MaxLength="8" />
+          <Property Name="rstatus" Type="char" MaxLength="1" />
+          <Property Name="rtime" Type="datetime" />
+          <Property Name="rtime_p1" Type="datetime" />
+          <Property Name="rtime_p2" Type="datetime" />
+          <Property Name="noreg" Type="char" MaxLength="6" />
+          <Property Name="olor" Type="bit" />
+          <Property Name="matext_lib" Type="bit" />
+          <Property Name="particula" Type="char" MaxLength="15" />
+          <Property Name="empaque" Type="char" MaxLength="10" />
+          <Property Name="color" Type="char" MaxLength="20" />
+          <Property Name="humedad" Type="char" MaxLength="20" />
+          <Property Name="caducidad" Type="char" MaxLength="20" />
+          <Property Name="pacas" Type="numeric" Precision="18" Scale="0" />
+          <Property Name="corte" Type="numeric" Precision="18" Scale="0" />
+          <Property Name="repase" Type="bit" />
+          <Property Name="floracion5" Type="bit" />
+          <Property Name="descolorida" Type="bit" />
+          <Property Name="humedad18" Type="bit" />
+          <Property Name="humedad12" Type="bit" />
+          <Property Name="maleza" Type="bit" />
+          <Property Name="prhoja" Type="bit" />
+          <Property Name="d1tab" Type="char" MaxLength="3" />
+          <Property Name="d2tab" Type="char" MaxLength="3" />
+          <Property Name="d3tab" Type="char" MaxLength="3" />
+          <Property Name="d4tab" Type="char" MaxLength="3" />
+          <Property Name="d5tab" Type="char" MaxLength="3" />
+          <Property Name="d1pac" Type="numeric" Precision="9" Scale="0" />
+          <Property Name="d2pac" Type="numeric" Precision="9" Scale="0" />
+          <Property Name="d3pac" Type="numeric" Precision="9" Scale="0" />
+          <Property Name="d4pac" Type="numeric" Precision="9" Scale="0" />
+          <Property Name="d5pac" Type="numeric" Precision="9" Scale="0" />
+          <Property Name="peso_ori" Type="numeric" Precision="18" Scale="0" />
+          <Property Name="pozo" Type="char" MaxLength="10" />
+          <Property Name="p_matsec" Type="numeric" Precision="6" Scale="2" />
+          <Property Name="fic_prov" Type="char" MaxLength="25" />
+          <Property Name="Recibida" Type="bit" />
+          <Property Name="Imp_P1" Type="numeric" Precision="4" Scale="0" />
+          <Property Name="Imp_P2" Type="numeric" Precision="4" Scale="0" />
+          <Property Name="Reimpresion" Type="numeric" Precision="4" Scale="0" />
+          <Property Name="Rtime_ip1" Type="datetime" />
+          <Property Name="Rtime_ip2" Type="datetime" />
+          <Property Name="rtime_rim" Type="datetime" />
+          <Property Name="terraplen" Type="char" MaxLength="10" />
+          <Property Name="arcina" Type="char" MaxLength="10" />
+          <Property Name="bunker" Type="char" MaxLength="10" />
+          <Property Name="consumo" Type="bit" />
+          <Property Name="maquilador" Type="varchar" MaxLength="100" />
+          <Property Name="sucursal" Type="varchar" MaxLength="50" />
+          <Property Name="propietario_camion" Type="varchar" MaxLength="50" />
+          <Property Name="predio_cliente" Type="varchar" MaxLength="50" />
+          <Property Name="destino" Type="varchar" MaxLength="50" />
+          <Property Name="tabla" Type="varchar" MaxLength="100" />
+          <Property Name="variedad" Type="varchar" MaxLength="100" />
+          <Property Name="ensilador" Type="varchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="no_pozos">
+          <Key>
+            <PropertyRef Name="id_no_pozo" />
+          </Key>
+          <Property Name="id_no_pozo" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="no_pozo" Type="varchar" MaxLength="50" />
+          <Property Name="rstatus" Type="char" MaxLength="1" />
+          <Property Name="id_establo" Type="int" />
+        </EntityType>
+        <EntityType Name="Producto_B">
+          <Key>
+            <PropertyRef Name="cveart" />
+          </Key>
+          <Property Name="cveart" Type="char" MaxLength="7" Nullable="false" />
+          <Property Name="desart" Type="char" MaxLength="60" />
+          <Property Name="unimed" Type="nvarchar" MaxLength="50" />
+          <Property Name="obsart" Type="nvarchar" MaxLength="50" />
+          <Property Name="rstatus" Type="char" MaxLength="1" />
+          <Property Name="rtime" Type="datetime" />
+          <Property Name="id_reg" Type="int" />
+          <Property Name="cvecla" Type="char" MaxLength="3" />
+          <Property Name="codigo" Type="char" MaxLength="3" />
+        </EntityType>
+        <EntityType Name="proveedo">
+          <Key>
+            <PropertyRef Name="cvepro" />
+          </Key>
+          <Property Name="cvepro" Type="char" MaxLength="3" Nullable="false" />
+          <Property Name="despro" Type="char" MaxLength="30" />
+          <Property Name="obspro" Type="char" MaxLength="30" />
+          <Property Name="contpro" Type="char" MaxLength="30" />
+          <Property Name="tel1pro" Type="char" MaxLength="15" />
+          <Property Name="tel2pro" Type="char" MaxLength="15" />
+          <Property Name="dompro" Type="char" MaxLength="50" />
+          <Property Name="cvecla" Type="char" MaxLength="3" />
+          <Property Name="prov" Type="bit" />
+          <Property Name="cli" Type="bit" />
+          <Property Name="rstatus" Type="char" MaxLength="1" />
+          <Property Name="rtime" Type="datetime" />
+        </EntityType>
+        <EntityType Name="Proveedo_B">
+          <Key>
+            <PropertyRef Name="cvepro" />
+          </Key>
+          <Property Name="cvepro" Type="char" MaxLength="3" Nullable="false" />
+          <Property Name="despro" Type="char" MaxLength="30" />
+          <Property Name="obspro" Type="char" MaxLength="30" />
+          <Property Name="contpro" Type="char" MaxLength="30" />
+          <Property Name="tel1pro" Type="char" MaxLength="15" />
+          <Property Name="tel2pro" Type="char" MaxLength="15" />
+          <Property Name="dompro" Type="char" MaxLength="50" />
+          <Property Name="cvecla" Type="char" MaxLength="3" />
+          <Property Name="prov" Type="bit" />
+          <Property Name="cli" Type="bit" />
+          <Property Name="rstatus" Type="char" MaxLength="1" />
+          <Property Name="rtime" Type="datetime" />
+        </EntityType>
+        <EntityType Name="usuarios">
+          <Key>
+            <PropertyRef Name="user_id" />
+          </Key>
+          <Property Name="user_id" Type="char" MaxLength="10" Nullable="false" />
+          <Property Name="usuario" Type="char" MaxLength="35" />
+          <Property Name="nivel" Type="numeric" Precision="1" Scale="0" />
+          <Property Name="password" Type="char" MaxLength="10" />
+          <Property Name="tipo_user" Type="char" MaxLength="2" />
+          <Property Name="rstatus" Type="char" MaxLength="1" />
+          <Property Name="rtime" Type="datetime" />
+        </EntityType>
+        <EntityContainer Name="base_forrajesModelStoreContainer">
+          <EntitySet Name="areas" EntityType="Self.areas" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="articulo" EntityType="Self.articulo" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="camiones" EntityType="Self.camiones" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="fichas_sg" EntityType="Self.fichas_sg" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="fichas_si" EntityType="Self.fichas_si" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="fichas_sm" EntityType="Self.fichas_sm" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="no_pozos" EntityType="Self.no_pozos" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Producto_B" EntityType="Self.Producto_B" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="proveedo" EntityType="Self.proveedo" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Proveedo_B" EntityType="Self.Proveedo_B" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="usuarios" EntityType="Self.usuarios" Schema="dbo" store:Type="Tables" />
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="base_forrajesModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Proveedo_B">
+          <Key>
+            <PropertyRef Name="cvepro" />
+          </Key>
+          <Property Name="cvepro" Type="String" MaxLength="3" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="despro" Type="String" MaxLength="30" FixedLength="true" Unicode="false" />
+          <Property Name="obspro" Type="String" MaxLength="30" FixedLength="true" Unicode="false" />
+          <Property Name="contpro" Type="String" MaxLength="30" FixedLength="true" Unicode="false" />
+          <Property Name="tel1pro" Type="String" MaxLength="15" FixedLength="true" Unicode="false" />
+          <Property Name="tel2pro" Type="String" MaxLength="15" FixedLength="true" Unicode="false" />
+          <Property Name="dompro" Type="String" MaxLength="50" FixedLength="true" Unicode="false" />
+          <Property Name="cvecla" Type="String" MaxLength="3" FixedLength="true" Unicode="false" />
+          <Property Name="prov" Type="Boolean" />
+          <Property Name="cli" Type="Boolean" />
+          <Property Name="rstatus" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+          <Property Name="rtime" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityContainer Name="base_forrajesEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Proveedo_B" EntityType="Self.Proveedo_B" />
+          <EntitySet Name="fichas_si" EntityType="base_forrajesModel.fichas_si" />
+          <EntitySet Name="fichas_sm" EntityType="base_forrajesModel.fichas_sm" />
+          <EntitySet Name="fichas_sg" EntityType="base_forrajesModel.fichas_sg" />
+          <EntitySet Name="usuarios" EntityType="base_forrajesModel.usuarios" />
+          <EntitySet Name="areas" EntityType="base_forrajesModel.areas" />
+          <EntitySet Name="articulo" EntityType="base_forrajesModel.articulo" />
+          <EntitySet Name="camiones" EntityType="base_forrajesModel.camiones" />
+          <EntitySet Name="no_pozos" EntityType="base_forrajesModel.no_pozos" />
+          <EntitySet Name="Producto_B" EntityType="base_forrajesModel.Producto_B" />
+          <EntitySet Name="proveedo" EntityType="base_forrajesModel.proveedo" />
+        </EntityContainer>
+        <EntityType Name="fichas_si">
+          <Key>
+            <PropertyRef Name="ficha" />
+          </Key>
+          <Property Name="noreg" Type="String" MaxLength="6" FixedLength="true" Unicode="false" />
+          <Property Name="ficha" Type="String" Nullable="false" MaxLength="25" FixedLength="true" Unicode="false" />
+          <Property Name="fecha" Type="DateTime" Precision="3" />
+          <Property Name="placas" Type="String" MaxLength="25" FixedLength="true" Unicode="false" />
+          <Property Name="user_id" Type="String" MaxLength="10" FixedLength="true" Unicode="false" />
+          <Property Name="prov_cli" Type="String" MaxLength="3" FixedLength="true" Unicode="false" />
+          <Property Name="producto" Type="String" MaxLength="7" FixedLength="true" Unicode="false" />
+          <Property Name="chofer" Type="String" MaxLength="40" FixedLength="true" Unicode="false" />
+          <Property Name="peso1" Type="Decimal" Precision="18" Scale="0" />
+          <Property Name="peso2" Type="Decimal" Precision="18" Scale="0" />
+          <Property Name="peso_t" Type="Decimal" Precision="18" Scale="0" />
+          <Property Name="obs_p1" Type="String" MaxLength="200" FixedLength="true" Unicode="false" />
+          <Property Name="obs_p2" Type="String" MaxLength="200" FixedLength="true" Unicode="false" />
+          <Property Name="tmov" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+          <Property Name="termina" Type="Boolean" />
+          <Property Name="folio" Type="String" MaxLength="12" FixedLength="true" Unicode="false" />
+          <Property Name="remision" Type="String" MaxLength="25" FixedLength="true" Unicode="false" />
+          <Property Name="cvemov" Type="String" MaxLength="3" FixedLength="true" Unicode="false" />
+          <Property Name="aplica" Type="Boolean" />
+          <Property Name="agrupada" Type="Boolean" />
+          <Property Name="observacio" Type="String" MaxLength="80" FixedLength="true" Unicode="false" />
+          <Property Name="cesp" Type="String" MaxLength="3" FixedLength="true" Unicode="false" />
+          <Property Name="folio_inv" Type="String" MaxLength="8" FixedLength="true" Unicode="false" />
+          <Property Name="rstatus" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+          <Property Name="rtime" Type="DateTime" Precision="3" />
+          <Property Name="rtime_p1" Type="DateTime" Precision="3" />
+          <Property Name="rtime_p2" Type="DateTime" Precision="3" />
+          <Property Name="olor" Type="Boolean" />
+          <Property Name="matext_lib" Type="Boolean" />
+          <Property Name="particula" Type="String" MaxLength="15" FixedLength="true" Unicode="false" />
+          <Property Name="empaque" Type="String" MaxLength="10" FixedLength="true" Unicode="false" />
+          <Property Name="color" Type="String" MaxLength="20" FixedLength="true" Unicode="false" />
+          <Property Name="humedad" Type="String" MaxLength="20" FixedLength="true" Unicode="false" />
+          <Property Name="caducidad" Type="String" MaxLength="20" FixedLength="true" Unicode="false" />
+          <Property Name="pacas" Type="Decimal" Precision="9" Scale="0" />
+          <Property Name="corte" Type="Decimal" Precision="3" Scale="0" />
+          <Property Name="repase" Type="Boolean" />
+          <Property Name="floracion5" Type="Boolean" />
+          <Property Name="descolorida" Type="Boolean" />
+          <Property Name="humedad18" Type="Boolean" />
+          <Property Name="humedad12" Type="Boolean" />
+          <Property Name="maleza" Type="Boolean" />
+          <Property Name="prhoja" Type="Boolean" />
+          <Property Name="d1tab" Type="String" MaxLength="3" FixedLength="true" Unicode="false" />
+          <Property Name="d2tab" Type="String" MaxLength="3" FixedLength="true" Unicode="false" />
+          <Property Name="d3tab" Type="String" MaxLength="3" FixedLength="true" Unicode="false" />
+          <Property Name="d4tab" Type="String" MaxLength="3" FixedLength="true" Unicode="false" />
+          <Property Name="d5tab" Type="String" MaxLength="3" FixedLength="true" Unicode="false" />
+          <Property Name="d1pac" Type="Decimal" Precision="9" Scale="0" />
+          <Property Name="d2pac" Type="Decimal" Precision="9" Scale="0" />
+          <Property Name="d3pac" Type="Decimal" Precision="9" Scale="0" />
+          <Property Name="d4pac" Type="Decimal" Precision="9" Scale="0" />
+          <Property Name="d5pac" Type="Decimal" Precision="9" Scale="0" />
+          <Property Name="peso_ori" Type="Decimal" Precision="18" Scale="0" />
+          <Property Name="pozo" Type="String" MaxLength="20" FixedLength="true" Unicode="false" />
+          <Property Name="p_matsec" Type="Decimal" Precision="6" Scale="2" />
+          <Property Name="fic_prov" Type="String" MaxLength="25" FixedLength="true" Unicode="false" />
+          <Property Name="Recibida" Type="Boolean" />
+          <Property Name="imp_p1" Type="Decimal" Precision="4" Scale="0" />
+          <Property Name="imp_p2" Type="Decimal" Precision="4" Scale="0" />
+          <Property Name="reimpresion" Type="Decimal" Precision="4" Scale="0" />
+          <Property Name="rtime_ip1" Type="DateTime" Precision="3" />
+          <Property Name="rtime_ip2" Type="DateTime" Precision="3" />
+          <Property Name="rtime_rim" Type="DateTime" Precision="3" />
+          <Property Name="terraplen" Type="String" MaxLength="10" FixedLength="true" Unicode="false" />
+          <Property Name="arcina" Type="String" MaxLength="10" FixedLength="true" Unicode="false" />
+          <Property Name="bunker" Type="String" MaxLength="10" FixedLength="true" Unicode="false" />
+          <Property Name="consumo" Type="Boolean" />
+          <Property Name="maquilador" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="sucursal" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="propietario_camion" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="predio_cliente" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="destino" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="tabla" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="variedad" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="ensilador" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="fichas_sm">
+          <Key>
+            <PropertyRef Name="ficha" />
+          </Key>
+          <Property Name="ficha" Type="String" Nullable="false" MaxLength="25" FixedLength="true" Unicode="false" />
+          <Property Name="fecha" Type="DateTime" Precision="3" />
+          <Property Name="placas" Type="String" MaxLength="25" FixedLength="true" Unicode="false" />
+          <Property Name="user_id" Type="String" MaxLength="10" FixedLength="true" Unicode="false" />
+          <Property Name="prov_cli" Type="String" MaxLength="3" FixedLength="true" Unicode="false" />
+          <Property Name="producto" Type="String" MaxLength="7" FixedLength="true" Unicode="false" />
+          <Property Name="chofer" Type="String" MaxLength="40" FixedLength="true" Unicode="false" />
+          <Property Name="peso1" Type="Decimal" Precision="18" Scale="0" />
+          <Property Name="peso2" Type="Decimal" Precision="18" Scale="0" />
+          <Property Name="peso_t" Type="Decimal" Precision="18" Scale="0" />
+          <Property Name="obs_p1" Type="String" MaxLength="200" FixedLength="true" Unicode="false" />
+          <Property Name="obs_p2" Type="String" MaxLength="200" FixedLength="true" Unicode="false" />
+          <Property Name="tmov" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+          <Property Name="termina" Type="Boolean" />
+          <Property Name="folio" Type="String" MaxLength="12" FixedLength="true" Unicode="false" />
+          <Property Name="remision" Type="String" MaxLength="25" FixedLength="true" Unicode="false" />
+          <Property Name="cvemov" Type="String" MaxLength="3" FixedLength="true" Unicode="false" />
+          <Property Name="aplica" Type="Boolean" />
+          <Property Name="agrupada" Type="Boolean" />
+          <Property Name="observacio" Type="String" MaxLength="80" FixedLength="true" Unicode="false" />
+          <Property Name="cesp" Type="String" MaxLength="3" FixedLength="true" Unicode="false" />
+          <Property Name="folio_inv" Type="String" MaxLength="8" FixedLength="true" Unicode="false" />
+          <Property Name="rstatus" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+          <Property Name="rtime" Type="DateTime" Precision="3" />
+          <Property Name="rtime_p1" Type="DateTime" Precision="3" />
+          <Property Name="rtime_p2" Type="DateTime" Precision="3" />
+          <Property Name="noreg" Type="String" MaxLength="6" FixedLength="true" Unicode="false" />
+          <Property Name="olor" Type="Boolean" />
+          <Property Name="matext_lib" Type="Boolean" />
+          <Property Name="particula" Type="String" MaxLength="15" FixedLength="true" Unicode="false" />
+          <Property Name="empaque" Type="String" MaxLength="10" FixedLength="true" Unicode="false" />
+          <Property Name="color" Type="String" MaxLength="20" FixedLength="true" Unicode="false" />
+          <Property Name="humedad" Type="String" MaxLength="20" FixedLength="true" Unicode="false" />
+          <Property Name="caducidad" Type="String" MaxLength="20" FixedLength="true" Unicode="false" />
+          <Property Name="pacas" Type="Decimal" Precision="18" Scale="0" />
+          <Property Name="corte" Type="Decimal" Precision="18" Scale="0" />
+          <Property Name="repase" Type="Boolean" />
+          <Property Name="floracion5" Type="Boolean" />
+          <Property Name="descolorida" Type="Boolean" />
+          <Property Name="humedad18" Type="Boolean" />
+          <Property Name="humedad12" Type="Boolean" />
+          <Property Name="maleza" Type="Boolean" />
+          <Property Name="prhoja" Type="Boolean" />
+          <Property Name="d1tab" Type="String" MaxLength="3" FixedLength="true" Unicode="false" />
+          <Property Name="d2tab" Type="String" MaxLength="3" FixedLength="true" Unicode="false" />
+          <Property Name="d3tab" Type="String" MaxLength="3" FixedLength="true" Unicode="false" />
+          <Property Name="d4tab" Type="String" MaxLength="3" FixedLength="true" Unicode="false" />
+          <Property Name="d5tab" Type="String" MaxLength="3" FixedLength="true" Unicode="false" />
+          <Property Name="d1pac" Type="Decimal" Precision="9" Scale="0" />
+          <Property Name="d2pac" Type="Decimal" Precision="9" Scale="0" />
+          <Property Name="d3pac" Type="Decimal" Precision="9" Scale="0" />
+          <Property Name="d4pac" Type="Decimal" Precision="9" Scale="0" />
+          <Property Name="d5pac" Type="Decimal" Precision="9" Scale="0" />
+          <Property Name="peso_ori" Type="Decimal" Precision="18" Scale="0" />
+          <Property Name="pozo" Type="String" MaxLength="10" FixedLength="true" Unicode="false" />
+          <Property Name="p_matsec" Type="Decimal" Precision="6" Scale="2" />
+          <Property Name="fic_prov" Type="String" MaxLength="25" FixedLength="true" Unicode="false" />
+          <Property Name="Recibida" Type="Boolean" />
+          <Property Name="Imp_P1" Type="Decimal" Precision="4" Scale="0" />
+          <Property Name="Imp_P2" Type="Decimal" Precision="4" Scale="0" />
+          <Property Name="Reimpresion" Type="Decimal" Precision="4" Scale="0" />
+          <Property Name="Rtime_ip1" Type="DateTime" Precision="3" />
+          <Property Name="Rtime_ip2" Type="DateTime" Precision="3" />
+          <Property Name="rtime_rim" Type="DateTime" Precision="3" />
+          <Property Name="terraplen" Type="String" MaxLength="10" FixedLength="true" Unicode="false" />
+          <Property Name="arcina" Type="String" MaxLength="10" FixedLength="true" Unicode="false" />
+          <Property Name="bunker" Type="String" MaxLength="10" FixedLength="true" Unicode="false" />
+          <Property Name="consumo" Type="Boolean" />
+          <Property Name="maquilador" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="sucursal" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="propietario_camion" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="predio_cliente" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="destino" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="tabla" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="variedad" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="ensilador" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="fichas_sg">
+          <Key>
+            <PropertyRef Name="ficha" />
+          </Key>
+          <Property Name="ficha" Type="String" Nullable="false" MaxLength="25" FixedLength="true" Unicode="false" />
+          <Property Name="fecha" Type="DateTime" Precision="3" />
+          <Property Name="placas" Type="String" MaxLength="25" FixedLength="true" Unicode="false" />
+          <Property Name="user_id" Type="String" MaxLength="10" FixedLength="true" Unicode="false" />
+          <Property Name="prov_cli" Type="String" MaxLength="3" FixedLength="true" Unicode="false" />
+          <Property Name="producto" Type="String" MaxLength="7" FixedLength="true" Unicode="false" />
+          <Property Name="chofer" Type="String" MaxLength="40" FixedLength="true" Unicode="false" />
+          <Property Name="peso1" Type="Decimal" Precision="18" Scale="0" />
+          <Property Name="peso2" Type="Decimal" Precision="18" Scale="0" />
+          <Property Name="peso_t" Type="Decimal" Precision="18" Scale="0" />
+          <Property Name="obs_p1" Type="String" MaxLength="200" FixedLength="true" Unicode="false" />
+          <Property Name="obs_p2" Type="String" MaxLength="200" FixedLength="true" Unicode="false" />
+          <Property Name="tmov" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+          <Property Name="termina" Type="Boolean" />
+          <Property Name="folio" Type="String" MaxLength="6" FixedLength="true" Unicode="false" />
+          <Property Name="remision" Type="String" MaxLength="25" FixedLength="true" Unicode="false" />
+          <Property Name="cvemov" Type="String" MaxLength="3" FixedLength="true" Unicode="false" />
+          <Property Name="aplica" Type="Boolean" />
+          <Property Name="agrupada" Type="Boolean" />
+          <Property Name="observacio" Type="String" MaxLength="80" FixedLength="true" Unicode="false" />
+          <Property Name="cesp" Type="String" MaxLength="3" FixedLength="true" Unicode="false" />
+          <Property Name="folio_inv" Type="String" MaxLength="8" FixedLength="true" Unicode="false" />
+          <Property Name="rstatus" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+          <Property Name="rtime" Type="DateTime" Precision="3" />
+          <Property Name="rtime_p1" Type="DateTime" Precision="3" />
+          <Property Name="rtime_p2" Type="DateTime" Precision="3" />
+          <Property Name="noreg" Type="String" MaxLength="6" FixedLength="true" Unicode="false" />
+          <Property Name="olor" Type="Boolean" />
+          <Property Name="matext_lib" Type="Boolean" />
+          <Property Name="particula" Type="String" MaxLength="15" FixedLength="true" Unicode="false" />
+          <Property Name="empaque" Type="String" MaxLength="10" FixedLength="true" Unicode="false" />
+          <Property Name="color" Type="String" MaxLength="20" FixedLength="true" Unicode="false" />
+          <Property Name="humedad" Type="String" MaxLength="20" FixedLength="true" Unicode="false" />
+          <Property Name="caducidad" Type="String" MaxLength="20" FixedLength="true" Unicode="false" />
+          <Property Name="pacas" Type="Decimal" Precision="9" Scale="0" />
+          <Property Name="corte" Type="Decimal" Precision="3" Scale="0" />
+          <Property Name="repase" Type="Boolean" />
+          <Property Name="floracion5" Type="Boolean" />
+          <Property Name="descolorida" Type="Boolean" />
+          <Property Name="humedad18" Type="Boolean" />
+          <Property Name="humedad12" Type="Boolean" />
+          <Property Name="maleza" Type="Boolean" />
+          <Property Name="prhoja" Type="Boolean" />
+          <Property Name="d1tab" Type="String" MaxLength="3" FixedLength="true" Unicode="false" />
+          <Property Name="d2tab" Type="String" MaxLength="3" FixedLength="true" Unicode="false" />
+          <Property Name="d3tab" Type="String" MaxLength="3" FixedLength="true" Unicode="false" />
+          <Property Name="d4tab" Type="String" MaxLength="3" FixedLength="true" Unicode="false" />
+          <Property Name="d5tab" Type="String" MaxLength="3" FixedLength="true" Unicode="false" />
+          <Property Name="d1pac" Type="Decimal" Precision="9" Scale="0" />
+          <Property Name="d2pac" Type="Decimal" Precision="9" Scale="0" />
+          <Property Name="d3pac" Type="Decimal" Precision="9" Scale="0" />
+          <Property Name="d4pac" Type="Decimal" Precision="9" Scale="0" />
+          <Property Name="d5pac" Type="Decimal" Precision="9" Scale="0" />
+          <Property Name="peso_ori" Type="Decimal" Precision="18" Scale="0" />
+          <Property Name="pozo" Type="String" MaxLength="10" FixedLength="true" Unicode="false" />
+          <Property Name="p_matsec" Type="Decimal" Precision="6" Scale="2" />
+          <Property Name="fic_prov" Type="String" MaxLength="25" FixedLength="true" Unicode="false" />
+          <Property Name="Recibida" Type="Boolean" />
+          <Property Name="imp_p1" Type="Decimal" Precision="4" Scale="0" />
+          <Property Name="imp_p2" Type="Decimal" Precision="4" Scale="0" />
+          <Property Name="reimpresion" Type="Decimal" Precision="4" Scale="0" />
+          <Property Name="rtime_ip1" Type="DateTime" Precision="3" />
+          <Property Name="rtime_ip2" Type="DateTime" Precision="3" />
+          <Property Name="rtime_rim" Type="DateTime" Precision="3" />
+          <Property Name="terraplen" Type="String" MaxLength="10" FixedLength="true" Unicode="false" />
+          <Property Name="arcina" Type="String" MaxLength="10" FixedLength="true" Unicode="false" />
+          <Property Name="bunker" Type="String" MaxLength="10" FixedLength="true" Unicode="false" />
+          <Property Name="consumo" Type="Boolean" />
+          <Property Name="maquilador" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="sucursal" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="propietario_camion" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="predio_cliente" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="destino" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="tabla" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="variedad" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="ensilador" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="usuarios">
+          <Key>
+            <PropertyRef Name="user_id" />
+          </Key>
+          <Property Name="user_id" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="false" />
+          <Property Name="usuario" Type="String" MaxLength="35" FixedLength="true" Unicode="false" />
+          <Property Name="nivel" Type="Decimal" Precision="1" Scale="0" />
+          <Property Name="password" Type="String" MaxLength="10" FixedLength="true" Unicode="false" />
+          <Property Name="tipo_user" Type="String" MaxLength="2" FixedLength="true" Unicode="false" />
+          <Property Name="rstatus" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+          <Property Name="rtime" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="areas">
+          <Key>
+            <PropertyRef Name="area" />
+          </Key>
+          <Property Name="area" Type="String" Nullable="false" MaxLength="6" FixedLength="true" Unicode="false" />
+          <Property Name="des_area" Type="String" MaxLength="40" FixedLength="true" Unicode="false" />
+          <Property Name="rstatus" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+          <Property Name="rtime" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="articulo">
+          <Key>
+            <PropertyRef Name="cveart" />
+          </Key>
+          <Property Name="cveart" Type="String" Nullable="false" MaxLength="7" FixedLength="true" Unicode="false" />
+          <Property Name="desart" Type="String" MaxLength="60" FixedLength="true" Unicode="false" />
+          <Property Name="unimed" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="obsart" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="rstatus" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+          <Property Name="rtime" Type="DateTime" Precision="3" />
+          <Property Name="id_reg" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="cvecla" Type="String" MaxLength="3" FixedLength="true" Unicode="false" />
+          <Property Name="codigo" Type="String" MaxLength="3" FixedLength="true" Unicode="false" />
+        </EntityType>
+        <EntityType Name="camiones">
+          <Key>
+            <PropertyRef Name="placas" />
+            <PropertyRef Name="chofer" />
+          </Key>
+          <Property Name="placas" Type="String" Nullable="false" MaxLength="25" FixedLength="true" Unicode="false" />
+          <Property Name="chofer" Type="String" Nullable="false" MaxLength="40" FixedLength="true" Unicode="false" />
+          <Property Name="des_cam" Type="String" MaxLength="40" FixedLength="true" Unicode="false" />
+          <Property Name="obs_cam" Type="String" MaxLength="40" FixedLength="true" Unicode="false" />
+          <Property Name="rstatus" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+          <Property Name="rtime" Type="DateTime" Precision="3" />
+          <Property Name="id_consecutivo" Type="Int32" />
+        </EntityType>
+        <EntityType Name="no_pozos">
+          <Key>
+            <PropertyRef Name="id_no_pozo" />
+          </Key>
+          <Property Name="id_no_pozo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="no_pozo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="rstatus" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+          <Property Name="id_establo" Type="Int32" />
+        </EntityType>
+        <EntityType Name="Producto_B">
+          <Key>
+            <PropertyRef Name="cveart" />
+          </Key>
+          <Property Name="cveart" Type="String" Nullable="false" MaxLength="7" FixedLength="true" Unicode="false" />
+          <Property Name="desart" Type="String" MaxLength="60" FixedLength="true" Unicode="false" />
+          <Property Name="unimed" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="obsart" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="rstatus" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+          <Property Name="rtime" Type="DateTime" Precision="3" />
+          <Property Name="id_reg" Type="Int32" />
+          <Property Name="cvecla" Type="String" MaxLength="3" FixedLength="true" Unicode="false" />
+          <Property Name="codigo" Type="String" MaxLength="3" FixedLength="true" Unicode="false" />
+        </EntityType>
+        <EntityType Name="proveedo">
+          <Key>
+            <PropertyRef Name="cvepro" />
+          </Key>
+          <Property Name="cvepro" Type="String" Nullable="false" MaxLength="3" FixedLength="true" Unicode="false" />
+          <Property Name="despro" Type="String" MaxLength="30" FixedLength="true" Unicode="false" />
+          <Property Name="obspro" Type="String" MaxLength="30" FixedLength="true" Unicode="false" />
+          <Property Name="contpro" Type="String" MaxLength="30" FixedLength="true" Unicode="false" />
+          <Property Name="tel1pro" Type="String" MaxLength="15" FixedLength="true" Unicode="false" />
+          <Property Name="tel2pro" Type="String" MaxLength="15" FixedLength="true" Unicode="false" />
+          <Property Name="dompro" Type="String" MaxLength="50" FixedLength="true" Unicode="false" />
+          <Property Name="cvecla" Type="String" MaxLength="3" FixedLength="true" Unicode="false" />
+          <Property Name="prov" Type="Boolean" />
+          <Property Name="cli" Type="Boolean" />
+          <Property Name="rstatus" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+          <Property Name="rtime" Type="DateTime" Precision="3" />
+        </EntityType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="base_forrajesModelStoreContainer" CdmEntityContainer="base_forrajesEntities">
+          <EntitySetMapping Name="Proveedo_B">
+            <EntityTypeMapping TypeName="base_forrajesModel.Proveedo_B">
+              <MappingFragment StoreEntitySet="Proveedo_B">
+                <ScalarProperty Name="cvepro" ColumnName="cvepro" />
+                <ScalarProperty Name="despro" ColumnName="despro" />
+                <ScalarProperty Name="obspro" ColumnName="obspro" />
+                <ScalarProperty Name="contpro" ColumnName="contpro" />
+                <ScalarProperty Name="tel1pro" ColumnName="tel1pro" />
+                <ScalarProperty Name="tel2pro" ColumnName="tel2pro" />
+                <ScalarProperty Name="dompro" ColumnName="dompro" />
+                <ScalarProperty Name="cvecla" ColumnName="cvecla" />
+                <ScalarProperty Name="prov" ColumnName="prov" />
+                <ScalarProperty Name="cli" ColumnName="cli" />
+                <ScalarProperty Name="rstatus" ColumnName="rstatus" />
+                <ScalarProperty Name="rtime" ColumnName="rtime" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="fichas_si">
+            <EntityTypeMapping TypeName="base_forrajesModel.fichas_si">
+              <MappingFragment StoreEntitySet="fichas_si">
+                <ScalarProperty Name="ensilador" ColumnName="ensilador" />
+                <ScalarProperty Name="variedad" ColumnName="variedad" />
+                <ScalarProperty Name="tabla" ColumnName="tabla" />
+                <ScalarProperty Name="destino" ColumnName="destino" />
+                <ScalarProperty Name="predio_cliente" ColumnName="predio_cliente" />
+                <ScalarProperty Name="propietario_camion" ColumnName="propietario_camion" />
+                <ScalarProperty Name="sucursal" ColumnName="sucursal" />
+                <ScalarProperty Name="maquilador" ColumnName="maquilador" />
+                <ScalarProperty Name="consumo" ColumnName="consumo" />
+                <ScalarProperty Name="bunker" ColumnName="bunker" />
+                <ScalarProperty Name="arcina" ColumnName="arcina" />
+                <ScalarProperty Name="terraplen" ColumnName="terraplen" />
+                <ScalarProperty Name="rtime_rim" ColumnName="rtime_rim" />
+                <ScalarProperty Name="rtime_ip2" ColumnName="rtime_ip2" />
+                <ScalarProperty Name="rtime_ip1" ColumnName="rtime_ip1" />
+                <ScalarProperty Name="reimpresion" ColumnName="reimpresion" />
+                <ScalarProperty Name="imp_p2" ColumnName="imp_p2" />
+                <ScalarProperty Name="imp_p1" ColumnName="imp_p1" />
+                <ScalarProperty Name="Recibida" ColumnName="Recibida" />
+                <ScalarProperty Name="fic_prov" ColumnName="fic_prov" />
+                <ScalarProperty Name="p_matsec" ColumnName="p_matsec" />
+                <ScalarProperty Name="pozo" ColumnName="pozo" />
+                <ScalarProperty Name="peso_ori" ColumnName="peso_ori" />
+                <ScalarProperty Name="d5pac" ColumnName="d5pac" />
+                <ScalarProperty Name="d4pac" ColumnName="d4pac" />
+                <ScalarProperty Name="d3pac" ColumnName="d3pac" />
+                <ScalarProperty Name="d2pac" ColumnName="d2pac" />
+                <ScalarProperty Name="d1pac" ColumnName="d1pac" />
+                <ScalarProperty Name="d5tab" ColumnName="d5tab" />
+                <ScalarProperty Name="d4tab" ColumnName="d4tab" />
+                <ScalarProperty Name="d3tab" ColumnName="d3tab" />
+                <ScalarProperty Name="d2tab" ColumnName="d2tab" />
+                <ScalarProperty Name="d1tab" ColumnName="d1tab" />
+                <ScalarProperty Name="prhoja" ColumnName="prhoja" />
+                <ScalarProperty Name="maleza" ColumnName="maleza" />
+                <ScalarProperty Name="humedad12" ColumnName="humedad12" />
+                <ScalarProperty Name="humedad18" ColumnName="humedad18" />
+                <ScalarProperty Name="descolorida" ColumnName="descolorida" />
+                <ScalarProperty Name="floracion5" ColumnName="floracion5" />
+                <ScalarProperty Name="repase" ColumnName="repase" />
+                <ScalarProperty Name="corte" ColumnName="corte" />
+                <ScalarProperty Name="pacas" ColumnName="pacas" />
+                <ScalarProperty Name="caducidad" ColumnName="caducidad" />
+                <ScalarProperty Name="humedad" ColumnName="humedad" />
+                <ScalarProperty Name="color" ColumnName="color" />
+                <ScalarProperty Name="empaque" ColumnName="empaque" />
+                <ScalarProperty Name="particula" ColumnName="particula" />
+                <ScalarProperty Name="matext_lib" ColumnName="matext_lib" />
+                <ScalarProperty Name="olor" ColumnName="olor" />
+                <ScalarProperty Name="rtime_p2" ColumnName="rtime_p2" />
+                <ScalarProperty Name="rtime_p1" ColumnName="rtime_p1" />
+                <ScalarProperty Name="rtime" ColumnName="rtime" />
+                <ScalarProperty Name="rstatus" ColumnName="rstatus" />
+                <ScalarProperty Name="folio_inv" ColumnName="folio_inv" />
+                <ScalarProperty Name="cesp" ColumnName="cesp" />
+                <ScalarProperty Name="observacio" ColumnName="observacio" />
+                <ScalarProperty Name="agrupada" ColumnName="agrupada" />
+                <ScalarProperty Name="aplica" ColumnName="aplica" />
+                <ScalarProperty Name="cvemov" ColumnName="cvemov" />
+                <ScalarProperty Name="remision" ColumnName="remision" />
+                <ScalarProperty Name="folio" ColumnName="folio" />
+                <ScalarProperty Name="termina" ColumnName="termina" />
+                <ScalarProperty Name="tmov" ColumnName="tmov" />
+                <ScalarProperty Name="obs_p2" ColumnName="obs_p2" />
+                <ScalarProperty Name="obs_p1" ColumnName="obs_p1" />
+                <ScalarProperty Name="peso_t" ColumnName="peso_t" />
+                <ScalarProperty Name="peso2" ColumnName="peso2" />
+                <ScalarProperty Name="peso1" ColumnName="peso1" />
+                <ScalarProperty Name="chofer" ColumnName="chofer" />
+                <ScalarProperty Name="producto" ColumnName="producto" />
+                <ScalarProperty Name="prov_cli" ColumnName="prov_cli" />
+                <ScalarProperty Name="user_id" ColumnName="user_id" />
+                <ScalarProperty Name="placas" ColumnName="placas" />
+                <ScalarProperty Name="fecha" ColumnName="fecha" />
+                <ScalarProperty Name="ficha" ColumnName="ficha" />
+                <ScalarProperty Name="noreg" ColumnName="noreg" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="fichas_sm">
+            <EntityTypeMapping TypeName="base_forrajesModel.fichas_sm">
+              <MappingFragment StoreEntitySet="fichas_sm">
+                <ScalarProperty Name="ensilador" ColumnName="ensilador" />
+                <ScalarProperty Name="variedad" ColumnName="variedad" />
+                <ScalarProperty Name="tabla" ColumnName="tabla" />
+                <ScalarProperty Name="destino" ColumnName="destino" />
+                <ScalarProperty Name="predio_cliente" ColumnName="predio_cliente" />
+                <ScalarProperty Name="propietario_camion" ColumnName="propietario_camion" />
+                <ScalarProperty Name="sucursal" ColumnName="sucursal" />
+                <ScalarProperty Name="maquilador" ColumnName="maquilador" />
+                <ScalarProperty Name="consumo" ColumnName="consumo" />
+                <ScalarProperty Name="bunker" ColumnName="bunker" />
+                <ScalarProperty Name="arcina" ColumnName="arcina" />
+                <ScalarProperty Name="terraplen" ColumnName="terraplen" />
+                <ScalarProperty Name="rtime_rim" ColumnName="rtime_rim" />
+                <ScalarProperty Name="Rtime_ip2" ColumnName="Rtime_ip2" />
+                <ScalarProperty Name="Rtime_ip1" ColumnName="Rtime_ip1" />
+                <ScalarProperty Name="Reimpresion" ColumnName="Reimpresion" />
+                <ScalarProperty Name="Imp_P2" ColumnName="Imp_P2" />
+                <ScalarProperty Name="Imp_P1" ColumnName="Imp_P1" />
+                <ScalarProperty Name="Recibida" ColumnName="Recibida" />
+                <ScalarProperty Name="fic_prov" ColumnName="fic_prov" />
+                <ScalarProperty Name="p_matsec" ColumnName="p_matsec" />
+                <ScalarProperty Name="pozo" ColumnName="pozo" />
+                <ScalarProperty Name="peso_ori" ColumnName="peso_ori" />
+                <ScalarProperty Name="d5pac" ColumnName="d5pac" />
+                <ScalarProperty Name="d4pac" ColumnName="d4pac" />
+                <ScalarProperty Name="d3pac" ColumnName="d3pac" />
+                <ScalarProperty Name="d2pac" ColumnName="d2pac" />
+                <ScalarProperty Name="d1pac" ColumnName="d1pac" />
+                <ScalarProperty Name="d5tab" ColumnName="d5tab" />
+                <ScalarProperty Name="d4tab" ColumnName="d4tab" />
+                <ScalarProperty Name="d3tab" ColumnName="d3tab" />
+                <ScalarProperty Name="d2tab" ColumnName="d2tab" />
+                <ScalarProperty Name="d1tab" ColumnName="d1tab" />
+                <ScalarProperty Name="prhoja" ColumnName="prhoja" />
+                <ScalarProperty Name="maleza" ColumnName="maleza" />
+                <ScalarProperty Name="humedad12" ColumnName="humedad12" />
+                <ScalarProperty Name="humedad18" ColumnName="humedad18" />
+                <ScalarProperty Name="descolorida" ColumnName="descolorida" />
+                <ScalarProperty Name="floracion5" ColumnName="floracion5" />
+                <ScalarProperty Name="repase" ColumnName="repase" />
+                <ScalarProperty Name="corte" ColumnName="corte" />
+                <ScalarProperty Name="pacas" ColumnName="pacas" />
+                <ScalarProperty Name="caducidad" ColumnName="caducidad" />
+                <ScalarProperty Name="humedad" ColumnName="humedad" />
+                <ScalarProperty Name="color" ColumnName="color" />
+                <ScalarProperty Name="empaque" ColumnName="empaque" />
+                <ScalarProperty Name="particula" ColumnName="particula" />
+                <ScalarProperty Name="matext_lib" ColumnName="matext_lib" />
+                <ScalarProperty Name="olor" ColumnName="olor" />
+                <ScalarProperty Name="noreg" ColumnName="noreg" />
+                <ScalarProperty Name="rtime_p2" ColumnName="rtime_p2" />
+                <ScalarProperty Name="rtime_p1" ColumnName="rtime_p1" />
+                <ScalarProperty Name="rtime" ColumnName="rtime" />
+                <ScalarProperty Name="rstatus" ColumnName="rstatus" />
+                <ScalarProperty Name="folio_inv" ColumnName="folio_inv" />
+                <ScalarProperty Name="cesp" ColumnName="cesp" />
+                <ScalarProperty Name="observacio" ColumnName="observacio" />
+                <ScalarProperty Name="agrupada" ColumnName="agrupada" />
+                <ScalarProperty Name="aplica" ColumnName="aplica" />
+                <ScalarProperty Name="cvemov" ColumnName="cvemov" />
+                <ScalarProperty Name="remision" ColumnName="remision" />
+                <ScalarProperty Name="folio" ColumnName="folio" />
+                <ScalarProperty Name="termina" ColumnName="termina" />
+                <ScalarProperty Name="tmov" ColumnName="tmov" />
+                <ScalarProperty Name="obs_p2" ColumnName="obs_p2" />
+                <ScalarProperty Name="obs_p1" ColumnName="obs_p1" />
+                <ScalarProperty Name="peso_t" ColumnName="peso_t" />
+                <ScalarProperty Name="peso2" ColumnName="peso2" />
+                <ScalarProperty Name="peso1" ColumnName="peso1" />
+                <ScalarProperty Name="chofer" ColumnName="chofer" />
+                <ScalarProperty Name="producto" ColumnName="producto" />
+                <ScalarProperty Name="prov_cli" ColumnName="prov_cli" />
+                <ScalarProperty Name="user_id" ColumnName="user_id" />
+                <ScalarProperty Name="placas" ColumnName="placas" />
+                <ScalarProperty Name="fecha" ColumnName="fecha" />
+                <ScalarProperty Name="ficha" ColumnName="ficha" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="fichas_sg">
+            <EntityTypeMapping TypeName="base_forrajesModel.fichas_sg">
+              <MappingFragment StoreEntitySet="fichas_sg">
+                <ScalarProperty Name="ensilador" ColumnName="ensilador" />
+                <ScalarProperty Name="variedad" ColumnName="variedad" />
+                <ScalarProperty Name="tabla" ColumnName="tabla" />
+                <ScalarProperty Name="destino" ColumnName="destino" />
+                <ScalarProperty Name="predio_cliente" ColumnName="predio_cliente" />
+                <ScalarProperty Name="propietario_camion" ColumnName="propietario_camion" />
+                <ScalarProperty Name="sucursal" ColumnName="sucursal" />
+                <ScalarProperty Name="maquilador" ColumnName="maquilador" />
+                <ScalarProperty Name="consumo" ColumnName="consumo" />
+                <ScalarProperty Name="bunker" ColumnName="bunker" />
+                <ScalarProperty Name="arcina" ColumnName="arcina" />
+                <ScalarProperty Name="terraplen" ColumnName="terraplen" />
+                <ScalarProperty Name="rtime_rim" ColumnName="rtime_rim" />
+                <ScalarProperty Name="rtime_ip2" ColumnName="rtime_ip2" />
+                <ScalarProperty Name="rtime_ip1" ColumnName="rtime_ip1" />
+                <ScalarProperty Name="reimpresion" ColumnName="reimpresion" />
+                <ScalarProperty Name="imp_p2" ColumnName="imp_p2" />
+                <ScalarProperty Name="imp_p1" ColumnName="imp_p1" />
+                <ScalarProperty Name="Recibida" ColumnName="Recibida" />
+                <ScalarProperty Name="fic_prov" ColumnName="fic_prov" />
+                <ScalarProperty Name="p_matsec" ColumnName="p_matsec" />
+                <ScalarProperty Name="pozo" ColumnName="pozo" />
+                <ScalarProperty Name="peso_ori" ColumnName="peso_ori" />
+                <ScalarProperty Name="d5pac" ColumnName="d5pac" />
+                <ScalarProperty Name="d4pac" ColumnName="d4pac" />
+                <ScalarProperty Name="d3pac" ColumnName="d3pac" />
+                <ScalarProperty Name="d2pac" ColumnName="d2pac" />
+                <ScalarProperty Name="d1pac" ColumnName="d1pac" />
+                <ScalarProperty Name="d5tab" ColumnName="d5tab" />
+                <ScalarProperty Name="d4tab" ColumnName="d4tab" />
+                <ScalarProperty Name="d3tab" ColumnName="d3tab" />
+                <ScalarProperty Name="d2tab" ColumnName="d2tab" />
+                <ScalarProperty Name="d1tab" ColumnName="d1tab" />
+                <ScalarProperty Name="prhoja" ColumnName="prhoja" />
+                <ScalarProperty Name="maleza" ColumnName="maleza" />
+                <ScalarProperty Name="humedad12" ColumnName="humedad12" />
+                <ScalarProperty Name="humedad18" ColumnName="humedad18" />
+                <ScalarProperty Name="descolorida" ColumnName="descolorida" />
+                <ScalarProperty Name="floracion5" ColumnName="floracion5" />
+                <ScalarProperty Name="repase" ColumnName="repase" />
+                <ScalarProperty Name="corte" ColumnName="corte" />
+                <ScalarProperty Name="pacas" ColumnName="pacas" />
+                <ScalarProperty Name="caducidad" ColumnName="caducidad" />
+                <ScalarProperty Name="humedad" ColumnName="humedad" />
+                <ScalarProperty Name="color" ColumnName="color" />
+                <ScalarProperty Name="empaque" ColumnName="empaque" />
+                <ScalarProperty Name="particula" ColumnName="particula" />
+                <ScalarProperty Name="matext_lib" ColumnName="matext_lib" />
+                <ScalarProperty Name="olor" ColumnName="olor" />
+                <ScalarProperty Name="noreg" ColumnName="noreg" />
+                <ScalarProperty Name="rtime_p2" ColumnName="rtime_p2" />
+                <ScalarProperty Name="rtime_p1" ColumnName="rtime_p1" />
+                <ScalarProperty Name="rtime" ColumnName="rtime" />
+                <ScalarProperty Name="rstatus" ColumnName="rstatus" />
+                <ScalarProperty Name="folio_inv" ColumnName="folio_inv" />
+                <ScalarProperty Name="cesp" ColumnName="cesp" />
+                <ScalarProperty Name="observacio" ColumnName="observacio" />
+                <ScalarProperty Name="agrupada" ColumnName="agrupada" />
+                <ScalarProperty Name="aplica" ColumnName="aplica" />
+                <ScalarProperty Name="cvemov" ColumnName="cvemov" />
+                <ScalarProperty Name="remision" ColumnName="remision" />
+                <ScalarProperty Name="folio" ColumnName="folio" />
+                <ScalarProperty Name="termina" ColumnName="termina" />
+                <ScalarProperty Name="tmov" ColumnName="tmov" />
+                <ScalarProperty Name="obs_p2" ColumnName="obs_p2" />
+                <ScalarProperty Name="obs_p1" ColumnName="obs_p1" />
+                <ScalarProperty Name="peso_t" ColumnName="peso_t" />
+                <ScalarProperty Name="peso2" ColumnName="peso2" />
+                <ScalarProperty Name="peso1" ColumnName="peso1" />
+                <ScalarProperty Name="chofer" ColumnName="chofer" />
+                <ScalarProperty Name="producto" ColumnName="producto" />
+                <ScalarProperty Name="prov_cli" ColumnName="prov_cli" />
+                <ScalarProperty Name="user_id" ColumnName="user_id" />
+                <ScalarProperty Name="placas" ColumnName="placas" />
+                <ScalarProperty Name="fecha" ColumnName="fecha" />
+                <ScalarProperty Name="ficha" ColumnName="ficha" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="usuarios">
+            <EntityTypeMapping TypeName="base_forrajesModel.usuarios">
+              <MappingFragment StoreEntitySet="usuarios">
+                <ScalarProperty Name="rtime" ColumnName="rtime" />
+                <ScalarProperty Name="rstatus" ColumnName="rstatus" />
+                <ScalarProperty Name="tipo_user" ColumnName="tipo_user" />
+                <ScalarProperty Name="password" ColumnName="password" />
+                <ScalarProperty Name="nivel" ColumnName="nivel" />
+                <ScalarProperty Name="usuario" ColumnName="usuario" />
+                <ScalarProperty Name="user_id" ColumnName="user_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="areas">
+            <EntityTypeMapping TypeName="base_forrajesModel.areas">
+              <MappingFragment StoreEntitySet="areas">
+                <ScalarProperty Name="rtime" ColumnName="rtime" />
+                <ScalarProperty Name="rstatus" ColumnName="rstatus" />
+                <ScalarProperty Name="des_area" ColumnName="des_area" />
+                <ScalarProperty Name="area" ColumnName="area" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="articulo">
+            <EntityTypeMapping TypeName="base_forrajesModel.articulo">
+              <MappingFragment StoreEntitySet="articulo">
+                <ScalarProperty Name="codigo" ColumnName="codigo" />
+                <ScalarProperty Name="cvecla" ColumnName="cvecla" />
+                <ScalarProperty Name="id_reg" ColumnName="id_reg" />
+                <ScalarProperty Name="rtime" ColumnName="rtime" />
+                <ScalarProperty Name="rstatus" ColumnName="rstatus" />
+                <ScalarProperty Name="obsart" ColumnName="obsart" />
+                <ScalarProperty Name="unimed" ColumnName="unimed" />
+                <ScalarProperty Name="desart" ColumnName="desart" />
+                <ScalarProperty Name="cveart" ColumnName="cveart" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="camiones">
+            <EntityTypeMapping TypeName="base_forrajesModel.camiones">
+              <MappingFragment StoreEntitySet="camiones">
+                <ScalarProperty Name="id_consecutivo" ColumnName="id_consecutivo" />
+                <ScalarProperty Name="rtime" ColumnName="rtime" />
+                <ScalarProperty Name="rstatus" ColumnName="rstatus" />
+                <ScalarProperty Name="obs_cam" ColumnName="obs_cam" />
+                <ScalarProperty Name="des_cam" ColumnName="des_cam" />
+                <ScalarProperty Name="chofer" ColumnName="chofer" />
+                <ScalarProperty Name="placas" ColumnName="placas" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="no_pozos">
+            <EntityTypeMapping TypeName="base_forrajesModel.no_pozos">
+              <MappingFragment StoreEntitySet="no_pozos">
+                <ScalarProperty Name="id_establo" ColumnName="id_establo" />
+                <ScalarProperty Name="rstatus" ColumnName="rstatus" />
+                <ScalarProperty Name="no_pozo" ColumnName="no_pozo" />
+                <ScalarProperty Name="id_no_pozo" ColumnName="id_no_pozo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Producto_B">
+            <EntityTypeMapping TypeName="base_forrajesModel.Producto_B">
+              <MappingFragment StoreEntitySet="Producto_B">
+                <ScalarProperty Name="codigo" ColumnName="codigo" />
+                <ScalarProperty Name="cvecla" ColumnName="cvecla" />
+                <ScalarProperty Name="id_reg" ColumnName="id_reg" />
+                <ScalarProperty Name="rtime" ColumnName="rtime" />
+                <ScalarProperty Name="rstatus" ColumnName="rstatus" />
+                <ScalarProperty Name="obsart" ColumnName="obsart" />
+                <ScalarProperty Name="unimed" ColumnName="unimed" />
+                <ScalarProperty Name="desart" ColumnName="desart" />
+                <ScalarProperty Name="cveart" ColumnName="cveart" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="proveedo">
+            <EntityTypeMapping TypeName="base_forrajesModel.proveedo">
+              <MappingFragment StoreEntitySet="proveedo">
+                <ScalarProperty Name="rtime" ColumnName="rtime" />
+                <ScalarProperty Name="rstatus" ColumnName="rstatus" />
+                <ScalarProperty Name="cli" ColumnName="cli" />
+                <ScalarProperty Name="prov" ColumnName="prov" />
+                <ScalarProperty Name="cvecla" ColumnName="cvecla" />
+                <ScalarProperty Name="dompro" ColumnName="dompro" />
+                <ScalarProperty Name="tel2pro" ColumnName="tel2pro" />
+                <ScalarProperty Name="tel1pro" ColumnName="tel1pro" />
+                <ScalarProperty Name="contpro" ColumnName="contpro" />
+                <ScalarProperty Name="obspro" ColumnName="obspro" />
+                <ScalarProperty Name="despro" ColumnName="despro" />
+                <ScalarProperty Name="cvepro" ColumnName="cvepro" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Ninguno" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

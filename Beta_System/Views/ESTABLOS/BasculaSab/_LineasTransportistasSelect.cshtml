@@ -1,0 +1,6 @@
+﻿@model Beta_System.Models.ConexionSab.Lineas
+
+@foreach (var item in Model.ID_Linea.Zip(Model.No_linea, (id, noPozo) => new { ID_Linea = id, No_linea = noPozo }))
+{
+    <option value="@item.No_linea">@item.No_linea</option>
+}

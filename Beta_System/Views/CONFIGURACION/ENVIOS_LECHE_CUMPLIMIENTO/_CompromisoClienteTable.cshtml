@@ -1,0 +1,64 @@
+﻿@{
+    var count = ViewBag.count_tabla;
+    var compromisoIDCliente = ViewBag.compromisoIDCliente;
+    var compromisoCliente = ViewBag.compromisoCliente;
+    var contador = 1;
+    var anio = ViewBag.compromisoAnio;
+    string enlace = "_";
+    List<Beta_System.Models.C_presupuestos_meses> mes = ViewBag.compromisoMesPresupuesto as List<Beta_System.Models.C_presupuestos_meses>;
+}
+
+<div class="table-responsive">
+    <table class="table table-striped table-bordered text-center" id="tabla_compromiso_cliente_@compromisoIDCliente" style="width:100%">
+        <thead>
+            <tr class="text-left">
+                <th colspan="14"><strong>@compromisoCliente</strong></th>
+            </tr>
+            <tr class="text-center bg-beta">
+                @foreach (var item in mes)
+                {
+                    <th style="min-width:7.5%"><strong>@item.mes</strong></th>
+                }
+                <th style="min-width:10%"><strong>Total</strong></th>
+            </tr>
+        </thead>
+        <tbody id="tbody_cliente_detalle">
+            <tr>
+                @foreach (var item in mes)
+                {
+                    int diasMes = DateTime.DaysInMonth(anio, item.id_mes_presupuesto);
+                    <td>
+                        <label class="compromisoIDMes" style="display:none">@item.id_mes_presupuesto</label>
+                        <label>Lts mensual</label>
+                        <input class="form-control litros_mensual" id="litros_mensual_@item.id_mes_presupuesto@enlace@compromisoIDCliente" onkeyup="CalculoLitrosCompromiso(@compromisoIDCliente,@item.id_mes_presupuesto, @diasMes)" />
+
+                        <label>Lts diario</label>
+                        <input class="form-control litros_diario" id="litros_diario_@item.id_mes_presupuesto@enlace@compromisoIDCliente" disabled />
+
+                        <label>full mensual</label>
+                        <input class="form-control full_mensual" id="litros_full_@item.id_mes_presupuesto@enlace@compromisoIDCliente" disabled />
+                    </td>
+                }
+                <td>
+                    <label>Lts mensual</label>
+                    <input class="form-control" id="litros_total_mensual" disabled />
+
+                    <label>Lts diario</label>
+                    <input class="form-control" id="litros_total_diario" disabled />
+
+                    <label>Lts mensual</label>
+                    <input class="form-control" id="litros_total_full" disabled />
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="col-md-12">
+    <div class="col-md-6 text-left">
+        <button class="btn btn_beta_danger" onclick="CancelarCargaCompromisoCliente();">Cancelar</button>
+    </div>
+    <div class="col-md-6 text-right">
+        <button class="btn btn_beta" onclick="CargaCompromisoCliente();">Confirmar</button>
+    </div>
+</div>

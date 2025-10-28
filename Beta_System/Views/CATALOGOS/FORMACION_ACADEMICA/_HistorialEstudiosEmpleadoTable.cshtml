@@ -1,0 +1,43 @@
+﻿@model IEnumerable<Beta_System.Models.C_rh_formacion_academica_d>
+
+
+<table class="table table-striped table-bordered" id="table_historico_formacion_academica" width="100%">
+    <thead>
+        <tr class="bg-beta">
+            <th>Titulo o Carrera</th>
+            <th>Institucion educativa</th>
+            <th>Estado de escolaridad</th>
+            <th>Año de graduacion</th>
+            <th>Cedula</th>
+            <th>Path Cedula</th>
+            <th>Eliminar</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td><strong>@item.C_rh_formacion_estudio.estudio</strong></td>
+                <td><strong>@item.C_rh_formacion_universidades.universidad"</strong></td>
+                <td><strong>@item.C_rh_formacion_status.nombre_status</strong></td>
+                <td><strong>@item.anio_graduacion</strong></td>
+                <td><strong>@item.numero_cedula</strong></td>
+                <td>
+                    <div class="w-100 text-center">
+                        @if (item.path_cedula != null && item.path_cedula.Length > 0)
+                        {
+                            <a href="@item.path_cedula" id="link_cedula_@item.id_formacion_academica_g" target="_blank" class="btn btn_beta"><strong id="const_frase"></strong> <i class="fa fa-eye"></i></a>
+                        }
+                        <input type="file" id="archivoCedula" accept="application/pdf" style="display: none;" onchange="ActualizarCedulaProfesional(this,@item.C_rh_formacion_academica_g.C_nomina_empleados.FirstOrDefault().Numero,@item.id_formacion_academica_d)">
+                        <button class="btn btn_beta" onclick="document.getElementById('archivoCedula').click();"><i class="fa fa-refresh"></i></button>
+
+                    </div>
+                </td>
+                <td>
+                    <button class="btn btn_beta_danger" onclick="RemoverHistoricoFormacionAcademica(@item.id_formacion_academica_d)"><i class="fa fa-remove"></i></button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+

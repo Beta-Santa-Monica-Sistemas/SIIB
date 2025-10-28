@@ -1,0 +1,79 @@
+﻿@model IEnumerable<Beta_System.Models.C_compras_inversiones_programadas>
+
+@{
+    List<int> permisos = Session["PermisosModulo"] as List<int>;
+}
+
+<table class="table table-striped table-bordered w-100" id="datatable_inversiones" width="100%">
+    <thead>
+        <tr class="bg-beta text-center">
+            <th>Folio inversión</th>
+            <th>Concepto</th>
+            <th>Presupuesto</th>
+            <th>Periodo de aplicación</th>
+            <th>Usuario registro</th>
+            <th>Fecha de registro</th>
+            @*<th>Requisicion</th>
+                <th>Usuario aplico</th>
+                <th>Fecha de aplicacion</th>*@
+            <th>Aplicado</th>
+            <th>Requisicion</th>
+            @*<th>Activo</th>*@
+            @if (permisos.Contains(4048))
+            {
+                <th>Editar</th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr class="text-center">
+                <td>@item.folio_inversion_requi</td>
+                <td class="text-left">@item.concepto</td>
+                <td>@item.presupuesto.Value.ToString("N")</td>
+                <td>@item.fecha_aplicacion.Value.ToShortDateString()</td>
+                <td>@item.C_usuarios_corporativo.usuario</td>
+                <td>@item.fecha_registro.Value.ToShortDateString()</td>
+                @*@if (item.id_requisicion_articulo_g != null)
+                    {
+                        <td>@item.id_requisicion_articulo_g</td>
+                        <td>@item.C_usuarios_corporativo1.usuario</td>
+                        <td>@item.fecha_aplica</td>
+                    }
+                    else
+                    {
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    }*@
+                @if (item.aplicado == true)
+                {
+                    <td style="color: green"><i class="fa fa-check"></i></td>
+                    <td><strong>@item.id_requisicion_articulo_g</strong></td>
+                }
+                else
+                {
+                    <td style="color: red"><i class="fa fa-times"></i></td>
+                    <td></td>
+                }
+
+
+
+                @if (permisos.Contains(4048))
+                {
+                    if (item.aplicado == false)
+                    {
+                        <td class="text-center">
+                            <button class="btn btn_beta_icon" onclick="InfoInversion(@item.id_compra_inversion_programada)"><i class="fa fa-edit"></i></button>
+                        </td>
+                    }
+                    else
+                    {
+                        <td></td>
+                    }
+                }
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,26 @@
+﻿@model IEnumerable<Beta_System.Models.C_cargos_contables_g>
+@{
+    var cargos = Session["usuarios_cargoscontables"] as List<Beta_System.Models.C_cargos_contables_g>;
+}
+
+<table class="table table-striped table-bordered">
+    <thead>
+        <tr class="bg-beta text-center">
+            <th>Cargo contable</th>
+            <th>Asignado</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @item.nombre_cargo
+                </td>
+                <td>
+                    <input class="form-control check_cargo" type="checkbox" id="@item.id_cargo_contable_g" style="height:20px;" />
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

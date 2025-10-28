@@ -1,0 +1,140 @@
+﻿@model IEnumerable<Beta_System.Models.C_contabilidad_solicitudes_pago_d>
+
+@if (Model.Count() > 0)
+{
+    var modo = ViewBag.modo;
+    var solicitud_g = Model.FirstOrDefault().C_contabilidad_solicitudes_pago_g;
+    decimal importe = 0;
+    <div class="row">
+        <div class="col-md-2 text-center">
+            <img src="~/Content/img_layout/logo_beta_new.png" class="img-responsive" height="80" />
+        </div>
+        <div class="col-md-4 text-left">
+            <label>Folio: <strong>#@solicitud_g.id_solicitud_pago_g</strong></label><br />
+            <label>Fecha registro: <strong>@string.Format(solicitud_g.fecha_registro.ToString(), "dd/mm/yyyy HH:mm")</strong></label><br />
+            <label>Usuario registró: <strong>@solicitud_g.C_usuarios_corporativo.C_empleados.nombres @solicitud_g.C_usuarios_corporativo.C_empleados.apellido_paterno</strong></label>
+        </div>
+        <div class="col-md-2 text-left">
+            <label>Referencia: <strong>@solicitud_g.referencia</strong></label><br />
+            <label>Importe: <strong>@solicitud_g.importe.Value.ToString("N2") @solicitud_g.moneda_clave_fiscal</strong></label><br />
+            <label>Cuenta de banco: <strong>@solicitud_g.numero_cuenta</strong></label>
+        </div>
+        <div class="col-md-3 text-center">
+            <h4 style="margin:5px;">Autorizaciones</h4>
+            @if (solicitud_g.id_usuario_aut1 != null)
+            {
+                <label>Usuario validó: <strong>@solicitud_g.C_usuarios_corporativo1.C_empleados.nombres @solicitud_g.C_usuarios_corporativo1.C_empleados.apellido_paterno</strong></label><br />
+            }
+            @if (solicitud_g.id_usuario_aut2 != null)
+            {
+                <label>Usuario autorizó: <strong>@solicitud_g.C_usuarios_corporativo2.C_empleados.nombres @solicitud_g.C_usuarios_corporativo2.C_empleados.apellido_paterno</strong></label>
+            }
+        </div>
+
+    </div>
+    <hr /><div class="table-responsive" style="height:400px;min-height:400px;overflow:scroll; overflow-x:hidden;">
+        @if (modo == 2)
+        {<strong>Pagos validados</strong>}
+        @if (modo == 3)
+        {<strong>Pagos autorizados</strong>}
+
+        <table class="table table-striped table-bordered table-sm table-hover">
+            <thead>
+                <tr class="bg-beta text-center">
+                    @if (modo == 1 || modo == 2) //solicitud_g.id_solicitudes_pago_status != 3
+                    {
+                        <th>Seleccion</th>
+                    }
+                    <th>Fecha</th>
+                    <th>Referencia</th>
+                    <th>Beneficiario</th>
+                    <th>Importe</th>
+                    <th>Moneda</th>
+                    <th>Descripción</th>
+                    <th>Cuenta</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Where(x => x.activo == true))
+                {
+                    importe += (decimal)item.importe_detalle;
+                    <tr class="text-center">
+                        @if (modo == 1 || modo == 2)
+                        {
+                            <td>
+                                <input type="checkbox" value="@item.id_solicitud_pago_d" checked="checked" class="form-control check_aut_valid" style="height:20px;min-height:20px;"
+                                       id="importes_@item.id_docto_ba" name="@item.importe_detalle" onclick="CalcularImporteTotal(2);" />
+                            </td>
+                        }
+                        <td>@string.Format(item.fecha_registro.Value.ToShortDateString(), "dd/mm/yyyy")</td>
+                        <td>@item.referencia</td>
+                        <td class="text-left">@item.beneficiario_nombre</td>
+                        <td>@item.importe_detalle.Value.ToString("N2")</td>
+                        <td>@item.moneda_clave_fiscal</td>
+                        <td class="text-left">@item.descripcion</td>
+                        <td>@item.cuenta_bancaria</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <h4>Importe total: $<strong id="lbl_total_importe_aut">@importe.ToString("N2")</strong></h4>
+    <hr />
+    <strong>Pagos no autorizados</strong>
+    <table class="table table-striped table-bordered table-sm table-hover">
+        <thead>
+            <tr class="bg-beta text-center">
+                <th>Fecha</th>
+                <th>Referencia</th>
+                <th>Beneficiario</th>
+                <th>Importe</th>
+                <th>Moneda</th>
+                <th>Descripción</th>
+                <th>Cuenta</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Where(x => x.activo == false))
+            {
+                importe += (decimal)item.importe_detalle;
+                <tr class="text-center">
+                    <td>@string.Format(item.fecha_registro.Value.ToShortDateString(), "dd/mm/yyyy")</td>
+                    <td>@item.referencia</td>
+                    <td class="text-left">@item.beneficiario_nombre</td>
+                    <td>@item.importe_detalle.Value.ToString("N2")</td>
+                    <td>@item.moneda_clave_fiscal</td>
+                    <td class="text-left">@item.descripcion</td>
+                    <td>@item.cuenta_bancaria</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    if (solicitud_g.id_solicitudes_pago_status == 1)
+    { //PENDIENTE VALIDAR
+        if (solicitud_g.id_usuario_aut1 == null && modo == 1)
+        {
+            <button class="btn btn_beta" onclick="ValidarAutorizarSolicitud(@modo, @solicitud_g.id_solicitud_pago_g, true);">VALIDAR</button>
+            <button class="btn btn_beta_danger" onclick="ValidarAutorizarSolicitud(@modo, @solicitud_g.id_solicitud_pago_g, false);">RECHAZAR</button>
+        }
+    }
+    else if (solicitud_g.id_solicitudes_pago_status == 2)
+    { //PENDIENTE VALIDAR
+        if (solicitud_g.id_usuario_aut2 == null && modo == 2)
+        {
+            <button class="btn btn_beta" onclick="ValidarAutorizarSolicitud(@modo, @solicitud_g.id_solicitud_pago_g, true);">VALIDAR</button>
+            <button class="btn btn_beta_danger" onclick="ValidarAutorizarSolicitud(@modo, @solicitud_g.id_solicitud_pago_g, false);">RECHAZAR</button>
+        }
+    }
+    else if (solicitud_g.id_solicitudes_pago_status == 3 && modo == 2)
+    {
+        <button class="btn btn_beta" onclick="ValidarAutorizarSolicitud(@modo, @solicitud_g.id_solicitud_pago_g, true);">VALIDAR</button>
+        <button class="btn btn_beta_danger" onclick="ValidarAutorizarSolicitud(@modo, @solicitud_g.id_solicitud_pago_g, false);">RECHAZAR</button>
+    }
+    else
+    {
+        <button class="btn" style="background-color:@solicitud_g.C_contabilidad_solicitudes_pago_status.color; color:white;">@solicitud_g.C_contabilidad_solicitudes_pago_status.nombre_status</button>
+    }
+
+
+}

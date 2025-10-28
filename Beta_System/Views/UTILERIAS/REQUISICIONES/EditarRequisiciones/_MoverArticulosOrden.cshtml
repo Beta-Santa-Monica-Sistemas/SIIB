@@ -1,0 +1,117 @@
+﻿@model IEnumerable<Beta_System.Models.C_compras_ordenes_d>
+
+@if (Model.Count() > 0)
+{
+    int count = 0;
+    int id_orden_default = 0;
+    <h2 class="text-center bg-success text-white p-1" style="margin:3px;">MOVER ARTÍCULOS ENTRE ORDENES DE COMPRA</h2>
+    <div class="row">
+        <div class="col-md-5 text-center">
+            <br />
+            <strong>SELECCIONA UNA ORDEN</strong>
+            <hr />
+            <select class="form-control" id="select_mover_orden_1" onchange="ConsultarArticulosOrdenChecksMover(1);">
+                @foreach (var item in Model.Select(x => x.C_compras_ordenes_g).Distinct().OrderBy(x => x.id_compras_orden_g))
+                {
+                    if (count == 0) { id_orden_default = item.id_compras_orden_g; }
+                    <option value="@item.id_compras_orden_g">@item.C_centros_g.siglas @item.id_compras_orden_g</option>
+                    count++;
+                }
+            </select>
+            <br />
+            <div style="height: 400px;min-height:400px; overflow:auto; overflow-x:hidden;" id="div_mover_orden_1">
+                <table class="table table-bordered table-striped table-sm">
+                    <thead>
+                        <tr class="bg-beta text-center">
+                            <th>Mover</th>
+                            <th>Clave</th>
+                            <th>Artículo</th>
+                            <th>Unidad</th>
+                            <th>Cantidad</th>
+                            <th>Precio</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Where(x => x.id_compras_orden_g == id_orden_default))
+                        {
+                            <tr class="text-center">
+                                <td>
+                                    <input type="checkbox" name="check_mover_orden_1" value="@item.id_compras_orden_d" class="form-control" style="height: 25px;" />
+                                </td>
+                                <td>@item.C_articulos_catalogo.clave</td>
+                                <td class="text-left">@item.C_articulos_catalogo.nombre_articulo.ToUpper()</td>
+                                <td>@item.C_unidades_medidas.unidad_medida</td>
+                                <td>@item.cantidad_compra.Value.ToString("N2")</td>
+                                <td>@item.precio_unitario.Value.ToString("N2")</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="col-md-2 text-center">
+            <br />
+            <br />
+            <br />
+            <br />
+            <strong>Mover a la orden</strong><br />
+            <button class="btn btn_beta_icon"><i class="fa fa-4x fa-arrow-right" onclick="MoverArticulosOrden(1, @Model.FirstOrDefault().C_compras_ordenes_g.id_requisicion_articulo_g);"></i></button>
+
+            <br />
+            <br />
+            <br />
+            <br />
+            <strong>Mover a la orden</strong><br />            
+            <button class="btn btn_beta_icon"><i class="fa fa-4x fa-arrow-left" onclick="MoverArticulosOrden(2, @Model.FirstOrDefault().C_compras_ordenes_g.id_requisicion_articulo_g);"></i></button>
+        </div>
+
+        <div class="col-md-5 text-center">
+            <br />
+            <strong>SELECCIONA UNA ORDEN</strong>
+            <hr />
+            <select class="form-control" id="select_mover_orden_2" onchange="ConsultarArticulosOrdenChecksMover(2);">
+                @foreach (var item in Model.Select(x => x.C_compras_ordenes_g).Distinct().OrderBy(x => x.id_compras_orden_g))
+                {
+                    <option value="@item.id_compras_orden_g">@item.C_centros_g.siglas @item.id_compras_orden_g</option>
+                }
+            </select>
+            <br />
+            <div style="height: 400px;min-height:400px; overflow:auto; overflow-x:hidden;" id="div_mover_orden_2">
+                <table class="table table-bordered table-striped table-sm">
+                    <thead>
+                        <tr class="bg-beta text-center">
+                            <th>Mover</th>
+                            <th>Clave</th>
+                            <th>Artículo</th>
+                            <th>Unidad</th>
+                            <th>Cantidad</th>
+                            <th>Precio</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Where(x => x.id_compras_orden_g == id_orden_default))
+                        {
+                            <tr class="text-center">
+                                <td>
+                                    <input type="checkbox" name="check_mover_orden_2" value="@item.id_compras_orden_d" class="form-control" style="height: 25px;" />
+                                </td>
+                                <td>@item.C_articulos_catalogo.clave</td>
+                                <td class="text-left">@item.C_articulos_catalogo.nombre_articulo.ToUpper()</td>
+                                <td>@item.C_unidades_medidas.unidad_medida</td>
+                                <td>@item.cantidad_compra.Value.ToString("N2")</td>
+                                <td>@item.precio_unitario.Value.ToString("N2")</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+}
+else
+{
+    <h3 class="text-center text-danger">NO SE ENCONTRÓ INFORMACIÓN DE LA ORDEN</h3>
+}

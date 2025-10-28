@@ -1,0 +1,17 @@
+﻿@model List<List<string>>
+
+
+@if (Model != null)
+{
+    <div class="row">
+        @for (int i = 0; i < Model.Count; i++)
+        {
+            <div class="c-dashboardInfo col-md-4">
+                <div class="wrap">
+                    <h4 class="heading heading5 hind-font medium-font-weight c-dashboardInfo__title">@Model[i][0]</h4>
+                    <span class="hind-font caption-12 c-dashboardInfo__count">@Model[i][1]</span>
+                </div>
+            </div>
+        }
+    </div>
+}

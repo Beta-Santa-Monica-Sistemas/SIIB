@@ -1,0 +1,50 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+}
+
+<div class="page_title">
+    <div class="counter_section">
+        <h1>Notifcaciones globales</h1>
+    </div>
+</div>
+
+<div class="column2 counter_section">
+    <div class="row">
+        <div class="col-md-4"></div>
+        <div class="col-md-4 text-center">
+           <div id="panel-notificaciones" style="padding:10px;">
+                <textarea type="text" id="txtAnuncio" placeholder="Escribir anuncio..." class="form-control"></textarea>
+                <hr />
+                <button id="btnEnviarAnuncio" class="btn btn_beta">Enviar notificación global</button>
+                <button id="btnQuitarAnuncio" class="btn btn_beta_danger">Quitar notificación</button>
+            </div>
+        </div>
+        <div class="col-md-4"></div>
+    </div>
+</div>
+
+
+<script>
+    $(function () {
+        $('#btnEnviarAnuncio').click(function () {
+            var msg = $('#txtAnuncio').val();
+            if (msg.trim() !== "") {
+                noti.server.establecerAnuncio(msg);
+            }
+        });
+
+        $('#btnQuitarAnuncio').click(function () {
+            noti.server.quitarAnuncio();
+        });
+        
+    });
+</script>
+
+
+
+
+
+
+

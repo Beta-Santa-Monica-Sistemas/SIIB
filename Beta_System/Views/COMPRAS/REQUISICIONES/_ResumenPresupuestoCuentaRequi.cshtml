@@ -1,0 +1,77 @@
+﻿@model List<Beta_System.Models.ResumenPresupuestoCuentaRequi>
+@{ 
+    var total_requi = ViewBag.total_requi;
+    var total_disponibles = ViewBag.total_disponibles;
+
+
+}
+
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr class="bg-beta text-center">
+            <th>Cta. autorizada</th>
+            <th>Cargo</th>
+            <th>Cuenta</th>
+            <th>Presupuesto</th>
+            <th>Ejercido</th>
+            <th>En proceso</th>
+            <th>Disponible</th>
+            <th>Tolerancia (@Convert.ToInt32(ViewBag.porc_tolerancia)%)</th>
+            <th>Disponible real</th>
+            <th>Requisición</th>
+            <th>Resultado</th>
+            <th>Pendiente</th>
+            <th>Diferencia</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            var disponible_real = item.Disponible + item.Monto_tolerancia;
+            <tr class="text-center">
+                <td>
+                    @if (item.Cta_auth == true) { <i class="fa fa-2x fa-check" style="color:lawngreen;"></i> }
+                    else { <i class="fa fa-2x fa-remove" style="color:red;"></i>}
+                </td>
+                <td>@item.Cargo_contable</td>
+                <td id="@item.Id_cuenta" class="cuenta_orden">
+                    <strong>@item.Nombre_cuenta</strong>
+                    <br />
+                    <label>@item.Cuenta</label>
+                </td>
+                <td>$@item.Presupuesto.ToString("N2")</td>
+                <td>$@item.Ejercido.ToString("N2")</td>
+                <td>$@item.Proceso.ToString("N2")</td>
+                <td id="@item.Disponible" class="disponible_orden">$@item.Disponible.ToString("N2")</td>
+                <td>$@item.Monto_tolerancia.ToString("N2")</td>
+                <td>$@disponible_real.ToString("N2")</td>
+                <td>
+                    <label>$@item.Requisicion.ToString("N2")</label><br />
+                    @if (item.Id_tipo_requisicion == 3)
+                    {<strong style="color:green;">(INVERSIÓN)</strong><br />}
+
+                    @if (item.Valor_dolar != 1)
+                    {
+                        <span>($@item.Valor_dolar.ToString("N2") @item.Clave_fiscal)</span>
+                    }
+
+                </td>
+                <td id="@item.Resultado" class="resultado_orden">@item.Resultado.ToString("N2")</td>
+                <td>$@item.Pendiente.ToString("N2")</td>
+                <td>$@item.Diferencia.ToString("N2")</td>
+                <td class="cuentas_contables_orden" style="display:none">@item.Id_cuenta</td>
+                <td class="id_tipo_requisicion_firma" style="display:none;">@item.Id_tipo_requisicion</td>
+                <td class="id_requisicion_firma_g" style="display:none;">@item.Id_requi_g</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+@*<script>
+    $("#lbl_porcentaje_excedente_requisicion").text(@total_disponibles);
+
+</script>*@
+
+

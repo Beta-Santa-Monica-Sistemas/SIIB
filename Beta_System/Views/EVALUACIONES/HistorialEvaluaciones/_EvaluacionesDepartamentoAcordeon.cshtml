@@ -1,0 +1,98 @@
+﻿@model List<Beta_System.Models.C_evaluaciones_d_empleados>
+
+@if (Model.Count() > 0)
+{
+    foreach (var evaluacion in Model)
+    {
+        <div class="" id="heading_@evaluacion.id_evaluacion_d_empleado">
+            <div class="w-100 collapsed" style="border: 1px solid black; background-color: rgb(236, 244, 251);">
+                <div class="row">
+                    <div class="col-md-4 text-left ml-1">
+                        <br />
+                        <strong>@evaluacion.C_nomina_empleados.Apellido_paterno @evaluacion.C_nomina_empleados.Apellido_materno @evaluacion.C_nomina_empleados.Nombres </strong>
+                    </div>
+                    <div class="col-md-2 text-left">
+                        <br />
+                        <strong>@evaluacion.C_nomina_empleados.C_nomina_puestos.nombre_puesto </strong>
+                    </div>
+                    <div class="col-md-2 text-right">
+                        <br />
+                        <strong>CALIFICACION FINAL:</strong>
+                    </div>
+                    <div class="col-md-1 text-left">
+                        @try
+                        {
+                            <label class="porcentaje mt-3">@Convert.ToInt32(evaluacion.calificacion_final)%</label>
+                        }
+                        catch (Exception) { }
+                    </div>
+                    <div class="col-md-1 text-center">
+                        <div class="col-md-6 text-center"><button class="btn btn_beta_icon" data-toggle="collapse" data-target="#collapse_@evaluacion.id_evaluacion_d_empleado" aria-expanded="false" aria-controls="collapse_@evaluacion.id_evaluacion_d_empleado"><i class="fa fa-bars"></i></button></div>
+                    </div>
+                    <div class="col-md-1 text-center">
+                        <div class="col-md-6 text-center">
+                            <button class="btn btn_beta_icon" onclick="ConsultarEvaluacionesEmpleado(@evaluacion.id_evaluacion_g, @evaluacion.id_evaluacion_d_empleado);"><i class="fa fa-eye"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="collapse_@evaluacion.id_evaluacion_d_empleado" class="collapse" aria-labelledby="heading_@evaluacion.id_evaluacion_d_empleado" data-parent="#accordionEvaluaciones">
+            <div class="p-4" style="border: 2px solid black; background-color: rgb(236, 244, 251);">
+            <div class="porcentaje-container row">
+                @foreach (var item in evaluacion.C_evaluaciones_d_conceptos.Where(x => x.activo == true).GroupBy(x => x.id_usuario_registra))
+                {
+                    decimal calificacion_usuario = 0;
+                    int id_usuario = (int)item.FirstOrDefault().id_usuario_registra;
+                    var califica = Model.Select(x => x.C_evaluaciones_d_calificaciones.Where(z => z.activo == true && z.id_usuario_califica == id_usuario)).ToList();
+                    if (califica.Count() > 0) { calificacion_usuario = (decimal)califica.FirstOrDefault().FirstOrDefault().calificacion_final; }
+
+                    <div class="col-md-4">
+                        <div class="porcentaje-card">
+                            <h3 style="margin:5px;" class="text-center">@item.FirstOrDefault().C_usuarios_corporativo.C_empleados.nombres @item.FirstOrDefault().C_usuarios_corporativo.C_empleados.apellido_paterno - @Convert.ToInt32(calificacion_usuario)%</h3>
+                            @foreach (var rubro in item.GroupBy(x => x.C_evaluaciones_conceptos_rubros.id_evaluacion_rubro))
+                            {
+                                <div class="table-responsive">
+                                    <table class="table table-striped">
+                                        <thead>
+                                            <tr class="bg-beta">
+                                                <th colspan="3"><strong>@rubro.FirstOrDefault().C_evaluaciones_conceptos_rubros.C_evaluaciones_rubros.nombre_rubro</strong></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var concepto in rubro.OrderBy(x => x.C_evaluaciones_conceptos_rubros.nombre_concepto))
+                                            {
+                                                <tr>
+                                                    <td>@concepto.C_evaluaciones_conceptos_rubros.nombre_concepto</td>
+                                                    <td>@Convert.ToInt32(concepto.calificacion) pts</td>
+                                                    <td>@Convert.ToInt32(concepto.porcentaje_calificacion)%</td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <td><h3><strong>Total:</strong></h3></td>
+                                                <td></td>
+                                                <td><h3><strong>@Convert.ToInt32(rubro.Sum(x => x.porcentaje_calificacion))%</strong></h3></td>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                }
+            </div>
+                
+            </div>
+        </div>
+    }
+
+
+}
+else
+{
+    <h3 class="text-center text-danger">NO SE ENCONTRARON REGISTROS</h3>
+}
+
+

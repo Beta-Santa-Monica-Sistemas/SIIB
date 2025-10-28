@@ -1,0 +1,1130 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+    List<int> permisos = Session["PermisosModulo"] as List<int>;
+}
+
+<style>
+    #ui-id-3 {
+        z-index: 99999999;
+    }
+</style>
+
+<div class="page_title">
+    <div class="counter_section">
+        <h1>Requisiciones</h1>
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="nav nav-tabs">
+                    @if (permisos.Contains(4031))
+                    {
+                        <li class="active"> <a data-toggle="tab" href="#consultar_requisicion" id="consultar_requi">REQUISICIONES REGISTRADAS<i class="fa fa-search fa-2x ml-2"></i></a></li>
+                    }
+
+                    @if (permisos.Contains(4032))
+                    {
+                        <li class="active"> <a data-toggle="tab" href="#agregar_requi">GENERAR REQUISICION<i class="fa fa-plus fa-2x ml-2"></i></a></li>
+                    }
+
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row column2 counter_section">
+    <div class="tab-content">
+
+        <!--CONSULTAR REQUISICION-->
+        @if (permisos.Contains(4031))
+        {
+            <div id="consultar_requisicion" class="tab-pane fade in active show">
+                <h3 class="text-center">Consultar requisición</h3>
+                <div class="row">
+                    <div class="col-md-2">
+                        <strong>Centro</strong>
+                        <select class="form-control" id="id_centro_search">
+                            <option value="0">Todas</option>
+                            @{ Html.RenderAction("CentrosUsuariosSelect", "CATALOGOS", new { id_usuario = (int)Session["LoggedId"] }); }
+                        </select>
+                    </div>
+                    @*<div class="col-md-1">
+                            <div class="row">
+                                <div class="form-check" style="width:100%; padding-top:14px">
+                                    <input class="form-check-input" type="radio" name="buscars_requi" value="0" onchange="mostrarfiltroRequi(0);" checked />
+                                    <label class="form-check-label">Buscar sin filtro</label>
+                                </div>
+
+                                <div class="form-check" style="width:100%">
+                                    <input class="form-check-input" type="radio" name="buscars_requi" value="1" onchange="mostrarfiltroRequi(1);" />
+                                    <label class="form-check-label">Buscar con filtro</label>
+                                </div>
+                            </div>
+                        </div>*@
+                    <div class="col-md-2 divs_search" @*style="display:none"*@ id="filtros_div_requi_1">
+                        <strong>Fecha inicial</strong>
+                        <input type="date" class="form-control" id="requi_fecha_inicial" />
+                    </div>
+                    <div class="col-md-2 divs_search" @*style="display:none"*@ id="filtros_div_requi_2">
+                        <strong>Fecha final</strong>
+                        <input type="date" class="form-control" id="requi_fecha_final" />
+                    </div>
+                    <div class="col-md-2 divs_search" @*style="display:none"*@ id="filtros_div_tipo">
+                        <strong>Tipo de orden</strong>
+                        <select class="form-control" id="requi_id_tipo_requi">
+                            <option value="0">Todas</option>
+                            @{ Html.RenderAction("ConsultarTiposRequisiciones", "CATALOGOS"); }
+                        </select>
+                    </div>
+                    <div class="col-md-2 divs_search" @*style="display:none"*@ id="filtros_div_status">
+                        <strong>Estatus</strong>
+                        <select class="form-control" id="requi_id_status">
+                            <option value="0">Todas</option>
+                            @{ Html.RenderAction("ConsultarStatusRequisicionesSelect", "CATALOGOS"); }
+                        </select>
+                    </div>
+
+                    <div class="col-md-1">
+                        <strong>Folio</strong>
+                        <input type="text" class="form-control" id="requi_folio" />
+                    </div>
+                    <div class="col-md-1 text-left">
+                        <br />
+                        <button class="btn btn_beta_icon" onclick="ConsultarRequiGenerada();"><i class="fa fa-search"></i></button>
+                    </div>
+                </div>
+                <hr />
+                <div class="table-responsive">
+                    <div id="div_requis_revision"></div>
+                </div>
+            </div>
+        }
+
+
+        <!--REGISTRAR REQUI-->
+        @if (permisos.Contains(4032))
+        {
+            <div id="agregar_requi" class="tab-pane">
+                <h3 class="text-center">Generar requisición</h3>
+                <div class="row">
+                    <div class="col-md-2"><h3 class="mt-2"><strong>Tipo de requisición:</strong></h3></div>
+                    <div class="col-md-12" style="display:none">
+                        <label id="codigo_articulo"></label>
+                    </div>
+                    <div class="col-md-2">
+                        <select class="form-control" id="id_tipo_requisicion" onchange="ShowHideFormularioProveedor(1);">
+                            <option value="0">SELECCIONA UN TIPO</option>
+                            @{ Html.RenderAction("ConsultarTiposRequisiciones", "CATALOGOS"); }
+                        </select>
+                    </div>
+                    <div class="col-md-2" style="display:none;" id="div_folio_inversion">
+                        <input type="text" class="form-control" id="folio_inversion" placeholder="Ingresa el folio de inversión" />
+                    </div>
+
+
+                    <div class="col-md-2"><button class="btn btn_beta_danger" id="btn_change_form" style="display: none;" onclick="ShowHideFormularioProveedor(2);">Cambiar</button></div>
+                </div>
+
+                <div id="div_formulario_requi" style="display: none;">
+                    <div class="row" style="border-top: .5px solid #2e87d7"></div>
+                    <br />
+                    <div class="row">
+                        <div class="col-md-4">
+                            <strong>Centro</strong>
+                            <select class="form-control input_validos" id="id_centro" onchange="">
+                                <option value="selecte_centro">SELECCIONAR CENTRO</option>
+                                @{ Html.RenderAction("CentrosUsuariosSelect", "CATALOGOS", new { id_usuario = (int)Session["LoggedId"] }); }
+                            </select>
+                        </div>
+
+                        @* MODIFICACION DE CONCEPTOS PARA SERVICIOS *@
+                        <div class="col-md-5" id="div_concepto_regular">
+                            <strong>Concepto</strong>
+                            <input type="text" class="form-control input_clear_art input_validos" id="concepto" />
+                        </div>
+
+                        <div class="col-md-6" id="div_concepto_servicio" style="display: none;">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <strong>Documento</strong>
+                                    <input type="text" class="form-control input_clear_art input_validos input_conceptos" id="factura_concepto" />
+                                </div>
+                                <div class="col-md-5">
+                                    <strong>Proveedor</strong>
+                                    <input type="text" class="form-control input_clear_art input_validos input_conceptos" id="proveedor_concepto" />
+                                </div>
+                                <div class="col-md-5">
+                                    <strong>Concepto</strong>
+                                    <input type="text" class="form-control input_clear_art input_validos input_conceptos" id="descripcion_concepto" />
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="col-md-2">
+                            <strong>Prioridad</strong>
+                            <select class="form-control " id="id_prioridad">@{ Html.RenderAction("ConsultarPrioriedadSelect", "CATALOGOS"); };</select>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <div class="col-md-6">
+                            <strong>Cargo contable</strong>
+                            <select class="form-control input_validos" id="select_cargo" onchange="ConsultarCuentasCargosUsuarioSelect();">
+                                <option value="select_cargo">SELECCIONAR CARGO CONTABLE</option>
+                                @*@{ Html.RenderAction("ConsultarCargosContables", "CATALOGOS"); };*@
+                                @{ Html.RenderAction("CargoContableCuentaUsuariosSelect", "CATALOGOS", new { id_usuario = (int)Session["LoggedId"] }); }
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <strong>Cuenta contable </strong>
+                            <select class="form-control input_validos" id="select_cuenta" onchange="ConsultarCuentasContableSelect(); EnfocarComponente();">
+                                <option value="selecte_cuenta">SELECCIONAR CUENTA</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <strong>Cuenta: </strong>
+                            <br />
+                            <strong id="cuentas"></strong>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <div class="col-md-10">
+                            <div class="col-md-1">
+                                <strong>Clave art.</strong>
+                                <br />
+                                <input type="text" class="form-control input_detalle input_validos solo-letras-numeros" id="id_articulos" name="id_articulos" onclick="" oninput="this.value = this.value.toUpperCase()">
+
+                            </div>
+                            <div class="col-md-6">
+                                <strong>Artículo</strong>
+                                <br />
+                                <input type="text" class="form-control input_detalle input_validos" id="id_articulo" placeholder="Ingresa un artículo" name="id_articulo" onclick="">
+                            </div>
+                            <div class="col-md-5">
+                                <div class="col-md-2" style="padding-top:19px">
+                                    <i class="fa fa-2x fa-search text_beta" onclick="LupaArticulo(1);"></i>
+                                </div>
+                                <div class="col-md-3 text-center">
+                                    <strong>Unidad de medida</strong>
+                                    <br />
+                                    <strong id="unidad_medida"></strong>
+                                    <input type="text" readonly id="id_unidad_medida" style="display:none;" />
+                                </div>
+                                <div class="col-md-3">
+                                    <strong>Cantidad</strong>
+                                    <input type="text" class="form-control input_detalle input_valid input_validos solo-numeros" id="cantidad" />
+                                </div>
+                                <div class="col-md-4" id="div_precio_orden_compra">
+                                    <strong>Ult. precio ($)</strong>
+                                    <input type="text" class="form-control solo-numeros" id="precio" value="0.00" />
+                                </div>
+                            </div>
+                            <div class="col-md-12"><br /></div>
+                            <div class="col-md-12">
+                                <strong>Observaciones</strong>
+                                <input type="text" class="form-control input_detalle" id="observacion" />
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="table-responsive">
+                                <div id="div_tabla_articulo_existencia"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                    <div id="div_proveedor" style="display: none;">
+                        <div class="row text-left">
+                            <div class="col-md-5">
+                                <div class="row text-left">
+                                    <div class="col-md-12">
+                                        <strong>Solicitante</strong>
+                                        <select class="form-control" id="id_solicitante">
+                                            <option value="0">Selecciona el solicitante</option>
+                                            @{Html.RenderAction("ConsultarEmpleadosActivosSelect", "EMPLEADOS");}
+                                        </select>
+                                    </div>
+                                </div>
+                                <br />
+                                <div class="row">
+                                    <div class="col-md-2">
+                                        <strong class="text-left">Clave prov.</strong>
+                                        <input class="form-control input_valid input_detalle solo-numeros" id="clave_proveedor" type="text" name="clave_proveedor" />
+                                    </div>
+                                    <div class="col-md-9">
+                                        <strong class="text-left">Proveedor</strong>
+                                        <input class="form-control input_valid input_detalle " id="id_proveedor" type="text" name="id_proveedor" placeholder="Ingresa el nombre del proveedor" />
+                                    </div>
+
+
+                                    <div style="display: flex; justify-content: center; align-items: center;">
+                                        <div style="padding-top: 16px;">
+                                            <i class="fa fa-2x fa-search text_beta" onclick="LupaProveedores(1);"></i>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                                <br />
+                                <div class="row">
+                                    <div class="col-md-3 text-center">
+                                        <strong>Nuevo precio</strong>
+                                        <br />
+                                        <input type="checkbox" id="check_new_cotizacion" style="min-height:20px;" class="form-control" onchange="ShowHideNewCotizacion(1)" />
+                                    </div>
+                                    <div class="col-md-5" id="div_new_cotizacion" style="display:none;">
+                                        <div class="row">
+                                            <input type="text" class="form-control input_valid input_detalle solo-numeros" id="precio_new_cotizacion" placeholder="Ingresa el nuevo precio" />
+
+                                            @*<div class="col-md-4 text-center">
+                                                    <select class="form-control" id="moneda_new_cotizacion">
+                                                        @{ Html.RenderAction("ConsultarTipoMoneda", "CATALOGOS"); }
+                                                    </select>
+                                                </div>*@
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 text-center">
+                                        <label>Moneda del proveedor:</label>
+                                        <br />
+                                        <strong id="clave_fiscal_moneda_new_cotizacion"></strong>
+                                        <label id="moneda_new_cotizacion" style="display:none;"></label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-7">
+                                <div id="div_cotizaciones_proveedor"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 text-right">
+                            <br />
+                            <button class="btn btn_beta" onclick="ConsultarInformacionRequisicion(); RegistrarArtRequi(); ">Agregar articulo</button>
+                        </div>
+                    </div>
+
+
+                    <br />
+                    <div class="row">
+                        <h3>Detalle de Requisición</h3>
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered text-center" id="articulos_table_solicitud">
+                                <thead>
+                                    <tr class="text-center bg-beta">
+                                        <th>Articulo</th>
+                                        <th>Medida</th>
+                                        <th>Descripción</th>
+                                        <th>Cantidad</th>
+                                        <th>Precio</th>
+                                        <th>Importe</th>
+                                        <th style="display:none;">id_unidad_medida</th>
+                                        <th>Observaciones</th>
+                                        <th style="display:none;">id_centro_g</th>
+                                        <th>Cargo Contable</th>
+                                        <th style="display:none;">id_cargo_contable</th>
+                                        <th style="display:none;">id_cuenta_contable_g</th>
+                                        <th>Eliminar</th>
+                                    </tr>
+                                </thead>
+                                <thead id="thead_requi_articulos">
+
+                                </thead>
+                            </table>
+                        </div>
+                        <div class="col-md-4"></div>
+                        <div class="col-md-3 text-left">
+                            <h3 class="p-2" style="border-radius: 2rem;"><strong class="text_beta" id="cantidad_total_requisicion">CANTIDAD TOTAL: 0.00</strong></h3>
+                        </div>
+                        <div class="col-md-5 text-right">
+                            <h3 class="p-2" style="border-radius: 2rem;"><strong class="text_beta" id="importe_total_requisicion">IMPORTE TOTAL: $0.000000000</strong></h3>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 text-center">
+                            <button class="btn btn_beta" onclick="RegistrarRequi();">Generar requisicion</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        }
+
+    </div>
+
+</div>
+
+
+<!--Modal LUPA Articulos-->
+<div class="modal fade" id="m_lupa_articulos" tabindex="-1" role="dialog" aria-labelledby="m_lupa_articulos" aria-hidden="true">
+    <div class="modal-dialog" role="document" style="min-width:60%; max-height:700px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="m_lupa_articulos_lbl">Lista de articulos</h2>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="col-md-4">
+                    <strong>Clasificación</strong>
+                    <select class="form-control " id="id_clasificaciones_art" onchange="LupaArticuloParametro(1);">
+                        <option value="-1">NINGUNA</option>
+                        <option value="0">TODAS</option>
+                        @{ Html.RenderAction("ConsultarClasificacionSelect", "ARTICULOS"); };
+                    </select>
+                </div>
+                <div id="div_lupa_articulos"></div>
+            </div>
+
+            <div class="col-md-12">
+                <label id="mensaje_prueba"></label>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn_beta_danger" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Modal LUPA Proveedor-->
+<div class="modal fade" id="m_lupa_proveedor" tabindex="-1" role="dialog" aria-labelledby="m_lupa_proveedor" aria-hidden="true">
+    <div class="modal-dialog" role="document" style="min-width:75%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="m_lupa_proveedor_lbl">
+                    Lista de proveedores
+                </h2>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="div_lupa_proveedor"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn_beta_danger" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- MODAL EDITAR ARTICULO REQUISICION -->
+<div class="modal fade" id="m_editar_articulo_requisicion_auth" tabindex="-1" role="dialog" aria-labelledby="editar_articulo_utileriaLabel" aria-hidden="true" style="z-index:999999;">
+    <div class="modal-dialog" role="document" style="min-width:80%; width:80%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editar_articulo_utileriaLabel">Editar articulo requisición</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="col-md-12 text-center">
+                    <h4 style="margin:5px;">Articulo a modificar:</h4>
+                    <h3 style="margin:5px;" id="txt_nombre_articulo_ediar"></h3>
+                    <hr />
+
+                    <div class="row">
+                        <div class="col-md-4">
+                            <strong>Nuevo artículo</strong>
+                            <select class="form-control" id="id_nuevo_articulo_editar_serv">
+                                @*@{ Html.RenderAction("ConsultarArticulosSistemaRubro", "ARTICULOS", new { id_rubro = 1, almacenable = 1 }); }*@
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <strong>Cargo contable</strong>
+                            <select class="form-control" id="select_cargo_editar" onchange="ConsultarCuentasContablesCargosSelect();">
+                                <option value="select_cargo">SELECCIONAR CARGO CONTABLE</option>
+                                @{ Html.RenderAction("CargoContableCuentaUsuariosSelect", "CATALOGOS", new { id_usuario = 0}); };
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <strong>Cuenta contable </strong>
+                            <select class="form-control select_cuenta" id="select_cuenta_editar">
+                                <option value="selecte_cuenta">SELECCIONAR CUENTA</option>
+                            </select>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <div class="col-md-2">
+                            <strong>Cantidad:</strong>
+                            <input type="number" id="cantidad_articulo_editar" class="form-control" />
+                        </div>
+                        <div class="col-md-8">
+                            <strong>Observaciones</strong>
+                            <textarea id="obsercacion_articulo_editar" rows="1" class="form-control"></textarea>
+                        </div>
+                        <div class="col-md-2">
+                            <strong>Cambiar cotización</strong>
+                            <input type="checkbox" name="check_cambiar_cotizacion_serv" id="check_cambiar_cotizacion_serv" class="form-control" style="height: 20px; min-height:20px;" onclick="ShowHideNewCotizacionEditar();" />
+                        </div>
+                    </div>
+                    <br />
+                    @* FORMULARIO DE EDICIÓN PARA REQUISICION DE SERVICIO *@
+                    <br />
+                    <div id="div_formulario_cotizacion_serv" style="display:none;">
+                        <div class="row">
+                            <div class="col-md-2">
+                                <strong>Clave prov.</strong>
+                                <input class="form-control input_valid input_detalle solo-numeros" id="clave_proveedor_serv" type="text" name="clave_proveedor_serv" />
+                            </div>
+                            <div class="col-md-8">
+                                <strong>Proveedor</strong>
+                                <input class="form-control input_valid input_detalle " id="id_proveedor_serv" type="text" name="id_proveedor_serv" placeholder="Ingresa el nombre del proveedor" />
+                            </div>
+                            <div class="col-md-2 text-center">
+                                <label>Moneda del proveedor:</label>
+                                <br />
+                                <strong id="clave_fiscal_moneda_new_cotizacion_serv"></strong>
+                                <label id="moneda_new_cotizacion_serv" style="display:none;"></label>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="col-md-2">
+                                <strong>Nuevo precio</strong>
+                                <br />
+                                <input type="checkbox" id="check_new_cotizacion_serv" style="min-height:20px;" class="form-control" onchange="ShowHideNewCotizacion(2)" />
+                            </div>
+                            <div class="col-md-5" id="div_new_cotizacion_serv" style="display:none;">
+                                <input type="text" class="form-control input_valid input_detalle solo-numeros" id="precio_new_cotizacion_serv" placeholder="Ingresa el nuevo precio" />
+                            </div>
+                        </div>
+                        <br />
+                        <div id="div_cotizaciones_proveedor_serv"></div>
+                    </div>
+                    
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn_beta_danger" data-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn_beta" id="btn_actualizar_articulo_editar">Actualizar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@Scripts.Render("~/bundles_SolicitudesMercancia/js")
+@Scripts.Render("~/bundles_Articulos/js")
+@Scripts.Render("~/bundles_Requisiciones/js")
+@Scripts.Render("~/bundles_Propiedades/js")
+@Scripts.Render("~/bundles_Proveedores/js")
+
+
+<script type="text/javascript">
+    var id_cotizacion_servicio = 0;
+    var id_cotizacion_servicio_serv = 0;
+    var count_articulos_detalle = 0;
+
+    $(window).on("load", function () {
+        ConsultarCuentasCargosUsuarioSelect();
+        ConsultarRequiGenerada();
+        CaracteresControl();
+
+        $("#id_solicitante").select2({
+            placeholder: 'Selecciona un solicitante'
+        });
+
+        $("#id_articulo").autocomplete({
+            source: function (request, response) {
+                var id_tipo_requi = $("#id_tipo_requisicion").val();
+                if (id_tipo_requi == 2) {
+                    id_tipo_requi = 2;
+                }
+                else {
+                    id_tipo_requi = 1;
+                }
+                $.ajax({
+                    type: "POST",
+                    async: false,
+                    url: "../ARTICULOS/ConsultarArticulosArray",
+                    data: {
+                        search: $("#id_articulo").val(),
+                        id_tipo: id_tipo_requi,
+                        almacenable: 0
+                    },
+                    success: function (data) {
+                        var data2 = $.parseJSON(data);
+                        response($.map(data2, function (item) {
+                            return { label: item.nombre_articulo, value: item.nombre_articulo };
+                        }))
+                    },
+                    error: function (xhr, status, error) {
+                        alert(error);
+                    }
+                });
+            }
+        });
+        $('#id_articulo').on('keydown', function (event) {
+            if (event.keyCode === 13 || event.keyCode === 9) {
+                ConsultarInformacionArticuloNomb(1);
+                ConsultarCotizacionesArticuloProveedor(1);
+                BuscarPrecioArticulo();
+            }
+            if ($('#id_articulo').lenght > 5) {
+
+            }
+            if ($('#id_articulo').val() == '') {
+                $("#unidad_medida").text('');
+                $("#id_unidad_medida").val('');
+                $("#id_articulos").val('');
+                $("#precio").val('0.00');
+                $("#codigo_articulo").text('');
+                $("#div_tabla_articulo_existencia").html('');
+            }
+        });
+        $('#id_articulos').on('keydown', function (event) {
+            if ($("#id_articulos").val() != '') {
+                var articulo_id = $("#id_articulos").val();
+                if (event.keyCode === 13 || event.keyCode === 9) {
+                    ConsultarInformacionArticuloID(1);
+                    ConsultarCotizacionesArticuloProveedor(1);
+                    BuscarPrecioArticulo();
+                    ConsultarExistenciaArticuloAlmacenTable();
+                }
+            }
+            else if (event.keyCode === 13 || event.keyCode === 9) {
+                $("#id_articulos").css("border-color", "red");
+                iziToast.warning({
+                    title: 'Aviso',
+                    message: 'La clave ingresada no es válida.',
+                });
+            }
+            if ($('#id_articulos').val() == '') {
+                $("#unidad_medida").text('');
+                $("#id_unidad_medida").val('');
+                $("#id_articulo").val('');
+                $("#precio").val('0.00');
+                $("#codigo_articulo").text('');
+                $("#div_tabla_articulo_existencia").html('');
+            }
+        });
+        $("#ui-id-1").on('click', function (event) {
+            //ConsultarInformacionArticuloID();
+            ConsultarInformacionArticuloNomb(1);
+            ConsultarCotizacionesArticuloProveedor(1);
+            BuscarPrecioArticulo();
+            ConsultarExistenciaArticuloAlmacenTable();
+        });
+        $("#id_proveedor").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    type: "POST",
+                    async: true,
+                    url: "../PROVEEDORES/ConsultarProveedoresArray",
+                    data: {
+                        search: $("#id_proveedor").val()
+                    },
+                    success: function (data) {
+                        var data2 = $.parseJSON(data);
+                        response($.map(data2, function (item) {
+                            //return { label: item.razon_social, value: item.id_compras_proveedor };
+
+                            return { label: item.razon_social + " (" + item.clave_fiscal + ")", value: item.razon_social };
+                        }))
+                    },
+                    error: function (xhr, status, error) {
+                        alert(error);
+                    }
+                });
+            }
+        });
+        $('#id_proveedor').keydown(function (e) {
+            if ($("#id_proveedor").val() != '') {
+                if (e.keyCode === 13 || e.keyCode === 9) {
+                    ConsultarClaveProveedor(1);
+                    ConsultarCotizacionesArticuloProveedor(1);
+                }
+            }
+
+        });
+        $('#clave_proveedor').keydown(function (e) {
+            if ($("#clave_proveedor").val() != '') {
+                if (e.keyCode === 13 || e.keyCode === 9) {
+                    ConsultarInformacionProveedorNomb(1);
+                    ConsultarCotizacionesArticuloProveedor(1);
+                }
+            }
+
+        });
+        $("#ui-id-2").on('click', function (event) {
+            ConsultarClaveProveedor(1);
+            ConsultarCotizacionesArticuloProveedor(1);
+        });
+
+
+        /*FORMULARIO PARA EDICION DE REQUISICION DE SERVICIO*/
+        $("#id_nuevo_articulo_editar").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    type: "POST",
+                    async: false,
+                    url: "../ARTICULOS/ConsultarArticulosArray",
+                    data: {
+                        search: $("#id_articulo").val(),
+                        id_tipo: 2,
+                        almacenable: 0
+                    },
+                    success: function (data) {
+                        var data2 = $.parseJSON(data);
+                        response($.map(data2, function (item) {
+                            return { label: item.nombre_articulo, value: item.nombre_articulo };
+                        }))
+                    },
+                    error: function (xhr, status, error) {
+                        alert(error);
+                    }
+                });
+            }
+        });
+        $('#id_nuevo_articulo_editar').on('keydown', function (event) {
+            if (event.keyCode === 13 || event.keyCode === 9) {
+                ConsultarInformacionArticuloNomb(1);
+                ConsultarCotizacionesArticuloProveedor(1);
+                BuscarPrecioArticulo();
+            }
+            if ($('#id_nuevo_articulo_editar').lenght > 5) {
+
+            }
+            if ($('#id_nuevo_articulo_editar').val() == '') {
+                $("#precio_new_cotizacion_serv").val('0.00');
+            }
+        });
+        $('#id_nuevo_articulo_editar').on('keydown', function (event) {
+            if ($("#id_nuevo_articulo_editar").val() != '') {
+                var articulo_id = $("#id_nuevo_articulo_editar").val();
+                if (event.keyCode === 13 || event.keyCode === 9) {
+                    ConsultarInformacionArticuloID(1);
+                    ConsultarCotizacionesArticuloProveedor(2);
+                }
+            }
+            else if (event.keyCode === 13 || event.keyCode === 9) {
+                $("#id_nuevo_articulo_editar").css("border-color", "red");
+                iziToast.warning({
+                    title: 'Aviso',
+                    message: 'La clave ingresada no es válida.',
+                });
+            }
+            if ($('#id_nuevo_articulo_editar').val() == '') {
+            }
+        });
+        $("#ui-id-3").on('click', function (event) {
+            //ConsultarInformacionArticuloID();
+            //ConsultarInformacionArticuloNomb(1);
+            ConsultarCotizacionesArticuloProveedor(2);
+        });
+        $("#id_proveedor_serv").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    type: "POST",
+                    async: true,
+                    url: "../PROVEEDORES/ConsultarProveedoresArray",
+                    data: {
+                        search: $("#id_proveedor_serv").val()
+                    },
+                    success: function (data) {
+                        var data2 = $.parseJSON(data);
+                        response($.map(data2, function (item) {
+                            //return { label: item.razon_social, value: item.id_compras_proveedor };
+
+                            return { label: item.razon_social + " (" + item.clave_fiscal + ")", value: item.razon_social };
+                        }))
+                    },
+                    error: function (xhr, status, error) {
+                        alert(error);
+                    }
+                });
+            }
+        });
+        $('#id_proveedor_serv').keydown(function (e) {
+            if ($("#id_proveedor_serv").val() != '') {
+                if (e.keyCode === 13 || e.keyCode === 9) {
+                    ConsultarClaveProveedor(2);
+                    ConsultarCotizacionesArticuloProveedor(2);
+                }
+            }
+
+        });
+        $('#clave_proveedor_serv').keydown(function (e) {
+            if ($("#clave_proveedor_serv").val() != '') {
+                if (e.keyCode === 13 || e.keyCode === 9) {
+                    ConsultarInformacionProveedorNomb(2);
+                    ConsultarCotizacionesArticuloProveedor(2);
+                }
+            }
+
+        });
+
+
+
+
+
+        $("#folio_inversion").keydown(function (e) {
+            if ($("#folio_inversion").val() != '') {
+                if (e.keyCode === 13 || e.keyCode === 9) {
+                    ValidarFolioInversion($("#folio_inversion").val());
+                }
+            }
+
+        });
+
+    });
+
+    function ValidarFolioInversion(folio) {
+        $.ajax({
+            type: "POST",
+            async: false,
+            url: "../REQUISICIONES/ValidarFolioInversion",
+            data: {
+                folio: folio
+            },
+            success: function (response) {
+                $("#unidad_medida").text('');
+                $("#clave_proveedor").val("");
+                $("#id_proveedor").val("");
+                var btn_change = $("#btn_change_form");
+                var div_proveedor = $("#div_proveedor");
+                var div_formulario_requi = $("#div_formulario_requi");
+                var div_precio_orden_compra = $("#div_precio_orden_compra");
+                var id_tipo_requi = $("#id_tipo_requisicion");
+                btn_change.css("display", "none");
+                id_tipo_requi.removeAttr("disabled");
+                btn_change.css("display", "none");
+                div_proveedor.css("display", "none");
+
+                if (response == "-1") {
+                    iziToast.warning({
+                        title: 'No se encontró el folio',
+                        message: '',
+                    });
+                }
+                else if (response == "-2") {
+                    iziToast.error({
+                        title: 'Este folio ya fue usado en una requisición',
+                        message: '',
+                    });
+                }
+                else if (response == "-3") {
+                    iziToast.error({
+                        title: 'Inversion programada para otra fecha',
+                        message: '',
+                    });
+                }
+                else {
+                    iziToast.success({
+                        title: 'Inversion encontrada',
+                        message: '',
+                    });
+                    div_precio_orden_compra.css("display", "block");
+                    div_proveedor.css("display", "none");
+                    id_tipo_requi.attr("disabled", "false");
+                    btn_change.css("display", "block");
+                    $("#folio_inversion").attr("disabled", "true");
+                    div_formulario_requi.toggle("blind");
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error(error);
+            }
+        });
+    }
+
+    function ShowHideFormularioProveedor(modo) {
+        $("#div_tabla_articulo_existencia").html('');
+        $("#unidad_medida").text('');
+        $("#clave_proveedor").val("");
+        $("#id_proveedor").val("");
+        var btn_change = $("#btn_change_form");
+        var div_proveedor = $("#div_proveedor");
+        var div_formulario_requi = $("#div_formulario_requi");
+        var div_precio_orden_compra = $("#div_precio_orden_compra");
+        var id_tipo_requi = $("#id_tipo_requisicion");
+
+        var div_folio_inversion = $("#div_folio_inversion");
+        var id_folio_inversion = $("#folio_inversion");
+
+        $("#id_solicitante").find('option[value=0]').prop('selected', 'selected');
+        $("#select2-id_solicitante-container").text("Selecciona el solicitante");
+
+        $("#div_concepto_regular").css("display", "none");
+        $("#div_concepto_servicio").css("display", "none");
+
+        if (modo == 1) {
+
+            //-----------SERVICIO
+            if (id_tipo_requi.val() == 2) {
+                div_precio_orden_compra.css("display", "none");
+                div_proveedor.css("display", "block");
+                id_tipo_requi.attr("disabled", "true");
+                btn_change.css("display", "block");
+                div_folio_inversion.css("display", "none");
+                id_folio_inversion.val("");
+                div_formulario_requi.toggle("blind");
+
+                $("#div_concepto_servicio").css("display", "block");
+
+            }
+
+            //------------INVERSION
+            else if (id_tipo_requi.val() == 3) {
+                div_folio_inversion.css("display", "block");
+                $("#folio_inversion").focus();
+                $("#div_concepto_regular").css("display", "block");
+            }
+
+            //------------SELECCIONA UN TIPO
+            else if (id_tipo_requi.val() == 0) {
+                btn_change.css("display", "none");
+                id_tipo_requi.removeAttr("disabled");
+                btn_change.css("display", "none");
+                div_proveedor.css("display", "none");
+                div_folio_inversion.css("display", "none");
+                id_folio_inversion.val("");
+                LimpiarFormularioRequi();
+                $("#id_tipo_requisicion").find('option[value=0]').prop('selected', 'selected');
+            }
+
+
+            else {  //COMPRA
+                div_precio_orden_compra.css("display", "block");
+                div_proveedor.css("display", "none");
+                id_tipo_requi.attr("disabled", "false");
+                btn_change.css("display", "block");
+                div_folio_inversion.css("display", "none");
+                div_formulario_requi.toggle("blind");
+
+                $("#div_concepto_regular").css("display", "block");
+            }
+        }
+        else {
+            id_tipo_requi.removeAttr("disabled");
+            div_proveedor.css("display", "none");
+            LimpiarFormularioRequi();
+            btn_change.css("display", "none");
+            div_folio_inversion.css("display", "none");
+            id_folio_inversion.val("");
+            $("#folio_inversion").removeAttr("disabled");
+            $("#id_tipo_requisicion").find('option[value=0]').prop('selected', 'selected');
+        }
+    }
+
+    function ConsultarInformacionRequisicion() {
+        if ($("#id_articulos").val() != "" && $("#id_articulo").val() != "") {
+            ConsultarInformacionArticuloID(1);
+        }
+    }
+
+    function RegistrarArtRequi() {
+        var limite_articulos = $(".id_articulos").length;
+        if (limite_articulos >= 25) {
+            iziToast.warning({
+                title: '¡Aviso!',
+                message: 'El limite de articulos por requisicion es de 25',
+            });
+            return;
+        }
+
+
+        $(".input_valid").each(function () {
+            if ($(this).val() == "") { $(this).css("border-color", "red"); }
+            else { $(this).css("border", ""); }
+        });
+        $(".input_validos").each(function () {
+            if ($(this).val() == "") { $(this).css("border-color", "red"); }
+            else { $(this).css("border", ""); }
+        });
+
+        $(".input_conceptos").each(function () {
+            if ($(this).val() == "") { $(this).css("border-color", "red"); }
+            else { $(this).css("border", ""); }
+        });
+
+        var id_articulo = $("#id_articulos").val();
+        var articulo = $("#id_articulo").val();
+        var cantidad = parseFloat($("#cantidad").val());
+        var precios = $("#precio").val();
+        var precio = precios.replace(new RegExp(",", 'g'), '');
+        var unidad_medida = $("#unidad_medida").text();
+        var id_unidad_medidas = $("#id_unidad_medida").val();
+        var datos = id_unidad_medidas.split('|');
+        var id_unidad_medida = datos[0];
+        var acepta_decimal = datos[1];
+        var observacion = $("#observacion").val();
+        var id_centro_g = $("#id_centro").val();
+        var id_cargo_contable = $("#select_cargo").val();
+        var id_cuenta_contable_g = $("#select_cuenta").val();
+        var cargo_contable = $("#cuentas").text() + ". " + $("#select_cargo option:selected").text();
+        var id_articulo_original = parseInt($("#codigo_articulo").text());
+        var nomarticulo = $("#articulos_table_solicitud").find('td:eq(6)').text();
+        var id_tipo_requi = $("#id_tipo_requisicion").val();
+        var cve_prov = $("#clave_proveedor").val();
+        var id_cotizacion = id_cotizacion_servicio;
+        var id_tipo_moneda = 0;
+        var new_cotizacion = false;
+        if ($("#check_new_cotizacion").is(':checked')) {
+            new_cotizacion = true;
+            precio = $("#precio_new_cotizacion").val();
+            id_tipo_moneda = $("#moneda_new_cotizacion").text();
+        }
+
+        //VALIDACION REQUISICION DE SERVICIO
+        if (id_tipo_requi == 2) {
+            if (cve_prov == "") {
+                iziToast.warning({
+                    title: '¡Ingresa un proveedor!',
+                    message: '',
+                });
+                $("#clave_proveedor").css("border-color", "red");
+                return;
+            }
+            if (new_cotizacion == false && id_cotizacion == 0) {
+                iziToast.warning({
+                    title: '¡Selecciona una cotización o marca la casilla "Nuevo precio"!',
+                    message: '',
+                });
+                //$("#check_new_cotizacion").click();
+                return;
+            }
+            if (new_cotizacion == true && precio == "") {
+                iziToast.warning({
+                    title: '¡Ingresa un precio!',
+                    message: '',
+                });
+                return;
+            }
+        }
+
+        var id_tipo_requi = $("#id_tipo_requisicion").val();
+        var concepto = "";
+
+        //VALIDACION REQUISICION DE SERVICIO (?)
+        if (id_tipo_requi == 2) {
+            var mensaje = "";
+
+            var factura = $("#factura_concepto").val();
+            var prov = $("#proveedor_concepto").val();
+            var desc = $("#descripcion_concepto").val();
+            if (factura == "" || prov == "" || desc == "") {
+                concepto = '';
+
+                if (factura.trim() == "") {
+                    mensaje += "• El documento es obligatorio<br>";
+                }
+                if (prov.trim() == "") {
+                    mensaje += "• El proveedor es obligatorio<br>";
+                }
+                if (desc.trim() == "") {
+                    mensaje += "• El concepto es obligatorio<br>";
+                }
+
+                iziToast.warning({
+                    title: '',
+                    message: mensaje,
+                });
+                return;
+            }
+            else {
+                concepto = factura + " " + prov + " " + desc;
+            }
+        }
+        else {
+            concepto = $('#concepto').val();
+        }
+
+
+        //VALIDACION DE SOLO REGISTRAR 1 VEZ EL ARTICULO
+        if (ArticuloRequiExiste(id_articulo) == true) {
+            iziToast.warning({
+                title: '¡Aviso!',
+                message: 'Asegurate de solicitar solo 1 vez el articulo o modifica su cantidad',
+            });
+            return;
+        }
+        //VALIDACION DE CENTRO Y CONCEPTO
+        if ($("#id_centro").val() == 'selecte_centro' || concepto == '') {
+            var mensaje = "";
+            //VALIDACION DE SELECCIONAR UN CENTRO
+            if ($("#id_centro").val() == 'selecte_centro') {
+                mensaje += "• El centro es obligatorio<br>";
+                $("#id_centro").css("border-color", "red");
+            }
+            //VALIDACION DE INGRESAR UN CONCEPTO
+            if (concepto == '') {
+                mensaje += "• El concepto es obligatorio";
+                $("#concepto").css("border-color", "red");
+            }
+
+
+            iziToast.warning({
+                title: '',
+                message: mensaje,
+            });
+            return;
+        }
+
+        //VALIDAR ARTICULO
+        if (articulo == null || articulo == "" || id_articulo == "" || id_articulo == null) {
+            iziToast.warning({
+                title: '',
+                message: 'Favor de ingresar un articulo valido',
+            });
+            $("#id_articulo").css("border-color", "red");
+            return;
+        }
+        //VALIDAR CARGO Y CUENTA CONTABLE
+        if ($("#select_cargo").val() == 'select_cargo' || $("#select_cargo").val() == null || $("#select_cuenta").val() == 'selecte_cuenta' || $("#select_cuenta").val() == null) {
+            var mensaje = "";
+            if ($("#select_cargo").val() == 'select_cargo' || $("#select_cargo").val() == null) {
+                mensaje += "• El cargp es obligatorio<br>";
+                $("#select_cargo").css("border-color", "red");
+            }
+            if ($("#select_cuenta").val() == 'selecte_cuenta' || $("#select_cuenta").val() == null) {
+                mensaje += "• La cuenta es obligatoria<br>";
+                $("#select_cuenta").css("border-color", "red");
+            }
+
+            iziToast.warning({
+                title: '',
+                message: mensaje,
+            });
+            return;
+        }
+
+        //VALIDACION SI ACEPTA DECIMALE EL ARTICULO
+        if (acepta_decimal == 1) {
+            //VALIDAR QUE SEA MAYOR QUE 0
+            if (isNaN(cantidad) || cantidad < 0) {
+                iziToast.warning({
+                    title: '¡Aviso!',
+                    message: 'Ingresa un valor mayor a 0',
+                });
+                $("#cantidad").css("border-color", "red");
+                return;
+            }
+        }
+        if (acepta_decimal == 0) {
+            //VALIDAR QUE SEA MAYOR QUE 0
+            if (isNaN(cantidad) || cantidad < 0 || !Number.isInteger(cantidad)) {
+                iziToast.warning({
+                    title: '¡Aviso!',
+                    message: 'Ingresa un valor entero y mayor a 0',
+                });
+                $("#cantidad").css("border-color", "red");
+                return;
+            }
+        }
+
+        //OBTENEMOS EL NOMBRE DEL ARTICULO
+        ObtenerNombreArticulo();
+        var articulo = articuloreal;
+        //INCREMENTAMOS LA TABLA
+        count_tabla = count_tabla + 1;
+        //SE AGREGA EL ARTICULO AL DETALLE DE LA REQUISICION
+        AgregarArticuloDetalle(count_tabla, id_articulo, articulo, cantidad, precio, unidad_medida, id_unidad_medida, observacion, id_centro_g, cargo_contable, id_cargo_contable, id_cuenta_contable_g, new_cotizacion, id_tipo_requi, cve_prov, id_cotizacion, id_tipo_moneda, id_articulo_original);
+
+    }
+</script>

@@ -1,0 +1,52 @@
+﻿@model List<Beta_System.Models.C_nomina_checador_prenomina>
+@using System.Globalization;
+@{
+    CultureInfo culturaEspañol = new CultureInfo("es-ES");
+    string nombre_dia = "";
+    string color_celda = "";
+}
+
+<h3 class="text-left" style="margin:5px;">Usuario registró: @Model.FirstOrDefault().C_usuarios_corporativo.usuario (@string.Format(Model.FirstOrDefault().fecha_registro.Value.ToShortDateString(), "dd/MM/yyyy"))</h3>
+<table class="table table-striped table-bordered table-hover small">
+    <thead>
+        <tr class="bg-beta text-center">
+            <th>Tipo registro</th>
+            @foreach (var item in Model)
+            {
+                int no_dia = Convert.ToInt32(item.fecha_accion.Value.DayOfWeek);
+                switch (no_dia)
+                {
+                    case 1: nombre_dia = "Lun"; break;
+                    case 2: nombre_dia = "Mar"; break;
+                    case 3: nombre_dia = "Mié"; break;
+                    case 4: nombre_dia = "Jue"; break;
+                    case 5: nombre_dia = "Vie"; break;
+                    case 6: nombre_dia = "Sáb"; break;
+                    case 0: nombre_dia = "Dom"; break;
+                    default: nombre_dia = "Número de día no válido"; break;
+                }
+                <th>@nombre_dia @item.fecha_accion.Value.Day @item.fecha_accion.Value.ToString("MMM", culturaEspañol)</th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        <tr class="text-center">
+            <td>Checador</td>
+            @foreach (var item in Model)
+            {
+                <td>@item.C_nomina_checador_conceptos.nombre_concepto</td>
+            }
+        </tr>
+        <tr class="text-center">
+            <td>Modificaciones</td>
+            @foreach (var item in Model)
+            {
+                if (item.id_nomina_checador_concepto != item.id_nomina_checador_concepto_real) { color_celda = "#FFC900;"; }
+                else { color_celda = ""; }
+                <td style="background-color: @color_celda">@item.C_nomina_checador_conceptos1.nombre_concepto</td>
+            }
+        </tr>
+    </tbody>
+</table>
+<i class="fa fa-2x fa-square" aria-hidden="true" style="background-color: #FFC900; color: #FFC900; "></i><strong class="ml-1">Valor modificado del checador a la prenómina revisada</strong>
+

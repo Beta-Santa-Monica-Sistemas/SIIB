@@ -1,0 +1,86 @@
+﻿@model IEnumerable<Beta_System.Models.C_compras_requi_d>
+@{
+    var requi = Model.FirstOrDefault().C_compras_requi_g;
+    Html.RenderAction("ConsultarInformacionRequisicionHeader", "REQUISICIONES", new { id_requisicion = requi.id_requisicion_articulo_g });
+    //Session["RequisicionCoti"] = requi.id_requisicion_articulo_g;
+}
+<style>
+    .small-font-table td,
+    .small-font-table th {
+        font-size: 10px;
+    }
+</style>
+
+
+<strong id="id_requisicion_g_cotizacion" style="display:none;">@requi.id_requisicion_articulo_g</strong>
+<div class="table-responsive" style="height: 350px; min-height: 350px; overflow-x: auto; overflow-y:auto;">
+    <table class="table table-condensed table-bordered selectable-row table-sm" id="datatable_articulos_detalles" style="width:100%;">
+        <thead>
+            <tr class="bg-beta text-center">
+                <th>Clave</th>
+                <th style="width: 20%;">Articulo</th>
+                <th>Unidad</th>
+                <th>Cantidad</th>
+                <th>Clasificación</th>
+                <th>Cargo contable</th>
+                <th>Cuenta contable</th>
+                <th style="width: 20%;">Obs.</th>
+                <th>Almacenable</th>
+                <th>Recotizar</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Where(x => x.cotizado == null).OrderByDescending(x => x.C_articulos_catalogo.clave))
+            {
+                <tr>
+                    <td>@item.C_articulos_catalogo.clave</td>
+                    <td style="width: 20%;">@item.C_articulos_catalogo.nombre_articulo.ToUpper()</td>
+                    @*<td>@item.C_articulos_catalogo.descripcion_articulo</td>*@
+                    <td>@item.C_unidades_medidas.unidad_medida</td>
+                    <td>@string.Format("{0:0.00}", item.cantidad)</td>
+                    <td>@item.C_articulos_catalogo.C_articulos_clasificaciones.nombre_clasificacion</td>
+                    <td>@item.C_cargos_contables_g.nombre_cargo</td>
+                    <td>@item.C_cuentas_contables_g.nombre_cuenta</td>
+                    <td style="width: 20%;">@item.observacion</td>
+                    <td>
+                        @if (item.C_articulos_catalogo.almacenable == true)
+                        {
+                            <i class="fa fa-check" style="color: green"></i>
+                        }
+                        else
+                        {
+                            <i class="fa fa-remove" style="color: red"></i>
+                        }
+                    </td>
+                    @if (item.recotizado == true)
+                    {
+                        <td style="color: green" id="@item.id_requisicion_articulo_d"><i class="fa fa-check"></i></td>
+                    }
+                    else
+                    {
+                        <td id="@item.id_requisicion_articulo_d"></td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<div class="col-md-12 text-left">
+    <h3 id="titulo" class="text_beta">Artículos a cotizar: @Model.Count()</h3>
+</div>
+<div class="col-md-12 historial" style="display:none">
+    <div class="col-md-12 text-right">
+        <button class="btn btn_beta" id="articulo_prov"><i class="fa fa-plus"></i> Agregar</button>
+        <button class="btn btn_beta" id="articulo_prov_hist"><i class="fa fa-search"></i> Historial</button>
+    </div>
+    <div class="col-md-12">
+        <hr />
+    </div><br />
+    <h3>Cotizaciones: <label id="articulo_nombre"></label></h3>
+</div>
+<div class="table-responsive">
+    <div id="div_cotizacion_articulo"></div>
+</div>
+<script>
+    $("#fecha_vigencia").val(today);
+</script>

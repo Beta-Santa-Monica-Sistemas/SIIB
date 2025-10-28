@@ -1,0 +1,74 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+}
+
+
+<div class="page_title">
+    <div class="counter_section">
+        <h1>Análisis de consumos</h1>
+    </div>
+</div>
+
+<div class="column2 counter_section">
+    <div class="row">
+        <div class="col-md-2">
+            <strong>Almacen:</strong>
+            <select class="form-control" id="id_almacen_consumos">
+                @{ Html.RenderAction("ConsultarAlmacenesUsuarioSelect", "CATALOGOS", new { id_usuario = (int)Session["LoggedId"] }); }
+            </select>
+        </div>
+        <div class="col-md-4">
+            <div class="row" id="div_fechas_consumos">
+                <div class="col-md-6">
+                    <strong>Fecha inicio</strong>
+                    <input type="date" class="form-control" id="fecha_inicio_consumos" />
+                </div>
+                <div class="col-md-6">
+                    <strong>Fecha fin</strong>
+                    <input type="date" class="form-control" id="fecha_fin_consumos" />
+                </div>
+            </div>
+            <div class="row" id="div_anio_consumos" style="display:none;">
+                <strong>Año de consulta</strong>
+                <select class="form-control" id="anio_consumos">
+                    @{ Html.RenderAction("ConsultarAniosPresupuestoSelect", "COMPRAS"); }
+                </select>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <strong>Tipo de articulos</strong>
+            <select class="form-control" id="id_tipo_articulos_consumos">
+                @*<option value="0">Todos</option>*@
+                @{ Html.RenderAction("ConsultarTiposArticulosSelect", "CATALOGOS"); }
+            </select>
+        </div>
+        <div class="col-md-2">
+            <h5 class="text-center">Tipo de consulta:</h5>
+            <input type="radio" value="0" name="RadioTipoConsulta" onclick="ShowHideTipoConsultaAnalisisConsumos(0);" checked /><strong class="ml-2">Rango de fechas</strong>
+            <br />
+            <input type="radio" value="1" name="RadioTipoConsulta" onclick="ShowHideTipoConsultaAnalisisConsumos(1);" /><strong class="ml-2">Anual</strong>
+        </div>
+        <div class="col-md-1">
+            <br />
+            <button class="btn btn_beta_icon" onclick="ConsultarAnalisisConsumos();"><i class="fa fa-search"></i></button>
+        </div>
+    </div>
+    <br />
+    <div class="table-responsive" id="div_consumos_articulos"></div>
+</div>
+
+@Scripts.Render("~/bundles_ReportesAlmacen/js")
+
+<script>
+    $(window).on("load", function () {
+        $('#fecha_inicio_consumos').val(last_week);
+        $('#fecha_fin_consumos').val(today);
+
+        $("#id_tipo_articulos_consumos").select2({
+            placeholder: 'Selecciona un artículo'
+        });
+    });
+
+</script>

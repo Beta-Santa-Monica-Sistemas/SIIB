@@ -1,0 +1,35 @@
+﻿@model List<Beta_System.Models.EmpleadoNChecador>
+
+@if (Model.Count() > 0)
+{
+    <table class="table table-striped table-bordered" id="tabla_NChecador" data-toggle="table" data-search="true">
+        <thead>
+            <tr class="bg-beta text-center">
+                <th>Clave Microsip </th>
+                <th>Nombre</th>
+                <th>Clave Checador</th>
+                <th>Nombre</th>
+                <th>Eliminar</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.OrderBy(x => x.NombreEmpleadoNomina).OrderBy(x => x.ApellidoEmpleadoNomina))
+            {
+                <tr id="tr_NChecador_@item.IdEmpleadoNChecador">
+                    <td>@item.EmpleadoIdNomina</td>
+                    <td>@(item.NombreEmpleadoNomina + " " + item.ApellidoEmpleadoNomina)</td>
+                    <td>@item.IdEmpleadoChecador</td>
+                    <td>@(item.NombreCheca + " " + item.ApellidoCheca)</td>
+                    <td> <button class="btn_beta_icon btn_beta_danger" onclick="EliminarEmpleadoLigado(@item.IdEmpleadoNChecador);"> <i class="fa fa-2x fa-times-circle ml-2"></i> </button></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <div class="col-md-12">
+        <h3 style="color:red">EL AREA SELECCIONADA NO CUENTA CON INFORMACION</h3>
+    </div>
+}
+

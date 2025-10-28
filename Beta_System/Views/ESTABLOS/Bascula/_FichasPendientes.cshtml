@@ -1,0 +1,65 @@
+﻿@model IEnumerable<Beta_System.Models.C_bascula_fichas>
+
+@if (Model.Count() > 0)
+{
+    <table class="table table-bordered table-striped" id="table_fichas_pendientes">
+        <thead>
+            <tr class="bg-beta text-center">
+                <th>Tipo</th>
+                <th>Ficha</th>
+                <th>Folio</th>
+                <th style="width:200px;">Articulo</th>
+                <th style="width:200px;">Cliente</th>
+                <th>Fecha</th>
+                <th>Linea Transportista</th>
+                <th>Chofer</th>
+                <th>Placas</th>
+                <th>Peso1</th>
+                <th>Observacion</th>
+                <th>Movimiento</th>
+                <th>Tipo Movimiento</th>
+                <th>Consultar</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr class="text-center">
+                    <td>@item.C_bascula_fichas_tipos.tipo_ficha</td>
+                    <td>@item.id_bascula_ficha</td>
+                    <td>@item.folio</td>
+                    <td style="width:200px;">@item.C_articulos_catalogo.nombre_articulo</td>
+                    @if (item.id_ficha_tipo == 1 || item.id_ficha_tipo == 4)
+                    {
+                        <td style="width:200px;">@item.C_envios_leche_clientes.nombre_comercial</td>
+                    }
+                    else
+                    {
+                        <td style="width:200px;">@item.C_compras_proveedores.razon_social</td>
+                    }
+                    <td>@String.Format(item.fecha_registo.Value.ToShortDateString(), "dd/mm/aaaa")</td>
+
+                    <td>
+                        @if (@item.id_ficha_tipo == 1)
+                        {
+                            @item.C_bascula_lineas_transportistas.nombre_linea
+                        }
+                    </td>
+                    <td>@item.chofer</td>
+                    <td>@item.placas</td>
+                    <td>@item.peso_1.Value.ToString("N3")</td>
+                    <td>@item.observaciones</td>
+                    <td>@item.C_bascula_codigos_movimientos.descripcion</td>
+                    <td>@item.C_bascula_tipos_movimientos.nombre_movimiento</td>
+                    <td>
+                        <button class="btn btn_beta_icon" onclick="ConsultarInfoFicha(@item.id_bascula_ficha)"><i class="fa fa-check"></i></button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <div class="col-md-12 text-center"><h2 style="color:red">NO EXISTEN FICHAS PENDIENTES PARA LA SEGUNDA PESADA.</h2></div>
+}

@@ -1,0 +1,27 @@
+﻿@model IEnumerable<Beta_System.Models.C_nomina_puestos>
+
+<table class="table table-striped table-bordered" id="tabla_puestos" data-toggle="table" data-search="true">
+    <thead>
+        <tr class="bg-beta text-center">
+            <th>Clave</th>
+            <th>Nombre</th>
+            <th>Salario diario</th>
+            <th>Salario diario máximo</th>
+            <th>Editar</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.id_puesto_empleado</td>
+                <td>@item.nombre_puesto</td>
+                <td>@item.salario_diario</td>
+                <td>@item.salario_diario_max</td>
+                <td class="text-center">
+                    <button class="btn btn_beta_icon" onclick="MostrarInfoPuesto(@item.id_puesto_empleado);"><i class="fa fa-eye"></i></button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

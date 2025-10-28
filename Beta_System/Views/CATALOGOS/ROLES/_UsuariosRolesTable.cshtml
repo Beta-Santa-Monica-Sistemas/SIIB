@@ -1,0 +1,43 @@
+﻿@model IEnumerable<Beta_System.Models.C_usuarios_corporativo>
+@{
+    List<int> permisos = Session["PermisosModulo"] as List<int>;
+}
+<table class="table table-striped table-bordered">
+    <thead>
+        <tr class="bg-beta">
+            <td>#</td>
+            <td>Usuario</td>
+            <td>Empleado</td>
+            <td>Estatus</td>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.id_usuario_corporativo</td>
+                <td>@item.usuario</td>
+                <td>@item.C_empleados.nombres @item.C_empleados.apellido_paterno @item.C_empleados.apellido_materno</td>
+                <td class="text-center">
+                    @if (permisos.Contains(7))
+                    {
+                        if (item.Activo == true)
+                        {
+                            <i class="fa fa-3x fa-toggle-on" style="color:#2e87d7;" onclick="OnOffUsuario(@item.id_usuario_corporativo, false);"></i>
+                        }
+                        else
+                        {
+                            <i class="fa fa-3x fa-toggle-on" style="color:gray;" onclick="OnOffUsuario(@item.id_usuario_corporativo, true);"></i>
+                        }
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+
+
+
+

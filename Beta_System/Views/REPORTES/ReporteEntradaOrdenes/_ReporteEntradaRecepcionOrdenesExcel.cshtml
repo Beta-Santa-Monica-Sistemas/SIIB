@@ -1,0 +1,24 @@
+﻿@using System.Data
+@model System.Data.DataTable
+@{
+    if (Model != null)
+    {
+    <table class="table table-sm table-condensed small table-bordered pdf-table pdf-content" id="">
+        <tr>
+            @foreach (DataColumn col in Model.Columns)
+            {
+                <th style="font-weight:700;display:block;" class="headerConcepto">@col.ColumnName</th>
+            }
+        </tr>
+        @foreach (DataRow row in Model.Rows)
+        {
+        <tr>
+            @foreach (DataColumn col in Model.Columns)
+            {
+                <td name="@row[0]" style="font-size:12px;display:block;">@row[col.ColumnName]</td>
+            }
+        </tr>
+        }
+    </table>        
+    }
+}

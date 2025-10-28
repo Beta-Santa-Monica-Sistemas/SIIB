@@ -1,0 +1,83 @@
+﻿@model List<Beta_System.Models.C_evaluaciones_d_empleados>
+
+@{
+    int modo = ViewBag.modo;
+}
+
+@if (modo == 1)
+{
+    if (Model.Count() > 0)
+    {
+        <div class="table-responsive">
+            <table class="table table-striped table-bordered" id="datatable_bonos_evaluacion_empleados">
+                <thead>
+                    <tr class="bg-beta text-center">
+                        <th class="text-left">Empleado</th>
+                        <th>Departamento</th>
+                        <th>Puesto</th>
+                        <th>Evaluación</th>
+                        <th>Monto bono</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.OrderBy(x => x.id_departamento).OrderBy(x => x.C_nomina_empleados.Apellido_paterno))
+                    {
+                        int calificacion = Convert.ToInt32(item.calificacion_final);
+                        decimal bono = 0;
+                        try
+                        {
+                            bono = ((decimal)item.C_nomina_empleados.C_evaluaciones_empleados_bonos.FirstOrDefault().monto_bono * calificacion) / 100;
+                        }
+                        catch (Exception)
+                        {
+
+                        }
+                        <tr class="text-center">
+                            <td class="text-left">@item.C_nomina_empleados.Apellido_paterno @item.C_nomina_empleados.Apellido_materno @item.C_nomina_empleados.Nombres </td>
+                            <td>@item.C_evaluaciones_departamentos.nombre_departamento</td>
+                            <td>@item.C_nomina_empleados.C_nomina_puestos.nombre_puesto</td>
+                            <td class="porcentaje">@calificacion%</td>
+                            <td>$@bono.ToString("N2")</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <h3 class="text-danger text-center">No se encontraron registros</h3>
+    }
+}
+else
+{
+    <table class="table table-striped table-bordered" id="datatable_bonos_evaluacion_empleados">
+        <tr class="bg-beta text-center">
+            <th class="text-left">Empleado</th>
+            <th>Departamento</th>
+            <th>Puesto</th>
+            <th>Evaluación</th>
+            <th>Monto bono</th>
+        </tr>
+        @foreach (var item in Model.OrderBy(x => x.id_departamento).OrderBy(x => x.C_nomina_empleados.Apellido_paterno))
+        {
+            int calificacion = Convert.ToInt32(item.calificacion_final);
+            decimal bono = 0;
+            try
+            {
+                bono = ((decimal)item.C_nomina_empleados.C_evaluaciones_empleados_bonos.FirstOrDefault().monto_bono * calificacion) / 100;
+            }
+            catch (Exception)
+            {
+
+            }
+            <tr class="text-center">
+                <td class="text-left">@item.C_nomina_empleados.Apellido_paterno @item.C_nomina_empleados.Apellido_materno @item.C_nomina_empleados.Nombres </td>
+                <td>@item.C_evaluaciones_departamentos.nombre_departamento</td>
+                <td>@item.C_nomina_empleados.C_nomina_puestos.nombre_puesto</td>
+                <td>@calificacion%</td>
+                <td>$@bono.ToString("N2")</td>
+            </tr>
+        }
+    </table>
+}

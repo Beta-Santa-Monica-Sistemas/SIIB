@@ -1,0 +1,37 @@
+﻿@model IEnumerable<Beta_System.Models.C_soporte_tickets_d>
+
+<div style="overflow-x: auto; max-width: 100%;">
+    <table class="table table-striped table-bordered" id="historial_soporte_table" style="width:100%; table-layout: fixed;">
+        <thead>
+            <tr class="bg-beta text-center">
+                <th>Solicitud</th>
+                <th>Solicita</th>
+                <th>Categoria</th>
+                <th>Tipo</th>
+                <th>Fecha del soporte</th>
+                <th>Hora de inicio</th>
+                <th>Hora de termino</th>
+                <th>Duracion</th>
+                <th>Realizado</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.C_soporte_tickets_g.C_usuarios_corporativo.C_empleados.nombres @item.C_soporte_tickets_g.C_usuarios_corporativo.C_empleados.apellido_paterno</td>
+                    <td>@item.solicitud</td>
+                    <td>@item.C_soporte_categorias.nombre</td>
+                    <td>@item.C_soporte_tipos.nombre</td>
+                    <td class="text-center">@(item.fecha_inico.HasValue ? item.fecha_inico.Value.ToString("yyyy/MM/dd") : "")</td>
+                    <td class="text-center">@(item.fecha_inico.HasValue ? item.fecha_inico.Value.ToString("hh:mm:ss tt") : "")</td>
+                    <td class="text-center">@(item.fecha_termino.HasValue ? item.fecha_termino.Value.ToString("hh:mm:ss tt") : "")</td>
+                    <td class="text-center">
+                        @(item.fecha_termino.HasValue && item.fecha_inico.HasValue? ((item.fecha_termino.Value - item.fecha_inico.Value).TotalHours >= 1? $"{(int)(item.fecha_termino.Value - item.fecha_inico.Value).TotalHours} h {(item.fecha_termino.Value - item.fecha_inico.Value).Minutes} min": $"{(item.fecha_termino.Value - item.fecha_inico.Value).Minutes} min {(item.fecha_termino.Value - item.fecha_inico.Value).Seconds} s"): "En proceso")
+                    </td>
+                    <td>@item.C_usuarios_corporativo.C_empleados.nombres @item.C_usuarios_corporativo.C_empleados.apellido_paterno</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

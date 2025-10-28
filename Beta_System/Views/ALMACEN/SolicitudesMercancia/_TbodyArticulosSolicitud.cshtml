@@ -1,0 +1,24 @@
+﻿@{ 
+    var count = ViewBag.count_articulos_detalle;
+}
+
+<tr id="row_@ViewBag.count_articulos_detalle">
+    <td style="display:none;"><label class="id_articulo_merca">@ViewBag.id_articulo</label></td>
+    <td><label class="id_articulos">@ViewBag.clave_mercancia</label></td>
+    <td><strong>@ViewBag.articulo</strong></td>
+    <td><label>@ViewBag.unidad_medida</label></td>
+    <td style="display:none;"><label class="unidades_medida">@ViewBag.id_unidad_medida</label></td>
+    <td><label class="cantidades">@string.Format("{0:0.00}", @ViewBag.cantidad)</label></td>
+    @{
+        double moneda = Convert.ToDouble(ViewBag.precio_articulo);
+    }
+    <td><label class="precios">@moneda.ToString("C")</label></td>
+    <td><label class="importes">@ViewBag.importe_articulo</label></td>
+    <td><label class="cargos_contables">@ViewBag.cargo_contable</label></td>
+    <td><label class="observaciones">@ViewBag.obs</label></td>
+    <td style="display:none;"><label class="id_cuentas">@ViewBag.id_cuenta</label></td>
+    <td style="display:none;"><label class="id_cargos">@ViewBag.id_cargo</label></td>
+    <td>
+        <button class="btn btn_beta_danger" onclick="EliminarArticuloSolicitud(@count);"><i class="fa fa-remove"></i></button>
+    </td>
+</tr>

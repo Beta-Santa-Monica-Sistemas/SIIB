@@ -1,0 +1,31 @@
+﻿@model List<List<string>>
+
+<div class="c-dashboardInfo col-md-12">
+    <div class="wrap">
+        <h4 class="heading heading5 hind-font medium-font-weight c-dashboardInfo__title">REQUISICIONES GENERADAS SIN RECEPCIÓN (30 DÍAS)</h4>
+        <div class="p-4" id="leaderboard" style="height: 500px; min-height: 500px; overflow:scroll; overflow-x:hidden;">
+            <table>
+                @for (int i = 0; i < Model.Count; i++)
+                {
+                    string class_header = "";
+                    if (i == 0) { class_header = "header_top"; }
+                    <tr class="tr_dashboard text-dark @class_header">
+                        <td><h4>@Model[i][0]</h4></td>
+                        <td><button class="btn" style="background-color: @Model[i][7]; color: white;">@Model[i][1]</button></td>
+                        <td><h4>@Model[i][2] @Model[i][3]</h4></td>
+                        <td style="width: 30%;"><h5>@Model[i][6]</h5></td>
+                        <td class="name text-right">
+                            <button class="btn" style="background-color: @Model[i][5]; color: white;">@Model[i][4]</button>
+                        </td>
+                        <td class="points text-right">
+                            <button class="btn btn_beta_icon" onclick="ConsultarDetalleRequiGeneral(@Model[i][3]);"><i class="fa fa-bars"></i></button>
+                        </td>
+
+                    </tr>
+
+                }
+            </table>
+        </div>
+
+    </div>
+</div>

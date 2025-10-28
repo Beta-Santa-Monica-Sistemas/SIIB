@@ -1,0 +1,65 @@
+﻿@model IEnumerable<Beta_System.Models.C_usuarios_roles>
+@{
+    List<int> permisos = Session["PermisosModulo"] as List<int>;
+}
+
+<table class="table table-striped table-bordered" id="datatable_roles_sistema" style="width:100%;">
+    <thead>
+        <tr class="bg-beta text-center">
+            <td>#</td>
+            <td>ROL</td>
+            <td>Modulos asignados</td>
+            <td>Usuarios</td>
+            <td>Editar nombre</td>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.id_rol</td>
+                <td>
+                    <strong>@item.nombre_rol</strong>
+                    <br />
+                    <p>@item.C_usuarios_tipo.nombre</p>
+                </td>
+                @try
+                {
+                    <td>
+                        @if (item.C_modulos_sub_permisos.Count() > 0)
+                        {
+                            <div style="overflow-y:scroll;height:150px;">
+                                @foreach (var modulo in item.C_modulos_sub_permisos.GroupBy(x => x.C_modulos_sub.C_modulos))
+                                {
+                                    <strong>@modulo.FirstOrDefault().C_modulos_sub.C_modulos.nombre</strong><br />
+                                    foreach (var submodulo in modulo)
+                                    {
+                                        <p>- @submodulo.C_modulos_sub.nombre</p>
+                                    }
+                                }
+                            </div>
+                        }
+                        else
+                        {
+                            <a href="../MODULOS/AsignarModulosRoles" target="_blank">ASIGNAR MODULOS AL ROL <i class="fa fa-cogs"></i></a>
+                        }
+                    </td>
+                }
+                catch (Exception)
+                {
+
+                }
+
+                <td class="text-center">
+                    @if (permisos.Contains(12)) { <button class="btn btn_beta" onclick="VerUsuariosRolTable(@item.id_rol)"><i class="fa fa-group"></i> Ver usuarios</button>}
+                </td>
+
+                <td class="text-center">
+                    @if (permisos.Contains(11)){<button class="btn btn_beta_icon" onclick="EditarRol(@item.id_rol, '@item.nombre_rol',  @item.id_usuario_tipo); AddEditRol(1);"><i class="fa fa-edit"></i></button>}
+                </td>
+
+
+            </tr>
+        }
+    </tbody>
+</table>

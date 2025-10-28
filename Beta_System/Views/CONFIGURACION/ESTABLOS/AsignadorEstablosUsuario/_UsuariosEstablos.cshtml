@@ -1,0 +1,41 @@
+﻿@model IEnumerable<Beta_System.Models.C_usuarios_establos>
+
+<table class="table table-striped table-bordered">
+    <thead>
+        <tr class="bg-beta text-center">
+            <th>Usuario</th>
+            @foreach (var item2 in Session["establos_list"] as List<Beta_System.Models.C_establos>)
+            {
+                <th>@item2.nombre_establo</th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var usu in Session["establos_usuarios"] as List<Beta_System.Models.C_usuarios_corporativo>)
+        {
+            <tr class="text-center">
+                <td>@usu.usuario</td>
+                @foreach (var establo in Session["establos_list"] as List<Beta_System.Models.C_establos>)
+                {
+                    try
+                    {
+                        var valid = Model.Where(x => x.id_usuario == usu.id_usuario_corporativo && x.id_establo == establo.id_establo && x.activo == true).ToList();
+                        if (valid.Count() > 0) {
+                            foreach (var item in valid)
+                            {
+                                if (item.id_establo == establo.id_establo) { <td><input class="form-control check_us" type="checkbox" checked id="@usu.id_usuario_corporativo|@establo.id_establo" style="height:20px;"/></td> }
+                                else {  <td><input class="form-control check_us" type="checkbox" id="@usu.id_usuario_corporativo|@establo.id_establo" style="height:20px;"/></td> }
+                            }
+                        }
+
+                        else {  <td><input class="form-control check_us" type="checkbox" id="@usu.id_usuario_corporativo|@establo.id_establo" style="height:20px;" /></td> }
+                    }
+                    catch (Exception)
+                    {
+                        <td><input class="form-control check_us" type="checkbox" id="@usu.id_usuario_corporativo|@establo.id_establo" style="height:20px;" /></td>
+                    }
+                }
+            </tr>
+        }
+    </tbody>
+</table>

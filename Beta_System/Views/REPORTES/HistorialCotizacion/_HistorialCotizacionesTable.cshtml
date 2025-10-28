@@ -1,0 +1,76 @@
+﻿@model IEnumerable<Beta_System.Models.C_compras_ordenes_d>
+
+@{ 
+    TimeSpan periodo = ViewBag.periodo;
+}
+
+<h3 class="text-center"><strong>Ordenes de compra (@periodo.Days días)</strong></h3>
+<div class="row">
+    <div class="col-md-3">
+        <strong>Fecha inicio</strong>
+        <input type="date" id="fechas_inicio_historial" class="form-control fechas_inicio" />
+    </div>
+    <div class="col-md-3">
+        <strong>Fecha fin</strong>
+        <input type="date" id="fechas_fin_historial" class="form-control" />
+    </div>
+    <div class="col-md-3">
+        <br />
+        <button class="btn btn_beta_icon" onclick="ConsultaHistorialCotizacionTable();"><i class="fa fa-search"></i></button>
+    </div>
+</div>
+
+
+@if (Model.Count() > 0)
+{
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered w-100" id="tabla_articulos_transito" width="100%">
+            <thead>
+                @*<tr class="bg-beta "><th colspan="9"></th></tr>*@
+                <tr class="bg-beta text-center">
+                    <th>Proveedor</th>
+                    <th>Descripción</th>
+                    <th>Fecha orden</th>
+                    <th>Orden</th>
+                    <th>Cantidad</th>
+                    <th>Precio</th>
+                    <th>Moneda</th>
+                    <th>Centro</th>
+                    <th>Requisicion</th>
+                    <th>Concepto</th>
+                    <th>Comprador</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr class="text-center">
+                        <td><strong>@item.C_compras_ordenes_g.C_compras_proveedores.cve</strong></td>
+                        <td class="text-left">
+                            @if (@item.C_compras_ordenes_g.C_compras_proveedores.nombre_prov != "" && @item.C_compras_ordenes_g.C_compras_proveedores.nombre_prov != null)
+                            {
+                                <strong>@item.C_compras_ordenes_g.C_compras_proveedores.nombre_prov</strong> }
+                            else
+                            { <strong>@item.C_compras_ordenes_g.C_compras_proveedores.razon_social</strong>}
+                        </td>
+                        <td>@String.Format(item.C_compras_ordenes_g.fecha_registro.Value.ToShortDateString(), "dd/mm/aaaa")</td>
+                        <td>@item.id_compras_orden_g</td>
+
+                        <td>@item.cantidad_compra.Value.ToString("N2")</td>
+                        <td><strong>$@item.precio_unitario.Value.ToString("N2")</strong></td>
+                        <td>@item.C_tipos_moneda.clave_fiscal</td>
+                        <td>@item.C_compras_ordenes_g.C_centros_g.siglas</td>
+                        <td>@item.C_compras_ordenes_g.C_compras_requi_g.id_requisicion_articulo_g</td>
+                        <td>@item.C_compras_ordenes_g.C_compras_requi_g.concepto</td>
+                        <td>@item.C_compras_ordenes_g.C_compras_cotizaciones_confirmadas_g.C_usuarios_corporativo.C_empleados.nombres @item.C_compras_ordenes_g.C_compras_cotizaciones_confirmadas_g.C_usuarios_corporativo.C_empleados.apellido_paterno</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+
+<script>
+    $('input[type="date"]').val(today);
+    $('.fechas_inicio').val(last_2_months);
+</script>

@@ -1,0 +1,42 @@
+﻿@model IEnumerable<Beta_System.Models.C_cargos_contables_g>
+@{
+    List<Beta_System.Models.C_firmas_cargo_permisos> cargo_permisos = ViewBag.firmas_permiso as List<Beta_System.Models.C_firmas_cargo_permisos>;
+    int id_usuario = ViewBag.id_usuario;
+}
+
+<table class="table table-striped table-bordered">
+    <thead>
+        <tr class="bg-beta text-center">
+            <th>Cargo</th>
+            @foreach (var firmas in cargo_permisos)
+            {
+                <th>@firmas.permiso</th>                
+            }
+        </tr>
+    </thead>
+    <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td class="cargos" id="@item.id_cargo_contable_g">
+                        @item.nombre_cargo
+                    </td>
+                    @foreach (var permiso in cargo_permisos)
+                    {
+                        if (permiso.C_firmas_usuarios.Where(x => x.id_usuario_corporativo == id_usuario && x.id_cargo_contable_g == item.id_cargo_contable_g).FirstOrDefault() != null)
+                        {
+                            <td>
+                                <input checked class="form-control check_cargo" type="checkbox" style="height:20px;" id="@item.id_cargo_contable_g @permiso.id_firma_cargo_permiso" name="@item.id_cargo_contable_g @permiso.id_firma_cargo_permiso" />
+                            </td>
+                        }
+                        else
+                        {
+                            <td>
+                                <input class="form-control check_cargo" type="checkbox" style="height:20px;" id="@item.id_cargo_contable_g @permiso.id_firma_cargo_permiso" name="@item.id_cargo_contable_g @permiso.id_firma_cargo_permiso" />
+                            </td>
+                        }
+                    }
+                </tr>
+            }
+        </tbody>
+</table>

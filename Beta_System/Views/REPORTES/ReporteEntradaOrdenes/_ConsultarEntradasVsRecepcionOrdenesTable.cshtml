@@ -1,0 +1,67 @@
+﻿@using System.Data
+@model System.Data.DataTable
+@{
+    if (Model != null)
+    {
+        string color_row = "";
+        string color_text = "";
+        <table class="table table-striped table-bordered small table-hover" id="datatable_entrada_ordenes">
+            <thead>
+                <tr  class="bg-beta text-center">
+                    @foreach (DataColumn col in Model.Columns)
+                    {
+                        <tH style="font-weight:700;" class="headerConcepto">@col.ColumnName</tH>
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (DataRow row in Model.Rows)
+                {
+                    <tr>
+                        @foreach (DataColumn col in Model.Columns)
+                        {
+                            decimal cant_ord_compra = Convert.ToDecimal(row["Cantidad ord. compra"]);
+                            decimal cantidad_recepcionada = 0;
+                            decimal entrada_inventario = Convert.ToDecimal(row["Entrada inventario"]);
+
+                            try
+                            {
+                                cantidad_recepcionada = Convert.ToDecimal(row["Cantidad recepcionada"]);
+                            }
+                            catch (Exception)
+                            {
+
+                            }
+
+
+                            if (ViewBag.modo == 1) {
+                                if (cant_ord_compra == cantidad_recepcionada && cantidad_recepcionada == entrada_inventario) { color_row = ""; color_text = "black"; }
+                                else { color_row = "red"; color_text = "white"; }
+                            }
+
+
+
+
+                            if (col.ColumnName == "Cantidad ord. compra")
+                            {
+                                <td name="@row[0]" style="font-size:12px; background-color: @color_row; color: @color_text"><strong>@cant_ord_compra.ToString("N2")</strong></td>
+                            }
+                            else if (col.ColumnName == "Cantidad recepcionada")
+                            {
+                                <td name="@row[0]" style="font-size:12px; background-color: @color_row; color: @color_text"><strong>@cantidad_recepcionada.ToString("N2")</strong></td>
+                            }
+                            else if (col.ColumnName == "Entrada inventario")
+                            {
+                                <td name="@row[0]" style="font-size:12px; background-color: @color_row; color: @color_text"><strong>@entrada_inventario.ToString("N2")</strong></td>
+                            }
+
+                            else { <td name="@row[0]" style="font-size:12px; background-color: @color_row; color: @color_text">@row[col.ColumnName]</td>}
+
+                            
+                        }
+                    </tr>
+                }
+            </tbody>            
+        </table>
+    }
+}

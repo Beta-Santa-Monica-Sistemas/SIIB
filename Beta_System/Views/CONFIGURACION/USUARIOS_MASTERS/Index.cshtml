@@ -1,0 +1,202 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+}
+
+<div class="page_title">
+    <div class="counter_section">
+        <h1>Administrador de usuarios master</h1>
+    </div>
+</div>
+
+<div class="column2 counter_section">
+    <div class="row">
+        <div class="col-md-4">
+            <strong>Accion:</strong>
+            <select class="form-control" id="select_accion" onchange="ConsultarUsuarioMasterAccionTable();">
+                @{Html.RenderAction("ConsultarUsuarioMaster", "CONFIGURACION"); }
+            </select>
+        </div>
+        <div class="col-md-6"> </div>
+        <div class="col-md-2">
+            <button class="btn btn_beta" data-toggle="modal" data-target="#masterModal"> <i class="fa fa-plus"> </i> Agregar usuario</button>
+
+        </div>
+    </div>
+    <hr />
+
+    <div id="div_UsuariosMaster"> </div>
+
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="masterModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Agregar usuario master</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body text-center">
+                <strong>Usuario</strong>
+                <select class="form-control" id="id_usuario_master">
+                    <option value="0"> Ninguno </option>
+                    @{Html.RenderAction("ConsultarUsuariosCorporativoSelect", "USUARIOS"); }
+                </select>
+                <br />
+                <strong>Acción</strong>
+                <select class="form-control" id="useraccion">
+                    @{Html.RenderAction("ConsultarUsuarioMaster", "CONFIGURACION"); }
+                </select>
+                <br />
+                <strong>Correo</strong>
+                <input type="text" class="form-control" id="correo_usuario" />
+                <hr />
+                <button class="btn btn_beta_danger" data-dismiss="modal">Cerrar</button>
+                <button class="btn btn_beta" onclick="RegistrarUsuarioMaster()"> Agregar </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+
+
+    $(window).on("load", function () {
+        try {
+            ConsultarUsuarioMasterAccionTable(); //consulta lo q este en el select al cargar la pagina
+            $("#id_usuario_master").select2({
+                placeholder: 'Selecciona un usuario',
+                dropdownParent: $("#masterModal")
+            });
+        }
+        catch (ex) { }
+    });
+
+    function ConsultarUsuarioMasterAccionTable() {
+        var id_accion = $("#select_accion").val();
+        jsShowWindowLoad();
+        $.ajax({
+            type: "POST",
+            async: false,
+            url: "../CONFIGURACION/ConsultarUsuarioMasterAccionTable",
+            data: { id_accion: id_accion },
+            success: function (response) {
+                jsRemoveWindowLoad();
+                try {
+                    $("#UsuariosMasterDataTable").dataTable().fnDestroy();
+                } catch (e) { }
+                $("#div_UsuariosMaster").html(response);
+                $('#UsuariosMasterDataTable').DataTable({
+                    keys: false,
+                    ordering: false,
+                    searching: true,
+                    paging: false,
+                    dom: "Bfrtip",
+                    buttons: [{
+                        extend: "copy",
+                        className: "btn-sm",
+                        columns: ':visible'
+                    }, {
+                        extend: "csv",
+                        className: "btn-sm"
+                    }, {
+                        extend: "excel",
+                        className: "btn-sm"
+                    }, {
+                        extend: "pdf",
+                        className: "btn-sm"
+                    }, {
+                        extend: "print",
+                        className: "btn-sm"
+                    }],
+                    responsive: false,
+                    select: true
+                });
+            },
+            error: function (xhr, status, error) {
+                console.error(error);
+                jsRemoveWindowLoad();
+            }
+        });
+    }
+
+    function OnUsuarioMaster(id_usuario_master, activo) {
+
+        $.ajax({
+            type: "POST",
+            async: false,
+            url: "../CONFIGURACION/OnOffUsuarioMaster",
+            data: {
+                id_usuario_master: id_usuario_master,
+                activo: activo
+            },
+            success: function (response) {
+                jsRemoveWindowLoad();
+                if (response == 1) {
+                    iziToast.success({
+                        title: 'OK',
+                        message: 'Cambio registrado',
+                    });
+                    ConsultarUsuarioMasterAccionTable();
+                } else {
+                    iziToast.error({
+                        title: 'Error',
+                        message: 'No sé pudo registrar el cambio',
+                    });
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error(error);
+                jsRemoveWindowLoad();
+            }
+        });
+
+    }
+
+    function RegistrarUsuarioMaster() {
+
+        var id_usuario_master = $("#id_usuario_master").val();
+        var usuario_accion = $("#useraccion").val();
+        var correo_usuario = $("#correo_usuario").val();
+
+        $.ajax({
+            type: "POST",
+            async: false,
+            url: "../CONFIGURACION/RegistrarUsuarioMaster",
+            data: {
+                id_usuario_master: id_usuario_master,
+                usuario_accion: usuario_accion,
+                correo_usuario: correo_usuario
+            },
+            success: function (response) {
+                jsRemoveWindowLoad();
+                if (response == 0) {
+                    iziToast.success({
+                        title: 'OK',
+                        message: 'Usuario registrado correctamente',
+                    });
+                    ConsultarUsuarioMasterAccionTable();
+                    $("#masterModal").modal("hide");
+                    $("#correo_usuario").val(""); //aquí se limpia
+                } else {
+                    iziToast.error({
+                        title: 'Error',
+                        message: 'No sé pudo registrar el usuario',
+                    });
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error(error);
+                jsRemoveWindowLoad();
+            }
+        });
+
+    }
+
+</script>

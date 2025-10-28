@@ -1,0 +1,36 @@
+﻿@model Beta_System.Models.C_alimentacion_dietas_g
+
+@if (Model != null)
+{
+    var detalle_dieta = Model.C_alimentacion_dietas_d.Where(x => x.activo == true).ToList();
+    if (detalle_dieta.Count() > 0)
+    {
+        foreach (var item in detalle_dieta.OrderBy(x => x.C_articulos_catalogo.nombre_articulo))
+        {
+            decimal diferencia = (decimal)item.kilos_MS_base - (decimal)item.kilos_MS;
+
+            <tr class="text-center alimentos_dieta" id="trAlimento_@item.id_articulo">
+                <td style="display: none;" id="idAlimento_@item.id_articulo"> @item.id_articulo</td>
+                <td class="nombreAlimento" id="nombreAlimento_@item.id_articulo">@item.C_articulos_catalogo.nombre_articulo</td>
+                <td class="porcMs" id="porcMs_@item.id_articulo">@Convert.ToInt32(item.porcentaje_MS)</td>
+                <td class="kgMs" id="kgMs_@item.id_articulo">@item.kilos_MS.Value.ToString("N3")</td>
+                <td class="kgBh" id="kgBh_@item.id_articulo">@item.kilos_BH.Value.ToString("N3")</td>
+                <td class="precio" id="precio_@item.id_articulo">@item.precio</td>
+                <td class="costoBh" id="costoBh_@item.id_articulo">@item.costo_BH.Value.ToString("N2")</td>
+                <td class="msOriginal" id="msOriginal_@item.id_articulo">@item.kilos_MS.Value.ToString("N3")</td>
+
+                @if (diferencia == 0) { <td class="diferenciaEdit" id="diferenciaEdit_@item.id_articulo"></td> }
+                else { <td class="diferencia" id="diferencia_@item.id_articulo">@diferencia.ToString("+#0.000;-#0.000;0.000")</td> }
+
+                <!-- <td class="diferencia" id="diferencia_@item.id_articulo"></td> -->
+                
+                <td>
+                    <button class="btn btn-danger btn-sm" onclick="ElliminarIngredienteNewDieta(@item.id_articulo);"><i class="fa fa-remove"></i></button>
+                </td>
+            </tr>
+        }
+    }
+}
+
+
+

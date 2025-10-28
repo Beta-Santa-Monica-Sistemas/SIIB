@@ -1,0 +1,22 @@
+﻿@{
+    var count = ViewBag.count_tabla;
+    int id_proveedor = ViewBag.resumen_id_proveedor;
+    string nombre_proveedor = ViewBag.resumen_nombre_proveedor;
+    decimal[] resumen_cliente_programacion = ViewBag.resumen_cliente_programacion;
+    decimal total = 0;
+}
+
+<tr id="row_@ViewBag.count_tabla" class="text-center">
+    <td style="display:none;">@id_proveedor</td>
+    <td>@nombre_proveedor</td>
+    @for (int i = 0; i < resumen_cliente_programacion.Length; i++)
+    {
+        <td>
+            <label class="resumen_cantidad_dias">@resumen_cliente_programacion[i]</label>
+        </td>
+        total = total + resumen_cliente_programacion[i];
+    }
+    <td>
+        <label>@total</label>
+    </td>
+</tr>

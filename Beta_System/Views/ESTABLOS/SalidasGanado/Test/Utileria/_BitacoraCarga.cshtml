@@ -1,0 +1,246 @@
+﻿@model IEnumerable<Beta_System.Models.C_salida_ganado_logs_d>
+
+@if (Model != null && Model.Count() != 0)
+{
+
+    <div class="" id="heading_header">
+        <div class="w-100 collapsed p-2" style="border: 1px solid black; background-color: black;">
+            <div class="row">
+                <div class="col-md-4 text-center">
+                    <h4 style="color: white;"><strong>FOLIO</strong></h4>
+                </div>
+                <div class="col-md-3 text-center">
+                    <h4 style="color: white;"><strong>FECHA</strong></h4>
+                </div>
+                <div class="col-md-2 text-center">
+                    <h4 style="color: white;"><strong>CANTIDAD</strong></h4>
+                </div>
+                <div class="col-md-2 text-center">
+                    <h4 style="color: white;"><strong>TIPO</strong></h4>
+                </div>
+                <div class="col-md-1 text-center">
+                    <h4 style="color: white;">Ver</h4>
+                </div>
+            </div>
+        </div>
+    </div>
+    foreach (var salida_ganado in Model.GroupBy(x => x.C_salida_ganado_logs_g.id_salida_gan_g))
+    {
+        <div>
+            <div class="" id="heading_@salida_ganado.FirstOrDefault().C_salida_ganado_logs_g.id_salida_gan_g">
+                <div class="w-100 collapsed" style="border: 1px solid black; background-color: rgb(236, 244, 251);">
+                    <div class="row">
+                        <div class="col-md-4 text-center mt-2">
+                            <strong>@salida_ganado.FirstOrDefault().C_salida_ganado_g.folio</strong>
+                        </div>
+                        <div class="col-md-3 text-center mt-2">
+                            <strong>@salida_ganado.FirstOrDefault().C_salida_ganado_g.fecha</strong>
+                        </div>
+                        <div class="col-md-2 text-center mt-2">
+                            <strong>@salida_ganado.FirstOrDefault().C_salida_ganado_g.C_salida_ganado_d.Count()</strong>
+                        </div>
+                        <div class="col-md-2 text-center mt-2">
+                            <strong>@salida_ganado.FirstOrDefault().C_salida_ganado_g.C_salida_ganado_tipos_salidas.nombre_salida</strong>
+                        </div>
+                        <div class="col-md-1 text-center">
+                            <button class="btn btn_beta_icon" data-toggle="collapse" data-target="#collapse_@salida_ganado.FirstOrDefault().C_salida_ganado_logs_g.id_salida_gan_g" aria-expanded="false" aria-controls="collapse_@salida_ganado.FirstOrDefault().C_salida_ganado_logs_g.id_salida_gan_g">
+                                <i class="fa fa-bars"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <script>
+    try {
+        $("#datatable_@salida_ganado.FirstOrDefault().C_salida_ganado_logs_g.id_salida_gan_g").dataTable().fnDestroy();
+    } catch (e) { }
+            </script>
+
+            <div id="collapse_@salida_ganado.FirstOrDefault().C_salida_ganado_logs_g.id_salida_gan_g" class="collapse" aria-labelledby="heading_@salida_ganado.FirstOrDefault().C_salida_ganado_logs_g.id_salida_gan_g" data-parent="#accordionSolicitudes">
+                <div class="" style="border: 1px solid black; background-color: rgb(236, 244, 251);">
+
+
+                    <div class="" style="border: 1px solid black; background-color: rgb(236, 244, 251);">
+                        <div class="w-100 p-2 bg-beta" style="border: 4px solid black;">
+                            <h2 style="color: white;" class="text-left"><strong>SALIDA ORIGINAL</strong></h2>
+                        </div>
+                        <table class="table table-sm table-condensed small table-bordered table-striped" id="datatable_@salida_ganado.FirstOrDefault().C_salida_ganado_logs_g.id_salida_gan_g">
+                            <thead>
+                                <tr class="bg-beta text-center">
+                                    <th># Arete</th>
+                                    <th>Siniiga</th>
+                                    <th>Clasificación</th>
+                                    <th>Causa de la baja</th>
+                                    <th>Condición</th>
+                                    <th>Sala</th>
+                                    <th>Edad</th>
+                                    <th>Foto</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var original in salida_ganado.OrderBy(x => x.C_salida_ganado_logs_g.fecha_edicion).GroupBy(x => x.id_salida_gan_logs_g).FirstOrDefault())
+                                {
+                                    <tr>
+                                        <td>@original.arete</td>
+                                        <td>@original.siniiga</td>
+                                        <td>@original.clasifica</td>
+                                        <td>@original.causa_b</td>
+                                        <td>@original.cond_ind</td>
+                                        <td>@original.sala</td>
+                                        <td>@original.edad</td>
+                                        <td>
+                                            <div class="mb-2">
+                                                <div class="d-flex justify-content-center gap-2">
+                                                    @if (original.path != null)
+                                                    {
+                                                        <a class="btn btn_beta_icon" href="@original.path" target="_blank"><i class="fa fa-eye"></i></a>
+                                                    }
+                                                    @if (original.path_2 != null)
+                                                    {
+                                                        <a class="btn btn_beta_icon" href="@original.path_2" target="_blank"><i class="fa fa-eye"></i></a>
+                                                    }
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+
+
+
+                    <div class="" style="border: 1px solid black; background-color: rgb(236, 244, 251);">
+                        <div class="w-100 p-2 bg-beta" style="border: 4px solid black;">
+                            <h2 style="color: white;" class="text-left"><strong>SALIDA ACTUAL</strong></h2>
+                        </div>
+                        <table class="table table-sm table-condensed small table-bordered table-striped" id="datatable_@salida_ganado.FirstOrDefault().C_salida_ganado_logs_g.id_salida_gan_g">
+                            <thead>
+                                <tr class="bg-beta text-center">
+                                    <th># Arete</th>
+                                    <th>Siniiga</th>
+                                    <th>Clasificación</th>
+                                    <th>Causa de la baja</th>
+                                    <th>Condición</th>
+                                    <th>Sala</th>
+                                    <th>Edad</th>
+                                    <th>Foto</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var original in salida_ganado.FirstOrDefault().C_salida_ganado_g.C_salida_ganado_d)
+                                {
+                                    <tr>
+                                        <td>@original.arete</td>
+                                        <td>@original.siniiga</td>
+                                        <td>@original.clasifica</td>
+                                        <td>@original.causa_b</td>
+                                        <td>@original.cond_ind</td>
+                                        <td>@original.sala</td>
+                                        <td>@original.edad</td>
+                                        <td>
+                                            <div class="mb-2">
+                                                <div class="d-flex justify-content-center gap-2">
+                                                    @if (original.path != null)
+                                                    {
+                                                        <a class="btn btn_beta_icon" href="@original.path" target="_blank"><i class="fa fa-eye"></i></a>
+                                                    }
+                                                    @if (original.path_2 != null)
+                                                    {
+                                                        <a class="btn btn_beta_icon" href="@original.path_2" target="_blank"><i class="fa fa-eye"></i></a>
+                                                    }
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+
+
+
+
+
+                    @foreach (var item in salida_ganado.GroupBy(x => x.id_salida_gan_logs_g))
+                    {
+                        <div class="" style="border: 1px solid black; background-color: rgb(236, 244, 251);">
+                            <div class="w-100 p-2 bg-beta" style="border: 4px solid black;">
+                                <h2 style="color: white;" class="text-left"><strong>SALIDA EDICION - @item.FirstOrDefault().C_salida_ganado_logs_g.fecha_edicion - MODIFICO @item.FirstOrDefault().C_salida_ganado_logs_g.C_usuarios_corporativo.C_empleados.nombres.ToUpper() @item.FirstOrDefault().C_salida_ganado_logs_g.C_usuarios_corporativo.C_empleados.apellido_paterno.ToUpper()</strong></h2>
+                            </div>
+                            <table class="table table-sm table-condensed small table-bordered table-striped">
+                                <thead>
+                                    <tr class="bg-beta text-center">
+                                        <th># Arete</th>
+                                        <th>Siniiga</th>
+                                        <th>Clasificación</th>
+                                        <th>Causa de la baja</th>
+                                        <th>Condición</th>
+                                        <th>Sala</th>
+                                        <th>Edad</th>
+                                        <th>Estatus</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var original in item)
+                                    {
+                                        <tr>
+                                            <td>@original.arete</td>
+                                            <td>@original.siniiga</td>
+                                            <td>@original.clasifica</td>
+                                            <td>@original.causa_b</td>
+                                            <td>@original.cond_ind</td>
+                                            <td>@original.sala</td>
+                                            <td>@original.edad</td>
+                                            <td>
+                                                @if (original.rstatus == "A")
+                                                {
+                                                    <strong style="color:rgb(71 206 56)">Activo</strong>
+                                                }
+                                                else
+                                                {
+                                                    <strong style="color:rgb(255 0 0)">Eliminado</strong>
+                                                }
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                </div>
+            </div>
+            <script>
+$('#datatable_@salida_ganado.FirstOrDefault().C_salida_ganado_logs_g.id_salida_gan_g').DataTable({
+    keys: false,
+    ordering: false,
+    paging: false,
+    select: true,
+    dom: "Bfrtip",
+    buttons: [{}],
+    responsive: false,
+    seraching: false
+});
+
+$('#datatable_@salida_ganado.FirstOrDefault().C_salida_ganado_logs_g.id_salida_gan_g').on('click', 'td', function () {
+    // Eliminar la clase y el color de fondo de la celda previamente seleccionada
+    $('td.success').removeClass('success');
+    $('td').css("background-color", "#fff");
+
+    // Agregar la clase y cambiar el color de fondo de la celda seleccionada
+    $(this).addClass('success');
+    $(this).css("background-color", "#rgb(153, 255, 204)");
+});
+            </script>
+
+
+
+        </div>
+    }
+}
+else
+{
+    <div class="col-md-12"><hr /></div>
+    <div class="col-md-12 text-center"><h2 style="color:rgb(255 0 0)">¡No se encontró información!</h2></div>
+}

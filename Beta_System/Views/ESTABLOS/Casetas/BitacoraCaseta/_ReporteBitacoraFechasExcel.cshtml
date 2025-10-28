@@ -1,0 +1,60 @@
+﻿@model IEnumerable<Beta_System.Models.C_establos_caseta_logs_g>
+
+<table class="table table-striped table-bordered" id="reporte_bitacora__table">
+    <tr class="text-center bg-beta">
+        <th class="headerConcepto">Nombre ingresante</th>
+        <th class="headerConcepto">Placas/Identificador</th>
+        <th class="headerConcepto">Tipo entrada</th>
+        <th class="headerConcepto">Usuario registra ingreso</th>
+        <th class="headerConcepto">Fecha ingreso</th>
+        <th class="headerConcepto">Hora ingreso</th>
+        <th class="headerConcepto">Usuario registra salida</th>
+        <th class="headerConcepto">Fecha salida</th>
+        <th class="headerConcepto">Hora salida</th>
+        <th class="headerConcepto">Asunto</th>
+        <th class="headerConcepto">Tiempo estancia</th>
+    </tr>
+    @foreach (var item in Model)
+    {
+        TimeSpan estancia;
+        string tiempo = "";
+        if (item.fecha_salida != null && item.fecha_entrada != null)
+        {
+            estancia = (item.fecha_salida - item.fecha_entrada).Value;
+            if (estancia.Days > 0) { tiempo += estancia.Days + " dias "; }
+            if (estancia.Hours > 0) { tiempo += estancia.Hours + " horas "; }
+            if (estancia.Minutes > 0) { tiempo += estancia.Minutes + " minutos"; }
+        }
+
+        <tr class="text-center">
+            <td>@item.nombre_registro</td>
+            <td>@item.placas</td>
+            <td>@item.C_establos_caseta_tipos_entradas.tipo_entrada</td>
+            <td>@item.C_usuarios_corporativo.C_empleados.nombres @item.C_usuarios_corporativo.C_empleados.apellido_paterno</td>
+
+            <td>@string.Format(item.fecha_entrada.Value.ToShortDateString(), "dd/mm/yyyy")</td>
+            <td>@string.Format(item.fecha_entrada.Value.ToShortTimeString(), "hh:mm")</td>
+
+            @if (item.fecha_salida != null && item.fecha_entrada != null)
+            {
+                <td>@item.C_usuarios_corporativo1.C_empleados.nombres @item.C_usuarios_corporativo1.C_empleados.apellido_paterno</td>
+                <td>@string.Format(item.fecha_salida.Value.ToShortDateString(), "dd/mm/yyyy")</td>
+                <td>@string.Format(item.fecha_salida.Value.ToShortTimeString(), "hh:mm")</td>
+            }
+            else
+            {
+                <td></td>
+                <td></td>
+                <td></td>
+            }
+
+
+            <td>@item.asunto</td>
+            <td>
+                @if (tiempo != "0")
+                {@tiempo}
+
+            </td>
+        </tr>
+    }
+</table>

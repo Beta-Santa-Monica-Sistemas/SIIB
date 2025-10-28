@@ -1,0 +1,132 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+    List<int> permisos = Session["PermisosModulo"] as List<int>;
+}
+
+<div class="page_title">
+    <div class="counter_section">
+        <h1>Solicitudes de pago</h1>
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="nav nav-tabs">
+                    @if (permisos.Contains(4020))
+                    {
+                        <li class="active"> <a data-toggle="tab" href="#solicitudes_pago_tab" id="consultar_requi">Solicitudes autorizadas<i class="fa fa-money fa-2x ml-2"></i></a></li>
+                    }
+                    @if (permisos.Contains(4019))
+                    {
+                        <li class="active"> <a data-toggle="tab" href="#solicitudes_aut_tab">Solicitudes a autorización<i class="fa fa-check fa-2x ml-2"></i></a></li>
+                    }
+                    @if (permisos.Contains(4018))
+                    {
+                        <li class="active"> <a data-toggle="tab" href="#solicitudes_rev_tab" id="consultar_requi">Solicitudes a validación<i class="fa fa-search fa-2x ml-2"></i></a></li>
+                    }
+                    @if (permisos.Contains(4017))
+                    {
+                        <li class="active"> <a data-toggle="tab" href="#generar_solicitud_tab">Generar solicitud<i class="fa fa-plus fa-2x ml-2"></i></a></li>
+                    }
+
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="column2 counter_section">
+    <div class="tab-content">
+        <div id="solicitudes_pago_tab" class="tab-pane fade in active show">
+            <h3 class="text-center">Solicitudes autorizadas</h3>
+            <div id="div_solciitudes_pago" class="table-responsive"></div>
+        </div>
+
+        <div id="solicitudes_rev_tab" class="tab-pane">
+            <h3 class="text-center">Solicitudes pendientes de validar</h3>
+            <div id="div_solciitudes_validar" class="table-responsive"></div>
+        </div>
+
+
+        <div id="solicitudes_aut_tab" class="tab-pane">
+            <h3 class="text-center">Solicitudes pendientes de autorizar</h3>
+            <div id="div_solciitudes_autorizar" class="table-responsive"></div>
+        </div>
+
+
+        <div id="generar_solicitud_tab" class="tab-pane">
+            <h3 class="text-center">Generar solicitud de pagos</h3>
+            <div class="row">
+                <div class="col-md-3">
+                    <strong>Fecha inicio</strong>
+                    <input type="date" id="fecha_inicio_pagos" class="form-control" />
+                </div>
+                <div class="col-md-3">
+                    <strong>Fecha fin</strong>
+                    <input type="date" id="fecha_fin_pagos" class="form-control" />
+                </div>
+                <div class="col-md-3">
+                    <strong>Moneda</strong>
+                    <select class="form-control" id="clave_fiscal_pagos">
+                        <option value="MXN">MXN</option>
+                        <option value="USD">USD</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <br />
+                    <button class="btn btn_beta_icon" onclick="ConsultarPagosProgramados();"><i class="fa fa-search"></i></button>
+                </div>
+            </div>
+            <hr />
+            <div id="div_pagos_pendientes"></div>
+        </div>
+
+
+    </div>
+</div>
+
+
+
+<!-- Modal DETALLE SOLICITUD AUTORIZAR-->
+<div class="modal fade" id="m_detalle_solicitud" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document" style="width:95%; min-width:95%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Detalle de la solicitud</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="div_solciitudes_validar_autorizar_detalle"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn_beta_danger" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@Scripts.Render("~/bundles_SolicitudesPagos/js")
+<script>
+    $(window).on("load", function () {
+        $('input[type="date"]').val(today);
+        $("#fecha_inicio_pagos").val(last_week);
+
+    });
+</script>
+
+@if (permisos.Contains(4019)) // REGISTRADAS
+{
+    <script>ConsultarSolicitudesPendientesValidarAutorizar(1, 1);</script>
+}
+
+@if (permisos.Contains(4019)) //VALIDADAS
+{
+    <script>ConsultarSolicitudesPendientesValidarAutorizar(2, 2);</script>
+}
+
+@if (permisos.Contains(4020))  //AUTORIZADAS
+{
+    <script>ConsultarSolicitudesPendientesValidarAutorizar(3, 3);</script>
+}

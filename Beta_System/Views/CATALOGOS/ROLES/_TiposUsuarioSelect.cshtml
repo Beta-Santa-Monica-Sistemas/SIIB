@@ -1,0 +1,6 @@
+﻿@model IEnumerable<Beta_System.Models.C_usuarios_tipo>
+
+@foreach (var item in Model)
+{
+    <option value="@item.id_usuario_tipo">@item.nombre</option>
+}

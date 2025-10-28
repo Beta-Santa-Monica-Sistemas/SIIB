@@ -1,0 +1,36 @@
+﻿@model List<Beta_System.Models.C_usuarios_masters>
+
+<table class="table table-striped table-bordered" id="UsuariosMasterDataTable">
+    <thead>
+        <tr class="bg-beta">
+            <th>Usuario</th>
+            <th>Correo</th>
+            <th>Activo</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var usuario in Model)
+        {
+            <tr>
+                <td>
+                    @if (usuario.C_usuarios_corporativo != null)
+                    {
+                        <strong>@usuario.C_usuarios_corporativo.usuario</strong>
+                    }
+                </td>
+                <td>@usuario.correo</td>
+                <td class="text-center">
+                    @if (usuario.activo == true)
+                    {
+
+                        <i class="fa fa-2x fa-toggle-on" style="color:lightgreen;" onclick="OnUsuarioMaster(@usuario.id_usuario_master, false);"></i>
+                    }
+                    else
+                    {
+                        <i class="fa fa-2x fa-toggle-on" style="color:gray;" onclick="OnUsuarioMaster(@usuario.id_usuario_master, true)"></i>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

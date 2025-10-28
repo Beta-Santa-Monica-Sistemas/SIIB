@@ -1,0 +1,120 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+    List<int> permisos = Session["PermisosModulo"] as List<int>;
+}
+
+<div class="page_title">
+    <div class="counter_section">
+        <h1>Administración de inversiones</h1>
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="nav nav-tabs">
+                    <li class="active"> <a data-toggle="tab" href="#inversion">ADMINISTRAR INVERSIONES<i class="fa fa-search fa-2x ml-2"></i></a></li>
+                    <li> <a data-toggle="tab" href="#inversion_reporte">REPORTE COMPARATIVO DE INVERSIONES<i class="fa fa-money fa-2x ml-2"></i></a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row column2 counter_section">
+    <div class="tab-content">
+        @* CONSULTA DE INVERSIONES *@
+        <div id="inversion" class="tab-pane fade in active show">
+            <h3 class="text-center">Administracion de inversiones</h3>
+            <div class="row">
+                <div class="col-md-3">
+                    <strong>Año</strong>
+                    <select class="form-control" id="anio_inversion_select">
+                        @{ Html.RenderAction("ConsultarAniosPresupuestoSelect", "COMPRAS"); }
+                    </select>
+                </div>
+                <div class="col-md-1" style="padding-top:10px">
+                    <button class="btn btn_beta_icon" onclick="ConsultaInversiones();"><i class="fa fa-search"></i></button>
+                </div>
+                <div class="col-md-8 text-right" style="padding-top:3px">
+                    <button class="btn btn_beta" onclick="RegistroInversion();"><i class="fa fa-plus"></i> REGISTRAR INVERSIÓN</button>
+                </div>
+            </div>
+            <hr />
+            <div class="table-responsive" id="div_tabla_inversiones"></div>
+        </div>
+
+        @* ARTICULOS DE BASCULA *@
+        <div id="inversion_reporte" class="tab-pane fade">
+            <h3 class="text-center">Reporte comparativo de inversión</h3>
+            <div class="row">
+                <div class="col-md-3">
+                    <strong>Año</strong>
+                    <select class="form-control" id="anio_inversion_reporte_select">
+                        @{ Html.RenderAction("ConsultarAniosPresupuestoSelect", "COMPRAS"); }
+                    </select>
+                </div>
+                <div class="col-md-1" style="padding-top:10px">
+                    <button class="btn btn_beta_icon" onclick="ConsultaInversionesReporte();"><i class="fa fa-search"></i></button>
+                </div>
+                <div class="col-md-4 text-right" style="padding-top:3px">
+                    <button class="btn btn_beta" onclick="DescargarExcelReporteInversionTable();"><i class="fa fa-print"></i>EXCEL DE INVERSIÓN</button>
+                </div>
+                <div class="col-md-4 text-right" style="padding-top:3px">
+                    <button class="btn btn_beta" onclick="ReporteInversionTablePDF();"><i class="fa fa-print"></i>IMPRESION DE INVERSIÓN</button>
+                </div>
+            </div>
+            <div class="table-responsive" id="div_tabla_inversiones_reporte"></div>
+        </div>
+    </div>
+</div>
+
+@*------------ MODAL DE INVERSIONES*@
+<div class="modal fade" id="m_inversion" tabindex="-1" role="dialog" aria-labelledby="m_inversion" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document" style="min-width: 40%; max-width:40%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <!--TITULO-->
+                <h5 class="modal-title" id="lbl_inversion">Control de inversion</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-3">
+                        <strong>Folio:</strong>
+                        <input type="text" class="form-control invers_limp" id="inversion_folio" />
+                    </div>
+                    <div class="col-md-5">
+                        <strong>Presupuesto:</strong>
+                        <input type="text" class="form-control solo-numeros invers_limp" id="inversion_ppto" />
+                    </div>
+                    <div class="col-md-4">
+                        <strong>Periodo de aplicación:</strong>
+                        <input type="date" class="form-control" id="inversion_periodo">
+                    </div>
+                    <div class="col-md-12">
+                        <strong>Concepto:</strong>
+                        <input type="text" class="form-control invers_limp" id="inversion_concepto" />
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn_beta_danger" data-dismiss="modal">Cerrar</button>
+                <!--Accion a Realizar-->
+                <button type="button" class="btn btn_beta" id="btn_accion_inversion">Confirmar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@Scripts.Render("~/bundles_Presupuestos/js")
+@Scripts.Render("~/bundles_Propiedades/js")
+@Scripts.Render("~/bundles_ReportesCompras/js")
+
+<script>
+    $(window).on("load", function () {
+        ConsultaInversiones();
+        ConsultaInversionesReporte();
+        CaracteresControl();
+    });
+</script>

@@ -1,0 +1,80 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+}
+
+<div class="page_title">
+    <div class="counter_section">
+        <h1>Reporte de solicitudes de mercancía</h1>
+    </div>
+</div>
+
+<div class="column2 counter_section">
+    <div class="row">
+        <div class="col-md-2">
+            <strong>Almacen:</strong>
+            <select class="form-control" id="id_almacen_solicitudes_mercancia">
+                <option value="0">Todos</option>
+                @{ Html.RenderAction("ConsultarAlmacenesUsuarioSelect", "CATALOGOS", new { id_usuario = (int)Session["LoggedId"] }); }
+            </select>
+        </div>
+        <div class="col-md-2">
+            <strong>Fecha inicio</strong>
+            <input type="date" class="form-control fecha_inicio" id="fecha_inicio_solicitudes_mercancia" />
+        </div>
+        <div class="col-md-2">
+            <strong>Fecha fin</strong>
+            <input type="date" class="form-control fecha_fin" id="fecha_fin_solicitudes_mercancia" />
+        </div>
+        <div class="col-md-4">
+            <strong>Equipo</strong>
+            <select id="id_equipo_solicitudes_mercancia" class="form-control">
+                <option value="0">Todos</option>
+                @{ Html.RenderAction("ConsultarEquiposEstablosSelect", "CATALOGOS"); }
+            </select>
+        </div>
+        <div class="col-md-4">
+            <br />
+            <strong>Solicitante:</strong>
+            <br />
+            <select class="form-control" id="id_solicitante_solicitudes_mercancia">
+                <option value="0">Todos</option>
+                @{ Html.RenderAction("ConsultarEmpleadosSelect", "CATALOGOS", new { status = "A" });}
+            </select>
+        </div>
+        <div class="col-md-3">
+            <br />
+            <strong>Departamento</strong>
+            <br />
+            <select class="form-control" id="id_departamento_solicitudes_mercancia">
+                <option value="0">Todos</option>
+                @{ Html.RenderAction("ConsultarDepartamentosSelect", "CATALOGOS"); }
+            </select>
+        </div>
+        <div class="col-md-1">
+            <br />
+            <br />
+            <button class="btn btn_beta_icon" onclick="ConsultarReporteSolicitudesMercancia();"><i class="fa fa-search"></i></button>
+        </div>
+    </div>
+    <br />
+    <div class="table-responsive" id="div_reporte_solicitud_mercancia"></div>
+</div>
+
+
+
+@Scripts.Render("~/bundles_ReportesAlmacen/js")
+
+<script>
+    try {
+        $("#id_solicitante_solicitudes_mercancia").select2({
+            placeholder: 'Selecciona un solicitante'
+        });
+        $("#id_equipo_solicitudes_mercancia").select2({
+            placeholder: 'Selecciona un equipo'
+        });
+    }
+    catch (ex) { }
+</script>
+

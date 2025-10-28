@@ -1,0 +1,87 @@
+﻿@model IQueryable<Beta_System.Models.C_compras_requi_g>
+
+@{ 
+    Beta_System.Controllers.REQUISICIONESController REQUISICIONESController = new Beta_System.Controllers.REQUISICIONESController();
+}
+
+<table class="table table-striped table-bordered text-center" id="datatable_requisiciones_por_firmar">
+    <thead>
+        <tr class="bg-beta text-center">
+            @if (ViewBag.modo == 2)
+            {
+                <th>AUT</th>
+            }
+            <th>Tipo de requisición</th>
+            <th>Fecha</th>
+            <th>Centro</th>
+            <th>Requisición</th>
+            <th>Concepto</th>
+            @if (ViewBag.modo == 2)
+            {
+                <th>Primera firma</th>
+            }
+            else
+            {
+                <th>Registrado por</th>
+            }
+            <th>Importe</th>
+            <th>PPTO. vs Req.</th>
+            <th>Mostrar</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.OrderByDescending(x => x.fecha_registro).Distinct())
+        {
+            string color_excedente = "text-success";
+            int[] id_requi_g = new int[] { item.id_requisicion_articulo_g };
+            
+            string valor_requisicion = "";
+            try { valor_requisicion = REQUISICIONESController.CalcularTotalRequi(id_requi_g); }
+            catch (Exception) {}
+
+            decimal valor_resultado = 0;
+            try { 
+                valor_resultado = REQUISICIONESController.ConsultarDisponiblePresupuestoCuentasRequisicion(item.id_requisicion_articulo_g);
+                if (valor_resultado < 0) { color_excedente = "text-danger"; }
+            }
+            catch (Exception){}
+
+            <tr class="text-center" id="TrRequi_@item.id_requisicion_articulo_g">
+                @if (ViewBag.modo == 2)
+                {
+                    <td>
+                        <input type="checkbox" id="@item.id_requisicion_articulo_g" value="@item.id_requisicion_articulo_g" onclick="CalcularTotalRequis();" class="check_aut_requi form-control requisicion_master" style="height:25px;" />
+                    </td>
+                }
+                <td><strong style="color: @item.C_compras_requisiciones_tipos.color">@item.C_compras_requisiciones_tipos.tipo_requisicion</strong></td>
+                <td>@String.Format(item.fecha_registro.Value.ToShortDateString(), "dd/mm/aaaa")</td>
+                <td>@item.C_centros_g.siglas</td>
+                <td>@item.id_requisicion_articulo_g</td>
+                <td>@item.concepto</td>
+                @if (ViewBag.modo == 2)
+                {
+                    <td>@item.C_usuarios_corporativo.C_empleados.nombres @item.C_usuarios_corporativo.C_empleados.apellido_paterno</td>
+                }
+                else
+                {
+                    <td>@item.C_usuarios_corporativo5.C_empleados.nombres @item.C_usuarios_corporativo5.C_empleados.apellido_paterno</td>
+                }
+                <td>
+                    @try
+                    {
+                        @*<strong>$ @{ Html.RenderAction("CalcularTotalRequi", "REQUISICIONES", new { requis = item.id_requisicion_articulo_g } ); } </strong>*@
+                        <strong>$@valor_requisicion</strong>
+                    }
+                    catch (Exception)
+                    {
+
+                    }
+                </td>
+                <td><strong class="@color_excedente">$@valor_resultado.ToString("N2")</strong></td>
+                <td>
+                    <button class="btn btn_beta_icon" onclick="ConsultarRequisicionesAutFinalDetalle(@item.id_requisicion_articulo_g, @ViewBag.modo);"><i class="fa fa-bars"></i></button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

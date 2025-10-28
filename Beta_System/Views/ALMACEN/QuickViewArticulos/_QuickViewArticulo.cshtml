@@ -1,0 +1,274 @@
+﻿@model Beta_System.Models.QuickViewArticulo
+
+<style>
+    .divEditable {
+        min-height: 10px;
+        line-height: 23px;
+        text-align: center;
+        font-size: 15px;
+        border-radius: 2rem;
+    }
+</style>
+
+@{
+    decimal importe = Convert.ToDecimal(Model.Existencia) * (decimal)Model.PrecioActual;
+    var ultima_compra = Model.Ultimas_compras.FirstOrDefault();
+}
+
+<div class="row">
+    <div class="col-md-2 text-left">
+        <strong>Articulo</strong>
+    </div>
+    <div class="col-md-2">
+        <div class="divEditable"><strong>@Model.articulo_info.clave</strong></div>
+    </div>
+    <div class="col-md-1"></div>
+    <div class="col-md-2 text-left">
+        <strong>Descripción</strong>
+    </div>
+    <div class="col-md-5">
+        <div class="divEditable text-left"><strong class="p-3">@Model.articulo_info.nombre_articulo</strong></div>
+    </div>
+</div>
+<br />
+<div class="row">
+    <div class="col-md-2 text-left">
+        <strong>Unidad de medida</strong>
+    </div>
+    <div class="col-md-2 text-center">
+        <div class="divEditable">
+            <strong>@Model.articulo_info.C_unidades_medidas.unidad_medida</strong>
+        </div>
+    </div>
+    <div class="col-md-1"></div>
+    <div class="col-md-2 text-left">
+        <strong>Almacen/Tipo</strong>
+    </div>
+    <div class="col-md-3 text-center">
+        <div class="divEditable">
+            <strong>@Model.articulo_info.C_articulos_tipos.nombre_tipo</strong>
+        </div>
+    </div>
+
+</div>
+<br />
+<div class="row pb-4" style="border-bottom: 1px solid black;">
+    <div class="col-md-2 text-left">
+        <strong>Ubicación</strong>
+    </div>
+    <div class="col-md-2 text-center">
+        <div class="divEditable">
+            <strong>@Model.Ubicacion</strong>
+        </div>
+    </div>
+    <div class="col-md-1"></div>
+    <div class="col-md-2 text-left">
+        <strong>Clasificación</strong>
+    </div>
+    <div class="col-md-3 text-center">
+        <div class="divEditable">
+            <strong>@Model.articulo_info.C_articulos_clasificaciones.nombre_clasificacion</strong>
+        </div>
+    </div>
+</div>
+<br />
+
+<div class="row">
+    <div class="col-md-2 text-left">
+        <strong>Existencia</strong>
+    </div>
+    <div class="col-md-2 text-center">
+        <div class="divEditable">
+            <strong>@Convert.ToDecimal(Model.Existencia).ToString("N2")</strong>
+        </div>
+    </div>
+    <div class="col-md-1"></div>
+    <div class="col-md-2 text-left">
+        <strong>Inventario mínimo</strong>
+    </div>
+    <div class="col-md-3 text-center">
+        <div class="divEditable">
+            @if (Model.Maximos_Minimos != null) { <strong>@Model.Maximos_Minimos.cantidad_minima</strong>}
+            else { <strong>NO ASIGNADA</strong>}
+        </div>
+    </div>
+</div>
+<br />
+<div class="row">
+    <div class="col-md-2 text-left">
+        <strong>Precio actual</strong>
+    </div>
+    <div class="col-md-2 text-center">
+        <div class="divEditable">
+            <strong>$@Model.PrecioActual.ToString("N2")</strong>
+        </div>
+    </div>
+
+    <div class="col-md-1"></div>
+    <div class="col-md-2 text-left">
+        <strong>Inventario máximo</strong>
+    </div>
+    <div class="col-md-3 text-center">
+        <div class="divEditable">
+            @if (Model.Maximos_Minimos != null)
+            {<strong>@Model.Maximos_Minimos.cantidad_maxima</strong>}
+        else
+        { <strong>NO ASIGNADA</strong>}
+        </div>
+    </div>
+
+</div>
+<br />
+<div class="row pb-4" style="border-bottom: 1px solid black;">
+    <div class="col-md-2 text-left">
+        <strong>Importe</strong>
+    </div>
+    <div class="col-md-2 text-center">
+        <div class="divEditable">
+            <strong>$@importe.ToString("N2")</strong>
+        </div>
+    </div>
+
+    <div class="col-md-1"></div>
+    <div class="col-md-2 text-left">
+        <strong>Ultimo inventario</strong>
+    </div>
+    <div class="col-md-3 text-center">
+        <div class="divEditable">
+            <strong>@Model.Fecha_ult_inventario</strong>
+        </div>
+    </div>
+</div>
+<br />
+
+@if (ultima_compra != null)
+{
+    <div class="row">
+        <div class="col-md-4">
+            <div class="row">
+                <div class="col-md-6 text-left">
+                    <strong>Ultima entrada</strong>
+                </div>
+                <div class="col-md-6 text-center">
+                    <div class="divEditable">
+                        <strong>@string.Format(ultima_compra.C_compras_ordenes_g.fecha_registro.Value.ToShortDateString(), "dd/MM/yyyy")</strong>
+                    </div>
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-md-6 text-left">
+                    <strong>Orden compra</strong>
+                </div>
+                <div class="col-md-6 text-center">
+                    <div class="divEditable">
+                        <strong>#@ultima_compra.C_compras_ordenes_g.id_compras_orden_g</strong>
+                    </div>
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-md-6 text-left">
+                    <strong>Precio ult. compra</strong>
+                </div>
+                <div class="col-md-6 text-center">
+                    <div class="divEditable">
+                        <strong>@ultima_compra.precio_unitario</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-1"></div>
+
+        <div class="col-md-7">
+            <h3 class="text-center"><strong>ULTIMAS COMPRAS</strong></h3>
+            <div class="table-responsive" style="overflow:auto; overflow-x:hidden;height:200px; min-height:200px;">
+                <table class="table table-sm table-condensed small table-bordered table-striped">
+                    <thead>
+                        <tr class="bg-beta text-center">
+                            <th>Fecha</th>
+                            <th>Orden</th>
+                            <th>Cantidad</th>
+                            <th>Moneda</th>
+                            <th>Importe $</th>
+                            <th>Ver</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Ultimas_compras)
+                        {
+                            decimal importe_orden = (decimal)item.cantidad_compra * (decimal)item.precio_unitario;
+                            <tr class="text-center">
+                                <td>@string.Format(item.C_compras_ordenes_g.fecha_registro.Value.ToShortDateString(), "dd/MM/yyyy")</td>
+                                <td>@item.id_compras_orden_g</td>
+                                <td>@item.cantidad_compra.Value.ToString("N2")</td>
+                                <td>@item.C_tipos_moneda.clave_fiscal</td>
+                                <td>@importe_orden.ToString("N2")</td>
+                                <td>
+                                    <button class="btn btn_beta_icon" onclick="ConsultarOrdenCompraDetalle(@item.id_compras_orden_g);"><i class="fa fa-bars"></i></button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+}
+
+else
+{
+    <div class="row">
+        <div class="col-md-2 text-left">
+            <strong>Ultima entrada</strong>
+        </div>
+        <div class="col-md-2 text-center">
+            <div class="divEditable">
+                <strong>Sin compra registrada</strong>
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-2 text-left">
+            <strong>Orden compra</strong>
+        </div>
+        <div class="col-md-2 text-center">
+            <div class="divEditable">
+                <strong></strong>
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-2 text-left">
+            <strong>Precio ult. compra</strong>
+        </div>
+        <div class="col-md-2 text-center">
+            <div class="divEditable">
+                <strong></strong>
+            </div>
+        </div>
+    </div>
+}
+
+<div class="row">
+    <div class="col-md-2 text-left">
+        <strong>Pendiente de surtir</strong>
+    </div>
+    <div class="col-md-2 text-center">
+        <div class="divEditable">
+            <strong>@Model.Articulos_Pendientes.Sum(x => x.cantidad)</strong>
+        </div>
+    </div>
+    <div class="col-md-8">
+        @foreach (var item in Model.Articulos_Pendientes)
+        {
+            <strong class="ml-2 text_beta">@item.C_compras_requi_g.C_centros_g.siglas @item.C_compras_requi_g.id_requisicion_articulo_g</strong>
+        }
+    </div>
+</div>
+
+
+
+

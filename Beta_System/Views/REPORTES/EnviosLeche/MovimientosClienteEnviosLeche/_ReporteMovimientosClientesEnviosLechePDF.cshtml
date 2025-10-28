@@ -1,0 +1,364 @@
+﻿@model List<Beta_System.Models.C_envios_leche_g>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+<!--ICONO DE LA PAGINA-->
+<link rel="icon" type="image/png" href="~/Content/img_layout/Logo_beta_icono.png" />
+
+<meta http-equiv="Last-Modified" content="0">
+<meta http-equiv='cache-control' content='no-cache'>
+<meta http-equiv='expires' content='0'>
+<meta http-equiv='pragma' content='no-cache'>
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>BETA System</title>
+
+<!-- bootstrap css -->
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css">
+
+
+<!-- site css -->
+<link rel="stylesheet" href="~/Content/style.css" />
+<!-- responsive css -->
+<link rel="stylesheet" href="~/Content/css/responsive.css" />
+<!-- color css -->
+<link rel="stylesheet" href="~/Content/css/color_2.css" />
+<!-- select bootstrap -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.18/css/bootstrap-select.min.css" integrity="sha512-ARJR74swou2y0Q2V9k0GbzQ/5vJ2RBSoCWokg4zkfM29Fb3vZEQyv0iWBMW/yvKgyHSR/7D64pFMmU8nYmbRkg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<!-- scrollbar css -->
+<link rel="stylesheet" href="~/Content/css/perfect-scrollbar.css" />
+<!-- custom css -->
+<link rel="stylesheet" href="~/Content/production/css/custom.css" />
+<!-- calendar file css -->
+<link rel="stylesheet" href="~/Content/css/semantic.min.css" />
+
+<link rel="stylesheet" href="~/Content/css/animate.css" />
+
+<link href="~/Content/production/css/select/select2.min.css" rel="stylesheet">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/css/iziToast.css" integrity="sha512-DIW4FkYTOxjCqRt7oS9BFO+nVOwDL4bzukDyDtMO7crjUZhwpyrWBFroq+IqRe6VnJkTpRAS6nhDvf0w+wHmxg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+<link href="~/Content/production/css/font-awesome.css" rel="stylesheet" />
+<link href="~/Content/production/css/font-awesome-animation.min.css" rel="stylesheet" />
+<link href="~/Content/production/fonts/css/font-we" rel="stylesheet" />
+
+<!--jquery-->
+<link rel="stylesheet" href="~/Content/production/css/datatables/css/jquery.dataTables.css" />
+<link href="~/Content/production/css/datatables/css/datatables_select.min.css" rel="stylesheet" />
+
+@Styles.Render("~/AdminBundles/CSS_v1")
+
+
+<script type="text/javascript" src="~/Content/js/animate.js"></script>
+<script type="text/javascript" src="~/Content/production/js/fixed_table_rc.js"></script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.bundle.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.18/js/bootstrap-select.min.js" integrity="sha512-yDlE7vpGDP7o2eftkCiPZ+yuUyEcaBwoJoIhdXv71KZWugFqEphIS3PU60lEkFaz8RxaVsMpSvQxMBaKVwA5xg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+
+<script type="text/javascript" src="~/Content/documentation/js/jquery-ui-1.13.1/jquery-ui.min.js"></script>
+
+@Scripts.Render("~/AdminBundles/JS")
+
+<script src="~/Content/production/js/datatables/pdfmake.min.js"></script>
+<script src="~/Content/production/js/datatables/vfs_fonts.js"></script>
+<script src="~/Content/production/js/datatables/dataTables_select.js"></script>
+
+<!--JSPDF-->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.min.js"></script>
+<script type="text/javascript" src="https://html2canvas.hertzen.com/dist/html2canvas.js"></script>
+
+<!--IZITOAST-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/js/iziToast.min.js" integrity="sha512-Zq9o+E00xhhR/7vJ49mxFNJ0KQw1E1TMWkPTxrWcnpfEFDEXgUiwJHIKit93EW/XxE31HSI5GEOW06G6BF1AtA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<!--eCharts-->
+<script src="~/Content/js/echarts.min.js" type="text/javascript"></script>
+
+<!--SELECT SEARCH-->
+<script src="~/Content/js/select/select2.full.js"></script>
+
+<!--CUSTOM JS-->
+<script type="text/javascript" src="~/Content/js/custom.js"></script>
+
+<!--MOMENT JS-->
+<script type="text/javascript" src="~/Content/moment.min.js"></script>
+
+<!--BOOTSTRAP JS-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha512-YK1Mz9UiZmhbFzXgMbl3bO49wZ78Xj3h8TtTBLFHEAEjUBxsEZdXd8Il5RWbhPOyB653bGQDNVGGny2mORZq4A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<!--LORD ICONS-->
+<script src="https://cdn.lordicon.com/lordicon-1.1.0.js"></script>
+
+<link href="~/Content/production/css/datatables/css/datatables_select.min.css" rel="stylesheet" />
+<script src="~/Content/production/js/datatables/dataTables_select.js"></script>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+<!--ICONO DE LA PAGINA-->
+<link rel="icon" type="image/png" href="" />
+
+<meta http-equiv="Last-Modified" content="0">
+<meta http-equiv='cache-control' content='no-cache'>
+<meta http-equiv='expires' content='0'>
+<meta http-equiv='pragma' content='no-cache'>
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>BETA System</title>
+
+<!-- bootstrap css -->
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css">
+
+
+<!-- site css -->
+<link rel="stylesheet" href="~/Content/style.css" />
+<!-- responsive css -->
+<link rel="stylesheet" href="~/Content/css/responsive.css" />
+<!-- color css -->
+<link rel="stylesheet" href="~/Content/css/color_2.css" />
+<!-- select bootstrap -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.18/css/bootstrap-select.min.css" integrity="sha512-ARJR74swou2y0Q2V9k0GbzQ/5vJ2RBSoCWokg4zkfM29Fb3vZEQyv0iWBMW/yvKgyHSR/7D64pFMmU8nYmbRkg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<!-- scrollbar css -->
+<link rel="stylesheet" href="~/Content/css/perfect-scrollbar.css" />
+<!-- custom css -->
+<link rel="stylesheet" href="~/Content/production/css/custom.css" />
+<!-- calendar file css -->
+<link rel="stylesheet" href="~/Content/css/semantic.min.css" />
+
+<link rel="stylesheet" href="~/Content/css/animate.css" />
+
+<link href="~/Content/production/css/select/select2.min.css" rel="stylesheet">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/css/iziToast.css" integrity="sha512-DIW4FkYTOxjCqRt7oS9BFO+nVOwDL4bzukDyDtMO7crjUZhwpyrWBFroq+IqRe6VnJkTpRAS6nhDvf0w+wHmxg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+<link href="~/Content/production/css/font-awesome.css" rel="stylesheet" />
+<link href="~/Content/production/css/font-awesome-animation.min.css" rel="stylesheet" />
+<link href="~/Content/production/fonts/css/font-we" rel="stylesheet" />
+
+<!--jquery-->
+<link rel="stylesheet" href="~/Content/production/css/datatables/css/jquery.dataTables.css" />
+<link href="~/Content/production/css/datatables/css/datatables_select.min.css" rel="stylesheet" />
+
+@Styles.Render("~/AdminBundles/CSS_v1")
+
+
+<script type="text/javascript" src="~/Content/js/animate.js"></script>
+<script type="text/javascript" src="~/Content/production/js/fixed_table_rc.js"></script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.bundle.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.18/js/bootstrap-select.min.js" integrity="sha512-yDlE7vpGDP7o2eftkCiPZ+yuUyEcaBwoJoIhdXv71KZWugFqEphIS3PU60lEkFaz8RxaVsMpSvQxMBaKVwA5xg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+
+<script type="text/javascript" src="~/Content/documentation/js/jquery-ui-1.13.1/jquery-ui.min.js"></script>
+
+@Scripts.Render("~/AdminBundles/JS")
+
+<script src="~/Content/production/js/datatables/pdfmake.min.js"></script>
+<script src="~/Content/production/js/datatables/vfs_fonts.js"></script>
+<script src="~/Content/production/js/datatables/dataTables_select.js"></script>
+
+<!--JSPDF-->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.min.js"></script>
+<script type="text/javascript" src="https://html2canvas.hertzen.com/dist/html2canvas.js"></script>
+
+<!--IZITOAST-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/js/iziToast.min.js" integrity="sha512-Zq9o+E00xhhR/7vJ49mxFNJ0KQw1E1TMWkPTxrWcnpfEFDEXgUiwJHIKit93EW/XxE31HSI5GEOW06G6BF1AtA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<!--eCharts-->
+<script src="~/Content/js/echarts.min.js" type="text/javascript"></script>
+
+<!--SELECT SEARCH-->
+<script src="~/Content/js/select/select2.full.js"></script>
+
+<!--CUSTOM JS-->
+<script type="text/javascript" src="~/Content/js/custom.js"></script>
+
+<!--MOMENT JS-->
+<script type="text/javascript" src="~/Content/moment.min.js"></script>
+
+<!--BOOTSTRAP JS-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha512-YK1Mz9UiZmhbFzXgMbl3bO49wZ78Xj3h8TtTBLFHEAEjUBxsEZdXd8Il5RWbhPOyB653bGQDNVGGny2mORZq4A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<!--LORD ICONS-->
+<script src="https://cdn.lordicon.com/lordicon-1.1.0.js"></script>
+
+<link href="~/Content/production/css/datatables/css/datatables_select.min.css" rel="stylesheet" />
+<script src="~/Content/production/js/datatables/dataTables_select.js"></script>
+
+<link rel="stylesheet" href="~/Content/fichaSab.css" />
+<style>
+    .parte1 label {
+        font-size: 22px;
+        display: block;
+    }
+
+    .parte2 label {
+        font-size: 20px;
+        display: block;
+    }
+
+    .parte3 label {
+        font-size: 18px;
+        display: block;
+        padding-left: 24px;
+    }
+
+    th, td {
+        color: black;
+        font-weight: 600;
+    }
+</style>
+
+
+
+<div class="row">
+    <div style="width:20%;margin-left:5%;">
+        <img src="~/Content/img_layout/logo_beta_new.png" style="max-width: 80%; width:80%; min-width:80%;" />
+    </div>
+    <div style="width:45%;">
+        <h2 style="margin:3px;">Sistema de Información Integral Beta</h2>
+        <h4 style="margin:3pX;">MOVIMIENTOS POR CLIENTE</h4>
+    </div>
+    <div style="width:30%;">
+        <h4 style="margin:3pX;">Fecha Inicial: @ViewBag.fecha_inicio</h4>
+        <h4 style="margin:3pX;">Fecha Final: @ViewBag.fecha_fin</h4>
+    </div>
+</div>
+
+@foreach (var envio in Model.GroupBy(x => x.id_envio_leche_cliente_ms))
+{
+    <h3 class="text-left p-2" style="margin:0px;">Cliente: @envio.FirstOrDefault().C_envios_leche_clientes.nombre_comercial</h3>
+    <table class="table table-striped table-bordered table-sm table-condensed">
+        <thead>
+            <tr class="text-center">
+                <th colspan="6">ENVIO</th>
+                <th colspan="4">RECEPCION</th>
+                <th colspan="5">FACTURACION</th>
+                <th colspan="2">PAGO</th>
+            </tr>
+            <tr>
+                @* ENVIO DE LECHE *@
+                <th>Fecha</th>
+                <th>Establo</th>
+                <th>Folio</th>
+                <th>Rem. Ce</th>
+                <th>Destino</th>
+                <th>Litros</th>
+                @* RECEPCION *@
+                <th>Fecha</th>
+                <th>Folio</th>
+                <th>Litros</th>
+                <th>Lote</th>
+
+                @* FACTURACION *@
+                <th>Fecha</th>
+                <th>Factura</th>
+                <th>Flete</th>
+                <th>P.U.</th>
+                <th>Importe</th>
+
+                @* DIAS *@
+                <th>Fecha</th>
+                <th>Referencia</th>
+                @*<th>del Envio</th>
+                    <th>de Fact.</th>*@
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in envio)
+            {
+                Beta_System.Models.C_envios_leche_confirmacion valid_recepcion = null;
+                Beta_System.Models.C_envios_leche_lote_g valid_factura = null;
+
+                if (item.C_envios_leche_confirmacion.Where(x => x.activo == true).Count() > 0)
+                {
+                    valid_recepcion = item.C_envios_leche_confirmacion.Where(x => x.activo == true).FirstOrDefault();
+
+                    if (valid_recepcion.C_envios_leche_lote_d.Count() > 0)
+                    {
+                        if (valid_recepcion.C_envios_leche_lote_d.FirstOrDefault().C_envios_leche_lote_g != null)
+                        {
+                            valid_factura = valid_recepcion.C_envios_leche_lote_d.FirstOrDefault().C_envios_leche_lote_g;
+                        }
+                    }
+                }
+
+                <tr>
+                    @* ENVIO DE LECHE *@
+                    <td>@string.Format(item.fecha_envio.Value.ToShortDateString(), "dd/MM/yyyy")</td>
+                    <td>@item.C_establos.siglas</td>
+                    <td>@item.folio</td>
+                    <td>@item.remision_cliente</td>
+                    <td>@item.C_envios_leche_destinos.nombre_destino</td>
+                    <td>
+                        @if (valid_recepcion != null)
+                        {
+                            <label>@valid_recepcion.C_envios_leche_g.C_envios_leche_d_fichas.Where(x => x.activo == true).Sum(x => x.litros_confirmacion).Value.ToString("N2")</label>
+                        }
+                    </td>
+
+                    @* RECEPCION *@
+                    @if (valid_recepcion != null)
+                    {
+                        <td>@string.Format(valid_recepcion.fecha_recepcion.Value.ToShortDateString(), "dd/MM/yyyy")</td>
+                        <td>@item.folio</td>
+                        <td>@item.litros_totales</td>
+                        <th>
+                            @try
+                            {
+                                <label>@valid_recepcion.C_envios_leche_lote_d.FirstOrDefault().id_envio_leche_lote_g</label>
+                            }
+                            catch (Exception)
+                            { }
+                        </th>
+                    }
+                    else
+                    {
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    }
+
+                    @* FACTURACION *@
+                    @if (valid_factura != null)
+                    {
+                        //decimal importe = (decimal)valid_recepcion.C_envios_leche_g.C_envios_leche_d_fichas.Where(x => x.activo == true).Sum(x => x.litros_confirmacion) * (decimal)valid_recepcion.C_envios_leche_lote_d.Where(x => x.activo == true).FirstOrDefault().precio_leche;
+                        decimal importe = (decimal)item.litros_totales * (decimal)valid_recepcion.C_envios_leche_lote_d.Where(x => x.activo == true).FirstOrDefault().precio_leche;
+
+                        <td>@string.Format(valid_factura.fecha_registro.Value.ToShortDateString(), "dd/MM/yyyy")</td>
+                        <td>@valid_factura.factura</td>
+                        <td>@valid_recepcion.C_envios_leche_lote_d.Where(x => x.activo == true).FirstOrDefault().precio_flete.Value.ToString("N2")</td>
+                        <td>@valid_recepcion.C_envios_leche_lote_d.Where(x => x.activo == true).FirstOrDefault().precio_leche.Value.ToString("N2")</td>
+                        <td>@importe.ToString("N2")</td>
+                    }
+                    else
+                    {
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    }
+
+                    <td></td>
+                    <td></td>
+
+                    @*<td></td>
+                        <td></td>*@
+                    @* DIAS *@
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+

@@ -1,0 +1,113 @@
+﻿@using System.Globalization;
+@{
+    CultureInfo culturaEspañol = new CultureInfo("es-ES");
+    DateTime fecha_inicio = ViewBag.fecha_inicio;
+    DateTime fecha_inicio_count = fecha_inicio;
+    DateTime fecha_inicio_count_body = fecha_inicio;
+    int no_semanas = ViewBag.no_semanas;
+    string nombre_dia = "";
+    string fecha_formato = "";
+}
+
+@for (int i = 1; i <= no_semanas; i++)
+{
+    <div class="p-3" style="border: 2px solid #2e87d7; border-radius:2.1rem;">
+        <h3 class="text-left text_beta">SEMANA @i</h3>
+        <table class="table table-striped table-bordered table-sm table-condensed">
+            <thead>
+                <tr class="bg-beta text-center">
+                    <th style="width:400px;">Alimento</th>
+                    @*<th>Calidad</th>*@
+                    @for (int z = 0; z <= 6; z++)
+                    {
+                        int no_dia = Convert.ToInt32(fecha_inicio_count.DayOfWeek);
+                        switch (no_dia)
+                        {
+                            case 1: nombre_dia = "Lun"; break;
+                            case 2: nombre_dia = "Mar"; break;
+                            case 3: nombre_dia = "Mié"; break;
+                            case 4: nombre_dia = "Jue"; break;
+                            case 5: nombre_dia = "Vie"; break;
+                            case 6: nombre_dia = "Sáb"; break;
+                            case 0: nombre_dia = "Dom"; break;
+                            default: nombre_dia = "Número de día no válido"; break;
+                        }
+                        <th>@nombre_dia @fecha_inicio_count.Day @fecha_inicio_count.ToString("MMM", culturaEspañol)</th>
+                        fecha_inicio_count = fecha_inicio_count.AddDays(1);
+                    }
+                    <th>Total</th>
+                    <th>Opciones</th>
+                </tr>
+            </thead>
+            <tbody id="tbody_prg_@i">
+                <tr class="text-center">
+                    <td style="width:400px;">
+                        <select class="form-control" id="id_alimento_@i">
+                            @{ Html.RenderAction("ConsultarArticulosBasculaTiposSelect", "CATALOGOS", new { tipo_ficha = 2 });}
+                        </select>
+                    </td>
+                    @*<td></td>*@
+
+                    @for (int z = 0; z <= 6; z++)
+                    {
+                        switch (Convert.ToInt32(fecha_inicio_count_body.DayOfWeek))
+                        {
+                            case 1: nombre_dia = "Lunes"; break;
+                            case 2: nombre_dia = "Martes"; break;
+                            case 3: nombre_dia = "Miercoles"; break;
+                            case 4: nombre_dia = "Jueves"; break;
+                            case 5: nombre_dia = "Viernes"; break;
+                            case 6: nombre_dia = "Sabado"; break;
+                            case 0: nombre_dia = "Domingo"; break;
+                            default: nombre_dia = "Número de día no válido"; break;
+                        }
+                        fecha_formato = fecha_inicio_count_body.ToString("yyyy-MM-dd");
+                        string id_input = nombre_dia + "_" + i;
+                        <td>
+                            <input type="number" value="0" class="form-control valores_prg valores_prg_@i" id="@id_input" name="@fecha_formato" onkeyup="CalcularTotalSemanaAlimento(@i);" />
+                        </td>
+                        fecha_inicio_count_body = fecha_inicio_count_body.AddDays(1);
+                    }
+                    <td>
+                        <label id="total_art_@i"></label>
+                    </td>
+                    <td>
+                        <button class="btn btn_beta_icon" onclick="AgregarAlimentoNuevoPrograma(@i);"><i class="fa fa-plus"></i></button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <br />
+}
+
+<div class="p-3" style="border: 2px solid #2e87d7; border-radius:2.1rem;">
+    <h3 class="text-left text_beta">RESUMEN</h3>
+    <table class="table table-striped table-bordered table-sm table-condensed ">
+        <thead>
+            <tr class="bg-beta text-center">
+                <th style="width:400px;">Alimento</th>
+                <th>Lun</th>
+                <th>Mar</th>
+                <th>Mié</th>
+                <th>Jue</th>
+                <th>Vie</th>
+                <th>Sáb</th>
+                <th>Dom</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody id="tbody_resumen">
+        </tbody>
+    </table>
+</div>
+
+<hr />
+<div class="text-right">
+    <button class="btn btn_beta" onclick="GuardarNuevoProgramaAlimentos();"><i class="fa fa-check"></i> Guardar programa</button>
+</div>
+
+
+
+
+

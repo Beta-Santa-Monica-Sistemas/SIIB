@@ -1,0 +1,92 @@
+﻿@model IEnumerable<Beta_System.Models.C_articulos_catalogo>
+
+@if (Model.Count() > 0)
+{
+    int tipo_vista = ViewBag.tipo_vista;
+    int id_almacen = ViewBag.id_almacen;
+
+
+<div class="table-responsive">
+        <table class="table table-striped table-bordered" id="datatable_criticidad_articulos">
+            <thead>
+                <tr class="bg-beta text-center">
+                    <th>Clave</th>
+                    <th>Artículo</th>
+                    <th>Clasificación</th>
+                    <th>Tipo consumo</th>
+                    <th>Tipo operación</th>
+                    @if (tipo_vista == 0) {
+                        <th>Actualizar</th>
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    string color_tipo_consumo = "";
+                    int id_tipo_consumo = 0;
+                    string color_tipo_operacion = "";
+                    int id_tipo_operacion = 0;
+                    var valid_consumo = item.C_almacen_criticidad_articulos.Where(x => x.id_almacen == id_almacen == x.activo == true).FirstOrDefault();
+                    if (valid_consumo != null)
+                    {
+                        color_tipo_consumo = valid_consumo.C_almacen_criticidad_tipos_consumos.color;
+                        id_tipo_consumo = (int)valid_consumo.id_criticidad_tipo_consumo;
+
+                        color_tipo_operacion = valid_consumo.C_almacen_criticidad_tipos_operacion.color;
+                        id_tipo_operacion = (int)valid_consumo.id_criticidad_tipo_operacion;
+                    }
+                    <tr class="text-center">
+                        <td>@item.clave</td>
+                        <td class="text-left">@item.nombre_articulo</td>
+                        <td>@item.C_articulos_clasificaciones.nombre_clasificacion</td>
+                        @if (tipo_vista == 0)  //CONFIGURACION
+                        {
+                            <td class="text-center" style="background-color: @color_tipo_consumo;">
+                                <select class="form-control select_tipos_consumo_criticidad" id="tipo_consumo_@item.id_articulo" name="@id_tipo_consumo"></select>
+                            </td>
+                            <td class="text-center" style="background-color: @color_tipo_operacion;">
+                                <select class="form-control select_tipos_operacion_criticidad" id="tipo_operacion_@item.id_articulo" name="@id_tipo_operacion"></select>
+                            </td>
+                            <td>
+                                <button class="btn btn_beta_icon btn_actualizar_criticos" id="btn_actualizar_@item.id_articulo" onclick="GuardarArticuloCriticoAlmacen(@item.id_articulo);"><i class="fa fa-edit"></i></button>
+                            </td>
+                        }
+                        else
+                        {
+                            <td class="text-center" style="background-color: @color_tipo_consumo;">
+                                @if (id_tipo_consumo != 0)
+                                { <strong>@valid_consumo.C_almacen_criticidad_tipos_consumos.siglas - @valid_consumo.C_almacen_criticidad_tipos_consumos.tipo_consumo</strong> }
+                                else { <strong>N/A</strong> }
+                            </td>
+                            <td class="text-center" style="background-color: @color_tipo_operacion;">
+                                @if (id_tipo_operacion != 0)
+                                {<strong>@valid_consumo.C_almacen_criticidad_tipos_operacion.siglas - @valid_consumo.C_almacen_criticidad_tipos_operacion.tipo_operacion</strong> }
+                            else
+                            { <strong>N/A</strong>}
+                            </td>
+                        }
+                    </tr>
+
+                    <script type="text/javascript">
+                        //ConsultarTiposConsumoCriticidadSelect();
+                        //ConsultarTiposOperacionCriticidadSelect();
+                        $(".select_tipos_consumo_criticidad").html(options_tipos_consumo_criticidad);
+                        $(".select_tipos_operacion_criticidad").html(options_tipos_operacion_criticidad);
+                    </script>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="text-left">
+        <button class="btn btn_beta" onclick="GuardarArticulosCriticosAlmacen();"><i class="fa fa-check"></i> Guardar cambios</button>
+    </div>
+}
+else
+{
+    <h3 class="text-center text-danger">NO SE ENCONTRARON REGISTROS</h3>
+}
+
+
+
+

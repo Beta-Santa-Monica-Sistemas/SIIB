@@ -1,0 +1,94 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+}
+
+<div class="page_title">
+    <div class="counter_section">
+        <h1>Administrar empleados/checador</h1>
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="nav nav-tabs">
+                    <li>
+                        <a data-toggle="tab" href="#tab-table-NChecador">
+                            ASOCIAR EMPLEADOS <i class="fa fa-2x fa-exchange ml-2"></i>
+                        </a>
+                    </li>
+                    <li>
+                        <a data-toggle="tab" href="#tab-table-EmpleadosLigados">
+                            ADMINISTRAR ASOCIACIONES <i class="fa fa-2x fa-group ml-2"></i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="column2 counter_section">
+    <div class="tab-content">
+        <div id="tab-table-NChecador" class="tab-pane fade in active show">
+            <h3 class="text-center">ASOCIAR EMPLEADOS</h3>
+            <div class="row">
+                <div class="col-md-4">
+                    <strong>Areas</strong>
+                    <select class="form-control limpiar_select" id="area_emp" onchange="EmpleadosSinChecadorTable();">
+                        <option value="0">TODAS</option>
+                        @{ Html.RenderAction("ConsultarDepartamentoNominaSelect", "CATALOGOS"); }
+                    </select>
+                </div>
+                <div class="col-md-8 text-right">
+                    <button id="btn_asignar" class="btn btn_beta" onclick="GuardarEmpleadoChecador();"><i class="fa fa-check"></i> Relacionar empleados</button>
+                </div>
+                <hr />
+            </div>
+            <div class="row mt-5">
+                <div class="col-md-6 p-2" style="border: 3px dashed #2e87d7;">
+                    <h3 class="text-center">Empleado nomina</h3>
+                    <div class="table-responsive" id="div_Tabla_Nomina">
+                    </div>
+                </div>
+                <div class="col-md-6 p-2" style="border: 3px dashed #2e87d7;">
+                    <h3 class="text-center">Empleado checador</h3>
+                    <div class="table-responsive" id="div_lupa_checador_empleados">
+                    </div>
+                </div>
+            </div>
+            <hr />
+        </div>
+
+        <div id="tab-table-EmpleadosLigados" class="tab-pane">
+            <h3 class="text-center">ADMINISTRAR ASOCIACIONES</h3>
+            <div class="column2 counter_section">
+                <div class="tab-content">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <strong>Areas</strong>
+                            <select class="form-control limpiar_select" id="area_emp_todos" onchange="EmpleadoChecadorNominaTable();">
+                                <option value="0">TODAS</option>
+                                @{ Html.RenderAction("ConsultarDepartamentoNominaSelect", "CATALOGOS"); }
+                            </select>
+                        </div>
+                        <div class="col-md-12">
+                            <div id="div_EmpleadoNC" class="table-responsive text-center">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+@Scripts.Render("~/bundles_EmpleadoChecador/js")
+<script>
+    $(window).on("load", function () {
+
+        LupaChecadorEmpleados(2);
+        EmpleadosSinChecadorTable();
+        EmpleadoChecadorNominaTable();
+    });
+</script>

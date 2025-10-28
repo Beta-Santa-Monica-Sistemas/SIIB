@@ -1,0 +1,39 @@
+﻿@model IEnumerable<Beta_System.Models.C_almacen_solicitudes_cambios_articulos>
+
+@if (Model.Count() > 0)
+{
+    <h4 class="text-center">HISTORIAL DE CAMBIOS</h4>
+    <table class="table table-striped table-bordered" id="tabla_cambios_articulos" style="width:100%;">
+        <thead>
+            <tr class="bg-beta text-center">
+                <th>Articulo original</th>
+                <th>Nuevo articulo</th>
+                <th>Cantidad anterior</th>
+                <th>Cantidad nueva</th>
+                <th>Fecha del cambio</th>
+                <th>Observaciones</th>
+                <th>Usuario cambio</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.OrderBy(x => x.fecha_cambio))
+            {
+                <tr class="text-center">
+                    <td>@item.C_articulos_catalogo.nombre_articulo</td>
+                    <td>@item.C_articulos_catalogo1.nombre_articulo</td>
+                    <td>@item.cantidad_vieja</td>
+                    <td>@item.cantidad_nueva</td>
+                    <td>@String.Format(item.fecha_cambio.Value.ToShortDateString(), "dd/mm/aaaa")</td>
+                    <td>@item.observaciones</td>
+                    <td>
+                        <label>@item.C_usuarios_corporativo.usuario</label>
+                        <strong>@item.C_usuarios_corporativo.C_empleados.nombres @item.C_usuarios_corporativo.C_empleados.apellido_paterno</strong>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+
+}
+

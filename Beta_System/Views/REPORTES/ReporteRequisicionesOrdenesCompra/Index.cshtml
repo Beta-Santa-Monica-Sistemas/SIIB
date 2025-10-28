@@ -1,0 +1,57 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+    List<int> permisos = Session["PermisosModulo"] as List<int>;
+}
+
+
+<style>
+    .divEditable {
+        padding: 3px;
+    }
+</style>
+
+<div class="page_title">
+    <div class="counter_section">
+        <h1>Reporte de Requisiciones</h1>
+    </div>
+</div>
+
+
+<div class=" column2 counter_section">
+    <div class="row">
+        <div class="col-md-2">
+            <strong>Centro:</strong>
+            <select class="form-control" id="id_centro">
+                <option value="0">Todas</option>
+                @{ Html.RenderAction("CentrosUsuariosSelect", "CATALOGOS", new { id_usuario = (int)Session["LoggedId"] }); }
+            </select>
+        </div>
+        <div class="col-md-2">
+            <strong>Fecha inicio:</strong>
+            <input type="date" class="form-control" id="fecha_inicio" />
+        </div>
+        <div class="col-md-2">
+            <strong>Fecha fin:</strong>
+            <input type="date" class="form-control" id="fecha_fin" />
+        </div>
+        <div class="col-md-3">
+            <br />
+            <button class="btn btn_beta_icon" onclick="ConsultarReporteRequisicionesOrdenesCompraTable();"><i class="fa fa-search"></i></button>
+        </div>
+        <div class="col-md-3 text-right">
+            <a target="_blank" id="ref_excel" href=""><button class="btn btn_beta btn-block text-center"><i class="fa fa-download"></i> Descargar EXCEL</button></a>
+        </div>
+    </div>
+
+    <div class="table-responsive" id="div_reporte_entradas_vs_ordenes" style="height: 600px; min-height: 600px; overflow:scroll;"></div>
+</div>
+
+@Scripts.Render("~/bundles_ReportesAlmacen/js")
+
+<script>
+    $(window).on("load", function () {
+
+    });
+</script>

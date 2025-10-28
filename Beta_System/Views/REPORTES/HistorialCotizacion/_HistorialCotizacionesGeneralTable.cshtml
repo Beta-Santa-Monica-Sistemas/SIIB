@@ -1,0 +1,91 @@
+﻿@model IEnumerable<Beta_System.Models.C_compras_cotizaciones_articulos>
+
+@if (Model.Count() > 0)
+{
+    <button class=" btn btn_beta" style="position:absolute; right: 3%;" data-toggle="modal" data-target="#m_add_cotizacion"><i class="fa fa-plus"></i> Registrar cotización</button>
+    <h3 class="text-center"><strong>Cotizaciones</strong></h3>
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered" id="datatable_cotizaciones_general">
+            <thead>
+                <tr class="bg-beta text-center">
+                    <th>Proveedor</th>
+                    <th>Descripción</th>
+                    <th>Cotización</th>
+                    <th>Vigencia</th>
+                    <th>Folio cotización</th>
+                    <th>Usuario registró</th>
+                    <th>Precio final</th>
+                    <th>Moneda</th>
+                    <th>Ultima actualización</th>
+                    <th>Extender vigencia</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr class="text-center">
+                        <td><strong>@item.C_compras_proveedores.cve</strong></td>
+                        <td class="text-left"><strong>@item.C_compras_proveedores.razon_social</strong></td>
+                        <td>@string.Format(item.fecha_cotizacion.Value.ToShortDateString(), "dd/MM/yyyy")</td>
+                        <td>@string.Format(item.fecha_vigencia.Value.ToShortDateString(), "dd/MM/yyyy")</td>
+                        <td>@item.id_compra_articulo_cotizacion</td>
+                        <td>@item.C_usuarios_corporativo.C_empleados.nombres @item.C_usuarios_corporativo.C_empleados.apellido_paterno</td>
+                        <td>
+                            @try
+                            {
+                                if (item.porcentaje_descuento > 0)
+                                {<strong>$@item.precio_final.Value.ToString("N2") (@item.porcentaje_descuento% desc.)</strong> }
+                            else
+                            { <strong>$@item.precio_final.Value.ToString("N2")</strong>}
+                    }
+                    catch (Exception)
+                    {
+
+                    }
+                        </td>
+                        <td>@item.C_tipos_moneda.clave_fiscal</td>
+                        <td>@string.Format(item.fecha_actualizacion.Value.ToShortDateString(), "dd/MM/yyyy")</td>
+                        <td>
+                            <button class="btn btn_beta_icon" onclick="EditarVigenciaCotizacion(@item.id_compra_articulo_cotizacion);"><i class="fa fa-bars"></i></button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        $("#nombre_articulo_cotizaciones").text('@Model.FirstOrDefault().C_articulos_catalogo.nombre_articulo');
+        $("#nombre_articulo_cotizaciones").css("display", "block");
+
+        $("#nombre_articulo_add_coti").text('@Model.FirstOrDefault().C_articulos_catalogo.nombre_articulo');
+        $("#unidad_medida_add_coti").text('@Model.FirstOrDefault().C_articulos_catalogo.C_unidades_medidas.unidad_medida');
+        $("#id_unidad_medida_add_coti").text('@Model.FirstOrDefault().C_articulos_catalogo.id_unidad_medida');
+        $("#id_articulo_add_coti").text('@Model.FirstOrDefault().id_articulo');
+
+    </script>
+
+}
+else
+{
+    var articulo_nom = ViewBag.histarticulo;
+    var articulo_medida = ViewBag.histunidadmedida;
+    var articulo_idmedida = ViewBag.histidunidadmedida;
+    var articulo_id = ViewBag.histidarticulo;
+
+    <div class="col-md-12 text-right">
+        <button class=" btn btn_beta" data-toggle="modal" data-target="#m_add_cotizacion"><i class="fa fa-plus"></i> Registrar cotización</button>
+    </div>
+    <h3 class="text-center"><strong>Cotizaciones</strong></h3>
+    <h4 class="text-center"><strong style="color:red">NINGUNA</strong></h4>
+    <script>
+        $("#nombre_articulo_cotizaciones").text('@articulo_nom');
+        $("#nombre_articulo_cotizaciones").css("display", "block");
+
+        $("#nombre_articulo_add_coti").text('@articulo_nom');
+        $("#unidad_medida_add_coti").text('@articulo_medida');
+        $("#id_unidad_medida_add_coti").text('@articulo_idmedida');
+        $("#id_articulo_add_coti").text('@articulo_id');
+
+    </script>
+}

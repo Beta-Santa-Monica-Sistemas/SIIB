@@ -1,0 +1,47 @@
+﻿@model Beta_System.Models.FichasPendienteSab
+
+<table class="table table-bordered table-striped" id="table_fichas_pendientes">
+    <thead>
+        <tr class="bg-beta text-center">
+            <th>Ficha</th>
+            <th>Folio</th>
+            <th>Articulo</th>
+            <th>Cliente</th>
+            <th>Linea Transportista</th>
+            <th>Chofer</th>
+            <th>Placas</th>
+            <th>Peso1</th>
+            <th>Fecha</th>
+            <th>Maquilador</th>
+            <th>Almacen</th>
+            <th>Observacion</th>
+            <th>Movimiento</th>
+            <th>Tipo Movimiento</th>
+            <th>Buscar</th>
+        </tr>
+    </thead>
+    <tbody>
+        @for (int i = 0; i < Model.Fichas.Count; i++)
+        {
+            <tr class="text-center">
+                <td>@Model.Fichas[i]</td>
+                <td>@Model.Folios[i]</td>
+                <td>@Model.Articulos[i]</td>
+                <td>@Model.Cliente[i]</td>
+                <td>@Model.LineaTransportista[i]</td>
+                <td>@Model.Chofer[i]</td>
+                <td>@Model.Placas[i]</td>
+                <td>@Model.Peso1[i]</td>
+                <td>@Model.Fecha1[i]</td>
+                <td>@Model.Maquilador[i]</td>
+                <td>@Model.Pozo[i]</td>
+                <td>@Model.Observacion[i]</td>
+                <td>@Model.Movimiento[i]</td>
+                <td>@Model.TipoMovimiento[i]</td>
+                <td>
+                    <button class="btn btn_beta_icon" onclick="ConsultarInfoFichaSabDirecto(@Model.Fichas[i]);"><i class="fa fa-search"></i></button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

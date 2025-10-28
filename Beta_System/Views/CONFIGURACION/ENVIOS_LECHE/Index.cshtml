@@ -1,0 +1,206 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+}
+
+<div class="page_title">
+    <div class="counter_section">
+        <h1>Configuracion de catalogos de envios de leche</h1>
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="nav nav-tabs">
+                    <li class="active"> <a data-toggle="tab" href="#bascula_clientes">CLIENTES<i class="fa fa-group fa-2x ml-2"></i></a></li>
+                    <li class="active"> <a data-toggle="tab" href="#bascula_destinos">DESTINOS<i class="fa fa-truck fa-2x ml-2"></i></a></li>
+                    <li class="active"> <a data-toggle="tab" href="#bascula_asociacion">ASOCIACION DESTINOS<i class="fa fa-exchange fa-2x ml-2"></i></a></li>
+                    <li class="active"> <a data-toggle="tab" href="#bascula_precios_leche">PRECIOS<i class="fa fa-money fa-2x ml-2"></i></a></li>
+
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row column2 counter_section">
+    <div class="tab-content">
+        @* DESTINOS *@
+        <div id="bascula_destinos" class="tab-pane show active">
+            <h3 class="text-center">DESTINOS</h3>
+            <div class="row">
+                <div class="col-md-2">
+                    <strong>Activo</strong>
+                    <select class="form-control " id="id_activo_destino">
+                        <option value="0">TODOS</option>
+                        <option value="1">SI</option>
+                        <option value="2">NO</option>
+                    </select>
+                </div>
+                <div class="col-md-1" style="padding-top:10px">
+                    <button class="btn btn_beta_icon" onclick="ConsultarDestinosCatalogoBascula();"><i class="fa fa-search"></i></button>
+                </div>
+                <div class="col-md-9 text-right">
+                    <button class="btn btn_beta" onclick="ModalCatalogoDestinos();">Registrar destino</button>
+                </div>
+                <div class="col-md-12">
+                    <div class="table-responsive" id="div_tabla_destinos"></div>
+                </div>
+            </div>
+        </div>
+        @* CLIENTES *@
+        <div id="bascula_clientes" class="tab-pane">
+            <h3 class="text-center">CLIENTES DE ENVIO DE LECHE</h3>
+            <div class="row">
+                <div class="col-md-2">
+                    <strong>Activo</strong>
+                    <select class="form-control " id="id_activo_cliente">
+                        <option value="0">TODOS</option>
+                        <option value="1">SI</option>
+                        <option value="2">NO</option>
+                    </select>
+                </div>
+                <div class="col-md-1 p-3">
+                    <button class="btn btn_beta_icon" onclick="ConsultaClientesEnvioLecheTable();"><i class="fa fa-search"></i></button>
+                </div>
+                <div class="col-md-12">
+                    <div class="table-responsive" id="div_tabla_clientes"></div>
+                </div>
+            </div>
+        </div>
+        @* ASOCIACION *@
+        <div id="bascula_asociacion" class="tab-pane">
+            <h3 class="text-center">ASOCIACION DE DESTINOS - PROVEEDORES</h3>
+            <div class="row">
+                <div class="col-md-12 text-right">
+                    <button class="btn btn_beta" onclick="ModalCatalogoAsociacion();">Registrar asociaciones</button>
+                </div>
+                <div class="col-md-12">
+                    <div class="table-responsive" id="div_tabla_asociacion"></div>
+                </div>
+            </div>
+        </div>
+
+        @*PRECIOS LECHE DESTINOS*@
+        <div id="bascula_precios_leche" class="tab-pane">
+            <h3 class="text-center">PRECIOS LECHE DESTINOS</h3>
+            <div class="table-responsive" id="div_precios_leche"></div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<!--Modal Destinos-->
+<div class="modal fade" id="m_bascula_destinos" tabindex="-1" role="dialog" aria-labelledby="m_bascula_destinos" aria-hidden="true">
+    <div class="modal-dialog" role="document" style="min-width:60%; max-height:700px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="m_bascula_destinos_lbl"></h2>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-10">
+                        <strong>Nombre:</strong>
+                        <input type="text" class="form-control" id="destino_nombre" />
+                    </div>
+                    <div class="col-md-2 text-center">
+                        <strong>Activo:</strong>
+                        <input type="checkbox" class="form-control text-center" id="destino_status" style="height:30px;" />
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="col-md-10 text-center">
+                    <button class="btn btn_beta" id="bascula_destinos_btn">Confirmar</button>
+                </div>
+                <div class="col-md-2 text-right"><button class="btn btn_beta_danger" data-dismiss="modal">Cerrar</button></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Modal Asociaciones-->
+<div class="modal fade" id="m_bascula_asociacion" tabindex="-1" role="dialog" aria-labelledby="m_bascula_asociacion" aria-hidden="true">
+    <div class="modal-dialog" role="document" style="min-width:70%; max-height:700px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="m_bascula_asociacion_lbl"></h2>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="col-md-12 text-center"><h2>CLIENTES</h2></div>
+                        <div class="table-responsive" id="div_tabla_asociacion_cliente"></div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="col-md-12 text-center"><h2>DESTINOS</h2></div>
+                        <div class="table-responsive" id="div_tabla_asociacion_destino"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!--Modal Cliente-->
+<div class="modal fade" id="m_cliente" tabindex="-1" role="dialog" aria-labelledby="m_cliente" aria-hidden="true">
+    <div class="modal-dialog" role="document" style="min-width:60%; max-height:700px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="m_cliente_lbl">Edicion de Cliente</h2>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-10">
+                        <strong>Nombre:</strong>
+                        <input type="text" class="form-control" id="cliente_nombre" />
+                    </div>
+                    <div class="col-md-2 text-center">
+                        <strong>Activo:</strong>
+                        <input type="checkbox" class="form-control text-center" id="cliente_status" style="height:30px;" />
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="col-md-10 text-center">
+                    <button class="btn btn_beta" id="btn_accion_cliente">Confirmar</button>
+                </div>
+                <div class="col-md-2 text-right"><button class="btn btn_beta_danger" data-dismiss="modal">Cerrar</button></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@Scripts.Render("~/bundles_Catalogos_EnviosLeche/js")
+
+<script type="text/javascript">
+    $(window).on("load", function () {
+        ConsultarDestinosCatalogoBascula();
+        ConsultaClientesEnvioLecheTable();
+        ConsultarClienteDestinosBascula();
+        ConsultarPreciosLecheDestinosTable();
+
+        //DESTINO
+        $('#m_bascula_destinos').on('hidden.bs.modal', function () {
+            $("#bascula_destinos_btn").attr("onclick", "");
+        });
+        //ASOCIACION DESTINOS
+        $('#m_bascula_asociacion').on('hidden.bs.modal', function () {
+            ConsultarClienteDestinosBascula();
+        });
+
+    });
+</script>

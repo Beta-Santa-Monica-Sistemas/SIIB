@@ -1,0 +1,25 @@
+﻿@model IEnumerable<Beta_System.Models.C_nomina_regimen_patronal>
+
+<table class="table table-striped table-bordered" id="tabla_regimen_patronal" data-toggle="table" data-search="true">
+    <thead>
+        <tr class="bg-beta text-center">
+            <th>Clave</th>
+            <th>Número R.P</th>
+            <th>Descripción</th>
+            <th>Mostrar</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.id_regimen_patronal</td>
+                <td>@item.numero_regimen_partonal</td>
+                <td>@item.descripcion</td>
+                <td class="text-center">
+                    <button class="btn btn_beta_icon" onclick="MostrarInfoRegimenPatronal(@item.id_regimen_patronal);"><i class="fa fa-eye"></i></button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

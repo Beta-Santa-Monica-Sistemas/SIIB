@@ -1,0 +1,63 @@
+﻿@model IEnumerable<Beta_System.Models.C_envios_leche_d_fichas>
+
+@if (Model.Count() > 0)
+{
+    <table class="table table-striped table-bordered text-center" id="tabla_envio_leche">
+        <thead>
+            <tr class="bg-beta text-center">
+                <th>Establo</th>
+                <th>Fecha</th>
+                <th>Producto</th>
+                <th>Cliente</th>
+                <th>Destino</th>
+                <th>Folio</th>
+                <th>Litros</th>
+                <th>Ficha1</th>
+                <th>Ficha2</th>
+                <th>Tanque1</th>
+                <th>Tanque2</th>
+                <th>Estatus</th>
+                <th>Calidad</th>
+                <th>Imprimir</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var group in Model.GroupBy(x => x.id_envio_leche_g))
+            {
+                var firstItem = group.FirstOrDefault();
+                DateTime horas = Convert.ToDateTime(firstItem.C_envios_leche_g.fecha_registro);
+                var ficha1 = group.ElementAtOrDefault(0)?.id_envio_leche_d ?? 0;
+                var ficha2 = group.ElementAtOrDefault(1)?.id_envio_leche_d ?? 0;
+                if (firstItem != null)
+                {
+                    <tr>
+                        <td>@firstItem.C_envios_leche_g.C_establos.nombre_establo</td>
+                        <td>@horas.ToShortDateString()</td>
+                        <td>@firstItem.C_envios_leche_g.C_articulos_catalogo.nombre_articulo</td>
+                        <td>@firstItem.C_envios_leche_g.C_envios_leche_clientes.nombre_comercial</td>
+                        <td>@firstItem.C_envios_leche_g.C_envios_leche_destinos.nombre_destino</td>
+                        <td>@firstItem.C_envios_leche_g.folio</td>
+                        <td> @(string.Format("{0:N3}", (group.ElementAtOrDefault(0)?.litros_ficha ?? 0) + (group.ElementAtOrDefault(1)?.litros_ficha ?? 0) )) </td>
+                        <td>@(group.ElementAtOrDefault(0)?.id_ficha_bascula.ToString() ?? "")</td>
+                        <td>@(group.ElementAtOrDefault(1)?.id_ficha_bascula.ToString() ?? "")</td>
+                        <td>@(group.ElementAtOrDefault(0)?.tanque ?? "")</td>
+                        <td>@(group.ElementAtOrDefault(1)?.tanque ?? "")</td>
+                        <td style="color:@firstItem.C_envios_leche_g.C_envios_leche_status.color">@firstItem.C_envios_leche_g.C_envios_leche_status.nombre_status</td>
+                        <td class="text-center">
+                            <button class="btn btn_beta_icon" onclick="AsignarConfirmacionCalidadLeche(@firstItem.id_envio_leche_g,'@ficha1','@ficha2','@firstItem.C_envios_leche_g.id_envio_leche_status');"><i class="fa fa-list"></i></button>
+                        </td>
+                        <td class="text-center">
+                            <button class="btn btn_beta_icon" onclick="DescargarFormatoEnviosLechePDF(@firstItem.id_envio_leche_g);"><i class="fa fa-print"></i></button>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <div class="col-md-12 text-center">
+        <h2 style="color:red">No se encontró información</h2>
+    </div>
+}

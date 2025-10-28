@@ -1,0 +1,430 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="TRACKER_LOGModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="C_tracker_establos">
+          <Key>
+            <PropertyRef Name="id_tracker_establo" />
+          </Key>
+          <Property Name="id_tracker_establo" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="siglas" Type="varchar" MaxLength="50" />
+          <Property Name="nombre_establo" Type="varchar" MaxLength="100" />
+          <Property Name="activo" Type="bit" />
+        </EntityType>
+        <EntityType Name="C_tracker_ingredientes_establos">
+          <Key>
+            <PropertyRef Name="id_ingrediente" />
+          </Key>
+          <Property Name="id_ingrediente" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="clave" Type="varchar" MaxLength="50" />
+          <Property Name="descripcion" Type="varchar" MaxLength="250" />
+          <Property Name="id_establo" Type="int" />
+          <Property Name="id_ing" Type="int" />
+          <Property Name="activo" Type="bit" />
+        </EntityType>
+        <EntityType Name="C_tracker_movimientos">
+          <Key>
+            <PropertyRef Name="id_log_tracker" />
+          </Key>
+          <Property Name="id_log_tracker" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="fecha_syync" Type="datetime" />
+          <Property Name="id_movimiento_tracker" Type="int" />
+          <Property Name="id_carg_desc" Type="int" />
+          <Property Name="id_barch" Type="int" />
+          <Property Name="cve_racion" Type="varchar" MaxLength="50" />
+          <Property Name="racion" Type="varchar" MaxLength="250" />
+          <Property Name="line_status" Type="varchar" MaxLength="5" />
+          <Property Name="id_ing" Type="int" />
+          <Property Name="ing_cve" Type="varchar" MaxLength="80" />
+          <Property Name="ing_nombre" Type="varchar" MaxLength="80" />
+          <Property Name="ing_tipo" Type="varchar" MaxLength="80" />
+          <Property Name="no_animales" Type="int" />
+          <Property Name="peso_cargado" Type="numeric" Precision="18" Scale="5" />
+          <Property Name="peso_real" Type="numeric" Precision="18" Scale="5" />
+          <Property Name="diferencia" Type="numeric" Precision="18" Scale="5" />
+          <Property Name="id_mezclador" Type="int" />
+          <Property Name="nombre_mezclador" Type="varchar" MaxLength="50" />
+          <Property Name="id_operador" Type="int" />
+          <Property Name="nombre_operador" Type="varchar" MaxLength="50" />
+          <Property Name="PMS_P" Type="numeric" Precision="18" Scale="5" />
+          <Property Name="PMS_R" Type="numeric" Precision="18" Scale="5" />
+          <Property Name="precio" Type="numeric" Precision="18" Scale="2" />
+          <Property Name="sobrante" Type="numeric" Precision="18" Scale="5" />
+          <Property Name="fecha_registro" Type="datetime" />
+          <Property Name="id_tracker_establo" Type="int" />
+          <Property Name="corral" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="C_tracker_movimientos_tipos">
+          <Key>
+            <PropertyRef Name="id_movimiento_tipo" />
+          </Key>
+          <Property Name="id_movimiento_tipo" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="nombre_tipo" Type="varchar" MaxLength="50" />
+          <Property Name="color" Type="varchar" MaxLength="50" />
+          <Property Name="activo" Type="bit" />
+        </EntityType>
+        <EntityType Name="C_tracker_parametros">
+          <Key>
+            <PropertyRef Name="id_tracker_config" />
+          </Key>
+          <Property Name="id_tracker_config" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="id_establo" Type="int" />
+          <Property Name="id_parametro_tipo" Type="int" />
+          <Property Name="valor" Type="varchar" MaxLength="500" />
+        </EntityType>
+        <EntityType Name="C_tracker_parametros_tipos">
+          <Key>
+            <PropertyRef Name="id_parametro_tipo" />
+          </Key>
+          <Property Name="id_parametro_tipo" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="tipo_parametro" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <Association Name="FK_C_tracker_ingredientes_establos_C_tracker_establos">
+          <End Role="C_tracker_establos" Type="Self.C_tracker_establos" Multiplicity="0..1" />
+          <End Role="C_tracker_ingredientes_establos" Type="Self.C_tracker_ingredientes_establos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="C_tracker_establos">
+              <PropertyRef Name="id_tracker_establo" />
+            </Principal>
+            <Dependent Role="C_tracker_ingredientes_establos">
+              <PropertyRef Name="id_establo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_C_tracker_movimientos_C_tracker_establos">
+          <End Role="C_tracker_establos" Type="Self.C_tracker_establos" Multiplicity="0..1" />
+          <End Role="C_tracker_movimientos" Type="Self.C_tracker_movimientos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="C_tracker_establos">
+              <PropertyRef Name="id_tracker_establo" />
+            </Principal>
+            <Dependent Role="C_tracker_movimientos">
+              <PropertyRef Name="id_tracker_establo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_C_tracker_movimientos_C_tracker_movimientos_tipos">
+          <End Role="C_tracker_movimientos_tipos" Type="Self.C_tracker_movimientos_tipos" Multiplicity="0..1" />
+          <End Role="C_tracker_movimientos" Type="Self.C_tracker_movimientos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="C_tracker_movimientos_tipos">
+              <PropertyRef Name="id_movimiento_tipo" />
+            </Principal>
+            <Dependent Role="C_tracker_movimientos">
+              <PropertyRef Name="id_movimiento_tracker" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_C_tracker_parametros_C_tracker_parametros_tipos">
+          <End Role="C_tracker_parametros_tipos" Type="Self.C_tracker_parametros_tipos" Multiplicity="0..1" />
+          <End Role="C_tracker_parametros" Type="Self.C_tracker_parametros" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="C_tracker_parametros_tipos">
+              <PropertyRef Name="id_parametro_tipo" />
+            </Principal>
+            <Dependent Role="C_tracker_parametros">
+              <PropertyRef Name="id_parametro_tipo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="TRACKER_LOGModelStoreContainer">
+          <EntitySet Name="C_tracker_establos" EntityType="Self.C_tracker_establos" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="C_tracker_ingredientes_establos" EntityType="Self.C_tracker_ingredientes_establos" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="C_tracker_movimientos" EntityType="Self.C_tracker_movimientos" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="C_tracker_movimientos_tipos" EntityType="Self.C_tracker_movimientos_tipos" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="C_tracker_parametros" EntityType="Self.C_tracker_parametros" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="C_tracker_parametros_tipos" EntityType="Self.C_tracker_parametros_tipos" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_C_tracker_ingredientes_establos_C_tracker_establos" Association="Self.FK_C_tracker_ingredientes_establos_C_tracker_establos">
+            <End Role="C_tracker_establos" EntitySet="C_tracker_establos" />
+            <End Role="C_tracker_ingredientes_establos" EntitySet="C_tracker_ingredientes_establos" />
+          </AssociationSet>
+          <AssociationSet Name="FK_C_tracker_movimientos_C_tracker_establos" Association="Self.FK_C_tracker_movimientos_C_tracker_establos">
+            <End Role="C_tracker_establos" EntitySet="C_tracker_establos" />
+            <End Role="C_tracker_movimientos" EntitySet="C_tracker_movimientos" />
+          </AssociationSet>
+          <AssociationSet Name="FK_C_tracker_movimientos_C_tracker_movimientos_tipos" Association="Self.FK_C_tracker_movimientos_C_tracker_movimientos_tipos">
+            <End Role="C_tracker_movimientos_tipos" EntitySet="C_tracker_movimientos_tipos" />
+            <End Role="C_tracker_movimientos" EntitySet="C_tracker_movimientos" />
+          </AssociationSet>
+          <AssociationSet Name="FK_C_tracker_parametros_C_tracker_parametros_tipos" Association="Self.FK_C_tracker_parametros_C_tracker_parametros_tipos">
+            <End Role="C_tracker_parametros_tipos" EntitySet="C_tracker_parametros_tipos" />
+            <End Role="C_tracker_parametros" EntitySet="C_tracker_parametros" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="TRACKER_LOGModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="C_tracker_establos">
+          <Key>
+            <PropertyRef Name="id_tracker_establo" />
+          </Key>
+          <Property Name="id_tracker_establo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="siglas" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="nombre_establo" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="activo" Type="Boolean" />
+          <NavigationProperty Name="C_tracker_ingredientes_establos" Relationship="Self.FK_C_tracker_ingredientes_establos_C_tracker_establos" FromRole="C_tracker_establos" ToRole="C_tracker_ingredientes_establos" />
+          <NavigationProperty Name="C_tracker_movimientos" Relationship="TRACKER_LOGModel.FK_C_tracker_movimientos_C_tracker_establos" FromRole="C_tracker_establos" ToRole="C_tracker_movimientos" />
+        </EntityType>
+        <EntityType Name="C_tracker_ingredientes_establos">
+          <Key>
+            <PropertyRef Name="id_ingrediente" />
+          </Key>
+          <Property Name="id_ingrediente" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="clave" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="descripcion" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="id_establo" Type="Int32" />
+          <Property Name="id_ing" Type="Int32" />
+          <Property Name="activo" Type="Boolean" />
+          <NavigationProperty Name="C_tracker_establos" Relationship="Self.FK_C_tracker_ingredientes_establos_C_tracker_establos" FromRole="C_tracker_ingredientes_establos" ToRole="C_tracker_establos" />
+        </EntityType>
+        <EntityType Name="C_tracker_movimientos_tipos">
+          <Key>
+            <PropertyRef Name="id_movimiento_tipo" />
+          </Key>
+          <Property Name="id_movimiento_tipo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="nombre_tipo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="color" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="activo" Type="Boolean" />
+          <NavigationProperty Name="C_tracker_movimientos" Relationship="TRACKER_LOGModel.FK_C_tracker_movimientos_C_tracker_movimientos_tipos" FromRole="C_tracker_movimientos_tipos" ToRole="C_tracker_movimientos" />
+        </EntityType>
+        <Association Name="FK_C_tracker_ingredientes_establos_C_tracker_establos">
+          <End Role="C_tracker_establos" Type="Self.C_tracker_establos" Multiplicity="0..1" />
+          <End Role="C_tracker_ingredientes_establos" Type="Self.C_tracker_ingredientes_establos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="C_tracker_establos">
+              <PropertyRef Name="id_tracker_establo" />
+            </Principal>
+            <Dependent Role="C_tracker_ingredientes_establos">
+              <PropertyRef Name="id_establo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="TRACKER_LOGEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="C_tracker_establos" EntityType="Self.C_tracker_establos" />
+          <EntitySet Name="C_tracker_ingredientes_establos" EntityType="Self.C_tracker_ingredientes_establos" />
+          <EntitySet Name="C_tracker_movimientos_tipos" EntityType="Self.C_tracker_movimientos_tipos" />
+          <AssociationSet Name="FK_C_tracker_ingredientes_establos_C_tracker_establos" Association="Self.FK_C_tracker_ingredientes_establos_C_tracker_establos">
+            <End Role="C_tracker_establos" EntitySet="C_tracker_establos" />
+            <End Role="C_tracker_ingredientes_establos" EntitySet="C_tracker_ingredientes_establos" />
+          </AssociationSet>
+          <EntitySet Name="C_tracker_parametros" EntityType="TRACKER_LOGModel.C_tracker_parametros" />
+          <EntitySet Name="C_tracker_parametros_tipos" EntityType="TRACKER_LOGModel.C_tracker_parametros_tipos" />
+          <AssociationSet Name="FK_C_tracker_parametros_C_tracker_parametros_tipos" Association="TRACKER_LOGModel.FK_C_tracker_parametros_C_tracker_parametros_tipos">
+            <End Role="C_tracker_parametros_tipos" EntitySet="C_tracker_parametros_tipos" />
+            <End Role="C_tracker_parametros" EntitySet="C_tracker_parametros" />
+          </AssociationSet>
+          <EntitySet Name="C_tracker_movimientos" EntityType="TRACKER_LOGModel.C_tracker_movimientos" />
+          <AssociationSet Name="FK_C_tracker_movimientos_C_tracker_establos" Association="TRACKER_LOGModel.FK_C_tracker_movimientos_C_tracker_establos">
+            <End Role="C_tracker_establos" EntitySet="C_tracker_establos" />
+            <End Role="C_tracker_movimientos" EntitySet="C_tracker_movimientos" />
+          </AssociationSet>
+          <AssociationSet Name="FK_C_tracker_movimientos_C_tracker_movimientos_tipos" Association="TRACKER_LOGModel.FK_C_tracker_movimientos_C_tracker_movimientos_tipos">
+            <End Role="C_tracker_movimientos_tipos" EntitySet="C_tracker_movimientos_tipos" />
+            <End Role="C_tracker_movimientos" EntitySet="C_tracker_movimientos" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="C_tracker_parametros">
+          <Key>
+            <PropertyRef Name="id_tracker_config" />
+          </Key>
+          <Property Name="id_tracker_config" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="id_establo" Type="Int32" />
+          <Property Name="id_parametro_tipo" Type="Int32" />
+          <Property Name="valor" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="C_tracker_parametros_tipos" Relationship="TRACKER_LOGModel.FK_C_tracker_parametros_C_tracker_parametros_tipos" FromRole="C_tracker_parametros" ToRole="C_tracker_parametros_tipos" />
+        </EntityType>
+        <EntityType Name="C_tracker_parametros_tipos">
+          <Key>
+            <PropertyRef Name="id_parametro_tipo" />
+          </Key>
+          <Property Name="id_parametro_tipo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="tipo_parametro" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="C_tracker_parametros" Relationship="TRACKER_LOGModel.FK_C_tracker_parametros_C_tracker_parametros_tipos" FromRole="C_tracker_parametros_tipos" ToRole="C_tracker_parametros" />
+        </EntityType>
+        <Association Name="FK_C_tracker_parametros_C_tracker_parametros_tipos">
+          <End Type="TRACKER_LOGModel.C_tracker_parametros_tipos" Role="C_tracker_parametros_tipos" Multiplicity="0..1" />
+          <End Type="TRACKER_LOGModel.C_tracker_parametros" Role="C_tracker_parametros" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="C_tracker_parametros_tipos">
+              <PropertyRef Name="id_parametro_tipo" />
+            </Principal>
+            <Dependent Role="C_tracker_parametros">
+              <PropertyRef Name="id_parametro_tipo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="C_tracker_movimientos">
+          <Key>
+            <PropertyRef Name="id_log_tracker" />
+          </Key>
+          <Property Name="id_log_tracker" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="fecha_syync" Type="DateTime" Precision="3" />
+          <Property Name="id_movimiento_tracker" Type="Int32" />
+          <Property Name="id_carg_desc" Type="Int32" />
+          <Property Name="id_barch" Type="Int32" />
+          <Property Name="cve_racion" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="racion" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="line_status" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
+          <Property Name="id_ing" Type="Int32" />
+          <Property Name="ing_cve" Type="String" MaxLength="80" FixedLength="false" Unicode="false" />
+          <Property Name="ing_nombre" Type="String" MaxLength="80" FixedLength="false" Unicode="false" />
+          <Property Name="ing_tipo" Type="String" MaxLength="80" FixedLength="false" Unicode="false" />
+          <Property Name="no_animales" Type="Int32" />
+          <Property Name="peso_cargado" Type="Decimal" Precision="18" Scale="5" />
+          <Property Name="peso_real" Type="Decimal" Precision="18" Scale="5" />
+          <Property Name="diferencia" Type="Decimal" Precision="18" Scale="5" />
+          <Property Name="id_mezclador" Type="Int32" />
+          <Property Name="nombre_mezclador" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="id_operador" Type="Int32" />
+          <Property Name="nombre_operador" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="PMS_P" Type="Decimal" Precision="18" Scale="5" />
+          <Property Name="PMS_R" Type="Decimal" Precision="18" Scale="5" />
+          <Property Name="precio" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="sobrante" Type="Decimal" Precision="18" Scale="5" />
+          <Property Name="fecha_registro" Type="DateTime" Precision="3" />
+          <Property Name="id_tracker_establo" Type="Int32" />
+          <Property Name="corral" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="C_tracker_establos" Relationship="TRACKER_LOGModel.FK_C_tracker_movimientos_C_tracker_establos" FromRole="C_tracker_movimientos" ToRole="C_tracker_establos" />
+          <NavigationProperty Name="C_tracker_movimientos_tipos" Relationship="TRACKER_LOGModel.FK_C_tracker_movimientos_C_tracker_movimientos_tipos" FromRole="C_tracker_movimientos" ToRole="C_tracker_movimientos_tipos" />
+        </EntityType>
+        <Association Name="FK_C_tracker_movimientos_C_tracker_establos">
+          <End Type="TRACKER_LOGModel.C_tracker_establos" Role="C_tracker_establos" Multiplicity="0..1" />
+          <End Type="TRACKER_LOGModel.C_tracker_movimientos" Role="C_tracker_movimientos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="C_tracker_establos">
+              <PropertyRef Name="id_tracker_establo" />
+            </Principal>
+            <Dependent Role="C_tracker_movimientos">
+              <PropertyRef Name="id_tracker_establo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_C_tracker_movimientos_C_tracker_movimientos_tipos">
+          <End Type="TRACKER_LOGModel.C_tracker_movimientos_tipos" Role="C_tracker_movimientos_tipos" Multiplicity="0..1" />
+          <End Type="TRACKER_LOGModel.C_tracker_movimientos" Role="C_tracker_movimientos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="C_tracker_movimientos_tipos">
+              <PropertyRef Name="id_movimiento_tipo" />
+            </Principal>
+            <Dependent Role="C_tracker_movimientos">
+              <PropertyRef Name="id_movimiento_tracker" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="TRACKER_LOGModelStoreContainer" CdmEntityContainer="TRACKER_LOGEntities">
+          <EntitySetMapping Name="C_tracker_establos">
+            <EntityTypeMapping TypeName="TRACKER_LOGModel.C_tracker_establos">
+              <MappingFragment StoreEntitySet="C_tracker_establos">
+                <ScalarProperty Name="id_tracker_establo" ColumnName="id_tracker_establo" />
+                <ScalarProperty Name="siglas" ColumnName="siglas" />
+                <ScalarProperty Name="nombre_establo" ColumnName="nombre_establo" />
+                <ScalarProperty Name="activo" ColumnName="activo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="C_tracker_ingredientes_establos">
+            <EntityTypeMapping TypeName="TRACKER_LOGModel.C_tracker_ingredientes_establos">
+              <MappingFragment StoreEntitySet="C_tracker_ingredientes_establos">
+                <ScalarProperty Name="id_ingrediente" ColumnName="id_ingrediente" />
+                <ScalarProperty Name="clave" ColumnName="clave" />
+                <ScalarProperty Name="descripcion" ColumnName="descripcion" />
+                <ScalarProperty Name="id_establo" ColumnName="id_establo" />
+                <ScalarProperty Name="id_ing" ColumnName="id_ing" />
+                <ScalarProperty Name="activo" ColumnName="activo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="C_tracker_movimientos_tipos">
+            <EntityTypeMapping TypeName="TRACKER_LOGModel.C_tracker_movimientos_tipos">
+              <MappingFragment StoreEntitySet="C_tracker_movimientos_tipos">
+                <ScalarProperty Name="id_movimiento_tipo" ColumnName="id_movimiento_tipo" />
+                <ScalarProperty Name="nombre_tipo" ColumnName="nombre_tipo" />
+                <ScalarProperty Name="color" ColumnName="color" />
+                <ScalarProperty Name="activo" ColumnName="activo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="C_tracker_parametros">
+            <EntityTypeMapping TypeName="TRACKER_LOGModel.C_tracker_parametros">
+              <MappingFragment StoreEntitySet="C_tracker_parametros">
+                <ScalarProperty Name="valor" ColumnName="valor" />
+                <ScalarProperty Name="id_parametro_tipo" ColumnName="id_parametro_tipo" />
+                <ScalarProperty Name="id_establo" ColumnName="id_establo" />
+                <ScalarProperty Name="id_tracker_config" ColumnName="id_tracker_config" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="C_tracker_parametros_tipos">
+            <EntityTypeMapping TypeName="TRACKER_LOGModel.C_tracker_parametros_tipos">
+              <MappingFragment StoreEntitySet="C_tracker_parametros_tipos">
+                <ScalarProperty Name="tipo_parametro" ColumnName="tipo_parametro" />
+                <ScalarProperty Name="id_parametro_tipo" ColumnName="id_parametro_tipo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="C_tracker_movimientos">
+            <EntityTypeMapping TypeName="TRACKER_LOGModel.C_tracker_movimientos">
+              <MappingFragment StoreEntitySet="C_tracker_movimientos">
+                <ScalarProperty Name="corral" ColumnName="corral" />
+                <ScalarProperty Name="id_tracker_establo" ColumnName="id_tracker_establo" />
+                <ScalarProperty Name="fecha_registro" ColumnName="fecha_registro" />
+                <ScalarProperty Name="sobrante" ColumnName="sobrante" />
+                <ScalarProperty Name="precio" ColumnName="precio" />
+                <ScalarProperty Name="PMS_R" ColumnName="PMS_R" />
+                <ScalarProperty Name="PMS_P" ColumnName="PMS_P" />
+                <ScalarProperty Name="nombre_operador" ColumnName="nombre_operador" />
+                <ScalarProperty Name="id_operador" ColumnName="id_operador" />
+                <ScalarProperty Name="nombre_mezclador" ColumnName="nombre_mezclador" />
+                <ScalarProperty Name="id_mezclador" ColumnName="id_mezclador" />
+                <ScalarProperty Name="diferencia" ColumnName="diferencia" />
+                <ScalarProperty Name="peso_real" ColumnName="peso_real" />
+                <ScalarProperty Name="peso_cargado" ColumnName="peso_cargado" />
+                <ScalarProperty Name="no_animales" ColumnName="no_animales" />
+                <ScalarProperty Name="ing_tipo" ColumnName="ing_tipo" />
+                <ScalarProperty Name="ing_nombre" ColumnName="ing_nombre" />
+                <ScalarProperty Name="ing_cve" ColumnName="ing_cve" />
+                <ScalarProperty Name="id_ing" ColumnName="id_ing" />
+                <ScalarProperty Name="line_status" ColumnName="line_status" />
+                <ScalarProperty Name="racion" ColumnName="racion" />
+                <ScalarProperty Name="cve_racion" ColumnName="cve_racion" />
+                <ScalarProperty Name="id_barch" ColumnName="id_barch" />
+                <ScalarProperty Name="id_carg_desc" ColumnName="id_carg_desc" />
+                <ScalarProperty Name="id_movimiento_tracker" ColumnName="id_movimiento_tracker" />
+                <ScalarProperty Name="fecha_syync" ColumnName="fecha_syync" />
+                <ScalarProperty Name="id_log_tracker" ColumnName="id_log_tracker" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Ninguno" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

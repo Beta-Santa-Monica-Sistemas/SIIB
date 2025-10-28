@@ -1,0 +1,331 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="ChecadorModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="att_punches">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="emp_id" Type="int" Nullable="false" />
+          <Property Name="punch_time" Type="datetime" Nullable="false" />
+          <Property Name="workcode" Type="nvarchar" MaxLength="64" />
+          <Property Name="workstate" Type="nvarchar" MaxLength="64" />
+          <Property Name="terminal_id" Type="int" />
+          <Property Name="punch_type" Type="nvarchar" MaxLength="64" />
+          <Property Name="operator" Type="nvarchar" MaxLength="64" />
+          <Property Name="operator_reason" Type="nvarchar" MaxLength="255" />
+          <Property Name="operator_time" Type="datetime" />
+          <Property Name="iuser1" Type="int" />
+          <Property Name="iuser2" Type="int" />
+          <Property Name="iuser3" Type="int" />
+          <Property Name="cuser1" Type="nvarchar" MaxLength="64" />
+          <Property Name="cuser2" Type="nvarchar" MaxLength="64" />
+          <Property Name="cuser3" Type="nvarchar" MaxLength="64" />
+          <Property Name="remark" Type="nvarchar" MaxLength="64" />
+          <Property Name="IsSelect" Type="int" />
+        </EntityType>
+        <EntityType Name="hr_employee">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="emp_pin" Type="int" Nullable="false" />
+          <Property Name="emp_code" Type="nvarchar" MaxLength="64" />
+          <Property Name="emp_ssn" Type="nvarchar" MaxLength="64" />
+          <Property Name="emp_role" Type="nvarchar" MaxLength="64" />
+          <Property Name="emp_firstname" Type="nvarchar" MaxLength="64" Nullable="false" />
+          <Property Name="emp_lastname" Type="nvarchar" MaxLength="64" Nullable="false" />
+          <Property Name="emp_username" Type="nvarchar" MaxLength="64" />
+          <Property Name="emp_pwd" Type="nvarchar" MaxLength="64" />
+          <Property Name="emp_timezone" Type="nvarchar" MaxLength="64" />
+          <Property Name="emp_phone" Type="nvarchar" MaxLength="13" />
+          <Property Name="emp_payroll_id" Type="nvarchar" MaxLength="64" />
+          <Property Name="emp_payroll_type" Type="nvarchar" MaxLength="64" />
+          <Property Name="emp_pin2" Type="nvarchar" MaxLength="64" />
+          <Property Name="emp_photo" Type="varbinary(max)" />
+          <Property Name="emp_privilege" Type="nvarchar" MaxLength="64" />
+          <Property Name="emp_group" Type="nvarchar" MaxLength="64" />
+          <Property Name="emp_hiredate" Type="datetime" />
+          <Property Name="emp_address" Type="nvarchar" MaxLength="64" />
+          <Property Name="emp_address2" Type="nvarchar" MaxLength="64" />
+          <Property Name="emp_active" Type="int" Nullable="false" />
+          <Property Name="emp_firedate" Type="datetime" />
+          <Property Name="emp_firereason" Type="nvarchar" MaxLength="1024" />
+          <Property Name="emp_emergencyphone1" Type="nvarchar" MaxLength="13" />
+          <Property Name="emp_emergencyphone2" Type="nvarchar" MaxLength="13" />
+          <Property Name="emp_emergencyname" Type="nvarchar" MaxLength="64" />
+          <Property Name="emp_emergencyaddress" Type="nvarchar" MaxLength="64" />
+          <Property Name="emp_cardNumber" Type="nvarchar" MaxLength="24" />
+          <Property Name="emp_country" Type="nvarchar" MaxLength="64" />
+          <Property Name="emp_city" Type="nvarchar" MaxLength="64" />
+          <Property Name="emp_state" Type="nvarchar" MaxLength="64" />
+          <Property Name="emp_postal" Type="nvarchar" MaxLength="6" />
+          <Property Name="emp_fax" Type="nvarchar" MaxLength="13" />
+          <Property Name="emp_email" Type="nvarchar" MaxLength="64" />
+          <Property Name="emp_title" Type="nvarchar" MaxLength="64" />
+          <Property Name="emp_hourlyrate1" Type="decimal" Precision="19" Scale="5" />
+          <Property Name="emp_hourlyrate2" Type="decimal" Precision="19" Scale="5" />
+          <Property Name="emp_hourlyrate3" Type="decimal" Precision="19" Scale="5" />
+          <Property Name="emp_hourlyrate4" Type="decimal" Precision="19" Scale="5" />
+          <Property Name="emp_hourlyrate5" Type="decimal" Precision="19" Scale="5" />
+          <Property Name="emp_gender" Type="int" />
+          <Property Name="emp_birthday" Type="datetime" />
+          <Property Name="emp_operationmode" Type="int" />
+          <Property Name="IsSelect" Type="int" />
+          <Property Name="iuser1" Type="int" />
+          <Property Name="iuser2" Type="int" />
+          <Property Name="iuser3" Type="int" />
+          <Property Name="cuser1" Type="nvarchar" MaxLength="64" />
+          <Property Name="cuser2" Type="nvarchar" MaxLength="64" />
+          <Property Name="cuser3" Type="nvarchar" MaxLength="64" />
+          <Property Name="remark" Type="nvarchar" MaxLength="64" />
+          <Property Name="emp_dept" Type="int" />
+          <Property Name="payclass_id" Type="int" />
+          <Property Name="schedule_id" Type="int" />
+        </EntityType>
+        <Association Name="FK63030A90758CB363">
+          <End Role="hr_employee" Type="Self.hr_employee" Multiplicity="1" />
+          <End Role="att_punches" Type="Self.att_punches" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="hr_employee">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="att_punches">
+              <PropertyRef Name="emp_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="ChecadorModelStoreContainer">
+          <EntitySet Name="att_punches" EntityType="Self.att_punches" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="hr_employee" EntityType="Self.hr_employee" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK63030A90758CB363" Association="Self.FK63030A90758CB363">
+            <End Role="hr_employee" EntitySet="hr_employee" />
+            <End Role="att_punches" EntitySet="att_punches" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="ChecadorModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="ChecadorEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="hr_employee" EntityType="ChecadorModel.hr_employee" />
+          <EntitySet Name="att_punches" EntityType="ChecadorModel.att_punches" />
+          <AssociationSet Name="FK63030A90758CB363" Association="ChecadorModel.FK63030A90758CB363">
+            <End Role="hr_employee" EntitySet="hr_employee" />
+            <End Role="att_punches" EntitySet="att_punches" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="hr_employee">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="emp_pin" Type="Int32" Nullable="false" />
+          <Property Name="emp_code" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="emp_ssn" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="emp_role" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="emp_firstname" Type="String" Nullable="false" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="emp_lastname" Type="String" Nullable="false" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="emp_username" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="emp_pwd" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="emp_timezone" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="emp_phone" Type="String" MaxLength="13" FixedLength="false" Unicode="true" />
+          <Property Name="emp_payroll_id" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="emp_payroll_type" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="emp_pin2" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="emp_photo" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <Property Name="emp_privilege" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="emp_group" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="emp_hiredate" Type="DateTime" Precision="3" />
+          <Property Name="emp_address" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="emp_address2" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="emp_active" Type="Int32" Nullable="false" />
+          <Property Name="emp_firedate" Type="DateTime" Precision="3" />
+          <Property Name="emp_firereason" Type="String" MaxLength="1024" FixedLength="false" Unicode="true" />
+          <Property Name="emp_emergencyphone1" Type="String" MaxLength="13" FixedLength="false" Unicode="true" />
+          <Property Name="emp_emergencyphone2" Type="String" MaxLength="13" FixedLength="false" Unicode="true" />
+          <Property Name="emp_emergencyname" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="emp_emergencyaddress" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="emp_cardNumber" Type="String" MaxLength="24" FixedLength="false" Unicode="true" />
+          <Property Name="emp_country" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="emp_city" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="emp_state" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="emp_postal" Type="String" MaxLength="6" FixedLength="false" Unicode="true" />
+          <Property Name="emp_fax" Type="String" MaxLength="13" FixedLength="false" Unicode="true" />
+          <Property Name="emp_email" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="emp_title" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="emp_hourlyrate1" Type="Decimal" Precision="19" Scale="5" />
+          <Property Name="emp_hourlyrate2" Type="Decimal" Precision="19" Scale="5" />
+          <Property Name="emp_hourlyrate3" Type="Decimal" Precision="19" Scale="5" />
+          <Property Name="emp_hourlyrate4" Type="Decimal" Precision="19" Scale="5" />
+          <Property Name="emp_hourlyrate5" Type="Decimal" Precision="19" Scale="5" />
+          <Property Name="emp_gender" Type="Int32" />
+          <Property Name="emp_birthday" Type="DateTime" Precision="3" />
+          <Property Name="emp_operationmode" Type="Int32" />
+          <Property Name="IsSelect" Type="Int32" />
+          <Property Name="iuser1" Type="Int32" />
+          <Property Name="iuser2" Type="Int32" />
+          <Property Name="iuser3" Type="Int32" />
+          <Property Name="cuser1" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="cuser2" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="cuser3" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="remark" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="emp_dept" Type="Int32" />
+          <Property Name="payclass_id" Type="Int32" />
+          <Property Name="schedule_id" Type="Int32" />
+          <NavigationProperty Name="att_punches" Relationship="ChecadorModel.FK63030A90758CB363" FromRole="hr_employee" ToRole="att_punches" />
+        </EntityType>
+        <EntityType Name="att_punches">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="emp_id" Type="Int32" Nullable="false" />
+          <Property Name="punch_time" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="workcode" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="workstate" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="terminal_id" Type="Int32" />
+          <Property Name="punch_type" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="operator" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="operator_reason" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="operator_time" Type="DateTime" Precision="3" />
+          <Property Name="iuser1" Type="Int32" />
+          <Property Name="iuser2" Type="Int32" />
+          <Property Name="iuser3" Type="Int32" />
+          <Property Name="cuser1" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="cuser2" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="cuser3" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="remark" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="IsSelect" Type="Int32" />
+          <NavigationProperty Name="hr_employee" Relationship="ChecadorModel.FK63030A90758CB363" FromRole="att_punches" ToRole="hr_employee" />
+        </EntityType>
+        <Association Name="FK63030A90758CB363">
+          <End Type="ChecadorModel.hr_employee" Role="hr_employee" Multiplicity="1" />
+          <End Type="ChecadorModel.att_punches" Role="att_punches" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="hr_employee">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="att_punches">
+              <PropertyRef Name="emp_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="ChecadorModelStoreContainer" CdmEntityContainer="ChecadorEntities">
+          <EntitySetMapping Name="hr_employee">
+            <EntityTypeMapping TypeName="ChecadorModel.hr_employee">
+              <MappingFragment StoreEntitySet="hr_employee">
+                <ScalarProperty Name="schedule_id" ColumnName="schedule_id" />
+                <ScalarProperty Name="payclass_id" ColumnName="payclass_id" />
+                <ScalarProperty Name="emp_dept" ColumnName="emp_dept" />
+                <ScalarProperty Name="remark" ColumnName="remark" />
+                <ScalarProperty Name="cuser3" ColumnName="cuser3" />
+                <ScalarProperty Name="cuser2" ColumnName="cuser2" />
+                <ScalarProperty Name="cuser1" ColumnName="cuser1" />
+                <ScalarProperty Name="iuser3" ColumnName="iuser3" />
+                <ScalarProperty Name="iuser2" ColumnName="iuser2" />
+                <ScalarProperty Name="iuser1" ColumnName="iuser1" />
+                <ScalarProperty Name="IsSelect" ColumnName="IsSelect" />
+                <ScalarProperty Name="emp_operationmode" ColumnName="emp_operationmode" />
+                <ScalarProperty Name="emp_birthday" ColumnName="emp_birthday" />
+                <ScalarProperty Name="emp_gender" ColumnName="emp_gender" />
+                <ScalarProperty Name="emp_hourlyrate5" ColumnName="emp_hourlyrate5" />
+                <ScalarProperty Name="emp_hourlyrate4" ColumnName="emp_hourlyrate4" />
+                <ScalarProperty Name="emp_hourlyrate3" ColumnName="emp_hourlyrate3" />
+                <ScalarProperty Name="emp_hourlyrate2" ColumnName="emp_hourlyrate2" />
+                <ScalarProperty Name="emp_hourlyrate1" ColumnName="emp_hourlyrate1" />
+                <ScalarProperty Name="emp_title" ColumnName="emp_title" />
+                <ScalarProperty Name="emp_email" ColumnName="emp_email" />
+                <ScalarProperty Name="emp_fax" ColumnName="emp_fax" />
+                <ScalarProperty Name="emp_postal" ColumnName="emp_postal" />
+                <ScalarProperty Name="emp_state" ColumnName="emp_state" />
+                <ScalarProperty Name="emp_city" ColumnName="emp_city" />
+                <ScalarProperty Name="emp_country" ColumnName="emp_country" />
+                <ScalarProperty Name="emp_cardNumber" ColumnName="emp_cardNumber" />
+                <ScalarProperty Name="emp_emergencyaddress" ColumnName="emp_emergencyaddress" />
+                <ScalarProperty Name="emp_emergencyname" ColumnName="emp_emergencyname" />
+                <ScalarProperty Name="emp_emergencyphone2" ColumnName="emp_emergencyphone2" />
+                <ScalarProperty Name="emp_emergencyphone1" ColumnName="emp_emergencyphone1" />
+                <ScalarProperty Name="emp_firereason" ColumnName="emp_firereason" />
+                <ScalarProperty Name="emp_firedate" ColumnName="emp_firedate" />
+                <ScalarProperty Name="emp_active" ColumnName="emp_active" />
+                <ScalarProperty Name="emp_address2" ColumnName="emp_address2" />
+                <ScalarProperty Name="emp_address" ColumnName="emp_address" />
+                <ScalarProperty Name="emp_hiredate" ColumnName="emp_hiredate" />
+                <ScalarProperty Name="emp_group" ColumnName="emp_group" />
+                <ScalarProperty Name="emp_privilege" ColumnName="emp_privilege" />
+                <ScalarProperty Name="emp_photo" ColumnName="emp_photo" />
+                <ScalarProperty Name="emp_pin2" ColumnName="emp_pin2" />
+                <ScalarProperty Name="emp_payroll_type" ColumnName="emp_payroll_type" />
+                <ScalarProperty Name="emp_payroll_id" ColumnName="emp_payroll_id" />
+                <ScalarProperty Name="emp_phone" ColumnName="emp_phone" />
+                <ScalarProperty Name="emp_timezone" ColumnName="emp_timezone" />
+                <ScalarProperty Name="emp_pwd" ColumnName="emp_pwd" />
+                <ScalarProperty Name="emp_username" ColumnName="emp_username" />
+                <ScalarProperty Name="emp_lastname" ColumnName="emp_lastname" />
+                <ScalarProperty Name="emp_firstname" ColumnName="emp_firstname" />
+                <ScalarProperty Name="emp_role" ColumnName="emp_role" />
+                <ScalarProperty Name="emp_ssn" ColumnName="emp_ssn" />
+                <ScalarProperty Name="emp_code" ColumnName="emp_code" />
+                <ScalarProperty Name="emp_pin" ColumnName="emp_pin" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="att_punches">
+            <EntityTypeMapping TypeName="ChecadorModel.att_punches">
+              <MappingFragment StoreEntitySet="att_punches">
+                <ScalarProperty Name="IsSelect" ColumnName="IsSelect" />
+                <ScalarProperty Name="remark" ColumnName="remark" />
+                <ScalarProperty Name="cuser3" ColumnName="cuser3" />
+                <ScalarProperty Name="cuser2" ColumnName="cuser2" />
+                <ScalarProperty Name="cuser1" ColumnName="cuser1" />
+                <ScalarProperty Name="iuser3" ColumnName="iuser3" />
+                <ScalarProperty Name="iuser2" ColumnName="iuser2" />
+                <ScalarProperty Name="iuser1" ColumnName="iuser1" />
+                <ScalarProperty Name="operator_time" ColumnName="operator_time" />
+                <ScalarProperty Name="operator_reason" ColumnName="operator_reason" />
+                <ScalarProperty Name="operator" ColumnName="operator" />
+                <ScalarProperty Name="punch_type" ColumnName="punch_type" />
+                <ScalarProperty Name="terminal_id" ColumnName="terminal_id" />
+                <ScalarProperty Name="workstate" ColumnName="workstate" />
+                <ScalarProperty Name="workcode" ColumnName="workcode" />
+                <ScalarProperty Name="punch_time" ColumnName="punch_time" />
+                <ScalarProperty Name="emp_id" ColumnName="emp_id" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Ninguno" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

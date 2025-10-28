@@ -1,0 +1,118 @@
+﻿@model Beta_System.Models.C_establos_caseta_logs_g
+
+@if (Model != null)
+{
+    int tipo_registro = (int)Model.id_tipo_entrada_caseta;
+    try
+    {
+        <div class="row">
+            <div class="col-md-6">
+                <h3 style="margin:5px;">Nombre:</h3>
+                <h1 style="margin:5px;">- @Model.nombre_registro</h1>
+
+                <h3 style="margin:5px;">Tipo de entrada: </h3>
+                <h1 style="margin:5px;">- @Model.C_establos_caseta_tipos_entradas.tipo_entrada</h1>
+
+                <h3 style="margin:5px;">Area: </h3>
+                <h1 style="margin:5px;">- @Model.C_establos_caseta_tipos_entradas_areas.nombre_area</h1>
+            </div>
+            <div class="col-md-6">
+                <h3 style="margin:5px;">Fecha entrada: </h3>
+                <h1 style="margin:5px;">- @String.Format(Model.fecha_entrada.Value.ToString(), "dd/mm/yyyy hh:mm")</h1>
+
+                <h3 style="margin:5px;">Usuario registró entrada: </h3>
+                <h1 style="margin:5px;">- @Model.C_usuarios_corporativo.C_empleados.nombres @Model.C_usuarios_corporativo.C_empleados.apellido_paterno</h1>
+            </div>
+        </div>
+        <hr />
+
+        if (tipo_registro == 1)  //EMPLEADO
+        {
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-5 txt_input">
+                        <strong>Ingrese el folio del vale de salida:</strong>
+                        <input type="text" placeholder="Ejemplo: SM-XX-XXX" class="text-center form-control" id="folio_vale_salida_input" />
+                    </div>
+                    <div class="col-md-1">
+
+                    </div>
+                    <div class="col-md-3">
+                        <br />
+                        <button class="btn btn_beta txt_input" onclick="GuardarLogSalidaHeader(@tipo_registro, @Model.id_caseta_log_g)"><i class="fa fa-check"></i> Registrar salida</button>
+                    </div>
+                </div>
+            </div>
+        }
+        else if (tipo_registro == 2)  //VISITA GENERAL
+        {
+            <button class="btn btn_beta btn-block" onclick="GuardarLogSalidaHeader(@tipo_registro, @Model.id_caseta_log_g)"><i class="fa fa-check"></i> Registrar salida</button>
+        }
+        else if (tipo_registro == 3)  //VISITA BASCULA
+        {
+            <hr />
+            <div id="div_formulario_bascula">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="ml-5 txt_input">
+                            <strong>Tipo de envío:</strong>
+                            <div id="div_tipos_tanques">
+                                @{ Html.RenderAction("ConsultarTiposTanquesRadio", "CATALOGOS"); }
+                            </div>
+                            <hr />
+                            <button class="btn btn_beta btn-block" onclick="GuardarLogSalidaHeader(@tipo_registro, @Model.id_caseta_log_g)" id="btn_salida_bascula" style="display:none;"><i class="fa fa-check"></i> Registrar salida</button>
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="row">
+                            <div class="col-md-6 txt_input">
+                                <div id="div_formulario_tanque_sencillo" style="display:none;">
+                                    <strong>Ficha/Folio:</strong>
+                                    <br />
+                                    <div class="row mt-2">
+                                        <div class="col-md-9">
+                                            <input class="form-control ficha_input" type="text" placeholder="Ingresa la ficha o el folio de salida de ganado" id="ficha_1" />
+                                        </div>
+                                        <div class="col-md-3">
+                                            <button class="btn btn_beta_icon" onclick="BuscarInformacionFicha(1);"><i class="fa fa-search"></i></button>
+                                        </div>
+                                    </div>
+                                    <hr />
+                                    <div id="div_info_ficha_1"></div>
+                                </div>
+
+                            </div>
+                            <div class="col-md-6 txt_input">
+                                <div id="div_formulario_tanque_full" style="display:none;">
+                                    <strong>Ficha/Folio:</strong>
+                                    <br />
+                                    <div class="row mt-2">
+                                        <div class="col-md-9">
+                                            <input class="form-control ficha_input" type="text" placeholder="Ingresa la ficha o el folio de salida de ganado" id="ficha_2" />
+                                        </div>
+                                        <div class="col-md-3">
+                                            <button class="btn btn_beta_icon" onclick="BuscarInformacionFicha(2);"><i class="fa fa-search"></i></button>
+                                        </div>
+                                    </div>
+                                    <hr />
+                                    <div id="div_info_ficha_2"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        }
+
+
+    }
+    catch (Exception) { }
+}
+else
+{
+    <h2 class="text-left text-danger"><strong>No se encontraron registros</strong></h2>
+}
+
+

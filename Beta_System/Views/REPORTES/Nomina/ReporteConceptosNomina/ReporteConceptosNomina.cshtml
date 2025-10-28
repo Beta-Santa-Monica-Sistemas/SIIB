@@ -1,0 +1,67 @@
+﻿
+@{
+    ViewBag.Title = "ReporteConceptosNomina";
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+}
+<div class="page_title">
+    <div class="counter_section">
+        <h1>Reporte por conceptos de nómina</h1>
+    </div>
+</div>
+
+<div class="column2 counter_section">
+    <div class="tab-content">
+        <div class="row">
+            <div class="col-md-3">
+                <strong>Establo:</strong>
+                <select class="form-control id_establo_select" id="id_establo_prenomina_finalizadas" onchange="ConsultarNominasGeneradasSelect();"></select>
+            </div>
+            <div class="col-md-1">
+                <strong>Año:</strong>
+                <select class="form-control" id="id_anio_prenomina_finalizadas" onchange="ConsultarNominasFinalizadasSelect();">
+                    @{ Html.RenderAction("ConsultarAniosPresupuestoSelect", "COMPRAS"); }
+                </select>
+            </div>
+            <div class="col-md-3">
+                <strong>Mes:</strong>
+                <select class="form-control" id="id_mes_prenomina_finalizadas" onchange="ConsultarNominasFinalizadasSelect();">
+                    @{ Html.RenderAction("ConsultarMesesSelet", "COMPRAS"); }
+                </select>
+            </div>
+            <div class="col-md-3">
+                <strong>Prenominas:</strong>
+                <select class="form-control" id="id_prenomina_finalizadas"></select>
+            </div>
+            <div class="col-md-2 text-center">
+                <br />
+                <button class="btn btn_beta_icon" onclick="ConsultarReporteConceptosNomina();"><i class="fa fa-search"></i></button>
+            </div>
+        </div>
+        <hr />
+        <div id="div_reporte_conceptos_nomina">
+
+        </div>
+
+    </div>
+</div>
+
+
+@Scripts.Render("~/bundles_Nomina/js")
+@Scripts.Render("~/bundles_Prenomina/js")
+@Scripts.Render("~/bundles_ReportesNominas/js")
+
+
+<script>
+    $(window).on("load", function () {
+        ConsultarEstablosUsuarioSelect(0);
+        var todos_option = $('<option>', { value: '0', text: 'Todos' });
+        $(".id_establo_select").prepend(todos_option);
+        $(".id_establo_select").val('0');
+        ConsultarNominasFinalizadasSelect();
+    });
+</script>
+
+
+
+
+

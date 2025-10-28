@@ -1,0 +1,16 @@
+﻿@model List<Beta_System.Models.C_articulos_catalogo>
+
+@foreach (var item in Model.OrderBy(x => x.nombre_articulo))
+{
+    <tr class="text-center articulos_ajuste_data" id="trArticuloAjuste_@item.id_articulo">
+        <td style='display:none;' class="id_articulo text-left">@item.id_articulo</td>
+        <td><input type="checkbox" class="select form-control" id="select_@item.id_articulo" style="height:25px;"/></td>
+        <td>@item.clave</td>
+        <td class="text-left">@item.nombre_articulo</td>
+        <td>@item.C_articulos_tipos.nombre_tipo</td>
+        <td>
+            <button class="btn btn_beta_danger" onclick="QuitarArticuloAjuste(@item.id_articulo);"><i class="fa fa-remove"></i></button>
+        </td>
+    </tr>
+}
+

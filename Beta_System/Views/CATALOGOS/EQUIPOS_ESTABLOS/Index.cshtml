@@ -1,0 +1,73 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+}
+
+
+
+<div class="page_title">
+    <div class="counter_section">
+        <div class="row">
+            <div class="col-md-9">
+                <h1>Administrar equipos de establos</h1>
+            </div>
+            <div class="col-md-3 text-right">
+                <strong>Nuevo equipo</strong>
+                <button class="btn btn_beta_icon" onclick="NuevoEquipos();"><i class="fa fa-plus"></i></button>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+
+<div class="column2 counter_section">
+    <div class="table-responsive" id="div_tabla_equipos"></div>
+</div>
+
+
+<!-- Modal EDITAR EQUIPO-->
+<div class="modal fade" id="m_add_upd_equipo" tabindex="-1" role="dialog" aria-labelledby="m_editar_equipoLbl" aria-hidden="true">
+    <div class="modal-dialog modal-sm" role="document" style="min-width:400px; width: 400px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="lbl_add_upd_equipo">Nuevo equipo</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="container-fluid text-center">
+                    <strong>CLAVE:</strong>
+                    <input type="text" class="form-control input_clean" id="clave_equipo" onkeyup="ValidarClaveUnicaEquipo();"/>
+                    <span id="lbl_valid_equipo"></span>
+                    <br />
+                    <strong>Nombre:</strong>
+                    <input type="text" class="form-control input_clean" id="nombre_equipo" />
+                    <br />
+                    <strong>Observaciones (opcional)</strong>
+                    <textarea class="form-control input_clean" id="obs_equipo" rows="3"></textarea>
+                    <br />
+                    <button class="btn btn_beta" id="btn_add_upd_equipo"></button>
+                </div>
+                <br />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn_beta_danger" data-dismiss="modal">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal EDITAR EQUIPO  -->
+
+
+@Scripts.Render("~/bundles_Equipos_Establos/js")
+
+<script>
+    $(window).on("load", function () {
+        ConsultarEquiposEstabloTable();
+    });
+</script>
+
+

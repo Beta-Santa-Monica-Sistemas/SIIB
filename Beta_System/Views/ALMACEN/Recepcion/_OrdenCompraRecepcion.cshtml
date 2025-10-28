@@ -1,0 +1,47 @@
+﻿@model IEnumerable<Beta_System.Models.C_compras_ordenes_g>
+
+
+@if (Model != null && Model.Count() > 0)
+    {
+    int id_almacen = ViewBag.id_almacen;
+    <table class="table table-striped table-bordered text-center" id="tabla_orden_g_pendiente" style="width:100%">
+        <thead>
+            <tr class="bg-beta">
+                <th>Orden</th>
+                <th>Fecha orden</th>
+                <th>Requisición</th>
+                <th>Centro</th>
+                @*<th>Requisicion</th>*@
+                <th>Cliente/Proveedor</th>
+                <th>Concepto</th>
+                <th>Recepcionar</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {               
+                <tr>
+                    <td>@item.id_compras_orden_g</td>
+                    <td>@Convert.ToDateTime(item.fecha_registro).ToShortDateString()</td>
+                    <td>@item.C_compras_requi_g.id_requisicion_articulo_g</td>
+                    <td>@item.C_centros_g.siglas</td>
+                    @*<td>@item.C_compras_requi_g.id_requisicion_articulo_g</td>*@
+                    <td>@item.C_compras_proveedores.razon_social</td>
+                    <td>@item.C_compras_requi_g.concepto.ToUpper()</td>
+                    <td class="text-center">
+                        <button class="btn btn_beta_icon" onclick="OrdenRecepcionar(@item.id_compras_orden_g, @id_almacen);"><i class="fa fa-plus"></i></button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <h2 class="text-center" style="color:red">NO SE ENCONTRO INFORMACION</h2>
+    <br />
+    <label>@ViewBag.ex_msj</label>
+}
+
+<script>
+</script>

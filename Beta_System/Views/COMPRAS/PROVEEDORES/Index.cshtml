@@ -1,0 +1,257 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+    List<int> permisos = Session["PermisosModulo"] as List<int>;
+}
+<style>
+    hr {
+        border: 1px solid gray;
+    }
+
+    #m_proveedor {
+        z-index: 1500;
+    }
+
+    #m_proveedor_bloqueo {
+        z-index: 1510;
+    }
+</style>
+
+<div class="page_title">
+    <div class="counter_section">
+        <h1>Proveedores</h1>
+    </div>
+</div>
+
+<div class=" column2 counter_section">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="col-md-3">
+                <strong>Estatus: </strong>
+                <select class="form-control" id="estatus_search" onchange="ConsultarProveedores();">
+                    <option value="0">Todas</option>
+                    @{ Html.RenderAction("ConsultarEstatus", "PROVEEDORES");}
+                </select>
+            </div>
+        </div>
+        <div id="div_proveedores" class="table-responsive"> </div>
+    </div>
+</div>
+
+<div class="modal fade" id="m_proveedor" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document" style="min-width: 80%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <!--TITULO-->
+                <h5 class="modal-title" id="lbl_titulo_proveedor"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="col-md-1">
+                            <strong>Clave</strong>
+                            <input type="text" class="form-control solo_lectura limpiar validar ms_edicion" id="cve" onkeyup="LimpiarKeyPress();" />
+                        </div>
+                        <div class="col-md-4">
+                            <strong>Nombre comercial</strong>
+                            <input type="text" class="form-control limpiar solo_lectura validar ms_edicion" id="nombre_prov" onkeyup="LimpiarKeyPress();" />
+                        </div>
+                        <div class="col-md-3">
+                            <strong>Razón social</strong>
+                            <input type="text" class="form-control limpiar solo_lectura validar ms_edicion" id="razon_social" onkeyup="LimpiarKeyPress();" />
+                        </div>
+                        <div class="col-md-2">
+                            <strong>RFC</strong>
+                            <input type="text" class="form-control limpiar solo_lectura validar ms_edicion" id="RFC" onkeyup="LimpiarKeyPress();" />
+                        </div>
+                        <div class="col-md-2">
+                            <strong>Estatus: </strong>
+                            <select class="form-control solo_lectura" id="id_estatus" onchange="ProveedorBloqueo();">
+                                @{ Html.RenderAction("ConsultarEstatus", "PROVEEDORES");}
+                            </select>
+                        </div>
+                        <div class="col-md-12" id="bloqueo_proveedor">
+                            <div class="col-md-11">
+                                <strong>Observacion</strong>
+                                <textarea class="form-control" rows="2" id="motivo_bloqueo" onkeyup="LimpiarKeyPress();"></textarea>
+                            </div>
+                            <div class="col-md-1 text-right" style="padding-top:15px">
+                                <button class="btn btn_beta_icon" onclick="AccionProveedor(4);"><i class="fa fa-eye"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12"><hr /></div>
+                    <div class="col-md-12">
+                        <div class="col-md-1">
+                            <strong>Cuenta</strong>
+                            <input type="text" class="form-control limpiar solo_lectura validar ms_edicion" id="id_cuenta" onkeyup="LimpiarKeyPress();" />
+                        </div>
+                        <div class="col-md-5">
+                            <strong>Domicilio</strong>
+                            <input type="text" class="form-control limpiar solo_lectura validar ms_edicion" id="direccion1" onkeyup="LimpiarKeyPress();" />
+                        </div>
+                        <div class="col-md-4">
+                            <strong>Correo</strong>
+                            <input type="text" class="form-control limpiar solo_lectura validar ms_edicion" id="correo_prov" onkeyup="LimpiarKeyPress();" />
+                        </div>
+                        <div class="col-md-2">
+                            <strong>Teléfono oficina</strong>
+                            <input type="text" class="form-control limpiar solo_lectura ms_edicion" id="tel_prov" onkeyup="LimpiarKeyPress();" />
+                        </div>
+                    </div>
+                    <div class="col-md-12"><hr /></div>
+                    <div class="col-md-12">
+                        <h3>Datos de contacto</h3>
+                    </div>
+                    <div class="col-md-12">
+                        <br />
+                        <div class="col-md-6">
+                            <strong>Nombre</strong>
+                            <input type="text" class="form-control limpiar solo_lectura validar solo-letras-numeros obligatorio" id="contacto1" onkeyup="LimpiarKeyPress();" />
+                        </div>
+                        <div class="col-md-6">
+                            <strong>Alias (Bascula)</strong>
+                            <input type="text" class="form-control limpiar solo_lectura solo-letras-numeros" id="alias_bascula" onkeyup="LimpiarKeyPress();" />
+                        </div>
+                        <div class="col-md-8">
+                            <strong>Correo</strong>
+                            <input type="email" class="form-control limpiar solo_lectura validar obligatorio" id="correo1" onkeyup="LimpiarKeyPress(); ValidarCorreos();" />
+                            <label id="mensaje_correo"></label>
+                        </div>
+                        <div class="col-md-4">
+                            <strong>Teléfono</strong>
+                            <input type="text" class="form-control limpiar solo_lectura validar" id="telefono1" onkeyup="LimpiarKeyPress(); ValidarTelefono();" />
+                            <label id="mensaje_telefono"></label>
+                        </div>
+                    </div>
+                    <div class="col-md-12"><hr /></div>
+                    <div class="col-md-12">
+                        <div class="col-md-12">
+                            <h3>Datos bancarios</h3>
+                        </div>
+                        <br />
+                        <div class="col-md-12"><br /></div>
+                        <div class="col-md-2">
+                            <strong>Días de Crédito</strong>
+                            <input type="text" class="form-control limpiar solo_lectura validar ms_edicion" id="dias_pago" onkeyup="LimpiarKeyPress();" />
+                        </div>
+                        <div class="col-md-2">
+                            <strong>Clabe interbancaria</strong>
+                            <input type="text" class="form-control limpiar solo_lectura validar ms_edicion" id="clabe1" onkeyup="LimpiarKeyPress();" />
+                            <label id="mensaje_clabe"></label>
+                        </div>
+                        <div class="col-md-2">
+                            <strong>Banco</strong>
+                            <input type="text" class="form-control limpiar solo_lectura validar ms_edicion" id="id_banco_1" />
+                        </div>
+                        <div class="col-md-3">
+                            <strong>Moneda</strong>
+                            <input type="text" class="form-control limpiar solo_lectura validar ms_edicion" id="tipo_moneda_1" />
+                        </div>
+                        <div class="col-md-3">
+                            <div class="row">
+                                <div class="col-md-6 text-center">
+                                    <strong>Alimentación <i class="fa fa-2x fa-question-circle text-info" data-bs-toggle="tooltip" data-bs-placement="top" title="Esta casilla indica que el proveedor aparecerá para facturas de forraje"></i></strong>
+                                    <input type="checkbox" class="form-control solo_lectura" id="prov_alimentacion" style="height: 30px;" />
+                                </div>
+                                <div class="colmd-6 text-center">
+                                    <strong>Báscula <i class="fa fa-2x fa-question-circle text-info" data-bs-toggle="tooltip" data-bs-placement="top" title="Esta casilla indica que el proveedor aparecerá en el módulo de báscula"></i></strong>
+                                    <input type="checkbox" class="form-control solo_lectura" id="prov_bascula" style="height: 30px;" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12"><hr /></div>
+
+                    <div class="col-md-12">
+                        <div class="col-md-8">
+                            <strong>Descripcion de la actividad</strong>
+                            <input type="text" class="form-control limpiar solo_lectura validar solo-letras-numeros obligatorio" id="giro_descripcion" onkeyup="LimpiarKeyPress();" />
+                        </div>
+                        <div class="col-md-4">
+                            <strong>Giro de la empresa</strong>
+                            <select class="form-control solo_lectura limpiar_seleccion3 solo-letras-numeros" id="giro_proveedor" onchange="LimpiarSelect();">
+                                <option value="ninguno_3">NINGUNO</option>
+                                @{ Html.RenderAction("GiroEmpresa", "PROVEEDORES");}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-12"><hr /></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn_beta_danger" data-dismiss="modal">Cerrar</button>
+                <!--Accion a Realizar-->
+                <button type="button" class="btn btn_beta" id="btn_accion_realizar"></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="m_proveedor_bloqueo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document" style="min-width: 50%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <!--TITULO-->
+                <h5 class="modal-title" id="lbl_titulo_proveedor_bloqueo"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="table-responsive">
+                            <div id="div_proveedores_bloqueo"> </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn_beta_danger" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@Scripts.Render("~/bundles_Proveedores/js")
+@Scripts.Render("~/bundles_Propiedades/js")
+
+<script>
+    $(window).on("load", function () {
+        $("#div_proveedores").css('overflow', 'hidden');
+        ConsultarProveedores();
+        $("#clabe1").on("input", function () {
+            const valorIngresado = $(this).val();
+            const valorNumerico = valorIngresado.replace(/[^0-9]/g, '');
+            $(this).val(valorNumerico);
+        });
+        $("#telefono1").on("input", function () {
+            const valorIngresado = $(this).val();
+            const valorNumerico = valorIngresado.replace(/[^0-9]/g, '');
+            $(this).val(valorNumerico);
+        });
+        CaracteresControl();
+
+    });
+    $("#bloqueo_proveedor").css("display", "none");
+
+    $('#m_proveedor_bloqueo').on('hidden.bs.modal', function () {
+        $('#m_proveedor').focus();
+        $('#m_proveedor').css('overflow', 'auto');
+    });;
+    $('#cve').on('keydown', function (event) {
+        if ($("#cve").val() != '') {
+            if (event.keyCode === 13 || event.keyCode === 9) {
+                ValidarClaveProveedor();
+                $('#cve').focus();
+            }
+        }
+    });
+</script>

@@ -1,0 +1,60 @@
+﻿@model IEnumerable<Beta_System.Models.C_compras_ordenes_d>
+@{
+    var contador = 0;
+}
+
+
+@if (Model != null && Model.Count() > 0)
+{
+    <table class="table table-striped table-bordered text-center" id="tabla_orden_g_pendiente_reporte" style="width:100%">
+        <thead>
+            <tr class="bg-beta">
+                <th>Orden</th>
+                <th>Folio</th>
+                <th>Fecha orden</th>
+                <th>Cargo</th>
+                <th>Cuenta</th>
+                <th>Clave</th>
+                <th>Articulo</th>
+                <th>Unidad medida</th>
+                <th>Cant. Solicitada</th>
+                <th>Cant. Entregada</th>
+                <th>Cant. Pendiente</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                decimal pendiente = (decimal)item.cantidad_compra - (decimal)item.cantidad_entregada;
+                <tr>
+                    <td>@item.id_compras_orden_g</td>
+                    <td>@item.C_compras_ordenes_g.C_compras_requi_g.folio</td>
+                    <td>@Convert.ToDateTime(@item.C_compras_ordenes_g.fecha_registro).ToShortDateString()</td>
+                    <td>@item.C_cargos_contables_g.nombre_cargo</td>
+                    <td class="text-left">
+                        <strong>@item.C_cuentas_contables_g.cuenta</strong><p>@item.C_cuentas_contables_g.nombre_cuenta</p>
+                    </td>
+                    <td>
+                        @item.C_articulos_catalogo.clave
+                    </td>
+                    <td>
+                        @item.nombre_articulo
+                    </td>
+                    <td>@item.C_unidades_medidas.unidad_medida</td>
+                    <td>@item.cantidad_compra.Value.ToString("N2")</td>
+                    <td>@item.cantidad_entregada.Value.ToString("N2")</td>
+                    <td>@pendiente.ToString("N2")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <h2 class="text-center" style="color:red">NO SE ENCONTRO NINGUNA ORDEN PENDIENTE</h2>
+    <br />
+    <label>@ViewBag.ex_msj</label>
+}
+
+<script>
+</script>

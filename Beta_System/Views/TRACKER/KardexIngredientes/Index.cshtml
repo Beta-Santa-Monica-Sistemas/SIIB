@@ -1,0 +1,78 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+}
+
+
+<div class="page_title">
+    <div class="counter_section">
+        <h1>Kardex de ingredientes</h1>
+    </div>
+</div>
+
+<div class="column2 counter_section">
+    <div class="row">
+        <div class="col-md-2 form-group">
+            <strong>Establo:</strong>
+            <select class="form-control id_establo_select" id="id_establo" onchange="ConsultarArticulosIngredientesEstablo();"></select>
+        </div>
+        <div class="col-md-2 form-group">
+            <strong>Fecha inicio</strong>
+            <input type="date" id="fecha_inicio" class="form-control" />
+        </div>
+        <div class="col-md-2 form-group">
+            <strong>Fecha fin</strong>
+            <input type="date" id="fecha_fin" class="form-control" />
+        </div>
+        <div class="col-md-3 form-group">
+            <strong>Ingrediente</strong>
+            <div id="div_articulo_ing">
+                <select class="form-control select_ingredientes" id="id_articulo_ing"></select>
+            </div>
+
+            <div id="div_articulo_ing_multiple" style="display:none;">
+                <select class="form-control select_ingredientes select_multiple" id="id_articulo_ing_multiple" multiple></select>
+            </div>
+            
+        </div>
+        <div class="col-md-2 form-group">
+            <strong>Tipo consulta:</strong>
+            <br />
+            <input name="tipo_consulta" type="radio" value="1" checked onchange="ShowHideIngredientes();" /><strong>Por fecha</strong>
+            <br />
+            <input name="tipo_consulta" type="radio" value="2" onchange="ShowHideIngredientes();" /><strong>Detalle</strong>
+            <br />
+            <input name="tipo_consulta" type="radio" value="3" onchange="ShowHideIngredientes();" /><strong>Resumen de consumos</strong>
+        </div>
+
+        <div class="col-md-1 form-group">
+            <br />
+            <button class="btn btn_beta_icon" onclick="ConsultarKardexIngredientes();"><i class="fa fa-search"></i></button>
+        </div>
+    </div>
+    <br />
+    <div id="div_kardex_ingredientes" class="table-responsive"></div>
+</div>
+
+@Scripts.Render("~/bundles_AlimentacionTracker/js")
+
+<script>
+    $(window).on("load", function () {
+        ConsultarEstablosUsuarioSelect(0);
+        ConsultarArticulosIngredientesEstablo();
+        try {
+            $("#id_articulo_ing").select2({
+                placeholder: 'Selecciona un ingrediente',
+                //dropdownParent: $("#tabulador")
+            });
+        }
+        catch (ex) { }
+
+        $('input[type="date"]').val(last_week);
+        $('#fecha_fin').val(today);
+        $('.id_establo_select option[value="4"]').remove();
+        $(".select_multiple").val('');
+    });
+</script>
+

@@ -1,0 +1,10 @@
+﻿@model IEnumerable<Beta_System.Models.C_establos_caseta_tipos_entradas>
+
+@foreach (var item in Model)
+{
+    <div class="row">
+        <strong class="w-75 mt-2 txt_input">- @item.tipo_entrada</strong>
+        <input class="ml-2" type="radio" name="radio_tipo_entrada" value="@item.id_tipo_entrada_caseta" style="height:30px; min-height:30px;width:30px;" onclick="ConsultarTipoFormulario();" />
+        <br />
+    </div>
+}

@@ -1,0 +1,7 @@
+﻿@model IEnumerable<Beta_System.Models.C_cuentas_contables_g>
+
+@foreach (var item in Model)
+{
+    <option value="@item.id_cuenta_contable">@item.nombre_cuenta - @item.cuenta</option>
+}
+

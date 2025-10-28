@@ -1,0 +1,28 @@
+﻿@model List<Beta_System.Models.C_usuarios_corporativo>
+
+@if (Model.Count() > 0)
+{
+    <table class="table table-sm table-condensed small table-bordered table-striped" id="datatable_usuarios_check">
+        <thead>
+            <tr class="bg-beta text-center">
+                <th>Seleccionar</th>
+                <th>Usuario</th>
+                <th>Nombre</th>
+                <th>Rol</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td class="text-center">
+                        <input type="checkbox" value="@item.id_usuario_corporativo" class="id_usuario_departamento_new" />
+                    </td>
+                    <td>@item.usuario</td>
+                    <td>@item.C_empleados.nombres @item.C_empleados.apellido_paterno @item.C_empleados.apellido_materno</td>
+                    <td>@item.C_usuarios_roles.nombre_rol</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

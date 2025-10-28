@@ -1,0 +1,104 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+}
+
+<div class="page_title">
+    <div class="counter_section">
+        <h1>Reporte de movimientos por proveedor</h1>
+    </div>
+</div>
+
+<div class="column2 counter_section">
+    <div class="row">
+        <div class="col-md-5">
+            <div class="row">
+                <div class="col-md-6">
+                    <strong>Fecha inicio</strong>
+                    <input type="date" class="form-control fechas_inicio" id="fecha_inicio_reporte" />
+                </div>
+                <div class="col-md-6">
+                    <strong>Fecha fin</strong>
+                    <input type="date" class="form-control" id="fecha_fin_reporte" />
+                </div>
+            </div>
+        </div>
+        <div class="col-md-7">
+            <div class="row">
+                <div class="col-md-7">
+                    <strong>Proveedor</strong>
+                    <select class="form-control select_autocomplete" id="id_proveedor_reporte">
+                        <option value="0" selected>Todos</option>
+                        @{ Html.RenderAction("ConsultarProveedoresTipoBasculaSelect", "CATALOGOS", new { tipo_ficha = 2 });}
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <br />
+                    <button class="btn btn_beta_icon" onclick="ConsultarMovimientosProveedorAlimentacion();"><i class="fa fa-search"></i></button>
+                </div>
+                <div class="col-md-3 text-right">
+                    <br />
+                    <button class="btn btn_beta" onclick="ConsultarMovimientosProveedorAlimentacionExcel();"><i class="fa fa-download"></i> Descargar EXCEL</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-5">
+            <div class="col-md-6">
+                <strong>Establo</strong>
+                <select class="form-control id_establo_select" id="id_establo_reporte"></select>
+            </div>
+            <div class="col-md-6">
+                <strong>Facturado</strong>
+                <select class="form-control" id="facturado_reporte">
+                    <option value="0">Todos</option>
+                    <option value="1">Si</option>
+                    <option value="2">No</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-md-7">
+            <div class="row">
+                <div class="col-md-7">
+                    <strong>Alimento</strong>
+                    <select class="form-control select_autocomplete" id="id_alimento_reporte">
+                        <option value="0" selected>Todos</option>
+                        @{ Html.RenderAction("ConsultarArticulosBasculaTiposSelect", "CATALOGOS", new { tipo_ficha = 2 });}
+                    </select>
+                </div>
+                <div class="col-md-5 text-right">
+                    <br />
+                    <button class="btn btn_beta" onclick="ConsultarMovimientosProveedorAlimentacionPDF();"><i class="fa fa-download"></i> Descargar PDF</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <hr />
+    <div id="div_reporte_movimientos_proveedor"></div>
+    @*<div id="div_reporte_movimientos_proveedor_pdf" style="display:none;" class="container"></div>*@
+</div>
+
+
+@Scripts.Render("~/bundles_ReportesAlimentacion/js")
+
+
+<script>
+    $(window).on("load", function () {
+        ConsultarEstablosUsuarioSelect(0);
+        $('input[type="date"]').val(today);
+        $('.fechas_inicio').val(last_2_months);
+
+        const todos_option = $('<option>', { value: '0', text: 'Todos' });
+        $(".id_establo_select").prepend(todos_option);
+        $(".id_establo_select").val('0');
+        try {
+            $(".select_autocomplete").select2({
+                placeholder: 'Selecciona una opción'
+            });
+        }
+        catch (ex) { }
+    });
+
+</script>

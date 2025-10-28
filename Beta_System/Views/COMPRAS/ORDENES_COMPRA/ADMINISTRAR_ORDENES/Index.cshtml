@@ -1,0 +1,125 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+}
+
+<div class="page_title">
+    <div class="counter_section">
+        <div class="row">
+            <div class="col-md-10">
+                <h1>Ordenes de compra</h1>
+            </div>
+            <div class="col-md-2">
+                <button class="btn btn_beta_icon" onclick="ConsultarOrdenesCompra();"><i class="fa fa-search"></i></button>
+            </div>
+        </div>
+        
+    </div>
+</div>
+
+
+
+
+<div class="column2 counter_section">
+    <div class="row">
+        <div class="col-md-2">
+            <strong>Centro</strong>
+            <select class="form-control" id="id_centro_search">
+                <option value="0">Todas</option>
+                @{ Html.RenderAction("CentrosUsuariosSelect", "CATALOGOS", new { id_usuario = (int)Session["LoggedId"] }); }
+            </select>
+        </div>
+        <div class="col-md-2">
+            <strong>Tipo de orden</strong>
+            <select class="form-control" id="id_tipo_orden_search">
+                <option value="0">Todas</option>
+                @{ Html.RenderAction("ConsultarTiposRequisiciones", "CATALOGOS"); }
+            </select>
+        </div>
+        <div class="col-md-2">
+            <strong>Fecha inicial</strong>
+            <input type="date" class="form-control" id="orden_fecha_inicial_search" />
+        </div>
+        <div class="col-md-2">
+            <strong>Fecha final</strong>
+            <input type="date" class="form-control" id="orden_fecha_final_search" />
+        </div>
+        <div class="col-md-2">
+            <strong>Proveedor</strong>
+            <select class="form-control" id="id_proveedor_search">
+                <option value="0">Todos</option>
+                @{ Html.RenderAction("ConsultarProveedoresSelect", "CATALOGOS"); }
+            </select>
+        </div>
+        <div class="col-md-2">
+            <div class="ml-2" style="display: block;">
+                <div class="row"><input type="radio" name="radio_recepcion_orden" value="2" style="min-height: 20px; width: 20px;" checked/><strong>Todas</strong></div>
+                <div class="row"><input type="radio" name="radio_recepcion_orden" value="1" style="min-height: 20px; width: 20px;" /><strong>Recepcionadas</strong></div>
+                <div class="row"><input type="radio" name="radio_recepcion_orden" value="0" style="min-height: 20px; width: 20px;" /><strong>Sin recepción</strong></div>
+            </div>
+        </div>
+        @*<div class="col-md-1 text-left">
+            <br />
+            <button class="btn btn_beta_icon" onclick="ConsultarOrdenesCompra();"><i class="fa fa-search"></i></button>
+        </div>*@
+    </div>
+    <hr />
+    <div class="table-responsive" id="div_ordenes_compra_general"></div>
+</div>
+
+<div id="div_pdf_orden_compra" class="container">
+
+</div>
+
+
+
+<!-- Modal FORMULARIO REENVIAR ORDEN COMPRA POR CORREO-->
+<div class="modal fade" id="m_reenviar_orden_compra" tabindex="-1" role="dialog" aria-labelledby="m_reenviar_orden_compraLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document"  style="width:50%; min-width: 50%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="m_reenviar_orden_compraLabel">Reenviar orden por correo</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="">
+                    <strong>Correo a enviar:</strong>
+                    <input type="text" class="form-control" id="correo_reenviar_orden"/>
+                </div>
+                <hr />
+                <h3 style="margin: 3px;" class="text_beta">Para enviar la orden a multiples correos secciona por el caractér ";"</h3>
+                <h4 style="margin: 3px;">Ejemplo:</h4>
+                <h4 style="margin: 3px;">"correo1@beta.com.mx; correo2@beta.com.mx; correo3@beta.com.mx"</h4>
+
+                <button class="btn btn_beta" id="btn_reenviar_orden">REENVIAR ORDEN <i class="fa fa-arrow-circle-right ml-2"></i></button>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn_beta_danger" data-dismiss="modal">Cancelar reenvío</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@Scripts.Render("~/bundles_OrdenesCompra/js")
+
+<script>
+    $(window).on("load", function () {
+        ConsultarOrdenesCompra();
+
+        try {
+            $("#id_proveedor_search").select2({
+                placeholder: 'Selecciona un proveedor'
+            });
+        }
+        catch (ex) {
+
+        }
+
+    });
+</script>
+
+
+

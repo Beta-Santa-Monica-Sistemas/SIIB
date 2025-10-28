@@ -1,0 +1,32 @@
+﻿@model IQueryable<Beta_System.Models.C_compras_requi_g>
+
+<table class="table table-striped table-bordered table-hover" id="datatable_aut_firma_1">
+    <thead>
+        <tr class="bg-beta text-center">
+            <th>Tipo de requisición</th>
+            <th>Fecha</th>
+            <th>Centro</th>
+            @*@<th>Folio</th>          /*@
+            <th>Requisición</th>
+            <th>Concepto</th>
+            <th>Registrado por</th>
+            <th>Mostrar</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr class="text-center">
+                <td><strong style="color: @item.C_compras_requisiciones_tipos.color">@item.C_compras_requisiciones_tipos.tipo_requisicion</strong></td>
+                <td>@String.Format(item.fecha_registro.Value.ToShortDateString(), "dd/mm/aaaa")</td>
+                <td>@item.C_centros_g.siglas</td>
+                <td>@item.id_requisicion_articulo_g</td>
+                <td>@item.concepto</td>
+                <td>@item.C_usuarios_corporativo5.C_empleados.nombres @item.C_usuarios_corporativo5.C_empleados.apellido_paterno</td>
+                <td>
+                    <button class="btn btn_beta_icon" onclick="ConsultarDetalleRequi('m_detalle_requi_revision', 'div_requis_revision_detalle', @item.id_requisicion_articulo_g,1); BotonesAutorizar(@item.id_requisicion_articulo_g, 2, 1);"><i class="fa fa-bars"></i></button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

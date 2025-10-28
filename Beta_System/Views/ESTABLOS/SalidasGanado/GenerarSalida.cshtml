@@ -1,0 +1,319 @@
+﻿
+@{
+    ViewBag.Title = "GenerarSalida";
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+    List<int> permisos = Session["PermisosModulo"] as List<int>;
+}
+
+<div class="page_title">
+    <div class="counter_section">
+        <h1>Salidas de Ganado</h1>
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="nav nav-tabs">
+                    @if (permisos.Contains(13))
+                    {
+                        <li class="active"> <a data-toggle="tab" href="#generar_salida">GENERAR SALIDA <i class="fa fa-2x fa-check ml-2"></i></a> </li>
+                    }
+                    @if (permisos.Contains(14))
+                    {
+                        <li> <a data-toggle="tab" href="#reporte_detalle">REPORTE - DETALLE DE SALIDAS<i class="fa fa-2x fa-file-text ml-2"></i></a></li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="column2 counter_section">
+    <div class="tab-content">
+
+        @if (permisos.Contains(13))
+        {
+            <div id="generar_salida" class="tab-pane fade in active show">
+                <h3 class="text-center">Generar salida de ganado</h3>
+                <div class="row">
+                    <div class="col-md-3" style="border-right: 1px solid #2e87d7; ">
+                        <h5 class="text-center"><strong>Tipo de salida</strong></h5>
+                        <div class="row">
+                            <div class="col-md-6 text-center">
+                                <input type="radio" name="tipo_salida" value="1" style="height: 30px; width: 30px;" checked onclick="ShowHideTipoSalida(1)" /><br />
+                                <label>Lote: </label>
+                            </div>
+                            <div class="col-md-6 text-center">
+                                <input type="radio" name="tipo_salida" value="2" style="height: 30px; width: 30px;" onclick="ShowHideTipoSalida(2);" /><br />
+                                <label>Diario</label>
+                            </div>
+                        </div>
+                        <hr />
+
+                        <strong>Establo</strong>
+                        <select class="form-control id_establo_select" id="id_establo" onchange="GenerarFolioEstablo();">
+                        </select>
+                        <br />
+                        <strong>Folio</strong>
+                        <input type="text" class="form-control" id="folio_g" readonly />
+                        <br />
+                        <div class="tipo_salida">
+                            <strong>Ficha</strong>
+                            <input type="text" class="form-control input_clean solo-letras-numeros" id="ficha_g" />
+                        </div>
+                        <br />
+                        <strong>Fecha</strong>
+                        <input type="text" class="form-control" value="@DateTime.Now.ToShortDateString()" readonly />
+                        <br />
+                        <strong>Hora</strong>
+                        <input type="text" class="form-control" value="@DateTime.Now.ToShortTimeString()" readonly />
+                        <br />
+                        <strong>Ganado</strong>
+                        <select class="form-control" id="ganado_g" onchange="ConsultarCondicionesClasificacion();">
+                            @{ Html.RenderAction("ConsultarClasificacionesGanado", "SALIDASGANADO"); }
+                        </select>
+                        <br />
+                        <strong>Condición</strong>
+                        <select class="form-control input_valid" id="condicion_g"></select>
+
+                        <br />
+                        <div class="row">
+                            <div class="col-md-4">
+                                <strong>Peso 1</strong>
+                                <input type="text" class="form-control input_clean input_ficha" readonly id="peso_1_g" />
+                            </div>
+                            <div class="col-md-4">
+                                <strong>Peso 2</strong>
+                                <input type="text" class="form-control input_clean input_ficha" readonly id="peso_2_g" />
+                            </div>
+                            <div class="col-md-4">
+                                <strong>Peso T</strong>
+                                <input type="text" class="form-control input_clean input_ficha" readonly id="peso_t_g" />
+                            </div>
+                        </div>
+                        <br />
+
+
+                    </div>
+                    <div class="col-md-9">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="col-md-4">
+                                    <strong>Pesador</strong>
+                                    <input type="text" class="form-control input_clean input_ficha" id="pesador_g" readonly />
+                                </div>
+                                <div class="col-md-4">
+                                    <strong>Chofer</strong>
+                                    <input type="text" class="form-control input_clean input_ficha" id="chofer_g" readonly />
+                                </div>
+                                <div class="col-md-2">
+                                    <strong>Placas</strong>
+                                    <input type="text" class="form-control input_clean input_ficha" id="placas_g" readonly />
+                                </div>
+                                <div class="col-md-2">
+                                    <strong>Vehículo</strong>
+                                    <input type="text" class="form-control input_clean input_ficha" id="vehiculo_g" readonly />
+                                </div>
+                            </div>
+
+                            <div class="col-md-12">
+                                <br />
+                                <div class="col-md-12">
+                                    <strong>Comprador</strong>
+                                    <input type="text" class="form-control input_clean input_ficha" id="comprador_g" readonly />
+                                </div>
+
+                                <div class="col-md-12">
+                                    <br />
+                                    <div class="col-md-2">
+                                        <strong>Arete</strong>
+                                        <input type="text" class="form-control input_detalle input_clean solo-letras-numeros" id="arete" />
+                                    </div>
+                                    <div class="col-md-4">
+                                        <strong>Causa de la baja</strong>
+                                        <input type="text" class="form-control input_detalle input_clean solo-letras-numeros" id="causa" />
+                                    </div>
+                                    <div class="col-md-4">
+                                        <strong>Edad</strong>
+                                        <input type="text" class="form-control input_detalle input_clean solo-letras-numeros" id="edad" />
+                                    </div>
+                                    <div class="col-md-2">
+                                        <strong>Sala</strong>
+                                        <input type="text" class="form-control input_detalle input_clean solo-letras-numeros" id="sala" />
+                                    </div>
+                                </div>
+
+                                <div class="col-md-12">
+                                    <br />
+                                    <div class="col-md-2">
+                                        <strong>Cantidad</strong>
+                                        <input type="number" class="form-control input_valid" id="cantidad" value="1" readonly />
+                                    </div>
+                                    <div class="col-md-2">
+                                        <strong>Peso Neto</strong>
+                                        <input type="number" class="form-control input_detalle input_valid input_clean solo-numeros" id="peso_neto" />
+                                    </div>
+                                    <div class="col-md-2" style="display:none;">
+                                        <strong>P. Unitario</strong>
+                                        <input type="number" class="form-control input_detalle input_clean" id="p_unitario" />
+                                    </div>
+
+                                    <div class="col-md-2">
+                                        <br />
+                                        <button class="btn btn_beta_icon" onclick="AgregarVacaTabla();"><i class="fa fa-plus"></i></button>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-12">
+                                    <hr />
+                                    <div class="table-responsive">
+                                        <table class="table table-striped table-bordered">
+                                            <thead>
+                                                <tr class="bg-beta">
+                                                    <th># Arete</th>
+                                                    <th>Clasificación</th>
+                                                    <th>Causa de la baja</th>
+                                                    <th>Condición</th>
+                                                    <th>Sala</th>
+                                                    <th>Edad</th>
+                                                    <th>Cantidad</th>
+                                                    <th>Peso Neto</th>
+                                                    <th>P. Unitario</th>
+                                                    <th>Importe $</th>
+                                                    <th>Eliminar</th>
+                                                </tr>
+                                            </thead>
+                                            <thead id="thead_ganado">
+
+                                            </thead>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-12 text-center">
+                                    <br />
+                                    <br />
+                                    <div class="col-md-3">
+                                        <strong>Cantidad Total</strong>
+                                        <input type="number" class="form-control input_clean" id="cantidad_total" readonly />
+                                    </div>
+                                    <div class="col-md-1"></div>
+                                    <div class="col-md-3">
+                                        <strong>Total Kilos</strong>
+                                        <input type="number" class="form-control input_clean" id="kilos_total" readonly />
+                                    </div>
+                                    <div class="col-md-1"></div>
+                                    <div class="col-md-3">
+                                        <strong>Importe Total</strong>
+                                        <input type="number" class="form-control input_clean" id="importes_total" readonly />
+                                    </div>
+                                </div>
+
+                                <div class="col-md-12 text-right">
+                                    <br />
+                                    <div style="border-top: 1px solid #2e87d7"></div>
+                                    <br />
+                                    <button class="btn btn_beta" onclick="GenerarSalidaGanado();">GENERAR SALIDA</button>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+        @if (permisos.Contains(14))
+        {
+            <div id="reporte_detalle" class="tab-pane fade in">
+                <h3 class="text-center">Reporte Salidas de Ganado Detalle</h3>
+                <div class="row">
+                    <div class="col-md-3">
+                        <strong>ESTABLO</strong>
+                        <select class="form-control id_establo_select" id="id_establo_consulta">
+                            <option value="0">TODOS</option>
+                            @*@{ Html.RenderAction("ConsultarEstablosSelect", "SALIDASGANADO"); }*@
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <strong>FECHA INICIO</strong>
+                        <input type="date" value="@DateTime.Now.ToShortDateString()" class="form-control" id="fecha_inicio" />
+                    </div>
+                    <div class="col-md-2">
+                        <strong>FECHA FIN</strong>
+                        <input type="date" value="@DateTime.Now.ToShortDateString()" class="form-control" id="fecha_fin" />
+                    </div>
+                    <div class="col-md-1 text-left">
+                        <br />
+                        <button class="btn btn_beta_icon" onclick="ConsultarSalidasEstablo();"><i class="fa fa-search"></i></button>
+                    </div>
+                    <div class="col-md-2 text-right" style="padding-top:26px">
+                        <button class="btn btn_beta" onclick="ExportarSalidasGanadoExcel();"><i class="fa fa-file"></i>  Exportar excel</button>
+                    </div>
+                </div>
+                <br />
+                <div class="table-responsive">
+                    <div id="div_tabla_salidas"></div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<div id="div_pdf_salida"></div>
+
+@Scripts.Render("~/bundles_SalidasGanado/js")
+@Scripts.Render("~/bundles_Propiedades/js")
+
+<script type="text/javascript">
+    $(window).on("load", function () {
+        CalcularTotales();
+        CaracteresControl();
+        ConsultarEstablosUsuarioSelect(0);
+        GenerarFolioEstablo();
+        ConsultarCondicionesClasificacion();
+        $('#id_establo_consulta').prepend($('<option value="0" selected>TODOS</option>'));
+    });
+
+
+    function ReImpresionFichaDirecto(ficha, establo) {
+        jsShowWindowLoad();
+        $.ajax({
+            type: "POST",
+            url: "../BASCULASAB/ReimprecionFichaPDF",
+            data: {
+                fichas: ficha,
+                id_establo: establo
+            },
+            success: function (response) {
+                jsRemoveWindowLoad();
+                if (response != "") {
+                    var newTab = window.open('', '_blank');
+                    newTab.document.open();
+                    newTab.document.write(response);
+                    newTab.document.close();
+                    newTab.onload = function () {
+                        newTab.print();
+                        newTab.close();
+                    };
+                }
+                else {
+                    //newTab.close();
+                    iziToast.warning({
+                        title: 'Aviso',
+                        message: 'No se encontró la ficha',
+                    });
+                    $("#reimp_ficha").val("");
+                }
+            },
+            error: function (xhr, status, error) {
+                //newTab.close();
+                console.error(error);
+                jsRemoveWindowLoad();
+                iziToast.warning({
+                    title: 'Aviso',
+                    message: 'No se encontró la ficha',
+                });
+            }
+        });
+    }
+</script>

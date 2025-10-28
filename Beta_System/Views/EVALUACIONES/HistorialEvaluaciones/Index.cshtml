@@ -1,0 +1,77 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+}
+
+
+<div class="page_title">
+    <div class="counter_section">
+        <div class="row">
+            <div class="col-md-8">
+                <h1>Historial de evaluaciones</h1>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row column2 counter_section">
+    <div class="row">
+        <div class="col-md-4">
+            <strong>Evaluaciones</strong>
+            <select id="id_evaluacion_g_consulta" class="form-control"></select>
+        </div>
+        <div class="col-md-2">
+            <strong>Departamentos:</strong>
+            <select id="id_departamento_consulta" class="form-control">
+                @{ Html.RenderAction("ConsultarDepartamentosUsuariosSelect", "EVALUACIONES");
+                }
+            </select>
+        </div>
+        <div class="col-md-2 text-center">
+            <br />
+            <button class="btn btn_beta" onclick="ConsultarEvaluacionesDepartamentoAcordeon();"><i class="fa fa-search"></i> Consultar</button>
+        </div>
+        <div class="col-md-4 text-right">
+            <br />
+            <button class="btn btn_beta" onclick="GenerarExcelEvaluacionesDepartamento();"><i class="fa fa-download"></i> Generar excel</button>
+        </div>
+    </div>
+    <hr />
+    <div id="div_evaluaciones"></div>
+</div>
+
+
+<!-- Modal EVALUACIONES DEL EMPLEADO-->
+<div class="modal fade" id="m_evaluaciones_empleado" tabindex="-1" role="dialog" aria-labelledby="m_evaluaciones_empleadoLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document" style="width: 95%; min-width: 95%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="m_evaluaciones_empleadoLabel">EVALUACIONES</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="div_evaluaciones_empleado"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn_beta_danger" data-dismiss="Regresar">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@Scripts.Render("~/bundles_Evaluaciones/js")
+@Scripts.Render("~/bundles_Propiedades/js")
+
+<script>
+    $(window).on("load", function () {
+        $('input[type="date"]').val(today);
+        ConsultarEvaluacionesSelect(0);
+    });
+
+
+</script>

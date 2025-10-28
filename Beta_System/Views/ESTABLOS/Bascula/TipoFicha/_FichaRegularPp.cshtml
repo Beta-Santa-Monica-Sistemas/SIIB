@@ -1,0 +1,91 @@
+﻿<div class="row p-2">
+    <div class="col-md-5">
+        <strong>Proveedor:</strong>
+        <select class="form-control limpiar_p1 borders" id="select_proveedor">
+            <option value="0">Selecciona un proveedor</option>
+        </select>
+    </div>
+    <div class="col-md-5">
+        <strong>Articulo/Producto</strong>
+        <select class="form-control limpiar_p1 borders" id="select_articulo">
+            <option value="0">Selecciona un artículo</option>
+        </select>
+    </div>
+    <div class="col-md-2">
+        <strong>No. Pozo:</strong><br />
+        <select class="form-control limpiar_p1" id="no_pozo"></select>
+    </div>
+</div>
+
+<div class="row p-2">
+    <div class="col-md-2">
+        <strong>Movimiento</strong><br />
+        <select class="form-control limpiar_p1" id="tmov">
+            @{ Html.RenderAction("ConsultarTiposMovimientoSelect", "CATALOGOS"); };
+        </select>
+    </div>
+    <div class="col-md-4">
+        <strong>Tipo de movimiento</strong>
+        <select class="form-control limpiar_p1" id="cvemov">
+        </select>
+    </div>
+    <div class="col-md-2">
+        <strong>Folio:</strong>
+        <input type="text" class="form-control limpiar_p1 solo-letras-numeros" id="folio" />
+    </div>
+    <div class="col-md-3">
+        <strong>Sucursal:</strong>
+        <input type="text" class="form-control limpiar_p1 solo-letras-numeros" id="sucursal" oninput="this.value = this.value.toUpperCase();" />
+    </div>
+    <div class="col-md-1">
+        <div class="col-md-12 text-center">
+            <strong>Agrupada</strong>
+            <input type="checkbox" class="form-control limpiar_p1 p-3" id="agrupada" style="height:30px;" />
+        </div>
+    </div>
+</div>
+
+<div class="row p-2">
+    <div class="col-md-4">
+        <strong>Destino:</strong>
+        <input type="text" class="form-control limpiar_p1 solo-letras-numeros" id="destino" oninput="this.value = this.value.toUpperCase();" />
+    </div>
+    <div class="col-md-4">
+        <strong>Conductor:</strong>
+        <input type="text" class="form-control limpiar_p1 solo-letras borders" id="conductor" oninput="this.value = this.value.toUpperCase();" />
+    </div>
+    <div class="col-md-2">
+        <strong>Placas:</strong>
+        <input type="text" class="form-control limpiar_p1 solo-letras-numeros borders" id="placas" oninput="this.value = this.value.toUpperCase();" />
+    </div>
+    <div class="col-md-2">
+        <strong>Peso origen:</strong>
+        <input type="text" class="form-control limpiar_p1 solo-numeros" id="peso_origen" />
+    </div>
+</div>
+
+<div class="row p-2">
+    <div class="col-md-10">
+        <strong>Observaciones</strong>
+        <textarea rows="1" id="obs" class="form-control limpiar_p1 solo-letras-numeros" oninput="this.value = this.value.toUpperCase();"></textarea>
+    </div>
+    <div class="col-md-2 p-3 text-center">
+        <button class="btn btn_beta" id="confirmar_primera_pesada" onclick="AdvertenciaPesada(1);">Crear ficha</button>
+    </div>
+    <div class="col-md-12">
+        <button class="btn btn_beta_danger" onclick="LimpiarCamposFicha(1);">Limpiar</button>
+    </div>
+</div>
+
+<script>
+    CaracteresControl();
+    try {
+        $("#select_proveedor").select2({
+            placeholder: 'Selecciona un proveedor',
+        });
+        $("#select_articulo").select2({
+            placeholder: 'Selecciona un artículo'
+        });
+    }
+    catch (ex) { }
+</script>

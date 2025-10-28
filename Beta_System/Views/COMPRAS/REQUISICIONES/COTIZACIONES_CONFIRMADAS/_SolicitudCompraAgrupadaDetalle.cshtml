@@ -1,0 +1,37 @@
+﻿@model IEnumerable<Beta_System.Models.C_compras_cotizaciones_confirmadas_d>
+
+
+<div class="modal-header">
+    <h2 class="modal-title" id="m_cotizaciones_confirmadas_detalleLabel">@Model.FirstOrDefault().C_compras_cotizaciones_confirmadas_g.nombre_suborden</h2>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<div class="modal-body">
+    <table class="table table-striped table-bordered">
+        <thead>
+            <tr class="bg-beta">
+                <th>Articulo</th>
+                <th>Descripción</th>
+                <th>Proveedor</th>
+                <th>Precio unitario</th>
+                <th>Cantidad cotizada</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                var cotizacion = item.C_compras_cotizaciones_requisiciones.C_compras_cotizaciones_articulos;
+                <tr>
+                    <th>@cotizacion.C_articulos_catalogo.clave</th>
+                    <th>@cotizacion.C_articulos_catalogo.nombre_articulo.ToUpper()</th>
+                    <th>@cotizacion.C_compras_proveedores.razon_social</th>
+                    <th>$@cotizacion.precio_unitario.Value.ToString("N6")</th>
+                    <th>@string.Format("{0:0.00}", item.C_compras_cotizaciones_requisiciones.cantidad_surtir)</th>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+
+</div>

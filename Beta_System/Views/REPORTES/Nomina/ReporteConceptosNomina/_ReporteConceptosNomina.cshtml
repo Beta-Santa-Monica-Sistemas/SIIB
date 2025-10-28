@@ -1,0 +1,34 @@
+﻿@model List<Beta_System.Models.ReporteConceptosNomina>
+
+@if (Model != null)
+{
+    //List<Beta_System.Models.C_nomina_conceptos> Lista_conceptos = ViewBag.lista_conceptos;
+    var conceptos = Model.Select(x => x.nombres_conceptos).ToArray();
+
+    decimal total_nomina = ViewBag.total_nomina;
+    var descuentos = Model.Where(x => x.id_conceptos.Contains(90524)).Select(x => x.valores_conceptos).ToList();
+    <table class="table table-striped table-bordered">
+        <thead>
+            <tr class="text-center bg-beta">
+                @for (int i = 0; i < conceptos.Length; i++)
+                {
+                    <th>@conceptos[i][0]</th>
+                }
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="text-center">
+                @foreach (var item in Model.Select(x => x.valores_conceptos))
+                {
+                    <td>$@item.Sum().ToString("N2")</td>
+                }
+                <td>@total_nomina.ToString("N2")</td>
+            </tr>
+        </tbody>
+    </table>
+
+}
+
+
+

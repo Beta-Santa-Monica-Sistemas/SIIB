@@ -1,0 +1,178 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+}
+
+<div class="page_title">
+    <div class="counter_section">
+        <h1>Administración de rubros/conceptos</h1>
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="nav nav-tabs">
+                    <li class="active"> <a data-toggle="tab" href="#admin_rubros">RUBROS DE EVALUACIÓN<i class="fa fa-2x fa-list ml-2"></i></a> </li>
+                    <li class="active"> <a data-toggle="tab" href="#asociacion_depas_rubros">ASOCIACIÓN DE RUBROS A DEPARTAMENTOS<i class="fa fa-2x fa-exchange ml-2"></i></a> </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row column2 counter_section">
+    <div class="tab-content">
+        <div id="admin_rubros" class="tab-pane fade in active show">
+            <button class="btn btn_beta" style="position:absolute; right: 2%;" onclick="AddEditRubro(1,0,'', '', '');"><i class="fa fa-plus"></i> Nuevo rubro</button>
+            <h3 class="text-center">RUBROS DE EVALUACIÓN</h3>
+            <hr />
+            <div id="div_rubros_cards"></div>
+        </div>
+
+        <div id="asociacion_depas_rubros" class="tab-pane fade">
+            <h3 class="text-center">ASOCIACIÓN DE RUBROS A DEPARTAMENTOS</h3>
+            <hr />
+            <div id="div_rubros_departamentos_cards"></div>
+        </div>
+    </div>
+
+</div>
+
+
+<!-- Modal CONCEPTOS/RUBROS-->
+<div class="modal fade" id="m_rubros_conceptos" tabindex="-1" role="dialog" aria-labelledby="m_rubros_conceptosLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document" style="width: 90%; min-width:90%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="m_rubros_conceptosLabel">RUBROS/CONCEPTOS</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="porcentaje-container">
+                            <div class="porcentaje-card">
+                                <h3 class="text-left text_beta" style="margin: 0;" id="lbl_rubro_title">NUEVO RUBRO</h3>
+                                <div class="row">
+                                    <div class="col-md-5 text-left">
+                                        <strong>Nombre:</strong>
+                                        <br />
+                                        <input type="text" class="form-control" id="nombre_rubro" />
+                                    </div>
+                                    <div class="col-md-3 text-left">
+                                        <strong>Porcentaje:</strong>
+                                        <br />
+                                        <input type="number" class="form-control" id="porcentaje_rubro" />
+                                    </div>
+                                </div>
+                                <hr />
+
+                                <h3 class="text-left text_beta" style="margin:0px;">CONCEPTOS DEL RUBRO</h3>
+                                <div class="table-responsive" style="overflow:auto; overflow-x:hidden; height:280px; min-height:280px;">
+                                    <table class="table table-striped">
+                                        <thead>
+                                            <tr class="bg-beta">
+                                                <th>Concepto</th>
+                                                <th>Porcentaje</th>
+                                                <th>Quitar</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="tr_conceptos"></tbody>
+                                    </table>
+                                </div>
+                                <hr />
+                                <button class="btn btn_beta" id="btn_add_edit_rubro">GUARDAR</button>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2 text-center">
+                        <br />
+                        <br />
+                        <br />
+                        <h4>AGREGAR CONCEPTO</h4>
+                        <button class="btn btn_beta" id="btn_ligar_concepto_rubro" onclick="AgregarConceptoRubro();"><i class="fa fa-3x fa-arrow-left"></i></button>
+                    </div>
+                    <div class="col-md-4">
+                        <br />
+                        <br />
+                        <br />
+                        <br />
+                        <div class="porcentaje-card">
+                            <strong>Nombre concepto:</strong>
+                            <br />
+                            <textarea class="form-control valid_concepto" id="nombre_concepto"></textarea>
+                            <br />
+                            <strong>Porcentaje:</strong>
+                            <br />
+                            <input type="number" class="form-control valid_concepto" id="porcentaje_concepto" />
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn_beta_danger" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- Modal CONCEPTOS/RUBROS-->
+<div class="modal fade" id="m_rubros_depas" tabindex="-1" role="dialog" aria-labelledby="m_rubros_depasLabel" aria-hidden="true">
+    <div class="modal-dialog porcentaje-card" role="document" style="width: 55%; min-width:55%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="m_rubros_depasLabel">ASIGNAR RUBROS AL DEPARTAMENTO</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <h3 class="text-center text_beta" style="margin: 0;" id="lbl_depa_title"></h3>
+                <hr />
+                <div class="row">
+                    <div class="col-md-8">
+                        <h3 class="text-center" style="margin:0px;">RUBROS DEL DEPARTAMENTO</h3>
+                        <div class="table-responsive" style="overflow:auto; overflow-x:hidden; height:280px; min-height:280px;" id="div_rubros_departamentos_table"></div>
+                    </div>
+                    <div class="col-md-4 text-center ">
+                        <br />
+                        <br />
+                        <br />
+                        <h3 class="porcentaje" id="lbl_total_rubros_depa">0</h3>
+                        <hr />
+                        <button class="btn btn_beta" id="btn_add_edit_rubros_depa">ACUALIZAR RUBROS</button>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn_beta_danger" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@Scripts.Render("~/bundles_Evaluaciones/js")
+@Scripts.Render("~/bundles_Propiedades/js")
+
+<script>
+    $(window).on("load", function () {
+        ConsultarRubrosEvaluacionCards();
+        ConsultarDepartamentosRubrosCards();
+    });
+
+    $('.valid_concepto').on('keyup', function (event) {
+        if (event.key === "Enter" || event.keyCode === 13) {
+            AgregarConceptoRubro();
+        }
+    });
+
+</script>
+
+
+
+

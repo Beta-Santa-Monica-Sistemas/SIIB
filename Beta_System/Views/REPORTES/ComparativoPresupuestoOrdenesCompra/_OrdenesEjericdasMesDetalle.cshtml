@@ -1,0 +1,214 @@
+﻿@model List<Beta_System.Models.C_compras_ordenes_d>
+@{
+
+    decimal total_ejercido = (decimal)ViewBag.total_ejercido;
+    decimal total_presupuesto = (decimal)ViewBag.total_presupuesto;
+    decimal anio_numero = (decimal)ViewBag.anio_numero;
+    string nombre_cuenta = ViewBag.nombre_cuenta;
+    string numero_cuenta = ViewBag.numero_cuenta;
+
+    string nombre_cargo = ViewBag.nombre_cargo;
+
+    DateTime fecha_inicio = (DateTime)ViewBag.fecha_inicio;
+    DateTime fecha_fin = (DateTime)ViewBag.fecha_fin;
+}
+
+@if (Model.Count() > 0)
+{
+    string class_diferencia = "";
+    decimal diferencia = (decimal)total_presupuesto - (decimal)total_ejercido;
+    if (diferencia < 0) { class_diferencia = "text-danger"; }
+    else { class_diferencia = "text-success"; }
+
+    TimeSpan diferencia_fecha = fecha_fin - fecha_inicio;
+    int numeroDeDias = diferencia_fecha.Days + 1;
+
+    //decimal total_oc_compra =
+
+
+    <div class="row">
+        <div class="col-md-8">
+
+        </div>
+        @foreach (var item in Model.GroupBy(x => x.C_compras_ordenes_g.id_tipo_orden))
+        {
+            <div class="col-md-1 text-center">
+                <h5 style="margin:2px; color: @item.FirstOrDefault().C_compras_ordenes_g.C_compras_requisiciones_tipos.color">@item.FirstOrDefault().C_compras_ordenes_g.C_compras_requisiciones_tipos.tipo_requisicion</h5>
+                <h4 style="margin: 2px;"><strong>@string.Format("{0:C}", item.Select(x => x.cantidad_compra * x.precio_unitario).Sum())</strong></h4>
+            </div>
+        }
+        <div class="col-md-1 text-center">
+            <h5 style="margin: 2px;">TOTAL:</h5>
+            <h4 style="margin: 2px;">@string.Format("{0:C}", Model.Select(x => x.precio_unitario * x.cantidad_compra).Sum())</h4>
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col-md-12">
+            <ul class="nav nav-tabs">
+                <li class="active"> <a data-toggle="tab" href="#ordenes_compra_tab" id="consultar_requi">ORDENES DE COMPRA<i class="fa fa-paperclip fa-2x ml-2"></i></a></li>
+                <li class="active"> <a data-toggle="tab" href="#consolidado_tab" onclick="ModalArticuloMarca(1);">CONSOLIDADO<i class="fa fa-list fa-2x ml-2"></i></a></li>
+            </ul>
+        </div>
+    </div>
+    <hr />
+    <div class="tab-content">
+        <div id="ordenes_compra_tab" class="tab-pane fade in active show">
+            <div style=" min-height: 500px; height: 500px; overflow: scroll; overflow-x: hidden;">
+                <table class="table table-striped table-bordered" id="datatable_detalle_ordenes_mes">
+                    <thead>
+                        <tr class="text-center text-white">
+                            <th style="align-content: space-evenly"><img src="~/Content/img_layout/logo_beta_new.png" width="120" /></th>
+                            <th style="align-content: space-evenly"><h5><strong>@nombre_cargo</strong></h5></th>
+                            <th style="align-content: space-evenly"><h5><strong>@nombre_cuenta @numero_cuenta</strong></h5></th>
+                            <th style="align-content: space-evenly"><h5><strong>Presupuesto: @string.Format("{0:C}", total_presupuesto)</strong></h5></th>
+                            <th style="align-content: space-evenly"><h5><strong>Ejercido: @string.Format("{0:C}", total_ejercido)</strong></h5></th>
+                            <th style="align-content: space-evenly"><h5><strong class="@class_diferencia">Diferencia @string.Format("{0:C}", diferencia)</strong></h5></th>
+                            <th style="align-content: space-evenly"><h5><strong>Fecha inicio: @string.Format(fecha_inicio.ToShortDateString(), "dd/mm/yyyy")</strong></h5></th>
+                            <th style="align-content: space-evenly"><h5><strong>Fecha fin: @string.Format(fecha_fin.ToShortDateString(), "dd/mm/yyyy")</strong></h5></th>
+                            <th style="align-content: space-evenly"><h5><strong>Total dias: @numeroDeDias</strong></h5></th>
+                            <th style="align-content: space-evenly"><h5><strong>Total de Ordenes de compra: @Model.GroupBy(x => x.id_compras_orden_g).Count()</strong></h5></th>
+                            <th style="align-content: space-evenly"><h5><strong>Solicitó autorización</strong></h5></th>
+                            @*<h4><strong>ORDENES DE COMPRA DEL @string.Format(fecha_inicio.ToShortDateString(), "dd/mm/yyyy") AL @string.Format(fecha_fin.ToShortDateString(), "dd/mm/yyyy")</strong></h4>*@
+                        </tr>
+
+                        <tr class="bg-dark text-white text-left">
+                            <th>Fecha</th>
+                            <th>Orden</th>
+                            <th>Centro</th>
+                            <th>Requisición</th>
+                            <th>Registró</th>
+                            <th>Validó</th>
+                            <th>Cotizó</th>
+                            <th>Autorizó</th>
+                            <th>Importe</th>
+                            <th>Proveedor</th>
+                            <th class="text-center">Si/No</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @foreach (var item in Model.OrderBy(x => x.C_compras_ordenes_g.fecha_registro).GroupBy(x => x.id_compras_orden_g))
+                        {
+                            var compras_g = item.FirstOrDefault().C_compras_ordenes_g;
+
+                            <tr class="text-left">
+                                <td>@string.Format(compras_g.fecha_registro.Value.ToShortDateString(), "dd/mm/yyyy")</td>
+                                <td>@compras_g.id_compras_orden_g</td>
+                                <td>@compras_g.C_compras_requi_g.C_centros_g.siglas</td>
+                                <td>@compras_g.C_compras_requi_g.id_requisicion_articulo_g</td>
+                                @*<td style="width:20%;">@compras_g.C_compras_requi_g.C_usuarios_corporativo5.C_empleados.nombres @compras_g.C_compras_requi_g.C_usuarios_corporativo5.C_empleados.apellido_paterno</td>
+                                    <td style="width:20%;">@compras_g.C_compras_requi_g.C_usuarios_corporativo.C_empleados.nombres</td>
+                                    <td style="width:20%;">@compras_g.C_compras_cotizaciones_confirmadas_g.C_usuarios_corporativo.C_empleados.nombres @compras_g.C_compras_cotizaciones_confirmadas_g.C_usuarios_corporativo.C_empleados.apellido_paterno</td>
+                                    <td style="width:20%;">@compras_g.C_compras_requi_g.C_usuarios_corporativo.C_empleados.nombres @compras_g.C_compras_requi_g.C_usuarios_corporativo.C_empleados.apellido_paterno</td>*@
+
+                                <td>@compras_g.C_compras_requi_g.C_usuarios_corporativo5.usuario</td>
+                                <td>@compras_g.C_compras_requi_g.C_usuarios_corporativo.usuario</td>
+                                <td>@compras_g.C_compras_cotizaciones_confirmadas_g.C_usuarios_corporativo.usuario</td>
+                                <td>@compras_g.C_usuarios_corporativo.usuario</td>
+                                <td><strong>@string.Format("{0:C}", item.Select(x => x.precio_unitario * x.cantidad_compra).Sum())</strong></td>
+                                <td style="width:30%;">
+                                    @compras_g.C_compras_proveedores.razon_social
+                                </td>
+                                <td class="text-center">
+                                    @if (compras_g.C_compras_cotizaciones_confirmadas_g.solicita_autorizacion == true)
+                                    {<i class="fa fa-2x fa-check text-success"></i>}
+                                </td>
+                            </tr>
+
+                            @*foreach (var detalle in item)
+                                {
+                                    decimal importe = (decimal)detalle.cantidad_compra * (decimal)detalle.precio_unitario;
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td>@detalle.C_articulos_catalogo.clave</td>
+                                        <td>@detalle.C_articulos_catalogo.nombre_articulo</td>
+                                        <td>@detalle.C_articulos_catalogo.C_unidades_medidas.unidad_medida</td>
+                                        <td>@string.Format("{0:C}", detalle.precio_unitario)</td>
+                                        <td>@detalle.cantidad_compra</td>
+                                        <td>@string.Format("{0:C}", importe)</td>
+                                        <td>@detalle.C_tipos_moneda.clave_fiscal</td>
+                                    </tr>
+                                }*@
+                        }
+                    </tbody>
+
+                </table>
+            </div>
+        </div>
+
+        <div id="consolidado_tab" class="tab-pane fade in">
+            <div style=" min-height: 500px; height: 500px; overflow: scroll; overflow-x: auto;">
+                <table class="table table-striped table-bordered" id="datatable_detalle_ordenes_mes_consolidado">
+                    <thead>
+                        <tr class="text-center text-white">
+                            <th style="align-content: space-evenly"><img src="~/Content/img_layout/logo_beta_new.png" width="120" /></th>
+                            <th style="align-content: space-evenly"><h5><strong>@nombre_cargo</strong></h5></th>
+                            <th style="align-content: space-evenly"><h5><strong>@nombre_cuenta @numero_cuenta</strong></h5></th>
+                            <th style="align-content: space-evenly"><h5><strong>Presupuesto: @string.Format("{0:C}", total_presupuesto)</strong></h5></th>
+                            <th style="align-content: space-evenly"><h5><strong>Ejercido: @string.Format("{0:C}", total_ejercido)</strong></h5></th>
+                            <th style="align-content: space-evenly;"><h5><strong class="@class_diferencia">Diferencia @string.Format("{0:C}", diferencia)</strong></h5></th>
+                            <th style="align-content: space-evenly"><h5><strong>Fecha inicio: @string.Format(fecha_inicio.ToShortDateString(), "dd/mm/yyyy")</strong></h5></th>
+                            <th style="align-content: space-evenly"><h5><strong>Fecha fin: @string.Format(fecha_fin.ToShortDateString(), "dd/mm/yyyy")</strong></h5></th>
+                            <th style="align-content: space-evenly"><h5><strong>Total días: @numeroDeDias</strong></h5></th>
+                            <th></th>
+                            <th style="align-content: space-evenly"><h5><strong>Ordenes de compra: @Model.GroupBy(x => x.id_compras_orden_g).Count()</strong></h5></th>
+                            <th style="align-content: space-evenly"><h5><strong>Total de Articulos/Servicios: @Model.Count()</strong></h5></th>
+                            <th></th>
+                            @*<h4><strong>ORDENES DE COMPRA DEL @string.Format(fecha_inicio.ToShortDateString(), "dd/mm/yyyy") AL @string.Format(fecha_fin.ToShortDateString(), "dd/mm/yyyy")</strong></h4>*@
+                        </tr>
+                        <tr class="bg-dark text-white">
+                            <th>Tipo</th>
+                            <th>Fecha</th>
+                            <th>Orden</th>
+                            <th>Centro</th>
+                            <th>Requisicion</th>
+                            <th>Clave</th>
+                            <th style="width:400px; min-width:400px;">Articulo</th>
+                            <th>Cantidad</th>
+                            <th>Unid. medida</th>
+                            <th>Precio</th>
+                            <th>Importe</th>
+                            <th>Proveedor</th>
+                            <th>Moneda</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @foreach (var item in Model.OrderBy(x => x.C_compras_ordenes_g.fecha_registro).GroupBy(x => x.id_compras_orden_g))
+                        {
+                            foreach (var detalle in item)
+                            {
+                                decimal importe = (decimal)detalle.cantidad_compra * (decimal)detalle.precio_unitario;
+                                <tr class="text-left">
+                                    <td style="color:@detalle.C_compras_ordenes_g.C_compras_requisiciones_tipos.color">@detalle.C_compras_ordenes_g.C_compras_requisiciones_tipos.tipo_requisicion</td>
+                                    <td>@string.Format(detalle.C_compras_ordenes_g.fecha_registro.Value.ToShortDateString(), "dd/mm/yyyy")</td>
+                                    <td># @detalle.id_compras_orden_g</td>
+                                    <td>@detalle.C_compras_ordenes_g.C_compras_requi_g.C_centros_g.siglas</td>
+                                    <td>@detalle.C_compras_ordenes_g.id_requisicion_articulo_g</td>
+                                    <td>@detalle.C_articulos_catalogo.clave</td>
+                                    <td>@detalle.C_articulos_catalogo.nombre_articulo</td>
+                                    <td>@detalle.cantidad_compra</td>
+                                    <td>@detalle.C_unidades_medidas.unidad_medida</td>
+                                    <td>@string.Format("{0:C}", detalle.precio_unitario)</td>
+                                    <td>@string.Format("{0:C}", importe)</td>
+                                    <td>@detalle.C_compras_ordenes_g.C_compras_proveedores.razon_social</td>
+                                    <td>@detalle.C_tipos_moneda.clave_fiscal</td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+
+                </table>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <h2 class="text-danger">No se encontraron registros</h2>
+}

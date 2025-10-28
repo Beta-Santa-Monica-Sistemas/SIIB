@@ -1,0 +1,90 @@
+﻿@model IEnumerable<Beta_System.Models.CapturaInventarioDiferenciasUtileria>
+
+
+@if (Model != null)
+{
+    <h3 class="text-right">Último inventario: @ViewBag.fecha_inventario</h3>
+
+    <table class="table table-striped table-bordered" id="tabla_inventario_fecha_cons" style="width:100%">
+        <thead>
+            <tr class="bg-beta text-center">
+                <th style="width:8%;">Registro</th>
+                <th style="width:20%;">Artículo</th>
+                <th style="width:10%;">
+                    <label>Última captura</label>
+                    <strong> (@ViewBag.fecha_corta )</strong>
+                </th>
+                <th style="width:10%;">Entradas por compra (E)</th>
+                <th style="width:10%;">Entradas por traspaso (E)</th>
+                <th style="width:10%;">Entradas ajuste (E)</th>
+                <th style="width:10%;">Devoluciones (E)</th>
+                <th style="width:10%;">Salida por vales (S)</th>
+                <th style="width:10%;">Salidas por traspaso (S)</th>
+                <th style="width:10%;">Mermas (S)</th>
+                <th style="width:10%;">Salidas ajuste(S)</th>
+                <th style="width:10%;">Existencia</th>
+                <th style="width:2%;">Acción</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr class="text-center">
+                    <td>
+                        <strong>
+                            Registro: @if (@item.Existe_registro == true)
+                            {
+                                <label style="color:green;">SI</label>
+                            }
+                            else
+                            {
+                                <label style="color:red;">NO</label>
+                            }
+                        </strong>
+                        <br />
+                        <strong>ID Captura: @item.Id_inventario_captura</strong>
+                    </td>
+                    <td class="text-center">
+                        <strong>Clave: </strong>@item.Clave<br />
+                        <strong>U.Medida: </strong> @item.Unidad_medida<br /><br />
+                        <strong>@item.Nombre_articulo</strong>
+                    </td>
+                    <td>@item.Ultima_Cap.ToString("N2")</td>
+                    <td>@item.Entradas.ToString("N2")</td>
+                    <td>@item.Entradas_trasp.ToString("N2")</td>
+                    <td>@item.Entrada_ajuste.ToString("N2")</td>
+                    <td>@item.Entrada_devolucion.ToString("N2")</td>
+                    <td>@item.Salidas.ToString("N2")</td>
+                    <td>@item.Salidas_trasp.ToString("N2")</td>
+                    <td>@item.Mermas.ToString("N2")</td>
+                    <td>@item.Salida_ajuste.ToString("N2")</td>
+                    <td>@item.Cantidad_sistema.ToString("N2")</td>
+                    <td class="text-center">
+                        @if (item.Id_tipo_inventario != 0)
+                        {
+                            if (item.Existe_registro == true)
+                            {
+                                <button class="btn btn_beta" onclick="ObtenerInfoCapturaAlmacen(@item.Id_inventario_captura);">Modificar</button>
+                            }
+                            else
+                            {
+                                <button class="btn btn_beta" onclick="RegistrarCapturaAlmacen(@item.Id_tipo_inventario,@item.Id_articulo);">Registrar</button>
+                            }
+                        }
+                        else
+                        {
+                            <label>Ninguna</label>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <h2 class="text-center">OCURRIÓ UN PROBLEMA AL REALIZAR LOS CALCULOS O<br /> <strong style="color:red">EL ARTICULO ESTA DESACTIVADO Y NO ES ALMACENABLE</strong></h2>
+    <br />
+    <label>@ViewBag.ex_msj</label>
+}
+

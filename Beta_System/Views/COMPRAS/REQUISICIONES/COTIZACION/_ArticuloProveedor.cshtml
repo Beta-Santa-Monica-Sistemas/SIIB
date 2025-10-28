@@ -1,0 +1,219 @@
+﻿@model IEnumerable<Beta_System.Models.C_compras_requi_d>
+
+@{
+    var item = Model.FirstOrDefault();
+    var articulo = item.C_articulos_catalogo;
+}
+<div class="row">
+    <div class="col-md-12" style="font-size:18px;">
+        <div class="col-md-6">
+            <h4 style="margin:3px;">Artículo: </h4>
+            <h3 style="margin:3px;" class="text_beta">@articulo.nombre_articulo</h3>
+        </div>
+        <div class="col-md-3 text-right">
+            <h4 style="margin:3px;">Cantidad:</h4>
+            <h3 style="margin:3px;" class="text_beta">@string.Format("{0:0.00}", item.cantidad)</h3>
+        </div>
+        <div class="col-md-3 text-right">
+            <h4 style="margin:3px;">Unidad de medida:</h4>
+            <h3 style="margin:3px;" class="text_beta">@articulo.C_unidades_medidas.unidad_medida</h3>
+            <label id="unidad_medida" style="display:none;">@articulo.id_unidad_medida</label>
+        </div>
+    </div>
+    <div class="col-md-12 text-center">
+        <hr />
+        <div class="col-md-2">
+            <strong class="text-left">Clave</strong>
+            <input class="form-control" id="clave_proveedor" type="text" name="clave_proveedor" placeholder="Ingresa una clave" onkeydown="Limpiador();" />
+            <br />
+        </div>
+        <div class="col-md-9">
+            <strong class="text-left">Proveedor</strong>
+            <input class="form-control" id="id_proveedor" type="text" name="id_proveedor" placeholder="Ingresa un proveedor" onkeydown="Limpiador();" />
+            <br />
+        </div>
+
+        <div style="display: flex; justify-content: center; align-items: center;">
+            <div style="padding-top: 26px;">
+                <i class="fa fa-2x fa-search text_beta" onclick="LupaProveedores(2);"></i>
+            </div>
+        </div>
+
+
+        <label id="mensaje_proveedor"></label>
+    </div>
+
+    <div id="div_info_prov" style="display:none;">
+        <h3 class="text_beta">Datos de contacto</h3>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="col-md-12">
+                    <strong>Nombre comercial</strong>
+                    <br />
+                    <label id="nombre_comercial"></label>
+                </div>
+                <div class="col-md-12">
+                    <strong>Razón social</strong>
+                    <br />
+                    <label id="razon_social"></label>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="col-md-12">
+                    <strong>Dirección</strong>
+                    <br />
+                    <label id="direccion"></label>
+                </div>
+                <div class="col-md-12">
+                    <strong>Nombre del contacto</strong>
+                    <br />
+                    <label id="nombre_contacto"></label>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="row">
+                    <div class="col-md-8">
+                        <strong>Teléfono de oficina</strong>
+                        <br />
+                        <label id="telef_oficina"></label>
+                    </div>
+                    <div class="col-md-4">
+                        <strong>Teléfono celular</strong>
+                        <br />
+                        <label id="telef_celular"></label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-8 text-left">
+                        <strong>Correo electrónico</strong>
+                        <br />
+                        <label id="correo"></label>
+                    </div>
+                    <div class="col-md-4 text-left">
+                        <strong>Moneda</strong>
+                        <br />
+                        <label id="clave_fiscal_moneda"></label>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <label id="proveedor" style="display:none"></label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-12">
+        <h3 class="text_beta">Datos del articulo</h3>
+        <div class="col-md-2">
+            <strong>Precio unitario</strong>
+            <input class="form-control solo-numeros" id="precio_unitario" type="text" onkeyup="CalcularPrecio(); Limpiador();" />
+            <label id="mensaje_precio"></label>
+        </div>
+        <div class="col-md-3">
+            <strong>Marca</strong>
+            <select class="form-control " id="marca">@{ Html.RenderAction("MostrarMarcasSelect", "CATALOGOS"); };</select>
+        </div>
+        <div class="col-md-2">
+            <strong>Presentación</strong>
+            <input class="form-control solo-letras" id="presentacion" type="text" />
+        </div>
+        <div class="col-md-4">
+            <strong>Fecha de vigencia</strong>
+            <input type="date" class="form-control" id="fecha_vigencia" onchange="Limpiador();" />
+            <label id="mensaje_fecha"></label>
+        </div>
+    </div>
+
+
+    <div class="col-md-12">
+        <h3 class="text_beta">Condiciones</h3>
+        <div class="col-md-2">
+            <strong>Crédito</strong>
+            <input class="form-control solo-numeros-spunto" id="credito" type="text" disabled />
+        </div>
+        <div class="col-md-2">
+            <strong>Descuento (%)</strong>
+            <input class="form-control solo-numeros" id="descuento" type="text" onkeyup="CalcularPrecio(); Limitador();"/>
+        </div>
+        <div class="col-md-3">
+            <strong>Tiempo de entrega (días)</strong>
+            <input class="form-control solo-numeros-spunto" id="tiempo_entrega" type="text" onkeyup="Limpiador();" />
+            <label id="mensaje_entrega"></label>
+        </div>
+        <div class="col-md-3">
+            <strong>Precio unitario (sin IVA)</strong>
+            <input class="form-control solo-numeros" id="precio_unitario_iva" type="text" readonly /><br />
+        </div>
+        <div class="col-md-2">
+            <strong>Moneda</strong>
+            <select class="form-control " id="tipo_moneda" disabled>@{ Html.RenderAction("ConsultarTipoMoneda", "CATALOGOS"); };</select>
+        </div>
+    </div>
+    <hr />
+    <div class="col-md-12 text-center">
+        <div class="col-md-4">
+            <button class="btn btn_beta_danger" data-dismiss="modal"><i class="fa fa-arrow-left"></i> Regresar</button>
+        </div>
+        <div class="col-md-4">
+            <button class="btn btn_beta" onclick="" style="display:none"><i class="fa fa-remove"></i> Eliminar</button>
+        </div>
+        <div class="col-md-4">
+            <button class="btn btn_beta" onclick="RegistrarCotizacionArticulo(@articulo.id_articulo,@item.id_requisicion_articulo_d);"><i class="fa fa-plus"></i> Guardar</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    $("#ui-id-1").on('click', function (event) {
+        ConsultarClaveProveedor();
+    });
+
+
+
+
+    CaracteresControl();
+    $("#id_proveedor").autocomplete({
+        source: function (request, response) {
+            $.ajax({
+                type: "POST",
+                async: false,
+                url: "../PROVEEDORES/ConsultarProveedoresArray",
+                data: {
+                    search: $("#id_proveedor").val()
+                },
+                success: function (data) {
+                    var data2 = $.parseJSON(data);
+                    response($.map(data2, function (item) {
+                        return { label: item.razon_social + " | " + item.clave_fiscal, value: item.razon_social };
+                    }));
+                    //id_compras_proveedor
+
+                    $("#id_proveedor").on('change', function (event) {
+                        ConsultarClaveProveedor();
+                    });
+                },
+                error: function (xhr, status, error) {
+                    alert(error);
+                }
+            });
+        }
+    });
+
+    $('#id_proveedor').keydown(function (e) {
+        if ($("#id_proveedor").val() != '') {
+            if (e.keyCode === 13 || e.keyCode === 9) {
+                ConsultarClaveProveedor()
+            }
+        }
+
+    });
+    $('#clave_proveedor').keydown(function (e) {
+        if ($("#clave_proveedor").val() != '') {
+            if (e.keyCode === 13 || e.keyCode === 9) {
+                ConsultarInformacionProveedorNomb();
+            }
+        }
+
+    });
+
+</script>

@@ -1,0 +1,53 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+}
+
+<div class="page_title">
+    <div class="counter_section">
+        <h1>Administración de bonos</h1>
+    </div>
+</div>
+
+
+<div class="row column2 counter_section">
+    <div class="row">
+        <div class="col-md-4">
+            <strong>Departamentos:</strong>
+            <select id="id_departamento" class="form-control">
+                @{ Html.RenderAction("ConsultarDepartamentosUsuariosSelect", "EVALUACIONES");
+                }
+            </select>
+        </div>
+        <div class="col-md-2 text-center">
+            <br />
+            <button class="btn btn_beta" onclick="ConsultarEmpleadosBonosTable();"><i class="fa fa-search"></i> Consultar</button>
+        </div>
+    </div>
+    <hr />
+    <div id="div_empleados_bonos"></div>
+</div>
+
+
+
+
+
+@Scripts.Render("~/bundles_Propiedades/js")
+@Scripts.Render("~/bundles_Evaluaciones/js")
+
+<script>
+    $(window).on("load", function () {
+        //const todos_option = $('<option>', { value: '0', text: 'Todos' });
+        //$("#id_departamento").prepend(todos_option);
+        ConsultarEmpleadosBonosTable();
+        CaracteresControl();
+    });
+
+    $('.valid_concepto').on('keyup', function (event) {
+        if (event.key === "Enter" || event.keyCode === 13) {
+            AgregarConceptoRubro();
+        }
+    });
+
+</script>

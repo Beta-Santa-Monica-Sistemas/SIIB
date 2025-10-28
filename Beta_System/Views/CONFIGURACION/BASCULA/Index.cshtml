@@ -1,0 +1,229 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+    List<int> permisos = Session["PermisosModulo"] as List<int>;
+}
+
+<!--<div class="page_title">
+    <div class="counter_section">
+        <h1>Configuracion de catalogos de báscula</h1>
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="nav nav-tabs">
+                    <li class="active"> <a data-toggle="tab" href="#bascula_articulos">ARTICULOS<i class="fa fa-th fa-2x ml-2"></i></a></li>
+                    <li class="active"> <a data-toggle="tab" href="#bascula_proveedores">PROVEEDORES<i class="fa fa-user fa-2x ml-2"></i></a></li>
+
+                    <li class="active"> <a data-toggle="tab" href="#bascula_asociacion">ASOCIACION PROVEEDORES - COMPRAS<i class="fa fa-exchange fa-2x ml-2"></i></a></li>
+
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row column2 counter_section">
+    <div class="tab-content">
+
+        <div id="bascula_articulos" class="tab-pane fade in active show">
+            <h3 class="text-center">ARTICULOS BÁSCULA</h3>
+            <hr />
+            <div class="row">
+                <div class="col-md-2">
+                    <strong>Activo</strong>
+                    <select class="form-control " id="id_activo_articulo">
+                        <option value="0">TODOS</option>
+                        <option value="1">SI</option>
+                        <option value="2">NO</option>
+                    </select>
+                </div>
+                <div class="col-md-1" style="padding-top:10px">
+                    <button class="btn btn_beta_icon" onclick="ConsultarArticulosCatalogoBascula();"><i class="fa fa-search"></i></button>
+                </div>
+                <div class="col-md-9 text-right">
+                    <button class="btn btn_beta" onclick="ModalCatalogoArticulo();">Registrar articulo</button>
+                </div>
+                <div class="col-md-12">
+                    <div class="table-responsive" id="div_tabla_articulos"></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="bascula_proveedores" class="tab-pane">
+            <h3 class="text-center">PROVEEDORES BÁSCULA</h3>
+            <hr />
+            <div class="row">
+                <div class="col-md-2">
+                    <strong>Activo</strong>
+                    <select class="form-control " id="id_activo_proveedor">
+                        <option value="0">TODOS</option>
+                        <option value="1">SI</option>
+                        <option value="2">NO</option>
+                    </select>
+                </div>
+                <div class="col-md-1" style="padding-top:10px">
+                    <button class="btn btn_beta_icon" onclick="ConsultarProveedoresCatalogoBascula();"><i class="fa fa-search"></i></button>
+                </div>
+                <div class="col-md-9 text-right">
+                    <button class="btn btn_beta" onclick="ModalCatalogoProveedores();">Registrar proveedor</button>
+                </div>
+                <div class="col-md-12">
+                    <div class="table-responsive" id="div_tabla_proveedores"></div>
+                </div>
+            </div>
+        </div>
+
+
+        <div id="bascula_asociacion" class="tab-pane">
+            <h3 class="text-center">PROVEEDORES BÁSCULA - PROVEEDORES COMPRAS</h3>
+            <div class="row">
+                <div class="col-md-12 text-right">
+                    <button class="btn btn_beta" data-toggle="modal" data-target="#m_asociacion_proveedores">Registrar asociaciones</button>
+                </div>
+            </div>
+            <hr />
+            <div class="table-responsive" id="div_proveedores_asociados"></div>
+        </div>
+    </div>
+</div>-->
+
+
+<!--Modal Articulos-->
+<!--<div class="modal fade" id="m_bascula_articulos" tabindex="-1" role="dialog" aria-labelledby="m_bascula_articulos" aria-hidden="true">
+    <div class="modal-dialog" role="document" style="min-width:60%; max-height:700px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="m_bascula_articulos_lbl"></h2>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-8">
+                        <strong>Nombre:</strong>
+                        <input type="text" class="form-control" id="articulo_nombre" />
+                    </div>
+                    <div class="col-md-2">
+                        <strong>Unidad de medida:</strong>
+                        <select class="form-control" id="articulo_medida">@{ Html.RenderAction("ConsultarUnidadMedida", "ARTICULOS"); };</select>
+                    </div>
+                    <div class="col-md-2 text-center">
+                        <strong>Activo:</strong>
+                        <input type="checkbox" class="form-control text-center" id="articulo_status" style="height:35px;" />
+                    </div>
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="col-md-10 text-center">
+                    <button class="btn btn_beta" id="bascula_articulos_btn">Confirmar</button>
+                </div>
+                <div class="col-md-2 text-right"><button class="btn btn_beta_danger" data-dismiss="modal">Cerrar</button></div>
+            </div>
+        </div>
+    </div>
+</div>-->
+
+<!--Modal Proveedores-->
+<!--<div class="modal fade" id="m_bascula_proveedores" tabindex="-1" role="dialog" aria-labelledby="m_bascula_proveedores" aria-hidden="true">
+    <div class="modal-dialog" role="document" style="min-width:60%; max-height:700px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="m_bascula_proveedores_lbl"></h2>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-1">
+                        <strong>Clave:</strong>
+                        <input type="text" class="form-control" id="proveedor_clave" />
+                    </div>
+                    <div class="col-md-9">
+                        <strong>Nombre:</strong>
+                        <input type="text" class="form-control" id="proveedor_nombre" />
+                    </div>
+                    <div class="col-md-2 text-center">
+                        <strong>Activo:</strong>
+                        <input type="checkbox" class="form-control text-center" id="proveedor_status" style="height:30px;" />
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="col-md-10 text-center">
+                    <button class="btn btn_beta" id="bascula_proveedor_btn">Confirmar</button>
+                </div>
+                <div class="col-md-2 text-right"><button class="btn btn_beta_danger" data-dismiss="modal">Cerrar</button></div>
+            </div>
+        </div>
+    </div>
+</div>-->
+
+
+<!--Modal Asociacion proveedores-->
+<!--<div class="modal fade" id="m_asociacion_proveedores" tabindex="-1" role="dialog" aria-labelledby="m_asociacion_proveedores_lbl" aria-hidden="true">
+    <div class="modal-dialog" role="document" style="width:95%; min-width:95%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="m_asociacion_proveedores_lbl"></h2>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-5">
+                        <h4 class="text-center">Proveedores báscula</h4>
+                        <div id="div_proveedores_bascula" ></div>
+                    </div>
+                    <div class="col-md-2 text-center" style="margin-top:10rem;">
+                        <strong>Asociar proveedores</strong>
+                        <br />
+                        <button class="btn btn_beta_icon" onclick="AsociarProveedorBasculaProveedorCompras();"><i class="fa fa-3x fa-compress"></i></button>
+                    </div>
+                    <div class="col-md-5">
+                        <h4 class="text-center">Proveedores compras</h4>
+                        <div id="div_proveedores_compras" ></div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="col-md-2 text-right"><button class="btn btn_beta_danger" data-dismiss="modal">Cerrar</button></div>
+            </div>
+        </div>
+
+    </div>
+</div>-->
+
+
+
+@Scripts.Render("~/bundles_Catalogos_Bascula/js")
+
+
+<script type="text/javascript">
+    $(window).on("load", function () {
+        ConsultarProveedoresCatalogoBascula();
+        ConsultarArticulosCatalogoBascula();
+        ConsultarProveedoresAsociadosBasculaCompras();
+
+        ConsultarProveedoresSinAsociacionBascula();
+        ConsultarProveedoresSinAsociacionCompras();
+
+        //ARTICULO
+        $('#m_bascula_articulos').on('hidden.bs.modal', function () {
+            ConsultarArticulosCatalogoBascula();
+            $("#bascula_articulos_btn").attr("onclick", "");
+        });
+        //PROVEEDOR
+        $('#m_bascula_proveedores').on('hidden.bs.modal', function () {
+            ConsultarProveedoresCatalogoBascula();
+            $("#bascula_proveedor_btn").attr("onclick", "");
+        });
+
+        //ASOCIACIONES PROVEEDORES BASCULAS/COMPRAS
+        $('#m_asociacion_proveedores').on('hidden.bs.modal', function () {
+            ConsultarProveedoresAsociadosBasculaCompras();
+        });
+    });
+</script>

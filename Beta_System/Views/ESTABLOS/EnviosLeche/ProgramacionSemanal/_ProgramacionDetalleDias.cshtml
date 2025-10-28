@@ -1,0 +1,229 @@
+﻿@using System.Globalization;
+@{
+    DateTime diaInicial = ViewBag.ProgramaFecha;
+    var contador = 0;
+    CultureInfo cultura = new CultureInfo("es-MX");
+
+    List<Beta_System.Models.C_presupuestos_dias> ListaDias = ViewBag.ListaDias;
+    List<int> id_dias = ListaDias.Select(x => x.id_dia_presupuesto).ToList();
+
+    var establos = ViewBag.ProgramaEstabloFecha as int[] ?? new int[0];
+    var nombre_establos = ViewBag.ProgramanNombreEstabloFecha;
+
+    List<int> id_establo = establos.ToList();
+    string lista_establos = string.Join("_", establos);
+    string lista_dias = string.Join("_", id_dias);
+    string guion = "_";
+}
+
+<div class="row">
+    <div class="col-md-6">
+        <strong>Destino:</strong>
+        <select class="form-control" id="destino_programacion_cliente"></select>
+    </div>
+    <div class="col-md-6">
+        <strong>Línea transportista:</strong>
+        <select class="form-control " id="linea_prog_cliente">@{ Html.RenderAction("ConsultarLineasTrasnportistasSelect", "CATALOGOS"); };</select>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-2">
+        <strong>Hora</strong>
+        <input class="form-control" type="time" id="hora_prog_cliente" />
+    </div>
+
+    <div class="col-md-2">
+        <strong>Tanque:</strong>
+        <select class="form-control " id="tanque_prog_cliente">@{ Html.RenderAction("ConsultarTiposTanquesSelect", "CATALOGOS"); };</select>
+    </div>
+    <div class="col-md-2">
+        <strong>Litros</strong>
+        <input class="form-control solo-numeros-spunto" type="text" id="lts_prog_cliente" />
+    </div>
+    <div class="col-md-1 p-3">
+        <button class="btn btn_beta_icon" onclick="AgregarDetalleProgramaDia();"><i class="fa fa-plus"></i></button>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12"><hr /></div>
+</div>
+
+@foreach (var establo in establos)
+{
+    string establo_reporte = Convert.ToString(nombre_establos[contador]);
+    contador++;
+    <div class="" id="heading_header_@establo">
+        <div class="w-100 collapsed p-2" style="border: 1px solid black; background-color: black;">
+            <div class="row">
+                <div class="col-md-11 text-center">
+                    <h3 style="color: white;"><strong>@establo_reporte.ToUpper()</strong></h3>
+                </div>
+                <div class="col-md-1">
+                    <button class="btn btn_beta_icon" data-toggle="collapse" data-target="#collapse_est_@establo" aria-expanded="false" aria-controls="collapse_est_@establo"><i class="fa fa-arrow-circle-down"></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="collapse" id="collapse_est_@establo" aria-labelledby="heading_est_@establo" data-parent="#accordionSolicitudes">
+        @for (int i = 0; i < ListaDias.Count(); i++)
+        {
+            string nombreDelMes = diaInicial.AddDays(i).ToString("MMMM", cultura);
+            string nombreDelDia = diaInicial.AddDays(i).ToString("dddd", cultura);
+            string id_encabezado = ListaDias[i].id_dia_presupuesto.ToString();
+            <div class="">
+                <div class="" id="heading_@establo@guion@id_encabezado">
+                    <div class="w-100 collapsed" style="border: 1px solid black; background-color: rgb(236, 244, 251);">
+                        <div class="row">
+                            <div class="col-md-7 p-lg-4">
+                                <strong style="text-transform: capitalize;">@nombreDelDia @diaInicial.AddDays(i).Day de @nombreDelMes del @diaInicial.AddDays(i).Year</strong>
+                            </div>
+                            <div class="col-md-4 p-lg-2">
+                                <strong>Total de litros</strong><br />
+                                <label id="litros_@establo@guion@id_encabezado"></label>
+                            </div>
+                            <div class="col-md-1">
+                                <button class="btn btn_beta_icon" data-toggle="collapse" data-target="#collapse_@establo@guion@id_encabezado" aria-expanded="false" aria-controls="collapse_@establo@guion@id_encabezado">
+                                    <i class="fa fa-bars"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <script>
+        try {
+            $("#datatable_@establo@guion@id_encabezado").dataTable().fnDestroy();
+        } catch (e) { }
+                </script>
+
+                <div id="collapse_@establo@guion@id_encabezado" class="collapse" aria-labelledby="heading_@establo@guion@id_encabezado" data-parent="#accordionSolicitudes">
+                    <div class="" style="border: 1px solid black; background-color: rgb(236, 244, 251);">
+                        <div class="" style="border: 1px solid black; background-color: rgb(236, 244, 251);">
+                            <br />
+                            <div class="table-responsive" id="div_table_dia_@establo@guion@id_encabezado">
+                                <table class="table table-bordered table-striped tabla_detalle_diario" id="datatable_@establo@guion@id_encabezado">
+                                    <thead>
+                                        <tr class="bg-beta text-center">
+                                            <th style="display:none">ID</th>
+                                            <th style="min-width:5%; max-width:5%;">H.CARGA</th>
+                                            <th style="min-width:10%; max-width:10%;">UNIDAD</th>
+                                            <th style="min-width:5%; max-width:5%;">LITROS</th>
+                                            <th style="min-width:30%; max-width:30%;">DESTINO</th>
+                                            <th style="min-width:30%; max-width:30%;">LINEA</th>
+                                            <th style="min-width:10%; max-width:10%;"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    <div class="row">
+        <div class="col-md-12"><hr /></div>
+    </div>
+}
+
+<div class="row">
+    <div class="col-md-12 text-right">
+        <button class="btn btn_beta" onclick="ConfirmacionDetalleProgramaDia('@lista_establos', '@lista_dias');" id="btn_confirmacion_semanal">Confirmar</button>
+    </div>
+</div>
+
+<!--<div class="" id="heading_header">
+    <div class="w-100 collapsed p-2" style="border: 1px solid black; background-color: black;">
+        <div class="row">
+            <div class="col-md-12 text-center" data-toggle="collapse" data-target="#collapse_est_2" aria-expanded="false" aria-controls="collapse_est_2">
+                <h3 style="color: white;"><strong>ESTABLO SAN GABRIEL</strong></h3>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="collapse" id="collapse_est_2" aria-labelledby="heading_est_2" data-parent="#accordionSolicitudes">
+    foreach (var area in diasSemana)
+    {
+        contador++;
+        decimal importe_area = 999;
+        string id_encabezado = "TEST_2_" + contador;
+        <div class="">
+            <div class="" id="heading_id_encabezado">
+                <div class="w-100 collapsed" style="border: 1px solid black; background-color: rgb(236, 244, 251);">
+                    <div class="row">
+                        <div class="col-md-11">
+                            <strong>Dia contador</strong>
+                        </div>
+                        <div class="col-md-1">
+                            <button class="btn btn_beta_icon" data-toggle="collapse" data-target="#collapse_id_encabezado" aria-expanded="false" aria-controls="collapse_id_encabezado">
+                                <i class="fa fa-bars"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <script>
+        try {
+            $("#datatable_id_encabezado").dataTable().fnDestroy();
+        } catch (e) { }
+            </script>
+
+            <div id="collapse_id_encabezado" class="collapse" aria-labelledby="heading_id_encabezado" data-parent="#accordionSolicitudes">
+                <div class="" style="border: 1px solid black; background-color: rgb(236, 244, 251);">
+                    <div class="" style="border: 1px solid black; background-color: rgb(236, 244, 251);">
+                        <br />
+                        <div class="table-responsive" id="div_table_dia_" id_encabezado>
+                            <table class="table table-bordered table-striped" id="datatable_id_encabezado">
+                                <thead>
+                                    <tr class="bg-beta text-center">
+                                        <th>H.CARGA</th>
+                                        <th>UNIDAD</th>
+                                        <th>LITROS</th>
+                                        <th>DESTINO</th>
+                                        <th>LINEA</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    foreach (var detalle in diasSemana)
+                                    {
+                                        <tr class="text-center">
+                                            <td>6:00 a.m</td>
+                                            <td>SENCILLO</td>
+                                            <td>36</td>
+                                            <td>NESTLE - COSELAMEX</td>
+                                            <td>ARLEQUIN</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>-->
+@*<script>
+    $('#datatable_@id_encabezado').DataTable({
+        keys: false,
+        ordering: false,
+        paging: true,
+        dom: "Bfrtip",
+        scrollCollapse: false,
+        buttons: [{}],
+        responsive: !0,
+        pagingType: 'simple_numbers'
+    });
+        </script>*@
+<!--</div>
+    }
+</div>-->
+
+<script>
+    ConsultarEstabloLecheUsuarioSelect();
+    CaracteresControl();
+</script>

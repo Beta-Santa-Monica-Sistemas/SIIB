@@ -1,0 +1,78 @@
+﻿@model Beta_System.Models.fichas_sg
+
+
+<div class="row" style="font-size: 22px;">
+    <div class="col-md-2 text-center">
+        <label>PRIMERA PESADA</label><br />
+        <strong>@Model.peso1</strong>
+    </div>
+    <div class="col-md-2 text-center">
+        <label>SEGUNDA PESADA</label><br />
+        <strong>@Model.peso2</strong>
+    </div>
+    <div class="col-md-2 text-center">
+        <label>KILOS NETOS</label><br />
+        <strong>@Model.peso_t</strong>
+    </div>
+</div>
+<br />
+
+<div class="row" style="font-size: 22px;">
+    <div class="col-md-5 text-left">
+        <label>PESADOR</label>
+        <strong class="ml-5">@Model.maquilador</strong>
+        <br />
+        <label>CHOFER</label>
+        <strong class="ml-5">@Model.chofer</strong>
+    </div>
+
+    <div class="col-md-4 text-left">
+        <label>COMPRADOR</label>
+        <strong class="ml-4">@Model.obs_p2</strong>
+        <br />
+        <label>VEHICULO</label>
+        <strong class="ml-5">@Model.propietario_camion</strong>
+        <strong class="ml-2">@Model.placas</strong>
+    </div>
+
+    <div class="col-md-2 text-center">
+        <br />
+        <br />
+        <div style="border-bottom:1px solid black; width:200px;"></div>
+        <label>RECIBO CHOFER (FIRMA)</label>
+    </div>
+</div>
+<label style="font-size: 22px;">FIRMAS AUTORIZADAS DE SALIDA DE GANADO:</label>
+<br />
+<br />
+<br />
+<br />
+
+<div class="row" style="font-size: 22px;">
+    <div class="col-md-3 text-center">
+        <br />
+        <br />
+        <div style="border-bottom:1px solid black; width:100%;"></div>
+        <label>ENCARGADO DE ESTABLO</label>
+    </div>
+    <div class="col-md-3 text-center">
+        <br />
+        <br />
+        <div style="border-bottom: 1px solid black; width: 100%;"></div>
+        <label>PESADOR</label>
+    </div>
+    <div class="col-md-3 text-center">
+        <br />
+        <br />
+        <div style="border-bottom: 1px solid black; width: 100%;"></div>
+        <label>MEDICO</label>
+    </div>
+    <div class="col-md-3 text-center">
+        <br />
+        <br />
+        <div style="border-bottom: 1px solid black; width: 100%;"></div>
+        <label>AUTORIZACION</label>
+    </div>
+</div>
+
+

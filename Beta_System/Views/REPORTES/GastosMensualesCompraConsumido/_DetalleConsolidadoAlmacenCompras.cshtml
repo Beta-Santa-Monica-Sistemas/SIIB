@@ -1,0 +1,100 @@
+﻿@model List<Beta_System.Models.GastosMensualesMS.GastosMensualesConsolidadoConsumoCompra>
+
+
+<div class="row">
+    <div class="col-md-6">
+        <h4 style="margin:3px;"><strong>@ViewBag.nombre_cargo</strong></h4>
+        <h4 style="margin:3px;"><label>@Model.FirstOrDefault().Cuenta      @Model.FirstOrDefault().Cuenta_Concepto</label></h4>
+    </div>
+    <div class="col-md-6 text-right">
+        <h4><strong>Importe compras directas: $ @Model.Select(x => x.Importe + x.Importe_articulo).Sum().ToString("N2")</strong></h4>
+    </div>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-striped table-bordered" id="datatable_consolidado_detalle">
+        <thead>
+            <tr class="bg-beta text-center">
+                <th>Fecha</th>
+                <th>Referencia</th>
+                <th style="width:40%;">Descripción</th>
+
+                <th>Requisición</th>
+                <th>Fecha requisicion</th>
+                <th>Observaciones</th>
+
+                <th>Clave prov.</th>
+                <th>Proveedor</th>
+                <th>Artículo</th>
+                <th>Cantidad</th>
+                <th>Precio</th>
+                <th>Importe $</th>
+                <th>Cuenta</th>
+                <th>Nombre cta.</th>
+                <th>Usuario registra</th>
+                @*<th>Almacen</th>*@
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Where(x => x.Docto_Cp_Id > 0))
+            {
+                string observaciones_requi = "";
+                if (item.Folio_requisicion != "N/A")
+                {
+                    try { observaciones_requi = item.Observaciones.Substring(0, item.Observaciones.Length - 2); }
+                    catch (Exception) { }
+                }
+
+                <tr class="text-center">
+                    <td>@string.Format(item.Fecha.ToShortDateString(), "dd/mm/yyyy")</td>
+                    <td>@item.Folio</td>
+                    <td>@item.Descripcion</td>
+
+                    @if (item.Folio_requisicion != "N/A")
+                    {
+                        <td>@item.Folio_requisicion</td>
+                        <td>@string.Format(item.Fecha_requisicion.ToShortDateString(), "dd/mm/yyyy")</td>
+                        <td>@observaciones_requi</td>
+                    }
+                    else
+                    {
+                        <td>@item.Folio_requisicion</td>
+                        <td></td>
+                        <td>@item.Observaciones</td>
+                    }
+
+                    <td>@item.Clave_Prov</td>
+                    <td>@item.Nombre_Proveedor</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>$@item.Importe.ToString("N2")</td>
+                    <td>@item.Cuenta</td>
+                    <td>@item.Cuenta_Concepto</td>
+                    <td>@item.Usuario_registra</td>
+                </tr>
+            }
+            @foreach (var item in Model.Where(x => x.Docto_Cp_Id == 0))
+            {
+                <tr class="text-center">
+                    <td>@string.Format(item.Fecha.ToShortDateString(), "dd/mm/yyyy")</td>
+                    <td>@item.Folio</td>
+                    <td style="width:40%;">@item.Descripcion</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>@item.Clave_Art - @item.Articulo</td>
+                    <td>@item.Cantidad.ToString("N2")</td>
+                    <td>@item.Costo.ToString("N2")</td>
+                    <td>$@item.Importe_articulo.ToString("N2")</td>
+                    <td>@item.Cuenta</td>
+                    <td>@item.Cuenta_Concepto</td>
+                    <td>@item.Usuario_registra</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+

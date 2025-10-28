@@ -1,0 +1,47 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+}
+
+<div class="page_title">
+    <div class="counter_section">
+        <h1>Asignar ubicación de entrega de almacén</h1>
+        <div class="row">
+            <div class="col-md-8"></div>
+            <div class="col-md-4">
+                <strong>Almacen:</strong>
+                <select class="form-control" id="id_almacen" onchange="ConsultarUbicacionesEntrega();">
+                    @{ Html.RenderAction("ConsultarAlmacenesUsuarioSelect", "CATALOGOS", new { id_usuario = (int)Session["LoggedId"] });}
+                </select>
+            </div>
+            <div class="col-md-12"><br /></div>
+            <div class="col-md-12 text-lg-right">
+                <button class="btn btn_beta" onclick="AsignarUbicacionAlmacenEntrega(2);">Asignar todas las ubicaciones de entrega</button>
+            </div>
+        </div>
+        <br />
+        <div class="table-responsive" id="div_ubicaciones_entrega">
+
+        </div>
+        <br />
+        <div class="row">
+            <div class="col-md-6 text-right">
+                <button class="btn btn_beta" onclick="AsignarUbicacionAlmacenEntrega(1);">Asignar ubicacion de entrega</button>
+            </div>
+            <div class="col-md-6 text-lg-right">
+                <button class="btn btn_beta_danger" onclick="RemoverUbicacionesAlmacen();">Remover todas las ubicaciones de entrega</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@Scripts.Render("~/bundles_Almacen/js")
+
+<script>
+
+    $(window).on("load", function () {
+        ConsultarUbicacionesEntrega();
+    });
+</script>

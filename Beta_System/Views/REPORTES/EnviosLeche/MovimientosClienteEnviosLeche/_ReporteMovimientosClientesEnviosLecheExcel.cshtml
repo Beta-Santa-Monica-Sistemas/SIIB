@@ -1,0 +1,120 @@
+﻿@model List<Beta_System.Models.C_envios_leche_g>
+
+<table class="table table-sm table-condensed table-striped table-bordered">
+    <tr>
+        @* ENVIO DE LECHE *@
+        <th>Cliente</th>
+        <th>Fecha</th>
+        <th>Establo</th>
+        <th>Folio</th>
+        <th>Rem. Ce</th>
+        <th>Destino</th>
+        <th>Litros</th>
+        @* RECEPCION *@
+        <th>Fecha</th>
+        <th>Folio</th>
+        <th>Litros</th>
+        <th>Lote</th>
+
+        @* FACTURACION *@
+        <th>Fecha</th>
+        <th>Factura</th>
+        <th>Flete</th>
+        <th>P.U.</th>
+        <th>Importe</th>
+
+        @* DIAS *@
+        <th>Fecha</th>
+        <th>Referencia</th>
+        @*<th>del Envio</th>
+            <th>de Fact.</th>*@
+    </tr>
+    @foreach (var item in Model)
+    {
+        Beta_System.Models.C_envios_leche_confirmacion valid_recepcion = null;
+        Beta_System.Models.C_envios_leche_lote_g valid_factura = null;
+
+        if (item.C_envios_leche_confirmacion.Where(x => x.activo == true).Count() > 0)
+        {
+            valid_recepcion = item.C_envios_leche_confirmacion.Where(x => x.activo == true).FirstOrDefault();
+
+            if (valid_recepcion.C_envios_leche_lote_d.Count() > 0)
+            {
+                if (valid_recepcion.C_envios_leche_lote_d.FirstOrDefault().C_envios_leche_lote_g != null)
+                {
+                    valid_factura = valid_recepcion.C_envios_leche_lote_d.FirstOrDefault().C_envios_leche_lote_g;
+                }
+            }
+        }
+
+        string litros_confirmados = "";
+        if (valid_recepcion != null)
+        {
+            litros_confirmados = valid_recepcion.C_envios_leche_g.C_envios_leche_d_fichas.Where(x => x.activo == true).Sum(x => x.litros_confirmacion).Value.ToString("N2");
+        }
+
+        string id_envio_leche_lote_g = "";
+        try
+        {
+            id_envio_leche_lote_g = @valid_recepcion.C_envios_leche_lote_d.FirstOrDefault().id_envio_leche_lote_g.ToString();
+        }
+        catch (Exception) { }
+
+        <tr>
+            <td>@item.C_envios_leche_clientes.nombre_comercial</td>
+            @* ENVIO DE LECHE *@
+            <td>@string.Format(item.fecha_envio.Value.ToShortDateString(), "dd/MM/yyyy")</td>
+            <td>@item.C_establos.siglas</td>
+            <td>@item.folio</td>
+            <td>@item.remision_cliente</td>
+            <td>@item.C_envios_leche_destinos.nombre_destino</td>
+            <td>@litros_confirmados</td>
+
+            @* RECEPCION *@
+            @if (valid_recepcion != null)
+            {
+                <td>@string.Format(valid_recepcion.fecha_recepcion.Value.ToShortDateString(), "dd/MM/yyyy")</td>
+                <td>@item.folio</td>
+                <td>@item.litros_totales</td>
+                <th>@id_envio_leche_lote_g</th>
+            }
+            else
+            {
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            }
+
+            @* FACTURACION *@
+            @if (valid_factura != null)
+            {
+                //decimal importe = (decimal)valid_recepcion.C_envios_leche_g.C_envios_leche_d_fichas.Where(x => x.activo == true).Sum(x => x.litros_confirmacion) * (decimal)valid_recepcion.C_envios_leche_lote_d.Where(x => x.activo == true).FirstOrDefault().precio_leche;
+                decimal importe = (decimal)item.litros_totales * (decimal)valid_recepcion.C_envios_leche_lote_d.Where(x => x.activo == true).FirstOrDefault().precio_leche;
+
+                <td>@string.Format(valid_factura.fecha_registro.Value.ToShortDateString(), "dd/MM/yyyy")</td>
+                <td>@valid_factura.factura</td>
+                <td>@valid_recepcion.C_envios_leche_lote_d.Where(x => x.activo == true).FirstOrDefault().precio_flete.Value.ToString("N2")</td>
+                <td>@valid_recepcion.C_envios_leche_lote_d.Where(x => x.activo == true).FirstOrDefault().precio_leche.Value.ToString("N2")</td>
+                <td>@importe.ToString("N2")</td>
+            }
+            else
+            {
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            }
+
+            <td></td>
+            <td></td>
+
+            @*<td></td>
+                <td></td>*@
+            @* DIAS *@
+        </tr>
+    }
+</table>
+
+

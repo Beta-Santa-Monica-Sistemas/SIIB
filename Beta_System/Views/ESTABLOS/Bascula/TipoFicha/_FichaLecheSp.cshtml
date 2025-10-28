@@ -1,0 +1,75 @@
+﻿<div class="row p-2">
+    <div class="col-md-4">
+        <strong>Tanque</strong>
+        <input type="text" class="form-control limpiar_sp" id="obs_sp" readonly />
+    </div>
+    <div class="col-md-2">
+        <strong>Peso 1</strong>
+        <input type="text" class="form-control limpiar_sp" id="peso1_sp" readonly />
+    </div>
+    <div class="col-md-2">
+        <strong>Peso T</strong>
+        <input type="text" class="form-control limpiar_sp" id="pesot_sp" readonly />
+    </div>
+    <div class="col-md-2">
+        <strong>Densidad</strong>
+        <input type="text" class="form-control limpiar_sp" id="densidad_sp" readonly value="1.02920" />
+    </div>
+    <div class="col-md-2">
+        <strong>Lts Totales</strong>
+        <input type="text" class="form-control limpiar_sp" id="litros_sp" readonly value="1.02920" />
+    </div>
+</div>
+<div class="row p-2">
+    <div class="col-md-4">
+        <strong>Temperatura</strong>
+        <input type="text" class="form-control limpiar_sp solo-numeros" id="temperatura_sp" />
+    </div>
+    <div class="col-md-8">
+        <strong>Sello</strong>
+        <input type="text" class="form-control limpiar_sp" id="sello_sp" />
+    </div>
+</div>
+<div class="row p-2">
+    <div class="col-md-6">
+        <strong>Proveedor:</strong>
+        <input type="text" class="form-control limpiar_sp" id="select_proveedor_sp" readonly />
+    </div>
+    <div class="col-md-6">
+        <strong>Articulo/Producto</strong>
+        <input type="text" class="form-control limpiar_sp" id="select_articulo_sp" readonly />
+    </div>
+</div>
+
+<div class="row p-2">
+    <div class="col-md-2">
+        <strong>Movimiento</strong>
+        <input type="text" class="form-control limpiar_sp" id="tmov_sp" readonly />
+    </div>
+    <div class="col-md-4">
+        <strong>Tipo de movimiento</strong>
+        <input type="text" class="form-control limpiar_sp" id="cvemov_sp" readonly />
+    </div>
+    <div class="col-md-6">
+        <strong>Línea transportista:</strong>
+        <input type="text" class="form-control limpiar_sp" id="linea_trasp_sp" readonly />
+    </div>
+</div>
+
+<div class="row p-2">
+    <div class="col-md-6">
+        <strong>Conductor:</strong>
+        <input type="text" class="form-control limpiar_sp" id="conductor_sp" readonly />
+    </div>
+    <div class="col-md-2">
+        <strong>Placas:</strong>
+        <input type="text" class="form-control limpiar_sp" id="placas_sp" readonly />
+    </div>
+    <div class="col-md-2 text-right p-2">
+        <button class="btn btn_beta" id="confirmar_segunda_pesada" onclick="AdvertenciaPesada(2);">Segunda Pesada</button>
+    </div>
+</div>
+
+<script>
+    CaracteresControl();
+</script>

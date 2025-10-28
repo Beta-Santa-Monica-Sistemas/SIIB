@@ -1,0 +1,43 @@
+﻿@using System.Data
+@model System.Data.DataTable
+@{
+    if (Model != null)
+    {
+        <table class="table table-sm table-condensed small table-bordered pdf-table pdf-content" id="dataable_movimientos_tracker">
+            <thead>
+                <tr class="bg-beta text-center">
+                    @foreach (System.Data.DataColumn col in Model.Columns)
+                    {
+                        <th>@col.ColumnName</th>
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (System.Data.DataRow row in Model.Rows)
+                {
+                    <tr>
+                        @for (int i = 0; i < Model.Columns.Count; i++)
+                        {
+                            string columnName = Model.Columns[i].ColumnName;
+                            var value = row[i];
+
+                            // Ejemplo de uso condicional por nombre de columna
+                            if (columnName == "Total")
+                            {
+                                <td class="text-center">@value</td>
+                            }
+                            else
+                            {
+                                <td>@value</td>
+                            }
+                        }
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <h4 class="text-center">No se encontró información</h4>
+    }
+}
