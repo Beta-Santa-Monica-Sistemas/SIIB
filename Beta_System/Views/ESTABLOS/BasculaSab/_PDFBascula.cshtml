@@ -1,0 +1,366 @@
+﻿@model List<Beta_System.Models.BasculaSab>
+@{
+    var establos = "no se encontro";
+}
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+<!--ICONO DE LA PAGINA-->
+<link rel="icon" type="image/png" href="" />
+
+<meta http-equiv="Last-Modified" content="0">
+<meta http-equiv='cache-control' content='no-cache'>
+<meta http-equiv='expires' content='0'>
+<meta http-equiv='pragma' content='no-cache'>
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>BETA System</title>
+
+<!-- bootstrap css -->
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css">
+
+
+<!-- site css -->
+<link rel="stylesheet" href="~/Content/style.css" />
+<!-- responsive css -->
+<link rel="stylesheet" href="~/Content/css/responsive.css" />
+<!-- color css -->
+<link rel="stylesheet" href="~/Content/css/color_2.css" />
+<!-- select bootstrap -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.18/css/bootstrap-select.min.css" integrity="sha512-ARJR74swou2y0Q2V9k0GbzQ/5vJ2RBSoCWokg4zkfM29Fb3vZEQyv0iWBMW/yvKgyHSR/7D64pFMmU8nYmbRkg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<!-- scrollbar css -->
+<link rel="stylesheet" href="~/Content/css/perfect-scrollbar.css" />
+<!-- custom css -->
+<link rel="stylesheet" href="~/Content/production/css/custom.css" />
+<!-- calendar file css -->
+<link rel="stylesheet" href="~/Content/css/semantic.min.css" />
+
+<link rel="stylesheet" href="~/Content/css/animate.css" />
+
+<link href="~/Content/production/css/select/select2.min.css" rel="stylesheet">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/css/iziToast.css" integrity="sha512-DIW4FkYTOxjCqRt7oS9BFO+nVOwDL4bzukDyDtMO7crjUZhwpyrWBFroq+IqRe6VnJkTpRAS6nhDvf0w+wHmxg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+<link href="~/Content/production/css/font-awesome.css" rel="stylesheet" />
+<link href="~/Content/production/css/font-awesome-animation.min.css" rel="stylesheet" />
+<link href="~/Content/production/fonts/css/font-we" rel="stylesheet" />
+
+<!--jquery-->
+<link rel="stylesheet" href="~/Content/production/css/datatables/css/jquery.dataTables.css" />
+<link href="~/Content/production/css/datatables/css/datatables_select.min.css" rel="stylesheet" />
+
+@Styles.Render("~/AdminBundles/CSS_v1")
+
+
+<script type="text/javascript" src="~/Content/js/animate.js"></script>
+<script type="text/javascript" src="~/Content/production/js/fixed_table_rc.js"></script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.bundle.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.18/js/bootstrap-select.min.js" integrity="sha512-yDlE7vpGDP7o2eftkCiPZ+yuUyEcaBwoJoIhdXv71KZWugFqEphIS3PU60lEkFaz8RxaVsMpSvQxMBaKVwA5xg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+
+<script type="text/javascript" src="~/Content/documentation/js/jquery-ui-1.13.1/jquery-ui.min.js"></script>
+
+@Scripts.Render("~/AdminBundles/JS")
+
+<script src="~/Content/production/js/datatables/pdfmake.min.js"></script>
+<script src="~/Content/production/js/datatables/vfs_fonts.js"></script>
+<script src="~/Content/production/js/datatables/dataTables_select.js"></script>
+
+<!--JSPDF-->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.min.js"></script>
+<script type="text/javascript" src="https://html2canvas.hertzen.com/dist/html2canvas.js"></script>
+
+<!--IZITOAST-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/js/iziToast.min.js" integrity="sha512-Zq9o+E00xhhR/7vJ49mxFNJ0KQw1E1TMWkPTxrWcnpfEFDEXgUiwJHIKit93EW/XxE31HSI5GEOW06G6BF1AtA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<!--eCharts-->
+<script src="~/Content/js/echarts.min.js" type="text/javascript"></script>
+
+<!--SELECT SEARCH-->
+<script src="~/Content/js/select/select2.full.js"></script>
+
+<!--CUSTOM JS-->
+<script type="text/javascript" src="~/Content/js/custom.js"></script>
+
+<!--MOMENT JS-->
+<script type="text/javascript" src="~/Content/moment.min.js"></script>
+
+<!--BOOTSTRAP JS-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha512-YK1Mz9UiZmhbFzXgMbl3bO49wZ78Xj3h8TtTBLFHEAEjUBxsEZdXd8Il5RWbhPOyB653bGQDNVGGny2mORZq4A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<!--LORD ICONS-->
+<script src="https://cdn.lordicon.com/lordicon-1.1.0.js"></script>
+
+<link href="~/Content/production/css/datatables/css/datatables_select.min.css" rel="stylesheet" />
+<script src="~/Content/production/js/datatables/dataTables_select.js"></script>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+<!--ICONO DE LA PAGINA-->
+<link rel="icon" type="image/png" href="" />
+
+<meta http-equiv="Last-Modified" content="0">
+<meta http-equiv='cache-control' content='no-cache'>
+<meta http-equiv='expires' content='0'>
+<meta http-equiv='pragma' content='no-cache'>
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>BETA System</title>
+
+<!-- bootstrap css -->
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css">
+
+
+<!-- site css -->
+<link rel="stylesheet" href="~/Content/style.css" />
+<!-- responsive css -->
+<link rel="stylesheet" href="~/Content/css/responsive.css" />
+<!-- color css -->
+<link rel="stylesheet" href="~/Content/css/color_2.css" />
+<!-- select bootstrap -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.18/css/bootstrap-select.min.css" integrity="sha512-ARJR74swou2y0Q2V9k0GbzQ/5vJ2RBSoCWokg4zkfM29Fb3vZEQyv0iWBMW/yvKgyHSR/7D64pFMmU8nYmbRkg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<!-- scrollbar css -->
+<link rel="stylesheet" href="~/Content/css/perfect-scrollbar.css" />
+<!-- custom css -->
+<link rel="stylesheet" href="~/Content/production/css/custom.css" />
+<!-- calendar file css -->
+<link rel="stylesheet" href="~/Content/css/semantic.min.css" />
+
+<link rel="stylesheet" href="~/Content/css/animate.css" />
+
+<link href="~/Content/production/css/select/select2.min.css" rel="stylesheet">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/css/iziToast.css" integrity="sha512-DIW4FkYTOxjCqRt7oS9BFO+nVOwDL4bzukDyDtMO7crjUZhwpyrWBFroq+IqRe6VnJkTpRAS6nhDvf0w+wHmxg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+<link href="~/Content/production/css/font-awesome.css" rel="stylesheet" />
+<link href="~/Content/production/css/font-awesome-animation.min.css" rel="stylesheet" />
+<link href="~/Content/production/fonts/css/font-we" rel="stylesheet" />
+
+<!--jquery-->
+<link rel="stylesheet" href="~/Content/production/css/datatables/css/jquery.dataTables.css" />
+<link href="~/Content/production/css/datatables/css/datatables_select.min.css" rel="stylesheet" />
+
+@Styles.Render("~/AdminBundles/CSS_v1")
+
+
+<script type="text/javascript" src="~/Content/js/animate.js"></script>
+<script type="text/javascript" src="~/Content/production/js/fixed_table_rc.js"></script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.bundle.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.18/js/bootstrap-select.min.js" integrity="sha512-yDlE7vpGDP7o2eftkCiPZ+yuUyEcaBwoJoIhdXv71KZWugFqEphIS3PU60lEkFaz8RxaVsMpSvQxMBaKVwA5xg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+
+<script type="text/javascript" src="~/Content/documentation/js/jquery-ui-1.13.1/jquery-ui.min.js"></script>
+
+@Scripts.Render("~/AdminBundles/JS")
+
+<script src="~/Content/production/js/datatables/pdfmake.min.js"></script>
+<script src="~/Content/production/js/datatables/vfs_fonts.js"></script>
+<script src="~/Content/production/js/datatables/dataTables_select.js"></script>
+
+<!--JSPDF-->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.min.js"></script>
+<script type="text/javascript" src="https://html2canvas.hertzen.com/dist/html2canvas.js"></script>
+
+<!--IZITOAST-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/js/iziToast.min.js" integrity="sha512-Zq9o+E00xhhR/7vJ49mxFNJ0KQw1E1TMWkPTxrWcnpfEFDEXgUiwJHIKit93EW/XxE31HSI5GEOW06G6BF1AtA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<!--eCharts-->
+<script src="~/Content/js/echarts.min.js" type="text/javascript"></script>
+
+<!--SELECT SEARCH-->
+<script src="~/Content/js/select/select2.full.js"></script>
+
+<!--CUSTOM JS-->
+<script type="text/javascript" src="~/Content/js/custom.js"></script>
+
+<!--MOMENT JS-->
+<script type="text/javascript" src="~/Content/moment.min.js"></script>
+
+<!--BOOTSTRAP JS-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha512-YK1Mz9UiZmhbFzXgMbl3bO49wZ78Xj3h8TtTBLFHEAEjUBxsEZdXd8Il5RWbhPOyB653bGQDNVGGny2mORZq4A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<!--LORD ICONS-->
+<script src="https://cdn.lordicon.com/lordicon-1.1.0.js"></script>
+
+<link href="~/Content/production/css/datatables/css/datatables_select.min.css" rel="stylesheet" />
+<script src="~/Content/production/js/datatables/dataTables_select.js"></script>
+
+<link rel="stylesheet" href="~/Content/fichaSab.css" />
+<style>
+    .parte1 label {
+        font-size: 22px;
+        display: block;
+    }
+
+    .parte2 label {
+        font-size: 20px;
+        display: block;
+    }
+
+    .parte3 label {
+        font-size: 18px;
+        display: block;
+        padding-left: 24px;
+    }
+</style>
+
+<div class="row">
+    <div class="col-md-12" style="height:40px;">
+        <strong></strong>
+    </div>
+    @foreach (var modelo in Model)
+    {
+        switch (modelo.Id_establo)
+        {
+            case 1:
+                establos = "ESTABLO SAN GABRIEL";
+                break;
+            case 2:
+                establos = "ESTABLO SAN IGNACIO";
+                break;
+            case 3:
+                establos = "ESTABLO SANTA MONICA";
+                break;
+            case 4:
+                establos = "TANQUE NUEVO";
+                break;
+        }
+        <div class="col-md-6">
+            <div class="row">
+                <div class="col-md-3 text-center">
+                    <img src="~/Content/img_layout/logo_beta_new.png" style=" margin-top: 8px; margin-left: 15px" class="img-responsive w-100">
+                    @*<img src="~/Content/img_layout/beta_logo_fondo_blanco.png" width="80" style="margin-left: 35%;">*@
+                </div>
+                <div class="col-md-9 text-center">
+                    <label style="font-size:24px; display:block; padding-left:20px;"><b>BETA SANTA MONICA</b></label>
+                    <label style="font-size:24px; display:block; padding-left:20px;"><b>S.P.R DE R.L. DE C.V.</b></label>
+                    <label style="font-size:18px; display:block; padding-left:20px;"><b>Oficina Torreón: Av. Morelos 671 Ote.</b></label>
+                    <label style="font-size:18px; display:block; padding-left:20px;"><b>Tels. (871) 7475800 y 7476810</b></label>
+                </div>
+            </div>
+
+            <div class="col-md-12"> <br /></div>
+            <div class="col-md-12 text-center parte2">
+                <label><b>@establos</b></label>
+            </div>
+            <div class="col-md-12">
+                <br /><br />
+            </div>
+            <div class="col-md-12 parte3">
+                <label><b># Ficha Bascula:</b> @modelo.Id_ficha</label>
+                <label><b># Folio:</b>  @modelo.Folio</label>
+                <label><b>Fecha 1:</b> @modelo.Fecha1</label>
+                <label><b>Fecha 2:</b> @modelo.Fecha2</label>
+                <label><b>Placas:</b> @modelo.Placas</label>
+            </div>
+            <div class="col-md-12">
+                <br />
+                <br />
+            </div>
+            <div class="col-md-12 parte3">
+                <label><b>Cliente:</b> @modelo.Cliente</label>
+                <label><b>Chofer:</b> @modelo.Chofer</label>
+                <label><b>Producto:</b> @modelo.Producto</label>
+            </div>
+            <div class="col-md-12">
+                <br />
+                <br />
+            </div>
+            <div class="col-md-12 parte3">
+                <label><b>Pesador:</b> @modelo.Pesador</label>
+                <label><b>Observacion:</b> @modelo.Observaciones</label>
+            </div>
+            <div class="col-md-12">
+                <br />
+                <br />
+            </div>
+            <div class="col-md-12 text-center parte2">
+                <label><b>1 Pesada:</b> @modelo.Pesada1</label>
+                <label><b>2 Pesada:</b> @modelo.Pesada2</label>
+                <label><b>T Pesada:</b> @modelo.Pesadat</label>
+            </div>
+            <div class="col-md-12">
+                <br />
+                <br />
+            </div>
+            <div class="col-md-12 text-right parte2" style="padding-right:20px">
+                <label><b>Original</b></label>
+            </div>
+        </div>
+
+
+        <div class="col-md-6">
+            <div class="row">
+                <div class="col-md-3 text-center">
+                    @*<img src="~/Content/img_layout/beta_logo_fondo_blanco.png" width="80" style="margin-left: 35%;">*@
+                    <img src="~/Content/img_layout/Logo_beta_icono.png" style=" margin-top:8px;" class="img-responsive w-50">
+                </div>
+                <div class="col-md-9">
+                    <label style="font-size:24px; display:block; padding-left:20px;"><b>BETA SANTA MONICA</b></label>
+                    <label style="font-size:24px; display:block; padding-left:20px;"><b>S.P.R DE R.L. DE C.V.</b></label>
+                    <label style="font-size:18px; display:block; padding-left:20px;"><b>Oficina Torreón: Av. Morelos 671 Ote.</b></label>
+                    <label style="font-size:18px; display:block; padding-left:20px;"><b>Tels. (871) 7475800 y 7476810</b></label>
+                </div>
+            </div>
+
+            <div class="col-md-12"> <br /></div>
+            <div class="col-md-12 text-center parte2">
+                <label><b>@establos</b></label>
+            </div>
+            <div class="col-md-12">
+                <br /><br />
+            </div>
+            <div class="col-md-12 parte3">
+                <label><b># Ficha Bascula:</b> @modelo.Id_ficha</label>
+                <label><b># Folio:</b>  @modelo.Folio</label>
+                <label><b>Fecha1:</b> @modelo.Fecha1</label>
+                <label><b>Fecha2:</b> @modelo.Fecha2</label>
+                <label><b>Placas:</b> @modelo.Placas</label>
+            </div>
+            <div class="col-md-12">
+                <br />
+                <br />
+            </div>
+            <div class="col-md-12 parte3">
+                <label><b>Cliente:</b> @modelo.Cliente</label>
+                <label><b>Chofer:</b> @modelo.Chofer</label>
+                <label><b>Producto:</b> @modelo.Producto</label>
+            </div>
+            <div class="col-md-12">
+                <br />
+                <br />
+            </div>
+            <div class="col-md-12 parte3">
+                <label><b>Pesador:</b> @modelo.Pesador</label>
+                <label><b>Observacion:</b> @modelo.Observaciones</label>
+            </div>
+            <div class="col-md-12">
+                <br />
+                <br />
+            </div>
+            <div class="col-md-12 text-center parte2">
+                <label><b>1 Pesada:</b> @modelo.Pesada1</label>
+                <label><b>2 Pesada:</b> @modelo.Pesada2</label>
+                <label><b>T Pesada:</b> @modelo.Pesadat</label>
+            </div>
+            <div class="col-md-12">
+                <br />
+                <br />
+            </div>
+            <div class="col-md-12 text-right parte2" style="padding-right:20px">
+                <label><b>Copia Chofer</b></label>
+            </div>
+        </div>
+    }
+</div>

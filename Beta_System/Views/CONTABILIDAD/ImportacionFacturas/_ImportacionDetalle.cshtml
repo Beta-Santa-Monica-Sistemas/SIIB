@@ -1,0 +1,107 @@
+﻿@model IEnumerable<Beta_System.Models.C_contabilidad_importacion_facturas_d>
+
+@{
+    var importacion = Model.FirstOrDefault().C_contabilidad_importacion_facturas_g;
+}
+
+<div class="row">
+    <div class="col-md-4">
+        <h2 style="margin:5px;" class="text_beta"><strong>Importación: # @importacion.id_contabilidad_importacion_g</strong></h2>
+        <h3 style="margin:5px;" class="text_beta"><strong>@importacion.nombre_importacion</strong></h3>
+    </div>
+    <div class="col-md-3">
+        <label style="margin:0px;">Fecha de operación:</label>
+        <br />
+        <label>@String.Format(importacion.fecha_registro.ToString(), "dd/mm/yyyy hh:mm")</label>
+        <br />
+        <label style="margin:0px;">Usuario registró: </label>
+        <br />
+        <label>@importacion.C_usuarios_corporativo.usuario</label>
+    </div>
+    <div class="col-md-3">
+        <strong>Facturas seleccionadas: @importacion.facturas_importadas</strong>
+        <br />
+        <strong>Facturas acepadas: @importacion.facturas_aceptadas</strong>
+        <br />
+        <strong>Facturas rechazadas: @importacion.facturas_rechazadas</strong>
+    </div>
+</div>
+
+<div class="table-responsive" style="height:500px; min-height:500px; overflow:scroll; overflow-x:hidden;">
+    <table class="table table-striped table-bordered" id="datatable_detalle_importacion">
+        <thead>
+            <tr class="bg-beta text-center">
+                <th>Tipo orden</th>
+                <th>Cuenta</th>
+                <th>Razón social</th>
+                <th>CxP</th>
+                <th style="width:30%;">Descripción</th>
+                <th>Factura</th>
+                <th>Fecha factura</th>
+                <th>Tipo cambio</th>
+                @*<th>Orden compra</th>*@
+                @*<th>Fecha importación</th>*@
+                <th>Subtotal</th>
+                <th>IVA (16)</th>
+                <th>IVA retenido</th>
+                <th>ISR</th>
+                <th>Total importe</th>
+                <th>Estatus</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.GroupBy(x => x.C_compras_facturas_proveedores.C_compras_ordenes_g.C_compras_requisiciones_tipos.id_requisicion_tipo))
+            {
+                var tipo_requi = item.FirstOrDefault().C_compras_facturas_proveedores.C_compras_ordenes_g.C_compras_requisiciones_tipos;
+                @*<tr style="background-color:#cbcbcb; color:white;">
+                        <td class="text-center"><strong style="color:@tipo_requi.color">@tipo_requi.tipo_requisicion</strong></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>*@
+
+                foreach (var detalle in item)
+                {
+                    <tr class="text-center">
+                        <td><strong style="color:@tipo_requi.color">@tipo_requi.tipo_requisicion</strong></td>
+                        <td><strong>@detalle.C_cuentas_contables_g.cuenta</strong><br /><label>@detalle.C_cuentas_contables_g.nombre_cuenta</label></td>
+                        <td>@detalle.C_compras_facturas_proveedores.C_compras_proveedores.razon_social</td>
+                        <td><strong>@detalle.C_compras_facturas_proveedores.C_compras_proveedores.cuenta_cxp</strong></td>
+                        <td>@detalle.concepto</td>
+                        <td><strong>#@detalle.C_compras_facturas_proveedores.folio_factura</strong></td>
+                        <td>@String.Format(detalle.C_compras_facturas_proveedores.fecha_factura.Value.ToShortDateString(), "dd/mm/yyyy")</td>
+                        @*<td>@String.Format(detalle.C_contabilidad_importacion_facturas_g.fecha_registro.Value.ToShortDateString(), "dd/mm/yyyy")</td>*@
+                        
+                        <td>$@detalle.tipo_cambio (@detalle.C_tipos_moneda.clave_fiscal)</td>
+                        @*<td>@detalle.C_compras_facturas_proveedores.id_compras_orden_g</td>*@
+
+                        <td><strong>@string.Format("{0:C}", detalle.C_compras_facturas_proveedores.subtotal)</strong></td>
+                        <td><strong>@string.Format("{0:C}", detalle.C_compras_facturas_proveedores.iva_monto)</strong></td>
+
+                        <td><strong>@string.Format("{0:C}", detalle.C_compras_facturas_proveedores.iva_retenido_monto)</strong></td>
+                        <td><strong>@string.Format("{0:C}", detalle.C_compras_facturas_proveedores.isr_monto)</strong></td>
+                        
+                        <td><strong>@string.Format("{0:C}", detalle.C_compras_facturas_proveedores.total)</strong></td>
+                        <td>
+                            <button class="btn" style="background-color: @detalle.C_contabilidad_importacion_status.color; color:white;">@detalle.C_contabilidad_importacion_status.nombre_status</button>
+                        </td>
+
+
+                    </tr>
+                }
+
+            }
+        </tbody>
+    </table>
+</div>
+

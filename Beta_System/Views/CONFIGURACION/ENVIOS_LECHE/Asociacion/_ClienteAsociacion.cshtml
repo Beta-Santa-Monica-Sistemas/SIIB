@@ -1,0 +1,18 @@
+﻿@model IEnumerable<Beta_System.Models.C_envios_leche_clientes>
+<table class="table table-striped table-bordered w-100" id="tabla_asociacion_cliente" width="100%">
+    <thead>
+        <tr class="bg-beta text-center">
+            <th style="max-width:15%; min-width:15%">Seleccionar</th>
+            <th style="max-width:85%; min-width:85%">Cliente</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr class="text-center">
+                <td> <input type="radio" class="form-control" name="radio_cliente" value="@item.id_envio_leche_cliente_ms" onclick="AsociarClienteDestino();" /> </td>
+                <td>@item.nombre_comercial - @item.C_tipos_moneda.clave_fiscal</td>
+            </tr>
+        }
+    </tbody>
+</table>

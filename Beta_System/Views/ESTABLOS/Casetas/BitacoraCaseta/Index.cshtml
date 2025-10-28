@@ -1,0 +1,345 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+    List<int> permisos = Session["PermisosModulo"] as List<int>;
+}
+
+<style>
+    .txt_tab {
+        font-size:24px;
+    }
+    .txt_input{
+        font-size:24px;
+    }
+
+    .title_tab {
+        font-size: 30px;
+        font-weight: 800;
+    }
+
+</style>
+
+<div class="page_title">
+    <div class="counter_section">
+        <h1>Caseta de seguridad</h1>
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="nav nav-tabs">
+                    @if (permisos.Contains(4024))
+                    {
+                        <li class="active"><a data-toggle="tab" href="#entradas_tab" id="entradas_tab_click" class="txt_tab">Registrar entrada<i class="fa fa-plus fa-2x ml-2"></i></a></li>
+                    }
+                    @if (permisos.Contains(4025))
+                    {
+                        <li class="active"> <a data-toggle="tab" href="#salidas_tab" class="txt_tab">Registrar salida<i class="fa fa-check fa-2x ml-2"></i></a></li>
+                    }
+                    @if (permisos.Contains(4026))
+                    {
+                        <li class="active"> <a data-toggle="tab" href="#bitacora_tab" class="txt_tab">Bitacora<i class="fa fa-book fa-2x ml-2"></i></a></li>
+                    }
+                    @if (permisos.Contains(4027))
+                    {
+                        <li class="active"> <a data-toggle="tab" href="#vale_tab" id="vale_tab_click" class="txt_tab">Generar vale de salida<i class="fa fa-ticket fa-2x ml-2"></i></a></li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="column2 counter_section">
+    <div class="tab-content">
+
+        <div id="entradas_tab" class="tab-pane">
+            <h1 class="text-center title_tab">REGISTRAR ENTRADA</h1>
+            <hr />
+            <div class="row">
+                <div class="col-md-3 txt_input">
+                    <strong>Establo:</strong>
+                    <select class="form-control id_establo_select" id="id_establo" onchange="LimpiarFormularioEntrada();"></select>
+                </div>
+                <div class="col-md-4 mt-4">
+                    <div class="text-center txt_input"><strong>Tipo de entrada:</strong></div>
+                    <div class="mt-4">
+                        @{ Html.RenderAction("ConusltarTiposEntradasCaseta", "CASETAS_ESTABLOS"); }
+                    </div>
+                </div>
+                <div class="col-md-5">
+                    <div class="col-md-12">
+                        <div id="div_formulario_header" style="display: none;">
+
+                            <div class="text-center txt_input mt-4">
+                                <strong>Area:</strong>
+                                <select class="form-control" id="id_area_tipo_entrada">
+                                    <option value=''>Selecciona un tipo de entrada</option>
+                                </select>
+                            </div>
+                            
+
+                            <div class="text-center txt_input mt-4">
+                                <strong>Nombre:</strong>
+                                <br />
+                            </div>
+                            
+                            <div class="mt-4">
+                                <input class="form-control input_clear input_valid" type="text" id="nombre_ingresante" placeholder="Ingrese el nombre del ingresante" />
+                            </div>
+
+                            <div class="mt-4">
+                                <div class="text-center txt_input mt-4"><strong>Placas/Identificador:</strong></div>
+                            </div>
+
+                            <div class="mt-4">
+                                <input class="form-control input_clear input_valid" type="text" id="placas_ingresante" placeholder="Ingrese las placas sin espacios, ni guiones" />
+                            </div>
+                            
+                            <div class="text-center txt_input mt-4">
+                                <strong>Asunto:</strong>
+                                <textarea id="asunto_ingresante" class="form-control input_clear mt-4" rows="3"></textarea>
+                            </div>
+                            
+                        </div>
+
+                        @*<div id="div_formulario_general" style="display:none;">
+                            </div>*@
+
+
+                        <div id="div_formulario_empleado" style="display:none;"></div>
+                        <hr />
+
+                        <button id="btn_registrar_entrada" class="btn btn_beta btn-block txt_tab" style="display:none;" onclick="GuardarLogEntradaCaseta();"><i class="fa fa-plus"></i> Registrar entrada</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+        <div id="salidas_tab" class="tab-pane">
+            <h1 class="text-center title_tab">REGISTRAR SALIDA</h1>
+            <hr />
+            <div id="div_entradas_pendientes" class="table-responsive"></div>
+
+            @*<div class="row">
+                    <div class="col-md-3">
+                        <strong>Placas/Identificador:</strong>
+                        <br />
+                        <div class="row">
+                            <div class="col-md-10">
+                                <input type="text" class="form-control" placeholder="Ingresa la placa/identificador" id="placas_busqueda" />
+                            </div>
+                            <div class="col-md-2">
+                                <button class="btn btn_beta_icon" onclick="BuscarVisitantePlacas();"><i class="fa fa-search"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-9" id="div_informacion_busqueda">
+
+                    </div>
+                </div>*@
+
+
+        </div>
+
+
+        <div id="bitacora_tab" class="tab-pane">
+            <h1 class="text-center title_tab">BITACORA</h1>
+            <hr />
+            <div class="row">
+                <div class="col-md-2">
+                    <strong>Establo:</strong>
+                    <select class="form-control id_establo_select" id="id_establo_bitacora"></select>
+                </div>
+                <div class="col-md-2">
+                    <strong>Fecha inicio:</strong>
+                    <input type="date" class="form-control" id="fecha_inicio_bitacora" />
+                </div>
+                <div class="col-md-2">
+                    <strong>Fecha fin:</strong>
+                    <input type="date" class="form-control" id="fecha_fin_bitacora" />
+                </div>
+                <div class="col-md-2">
+                    <br />
+                    <button class="btn btn_beta_icon" onclick="ConsultarBitacoraCaseta();"><i class="fa fa-search"></i></button>
+                </div>
+                <div class="col-md-4 text-right">
+                    <button class="btn btn_beta" onclick="ConsultarBitacoraCasetaExcel();"><i class="fa fa-download"></i> DESCARGAR BITACORA EXCEL</button>
+                </div>
+            </div>
+            <hr />
+            <div id="div_reporte_bitacora" class="table-responsive"></div>
+        </div>
+
+
+        <div id="vale_tab" class="tab-pane">
+            <h3 class="text-center">GENERAR VALE DE SALIDA</h3>
+            <hr />
+            <div class="row">
+                <div class="col-md-4 text-center">
+                    <h3><strong>Selecciona el establo del vale:</strong></h3>
+                    <select class="form-control id_establo_select" id="id_establo_vale" onchange="GenerarFolioValeSalida(); ConusltarAreasTiposEntradasCasetaValeSalida();">
+                    </select>
+                </div>
+                <div class="col-md-5"></div>
+                <div class="col-md-3 text-center">
+                    <strong>HISTORIAL DE VALES</strong>
+                    <button class="btn btn_beta" data-toggle="modal" data-target="#m_historial_vales">Consultar vales generados <i class="fa fa-search"></i></button>
+                </div>
+            </div>
+            <hr />
+            <div id="div_vale_formato"></div>
+        </div>
+
+
+
+
+    </div>
+</div>
+
+
+<!-- Modal REGISTRAR SALIDA-->
+<div class="modal fade" id="m_generar_salida" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document" style="width:80%; min-width:80%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title txt_tab" id="exampleModalLabel">REGISTRAR SALIDA</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="div_informacion_busqueda">
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn_beta_danger" data-dismiss="modal">Regresar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- Modal HISTORIAL DE VALES DE SALIDA-->
+<div class="modal fade" id="m_historial_vales" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabelHV" aria-hidden="true">
+    <div class="modal-dialog" role="document" style="width:95%; min-width:95%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title txt_tab" id="exampleModalLabelHV">HISTORIAL DE VALES</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-3">
+                        <strong class="">Fecha inicio</strong>
+                        <input type="date" id="fecha_inicio_historial" class="form-control" />
+                    </div>
+                    <div class="col-md-3">
+                        <strong>Fecha Fin</strong>
+                        <input type="date" id="fecha_fin_historial" class="form-control" />
+                    </div>
+                    <div class="col-md-3">
+                        <strong>Establo</strong>
+                        <select class="form-control id_establo_select" id="id_establo_historial">
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <br />
+                        <button class="btn btn_beta_icon" onclick="ConsultarValesGenerados();"><i class="fa fa-search"></i></button>
+                    </div>
+                </div>
+                <hr />
+                <div id="div_historial_vales" class="table-responsive">
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn_beta_danger" data-dismiss="modal">Regresar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal DETALLE VALE SALIDA-->
+<div class="modal fade" id="m_detalle_vale_salida" tabindex="-1" role="dialog" aria-labelledby="m_detalle_vale_salidalbl" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title txt_tab" id="m_detalle_vale_salidalbl">DETALLE DEL VALE DE SALIDA</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="div_detalle_vale_salida"></div>
+
+                <div class="row">
+                    <div class="col-md-5"></div>
+                    <div class="col-md-2">
+                        <button type="button" class="btn btn_beta_danger" data-dismiss="modal">Regresar</button>
+                    </div>
+                    <div class="col-md-5"></div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+@Scripts.Render("~/bundles_Casetas/js")
+@Scripts.Render("~/bundles_Propiedades/js")
+
+<script>
+    $(window).on("load", function () {
+        ConsultarEstablosUsuarioSelect(0);
+        ConsultarEntradasPendientesEstablo();
+        ConsultarFormatoValeSalida();
+
+        $("#fecha_inicio_bitacora").val(last_week);
+        $("#fecha_fin_bitacora").val(today);
+
+        $("#fecha_inicio_historial").val(last_week);
+        $("#fecha_fin_historial").val(today);
+
+        var inputPalcas = document.getElementById("placas_ingresante");
+        inputPalcas.addEventListener("keydown", function (event) {
+            // Check if the pressed key is a space
+            if (event.key === " " || event.key === "-" || event.key === "_") {
+                // Prevent the default behavior (adding space to the input)
+                event.preventDefault();
+            }
+        });
+
+        var inputPalcasSearch = document.getElementById("placas_busqueda");
+        inputPalcasSearch.addEventListener("keydown", function (event) {
+            // Check if the pressed key is a space
+            if (event.key === " " || event.key === "-" || event.key === "_") {
+                // Prevent the default behavior (adding space to the input)
+                event.preventDefault();
+            }
+        });
+    });
+</script>
+
+@if (permisos.Contains(4024))
+{
+    <script>
+        $("#entradas_tab_click").click();
+    </script>
+}
+
+
+@if (permisos.Contains(4027))
+{
+    <script>
+        $("#vale_tab_click").click();
+    </script>
+}

@@ -1,0 +1,532 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+    List<int> permisos = Session["PermisosModulo"] as List<int>;
+}
+
+<style>
+    tr {
+        font-size: 12px;
+    }
+</style>
+
+<div class="page_title">
+    <div class="counter_section">
+        <h1>Administración de artículos</h1>
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="nav nav-tabs">
+                    <li class="active"> <a data-toggle="tab" href="#consultar_articulo" id="consultar_requi">ADMINISTRAR ARTICULOS<i class="fa fa-search fa-2x ml-2"></i></a></li>
+                    <li> <a data-toggle="tab" href="#precios_articulo">ADMINISTRAR PRECIOS<i class="fa fa-money fa-2x ml-2"></i></a></li>
+                    <li> <a data-toggle="tab" href="#articulos_bascula">ADMINISTRAR ARTÍCULOS BÁSCULA<i class="fa fa-truck fa-2x ml-2"></i></a></li>
+                    <li class="active"> <a data-toggle="tab" href="#" onclick="ModalArticuloMarca(1);">ADMINISTRAR MARCAS<i class="fa fa-edit fa-2x ml-2"></i></a></li>
+                    <li class="active"> <a data-toggle="tab" href="#" onclick="ModalArticuloClasificacion(1);">ADMINISTRAR CLASIFICACIONES<i class="fa fa-edit fa-2x ml-2"></i></a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row column2 counter_section">
+    <div class="tab-content">
+        @* CONSULTA DE ARTICULOS GENERAL *@
+        <div id="consultar_articulo" class="tab-pane fade in active show">
+            <div class="row">
+                <div class="col-md-10">
+                    <ul class="nav nav-tabs">
+                        <li class="active"> <a data-toggle="tab" href="#busqueda_especifica" id="articulo_cla_nom">BÚSQUEDA ESPECÍFICA<i class="fa fa-search fa-2x ml-2"></i></a></li>
+                        <li> <a data-toggle="tab" href="#busqueda_filtro" id="articulo_comp">BÚSQUEDA POR FILTROS<i class="fa fa-list fa-2x ml-2"></i></a></li>
+                    </ul>
+                </div>
+                <div class="col-md-2">
+                    @if (permisos.Contains(1013))
+                    {
+                        <div class="text-right">
+                            <button class="btn btn_beta" onclick="AccionArticulo(2);"><i class="fa fa-plus"></i> Agregar artículo</button>
+                        </div>
+                    }
+                </div>
+            </div>
+            <br />
+            <div class="tab-content">
+                <div id="busqueda_especifica" class="tab-pane fade  in active show">
+                    <h3 class="text-center">Búsqueda específica</h3>
+                    <div class="row">
+                        <div class="col-md-1">
+                            <strong>Clave:</strong>
+                            <input type="text" class="form-control" id="clave_buscar" />
+                        </div>
+                        <div class="col-md-4">
+                            <strong>Articulo:</strong>
+                            <input type="text" class="form-control" id="nombre_buscar" />
+                        </div>
+                        <div class="col-md-1" style="padding-top:10px">
+                            <button class="btn btn_beta_icon" onclick="ConsultarArticuloCompletosFiltrado();"><i class="fa fa-search"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="busqueda_filtro" class="tab-pane fade">
+                    <h3 class="text-center">Búsqueda filtrada</h3>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <strong>Clasificación</strong>
+                            <select class="form-control " id="id_clasificaciones">
+                                <option value="0">TODAS</option>
+                                @{ Html.RenderAction("ConsultarClasificacionSelect", "ARTICULOS"); };
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <strong>Rubro:</strong>
+                            <select class="form-control " id="art_tipo_requisicion" onchange="">
+                                <option value="0">TODOS</option>
+                                @{ Html.RenderAction("ConsultarTipoArticuloRequi", "CATALOGOS"); };
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <strong>Almacenable</strong>
+                            <select class="form-control " id="id_almacenables">
+                                <option value="0">TODOS</option>
+                                <option value="true">SI</option>
+                                <option value="false">NO</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <strong>Marca:</strong>
+                            <select class="form-control " id="art_marca" onchange="">
+                                <option value="0">TODAS</option>
+                                @{ Html.RenderAction("ConsultarTipoArticuloRequi", "CATALOGOS"); };
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <strong>Activo</strong>
+                            <select class="form-control " id="id_activos">
+                                <option value="0">TODOS</option>
+                                <option value="true">SI</option>
+                                <option value="false">NO</option>
+                            </select>
+                        </div>
+                        <div class="col-md-1" style="padding-top:10px">
+                            <button class="btn btn_beta_icon" onclick="ConsultarArticuloCompletos(0);"><i class="fa fa-search"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <hr />
+            <div class="table-responsive" id="div_tabla_articulo"></div>
+        </div>
+        
+        @* ARTICULOS DE BASCULA *@
+        <div id="articulos_bascula" class="tab-pane fade">
+            <h3 class="text-center">ARTÍCULO BÁSCULA</h3>
+            <div class="row">
+                <div class="col-md-4 text-left">
+                    <button class="btn btn_beta" onclick="ArticulosBasculaTable();"><i class="fa fa-refresh"></i> Consultar artículos</button>
+                </div>
+                @if (permisos.Contains(4041))
+                {
+                    <div class="col-md-8 text-right">
+                        <button class="btn btn_beta" onclick="PreAsociacionArticuloBascula();"><i class="fa fa-plus"></i> Asociar articulos</button>
+                    </div>
+                }
+            </div>
+            <div class="table-responsive" id="div_articulo_bascula" style="height: 500px; min-height:500px; overflow: auto;"></div>
+        </div>
+        
+        @* PRECIO DE LOS ARTICULOS *@
+        <div id="precios_articulo" class="tab-pane fade">
+            <div class="row">
+                <div class="col-md-2">
+                    <button class="btn btn_beta" onclick="ModalArticuloPrecio(1);"><i class="fa fa-plus"></i> Agregar precio</button>
+                </div>
+                <div class="col-md-12"><hr /></div>
+                <div class="col-md-12 text-center">
+                    <h3>Lista de articulos con precio</h3>
+                </div>
+                <div class="col-md-12"><br /></div>
+                <div class="table-responsive" id="div_tabla_articulo_con_precio"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*------------ MODAL DE ARTICULO*@
+<div class="modal fade" id="m_agregar_editar_articulo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document" style="min-width: 60%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <!--TITULO-->
+                <h5 class="modal-title" id="lbl_titulo_articulo"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <strong>Nombre:</strong>
+                        <input type="text" class="form-control input_clear_art input_valid" id="nombre" onkeyup="LimpiarNombre();" />
+                        <br />
+                    </div>
+
+                    <div class="col-md-12">
+                        <strong>Observaciones:</strong>
+                        <input type="text" class="form-control input_clear_art" id="descrip" />
+                        <br />
+                    </div>
+
+                    <div class="col-md-12">
+                        <div class="col-md-2">
+                            <strong>Unidad de medida:</strong>
+                            <select class="form-control " id="id_medida" onchange="TipoArticuloRequi();">@{ Html.RenderAction("ConsultarUnidadMedida", "ARTICULOS"); };</select>
+                        </div>
+                        <div class="col-md-5">
+                            <strong>Clasificación:</strong>
+                            <select class="form-control " id="id_clasificacion" onchange="TipoArticuloRequi();">@{ Html.RenderAction("MostrarClasificacionSelect", "CATALOGOS"); };</select>
+                        </div>
+                        <div class="col-md-5">
+                            <strong>Tipo/Almacén:</strong>
+                            <select class="form-control " id="id_tipo" onchange="TipoArticuloRequi();">@{ Html.RenderAction("ConsultarTiposArticulosSelect", "CATALOGOS"); };</select>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <br />
+                        <div class="col-md-2">
+                            <strong>Clave:</strong>
+                            <input type="text" class="form-control input_valid solo_numeros" id="codigo_articulo" onkeyup="LimpiarNombre();" />
+                        </div>
+                        <div class="col-md-3">
+                            <strong>Rubro:</strong>
+                            <select class="form-control " id="id_tipo_requisicion" onchange="TipoArticuloRequi();">@{ Html.RenderAction("ConsultarTipoArticuloRequi", "CATALOGOS"); };</select>
+                        </div>
+                        <div class="col-md-2">
+                            <strong>Marca:</strong>
+                            <select class="form-control " id="id_marca_articulo"></select>
+                        </div>
+                        <div class="col-md-5">
+                            <div class="col-md-4 text-center">
+                                <strong>Almacenable:</strong>
+                                <input type="checkbox" class="form-control text-center" id="almacenable" style="height:30px;" />
+                            </div>
+                            <div class="col-md-4 text-center">
+                                <strong>Báscula:</strong>
+                                <input type="checkbox" class="form-control text-center" id="chk_disponible_bascula" style="height:30px;" />
+                            </div>
+                            <div class="col-md-4 text-center">
+                                <strong>Activo:</strong>
+                                <input type="checkbox" class="form-control text-center" id="id_estatus" style="height:30px;" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn_beta_danger" data-dismiss="modal">Cerrar</button>
+                <!--Accion a Realizar-->
+                <button type="button" class="btn btn_beta" id="btn_accion_realizar"></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*------------ MODAL DE MARCAS*@
+<div class="modal fade" id="m_marca_articulo" tabindex="-1" role="dialog" aria-labelledby="m_marca_articulo" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document" style="min-width: 35%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <!--TITULO-->
+                <h5 class="modal-title" id="lbl_titulo_marca_articulo">Administracion de marca</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12 text-right">
+                        <button type="button" class="btn btn_beta" onclick="ModalArticuloMarca(2);" id="nueva_marca"><i class="fa fa-plus"></i>Nueva marca</button>
+                    </div>
+                    <div class="col-md-12">
+                        <br />
+                    </div>
+                    <div class="col-md-12" style="display:none" id="div_agregar_marca">
+                        <div class="col-md-10">
+                            <strong>Marca:</strong>
+                            <input type="text" class="form-control input_clear_art " id="nombre_marca" onkeyup="" />
+                            <br />
+                        </div>
+                        <div class="col-md-2 text-center">
+                            <strong>Activo:</strong>
+                            <input type="checkbox" class="form-control text-center" id="id_estatus_marca" style="height:30px;" />
+                        </div>
+                        <div class="col-md-12">
+                            <label style="display:none" id="id_marca_articulo"> </label>
+                        </div>
+                        <div class="col-md-6">
+                            <button type="button" class="btn btn_beta" onclick="AccionMarca(3);" id="marca_regresar">Regresar</button>
+                        </div>
+                        <div class="col-md-6" id="boton_registrar">
+                            <button type="button" class="btn btn_beta" onclick="AccionMarca(1);" id="marca_confirmar">Confirmar</button>
+                        </div>
+                    </div>
+
+                    <div class="table-responsive" id="div_tabla_marcas">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn_beta_danger" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*------------ MODAL DE CLASIFICACION*@
+<div class="modal fade" id="m_clasificacion_articulo" tabindex="-1" role="dialog" aria-labelledby="m_clasificacion_articulo" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document" style="min-width: 35%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <!--TITULO-->
+                <h5 class="modal-title" id="lbl_titulo_clasificacion_articulo">Administracion de clasificacion</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12 text-right">
+                        <button type="button" class="btn btn_beta" onclick="ModalArticuloClasificacion(2);" id="agregar_clasificacion"><i class="fa fa-plus"></i>Nueva clasificacion</button>
+                    </div>
+                    <div class="col-md-12">
+                        <br />
+                    </div>
+                    <div class="col-md-12" style="display:none" id="div_agregar_clasificacion">
+                        <div class="col-md-10">
+                            <strong>Clasificacion:</strong>
+                            <input type="text" class="form-control input_clear_art " id="nombre_clasificacion" onkeyup="" />
+                            <br />
+                        </div>
+                        <div class="col-md-2 text-center">
+                            <strong>Activo:</strong>
+                            <input type="checkbox" class="form-control text-center" id="id_estatus_clasificacion" style="height:30px;" />
+                        </div>
+                        <div class="col-md-12">
+                            <label style="display:none" id="id_clasificacion"> </label>
+                        </div>
+                        <div class="col-md-6">
+                            <button type="button" class="btn btn_beta" onclick="AccionClasificacion(3);" id="accion_regresar_clasificacion">Regresar</button>
+                        </div>
+                        <div class="col-md-6" id="boton_registrar">
+                            <button type="button" class="btn btn_beta" id="confirmar_clasificacion">Confirmar</button>
+                        </div>
+                    </div>
+
+                    <div class="table-responsive" id="div_tabla_clasificacion">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn_beta_danger" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@*------------ MODAL DE ARTICULO PRECIO*@
+<div class="modal fade" id="m_articulo_precio" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document" style="min-width: 10%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <!--TITULO-->
+                <h5 class="modal-title" id="lbl_titulo_articulo">Control de precio de articulos</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12" style="display:none">
+                        <div class="col-md-12"><label id="id_articulo_registro_con_precio"></label></div>
+                        <div class="col-md-12"><label id="id_articulo_registro_sin_precio"></label></div>
+                    </div>
+                    <div class="col-md-2">
+                        <strong>Clave:</strong>
+                        <input type="text" class="form-control solo-letras-numeros" id="codigo_articulo_precio" />
+                    </div>
+                    <div class="col-md-6">
+                        <strong>Articulo:</strong>
+                        <input type="text" class="form-control solo-letras-numeros" id="nombre_articulo_precio" />
+                    </div>
+                    <div class="col-md-3">
+                        <strong>Precio:</strong>
+                        <input type="text" class="form-control solo-numeros" id="articulo_precio" />
+                    </div>
+                    <div class="col-md-1" style="padding-top:10px" id="div_lupa_precio">
+                        <button class="btn btn_beta_icon" onclick="ModalArticuloPrecio(2);"><i class="fa fa-search"></i></button>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn_beta_danger" data-dismiss="modal">Cerrar</button>
+                <!--Accion a Realizar-->
+                <button type="button" class="btn btn_beta" id="btn_accion_realizar_precio">Confirmar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Modal LUPA Articulos Pendientes-->
+<div class="modal fade" id="m_lupa_articulos_pendiente" tabindex="-1" role="dialog" aria-labelledby="m_lupa_articulos_pendiente" aria-hidden="true">
+    <div class="modal-dialog" role="document" style="min-width:60%; max-height:700px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="m_lupa_articulos_pendiente_lbl">Lista de articulos</h2>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="col-md-4">
+                    <strong>Clasificación</strong>
+                    <select class="form-control " id="id_clasificaciones_precio" onchange="ArticulosPendientesPrecio();">
+                        <option value="-1">NINGUNA</option>
+                        <option value="0">TODAS</option>
+                        @{ Html.RenderAction("ConsultarClasificacionSelect", "ARTICULOS"); };
+                    </select>
+                </div>
+                <div id="div_lupa_articulos_pendiente"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Modal ARTICULOS DE BASCULA-->
+<div class="modal fade" id="m_articulo_asociacion" tabindex="-1" role="dialog" aria-labelledby="m_articulo_asociacion" aria-hidden="true">
+    <div class="modal-dialog" role="document" style="max-width:40%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <strong class="modal-title text-center" id="m_articulo_asociacion_lbl">ASOCIACION ARTICULOS AL TIPO DE BÁSCULA</strong>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div id="div_tipos_articulo_bascula"></div>
+                    </div>
+                    <div>
+                        <hr />
+                        <h3 class="text-center">Artículos</h3>
+                    </div>
+                    <div class="col-md-12">
+                        <div style="overflow-y:scroll; overflow-x:hidden; height:400px; min-height:400px;">
+                            <table class="table table-striped table-bordered text-center" id="tabla_pre_asociacion">
+                                <thead>
+                                    <tr class="bg-beta text-center">
+                                        <th style="min-width:12%">Clave</th>
+                                        <th style="min-width:78%">Articulo</th>
+                                        <th style="min-width:10%;">Eliminar</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-md-12"><hr /></div>
+                    <div class="col-md-12 text-right">
+                        <button class="btn btn_beta" onclick="AsociacionArticuloBascula();"><i class="fa fa-check"></i> CONFIRMAR</button>
+                        <button class="btn btn_beta_danger" onclick="PreAsociacionArticuloBasculaCerrar();"><i class="fa fa-backward"></i> REGRESAR</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@Scripts.Render("~/bundles_Articulos/js")
+@Scripts.Render("~/bundles_Propiedades/js")
+
+<script>
+    $(window).on("load", function () {
+        $("#div_tabla_articulo").css('overflow', 'hidden');
+        CaracteresControl();
+        MostrarMarcasSelect();
+        MostrarClasificacionSelect();
+        ArticulosConPrecio();
+
+        $('#codigo_articulo_precio').keydown(function (e) {
+            if ($("#codigo_articulo_precio").val() != '') {
+                if (e.keyCode === 13 || e.keyCode === 9) {
+                    CargarInfoArticuloSinPrecioClave();
+                }
+            }
+        });
+
+
+        $("#nombre_articulo_precio").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    type: "POST",
+                    async: false,
+                    url: "../ARTICULOS/ConsultarArticulosSinPrecioArray",
+                    data: {
+                        search: $("#nombre_articulo_precio").val()
+                    },
+                    success: function (data) {
+                        var data2 = $.parseJSON(data);
+                        response($.map(data2, function (item) {
+                            return { label: item.nombre_articulo, value: item.nombre_articulo };
+                        }))
+                    },
+                    error: function (xhr, status, error) {
+                        alert(error);
+                    }
+                });
+            }
+        });
+        $('#nombre_articulo_precio').on('keydown', function (event) {
+            if (event.keyCode === 13 || event.keyCode === 9) {
+                CargarInfoArticuloSinPrecioNombre();
+            }
+        });
+        $("#ui-id-1").on('click', function (event) {
+            CargarInfoArticuloSinPrecioNombre();
+        });
+
+        $('#m_marca_articulo').on('hidden.bs.modal', function () {
+            $("#nueva_marca").css("display", "block");
+            $("#div_tabla_marcas").css("display", "block");
+            $("#div_agregar_marca").css("display", "none");
+            MostrarMarcasSelect();
+            LimpiarMarcas();
+        });
+
+        $('#m_clasificacion_articulo').on('hidden.bs.modal', function () {
+            $("#agregar_clasificacion").css("display", "block");
+            $("#div_tabla_clasificacion").css("display", "block");
+            $("#div_agregar_clasificacion").css("display", "none");
+            LimpiarClasificacion();
+            MostrarClasificacionSelect();
+        });
+
+
+        $('#m_lupa_articulos_pendiente').on('hidden.bs.modal', function () {
+            $('#m_articulo_precio').focus();
+            $('#m_articulo_precio').css('overflow', 'auto');
+        });
+
+        $('#m_articulo_precio').on('hidden.bs.modal', function () {
+            ArticulosConPrecio();
+        });
+
+        ConsultarConsecutivoArticulo();        
+        //ArticulosBasculaTable();
+    });
+</script>

@@ -1,0 +1,60 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+    List<int> permisos = Session["PermisosModulo"] as List<int>;
+}
+
+
+<div class="page_title">
+    <div class="counter_section">
+        <h1>Consultar tránsito de artículos</h1>
+        <div class="row" id="tablas_control">
+            <div class="col-md-2">
+                <strong>Clave:</strong>
+                <input type="text" class="form-control" id="clave_buscar" />
+            </div>
+            <div class="col-md-5">
+                <strong>Tipo:</strong>
+                <select class="form-control" id="id_tipo">@{ Html.RenderAction("ConsultarTiposArticulosSelect", "CATALOGOS"); };</select>
+            </div>
+            <div class="col-md-1" style="padding-top:10px">
+                <button class="btn btn_beta_icon" onclick="ConsultaArticuloTransitoTable();"><i class="fa fa-search"></i></button>
+            </div>
+            <div class="col-md-12"><br /></div>
+            <div class="col-md-12">
+                <div class="table-responsive">
+                    <div id="div_tabla_articulo_transito"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal REVISION DE REQUI-->
+<div class="modal fade" id="m_detalle_requi_revision" tabindex="-1" role="dialog" aria-labelledby="m_detalle_requi_revision" aria-hidden="true">
+    <div class="modal-dialog" role="document" style="min-width:95%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="m_detalle_requi_revision_lbl">Detalle de requisición</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" style="height: 500px; min-height: 500px; overflow: auto; overflow-x: hidden;">
+                <div id="div_requis_revision_detalle"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@Scripts.Render("~/bundles_Requisiciones/js")
+@Scripts.Render("~/bundles_Articulos/js")
+
+<script>
+    $(window).on("load", function () {
+    });
+</script>

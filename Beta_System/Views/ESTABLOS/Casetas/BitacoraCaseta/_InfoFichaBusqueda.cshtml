@@ -1,0 +1,18 @@
+﻿@model List<string>
+
+@if (Model != null)
+{
+    <h3 style="margin:5px;">Proveedor: </h3>
+    <h2 style="margin:5px;" class="bascula_proveedor">- @Model[0].Trim()</h2>
+
+    <h3 style="margin:5px;">Articulo: </h3>
+    <h2 style="margin:5px;" class="bascula_producto">- @Model[1].Trim()</h2>
+
+    <h3 style="margin:5px;">Placas: </h3>
+    <h2 style="margin:5px;" class="bascula_placas">- @Model[2].Trim()</h2>
+
+    <h3 style="margin:5px;">Chofer: </h3>
+    <h2 style="margin:5px;" class="bascula_chofer">- @Model[3].Trim()</h2>
+}
+
+

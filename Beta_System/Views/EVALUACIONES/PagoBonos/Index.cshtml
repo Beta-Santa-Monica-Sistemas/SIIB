@@ -1,0 +1,53 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+    List<int> permisos = Session["PermisosModulo"] as List<int>;
+}
+
+<div class="page_title">
+    <div class="counter_section">
+        <div class="row">
+            <div class="col-md-8">
+                <h1>Pago de bonos</h1>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row column2 counter_section">
+    <div class="row">
+        <div class="col-md-4">
+            <strong>Evaluaciones</strong>
+            <select id="id_evaluacion_g_consulta" class="form-control"></select>
+        </div>
+        <div class="col-md-2 text-center">
+            <br />
+            <button class="btn btn_beta" onclick="ConsultarBonosEvaluacion();"><i class="fa fa-search"></i> Consultar</button>
+        </div>
+        <div class="col-md-4 text-right">
+            <br />
+            <button class="btn btn_beta" onclick="GenerarExcelBonosEvaluacion();"><i class="fa fa-download"></i> Generar excel</button>
+        </div>
+    </div>
+    <hr />
+    <div id="div_bonos_evaluacion"></div>
+</div>
+
+
+
+
+
+@Scripts.Render("~/bundles_Evaluaciones/js")
+@Scripts.Render("~/bundles_Propiedades/js")
+
+<script>
+    $(window).on("load", function () {
+        $('input[type="date"]').val(today);
+        ConsultarEvaluacionesSelect(2);  //SOLO CERRADAS
+    });
+
+</script>
+
+
+

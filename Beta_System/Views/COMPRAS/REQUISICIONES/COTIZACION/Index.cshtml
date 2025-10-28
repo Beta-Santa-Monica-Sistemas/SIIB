@@ -1,0 +1,347 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+    List<int> permisos = Session["PermisosModulo"] as List<int>;
+}
+
+<style>
+    tr {
+        font-size: 16px;
+    }
+
+    .ui-menu {
+        z-index: 1550;
+    }
+
+    #m_articulos_requisicion {
+        z-index: 1500;
+    }
+
+    #m_proveedor_requisicion {
+        z-index: 1510;
+    }
+
+    #m_proveedor_requisicion_hist {
+        z-index: 1510;
+    }
+
+    #m_proveedor_requisicion_modif {
+        z-index: 1510;
+    }
+
+    #m_lupa_proveedor {
+        z-index: 1510;
+    }
+</style>
+
+<div class="page_title">
+    <div class="counter_section">
+        <h1>Requisiciones a cotizar</h1>
+    </div>
+</div>
+@* INDEX COTIZACION *@
+<div class=" column2 counter_section">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="col-md-4">
+                <strong>Centro</strong>
+                <select class="form-control" id="id_centro_search">
+                    <option value="0">TODAS</option>
+                    @{ Html.RenderAction("CentrosUsuariosSelect", "CATALOGOS", new { id_usuario = (int)Session["LoggedId"] }); }
+                </select>
+            </div>
+            <div class="col-md-3">
+                <strong>Clasificación</strong>
+                <select class="form-control " id="id_clasificaciones">
+                    <option value="0">TODAS</option>
+                    @{ Html.RenderAction("ConsultarClasificacionSelect", "ARTICULOS"); };
+                </select>
+            </div>
+            <div class="col-md-3 text-left">
+                <br />
+                <button class="btn btn_beta_icon" onclick="ConsultarArticuloRequisicion();"><i class="fa fa-search"></i></button>
+            </div>
+        </div>
+        <br />
+        <div id="div_tabla_articulos" class="table-responsive">
+        </div>
+    </div>
+</div>
+
+@* MODAL - ARTICULOS REQUISICION DETALLE *@
+<div class="modal fade" id="m_articulos_requisicion" tabindex="-1" role="dialog" aria-labelledby="m_articulos_requisicion" aria-hidden="true">
+    <div class="modal-dialog" role="document" style="min-width:95%; width:95%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="m_articulos_requisicion_lbl">COTIZACION POR ARTÍCULO</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="div_requi_detalle_articulos"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn_beta_danger" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@* MODAL - PROVEEDOR COTIZACION ARTICULO *@
+<div class="modal fade" id="m_proveedor_requisicion" tabindex="-1" role="dialog" aria-labelledby="m_proveedor_requisicion" aria-hidden="true">
+    <div class="modal-dialog" role="document" style="min-width:80%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="m_proveedor_requisicion_lbl">COTIZAR ARTÍCULO</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="div_requi_proveedor_articulos"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@* MODAL - PROVEEDOR COTIZACION ARTICULO HISTORIAL *@
+<div class="modal fade" id="m_proveedor_requisicion_hist" tabindex="-1" role="dialog" aria-labelledby="m_proveedor_requisicion_hist" aria-hidden="true">
+    <div class="modal-dialog" role="document" style="min-width:75%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="m_proveedor_requisicion_lbl_hist"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="col-md-12">
+                    <div id="div_cotizacion_articulo_hi"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@*MODAL - PROVEEDOR CAMBIAR FECHA DE VIGENCIA*@
+<div class="modal fade" id="m_proveedor_requisicion_modif" tabindex="-1" role="dialog" aria-labelledby="m_proveedor_requisicion_modif" aria-hidden="true">
+    <div class="modal-dialog" role="document" style="min-width:10%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="m_proveedor_requisicion_lbl_modif"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="col-md-12">
+                    <div id="div_cotizacion_articulo_modif"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Modal LUPA Proveedor-->
+<div class="modal fade" id="m_lupa_proveedor" tabindex="-1" role="dialog" aria-labelledby="m_lupa_proveedor" aria-hidden="true">
+    <div class="modal-dialog" role="document" style="min-width:75%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="m_lupa_proveedor_lbl">Lista de proveedores</h2>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="div_lupa_proveedor"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@Scripts.Render("~/bundles_Requisiciones/js")
+@Scripts.Render("~/bundles_Proveedores/js")
+@Scripts.Render("~/bundles_Propiedades/js")
+
+<script>
+    $(window).on("load", function () {
+
+        var hist_articulo = 0;
+        var hist_requi = 0;
+        var hist_cantidad = 0;
+        var requisiciond = 0;
+        var articolo_d = 0;
+
+
+        CaracteresControl();
+        ConsultarArticuloRequisicion();
+        $("#div_tabla_cotizaciones").css('overflow', 'hidden');
+        //$("#ui-id-1").on('click', function (event) {
+        //    ConsultarClaveProveedor();
+        //});
+
+        $('#m_proveedor_requisicion').on('hidden.bs.modal', function () {
+            $('#m_articulos_requisicion').focus();
+            $('#m_articulos_requisicion').css('overflow', 'auto');
+        });;
+
+        $('#m_proveedor_requisicion_hist').on('hidden.bs.modal', function () {
+            ActualizarCotizacionesTable();
+        });
+
+        $('#m_articulos_requisicion').on('hidden.bs.modal', function () {
+            ConsultarArticuloRequisicion();
+        });
+    });
+
+
+    function RegistrarCotizacionArticulo(id_articulo, requid) {
+        var fecha_vigencia = $("#fecha_vigencia").val();
+
+        var id_requi_g = $("#id_requisicion_g_cotizacion").text();
+        if (id_requi_g == "" || id_requi_g == undefined) {
+            iziToast.warning({
+                title: 'Ocurrió un error al cotizar',
+                message: 'Cierre este recuadro y vuelva a abrirlo',
+            });
+        }
+        else if (fecha_vigencia == '' || fecha_vigencia == "") {
+            iziToast.warning({
+                title: 'Ingresa una fecha de vigencia',
+                message: '',
+            });
+        }
+        else {
+            var c_requi_coti = {};
+            var c_coti_requi = {};
+            c_requi_coti.id_articulo = id_articulo;
+            c_requi_coti.id_compras_proveedor = $("#proveedor").val();
+            c_requi_coti.precio_unitario = $("#precio_unitario").val();
+            var descuentos = $("#descuento").val();
+            if (descuentos <= 0 || descuentos == "") {
+                descuentos = 0;
+            }
+            c_requi_coti.porcentaje_descuento = descuentos;
+
+            var precio_unit = $("#precio_unitario_iva").val();
+            var precio = parseFloat(precio_unit.replace('$', '').replace(/,/g, ''));
+
+
+            var tiempo_entrega = $("#tiempo_entrega").val();
+            if (tiempo_entrega <= 0 || tiempo_entrega == "") {
+                tiempo_entrega = 0;
+            }
+
+            c_requi_coti.precio_final = precio;
+
+            c_requi_coti.id_unidad_medida = $("#unidad_medida").text();
+            c_requi_coti.marca = $("#marca").find(":selected").text();
+            c_requi_coti.presentacion = $("#presentacion").val();
+            //c_requi_coti.fecha_vigencia = fecha_vigencia;
+            c_requi_coti.id_compras_proveedor = $("#proveedor").val();
+            c_requi_coti.id_tipo_moneda = $("#tipo_moneda").val();
+            c_requi_coti.dias_entrega = tiempo_entrega;
+            c_coti_requi.dias_entrega = tiempo_entrega;
+            c_coti_requi.id_articulo = id_articulo
+            c_coti_requi.id_requisicion_articulo_d = requid;
+            var proveedor = $("#proveedor").val();;
+            ConsultarInformacionProveedorNomb();
+            ValidarTotal();
+            if (validacion) {
+                $.ajax({
+                    type: "POST",
+                    async: false,
+                    url: "../REQUISICIONES/VerificarCotizacionVR",
+                    data: {
+                        requid: requid,
+                        id_cotizacion: 0,
+                        articulo: id_articulo,
+                        proveedor: proveedor
+                    },
+                    success: function (result) {
+                        if (result == 1) {
+                            $.ajax({
+                                type: "POST",
+                                async: false,
+                                url: "../REQUISICIONES/LimiteCotizacion",
+                                data: {
+                                    requid: requid,
+                                    articulo: id_articulo
+                                },
+                                success: function (result) {
+                                    if (result == 'True') {
+                                        $.ajax({
+                                            type: "POST",
+                                            async: false,
+                                            url: "../REQUISICIONES/RegistrarCotizacionArticulo",
+                                            data: {
+                                                c_requi_coti: c_requi_coti,
+                                                c_coti_requi: c_coti_requi,
+                                                id_requi_g: id_requi_g,
+                                                fecha_vigencia: fecha_vigencia
+                                            },
+                                            success: function (result) {
+                                                if (result == "True") {
+                                                    $("#m_proveedor_requisicion").modal("hide");
+                                                    iziToast.success({
+                                                        title: 'Exito',
+                                                        message: '¡Cotizacion registrada!',
+                                                    });
+                                                    ActualizarCotizacionesTable();
+                                                }
+                                                else {
+                                                    iziToast.error({
+                                                        title: 'Ocurrió un error al registrar la cotización',
+                                                        message: '',
+                                                    });
+                                                }
+                                            },
+                                            error: function (xhr, status, error) {
+                                                console.error(error);
+                                            }
+                                        });
+                                    }
+                                    else {
+                                        iziToast.warning({
+                                            title: 'Aviso',
+                                            message: '¡Solo se puede cotizar 3 veces el articulo por requisicion!',
+                                        });
+                                    }
+                                },
+                                error: function (xhr, status, error) {
+                                    console.error(error);
+                                }
+                            });
+                        }
+                        else {
+                            iziToast.warning({
+                                title: 'Aviso',
+                                message: 'Solo se puede cotizar una vez el artículo por proveedor',
+                            });
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error(error);
+                    }
+                });
+            }
+            else {
+                iziToast.warning({
+                    title: 'Aviso',
+                    message: 'Campos obligatorios',
+                });
+            }
+        }
+
+    }
+
+
+
+</script>

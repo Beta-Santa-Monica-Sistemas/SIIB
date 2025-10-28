@@ -1,0 +1,91 @@
+﻿@model IEnumerable<Beta_System.Models.C_bascula_fichas>
+
+<table class="table table-bordered table-striped" id="table_fichas_reporte">
+    <thead>
+        <tr class="bg-beta text-center">
+            <th>Establo</th>
+            <th>Ficha</th>
+            <th>Folio</th>
+            <th>Articulo</th>
+            <th>Cliente</th>
+            <th>Fecha pesada 1</th>
+            <th>Fecha pesada 2</th>
+            <th>Linea Transportista</th>
+            <th>Chofer</th>
+            <th>Placas</th>
+            <th>Peso1</th>
+            <th>Peso2</th>
+            <th>PesoT</th>
+            <th>Mat. Seca</th>
+            <th>Maquilador</th>
+            <th>Observacion</th>
+            <th>Movimiento</th>
+            <th>Tipo Movimiento</th>
+            <th>Peso Origen</th>
+            <th>Tabla</th>
+            <th>Variedad</th>
+            <th>Corte</th>
+            <th>Pacas</th>
+            <th>Ensilador</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.C_establos.nombre_establo</td>
+                <td>@item.id_bascula_ficha</td>
+                <td>@item.folio</td>
+                <td>@item.C_articulos_catalogo.nombre_articulo</td>
+                @if (item.id_ficha_tipo == 1 || item.id_ficha_tipo == 4)
+                {
+                    <td>@item.C_envios_leche_clientes.razon_social</td>
+                }
+                else
+                {
+                    <td>@item.C_compras_proveedores.alias_bascula</td>
+                }
+                <td>@String.Format(item.fecha_registo.Value.ToShortDateString(), "dd/mm/aaaa")</td>
+                @if (item.fecha_segunda_pesada != null)
+                {
+                    <td>@String.Format(item.fecha_segunda_pesada.Value.ToShortDateString(), "dd/mm/aaaa")</td>
+                }
+                else
+                {
+                    <td style="color:red">PENDIENTE</td>
+                }
+                <td>@item.C_bascula_lineas_transportistas.nombre_linea</td>
+                <td>@item.chofer</td>
+                <td>@item.placas</td>
+                <td>@item.peso_1.Value.ToString("N3")</td>
+                @if (item.peso_2 != null)
+                {
+                    <td>@item.peso_2.Value.ToString("N3")</td>
+                }
+                else
+                {
+                    <td style="color:red">PENDIENTE</td>
+                }
+                @if (item.peso_t != null)
+                {
+                    <td>@item.peso_t.Value.ToString("N3")</td>
+                }
+                else
+                {
+                    <td style="color:red">PENDIENTE</td>
+                }
+                <td>@item.peso_materia_seca</td>
+                <td>@item.maquilador</td>
+                <td>@item.observaciones</td>
+                <td>@item.C_bascula_codigos_movimientos.descripcion</td>
+                <td>@item.C_bascula_tipos_movimientos.nombre_movimiento</td>
+                <td>@item.peso_origen</td>
+                <td>@item.tabla</td>
+                <td>@item.variedad</td>
+                <td>@item.corte</td>
+                <td>@item.pacas</td>
+                <td>@item.ensilador</td>
+            </tr>
+        }
+    </tbody>
+</table>

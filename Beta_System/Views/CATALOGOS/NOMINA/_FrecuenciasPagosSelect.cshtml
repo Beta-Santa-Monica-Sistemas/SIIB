@@ -1,0 +1,6 @@
+﻿@model IEnumerable<Beta_System.Models.C_nomina_frecuencias_pagos>
+
+@foreach (var item in Model)
+{
+    <option value="@item.id_frecuencia_pago">@item.nombre_frecuencia_pago</option>
+}

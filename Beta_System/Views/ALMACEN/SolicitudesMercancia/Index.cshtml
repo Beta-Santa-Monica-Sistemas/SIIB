@@ -1,0 +1,704 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+    List<int> permisos = Session["PermisosModulo"] as List<int>;
+}
+
+<div class="page_title">
+    <div class="counter_section">
+        <h1>Solicitudes de mercancía</h1>
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="nav nav-tabs">
+                    <li> <a data-toggle="tab" href="#autorizar_solcitiud_tab" id="tab_solicitudes">CONSULTAR SOLICITUDES<i class="fa fa-2x fa-check ml-2"></i></a> </li>
+
+                    @if (permisos.Contains(15))
+                    {
+                        <li class="active"> <a data-toggle="tab" href="#generar_solicitud_tab">GENERAR SOLICITUD<i class="fa fa-2x fa-plus-circle ml-2"></i></a> </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class=" column2 counter_section">
+    <div class="tab-content">
+
+        <div id="autorizar_solcitiud_tab" class="tab-pane fade in in active show">
+            <h3 class="text-center">Autorizar solicitudes de mercancia</h3>
+            <div class="row">
+                <div class="col-md-2">
+                    <strong>Almacén:</strong>
+                    <select id="id_almacen_admin" class="form-control">
+                        <option value="0">TODOS</option>
+                        @{Html.RenderAction("ConsultarAlmacenesUsuarioSelect", "CATALOGOS", new { id_usuario = (int)Session["LoggedId"] }); }
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <strong>Fecha inicio:</strong>
+                    <input type="date" class="form-control" id="fecha_inicio_admin" />
+                </div>
+                <div class="col-md-2">
+                    <strong>Fecha fin:</strong>
+                    <input type="date" class="form-control" id="fecha_fin_admin" />
+                </div>
+                <div class="col-md-2">
+                    <strong>Estatus</strong>
+                    <select class="form-control" id="id_status_solicitudes_admin">
+                        <option selected value="0">TODAS</option>
+                        @{ Html.RenderAction("ConsultarEstatusSolicitudesMercanciaSelect", "CATALOGOS"); }
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <strong>Folio:</strong>
+                    <input type="text" class="form-control" id="folio_admin" />
+                </div>
+                <div class="col-md-1 text-right">
+                    <br />
+                    <button class="btn btn_beta_icon" onclick="ConsultarSolicitudesTable();"><i class="fa fa-search"></i></button>
+                </div>
+            </div>
+            <hr />
+            <div>
+                <div id="div_solicitudes_admin" style="height:500px; min-height:500px; overflow:scroll;" class="table-responsive"></div>
+            </div>
+        </div>
+
+
+        @if (permisos.Contains(15))
+        {
+            <div id="generar_solicitud_tab" class="tab-pane fade">
+                <h3 class="text-center">Generar solicitud de mercancia</h3>
+                <div class="row">
+                    <div class="col-md-12" style="display:none">
+                        <label id="codigo_articulo"></label>
+                    </div>
+                    <div class="col-md-3">
+                        <strong>Centro:</strong>
+                        <br />
+                        <select class="form-control" id="select_centro"> @{ Html.RenderAction("ConsultarCentrosSelect", "CATALOGOS"); }</select>
+                    </div>
+                    <div class="col-md-3">
+                        <strong>Almacén:</strong>
+                        <br />
+                        <select class="form-control" id="select_almacen" onchange="ConsultarProductoresAlmacen();"> @{ Html.RenderAction("ConsultarAlmacenesUsuarioSelect", "CATALOGOS", new { id_usuario = (int)Session["LoggedId"] }); }</select>
+                    </div>
+                    <div class="col-md-3">
+                        <strong>Departamento:</strong>
+                        <br />
+                        <select class="form-control" id="select_departamento"> @{ Html.RenderAction("ConsultarDepartamentosSelect", "CATALOGOS"); }</select>
+                    </div>
+                    <div class="col-md-3">
+                        <strong>Solicitante:</strong>
+                        <br />
+                        <select class="form-control" id="select_solicitante">@{ Html.RenderAction("ConsultarEmpleadosSelect", "CATALOGOS", new { status = "A" });}</select>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-6">
+                        <strong>Concepto:</strong>
+                        <br />
+                        <input type="text" class="form-control valid_input" id="concepto" />
+                    </div>
+                    <div class="col-md-3">
+                        <strong>Equipo:</strong>
+                        <br />
+                        <select class="form-control" id="select_equipo"> @{ Html.RenderAction("ConsultarEquiposEstablosSelect", "CATALOGOS"); }</select>
+                    </div>
+                    <div class="col-md-3">
+                        <strong>Productor alimento:</strong>
+                        <select class="form-control" id="select_productor">
+                            <option value="0" selected>Ninguno</option>
+                        </select>
+                    </div>
+                </div>
+                <br />
+                <hr />
+
+                <div class="row">
+                    <div class="col-md-3">
+                        <strong>Cargo contable:</strong>
+                        <br />
+                        <select class="form-control" id="select_cargo" onchange="ConsultarCuentasContablesCargosSelect();"> @{ Html.RenderAction("CargosContablesSelect", "CATALOGOS"); }</select>
+                    </div>
+                    <div class="col-md-6">
+                        <strong>Cuenta:</strong>
+                        <br />
+                        <select class="form-control" id="select_cuenta" onchange="ConsultarCuentasContableSelect();"> </select>
+                    </div>
+                    <div class="col-md-3 text-center">
+                        <br />
+                        <strong>No. cuenta</strong>
+                        <br />
+                        <strong id="cuentas"></strong>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-1">
+                        <strong>Clave:</strong>
+                        <br />
+                        <input type="text" class="form-control input_detalle input_validos solo-letras-numeros" id="id_articulos" name="id_articulos" onclick="" oninput="this.value = this.value.toUpperCase()">
+
+                    </div>
+                    <div class="col-md-4">
+                        <strong>Artículo:</strong>
+                        <br />
+                        <input type="text" class="form-control input_detalle input_validos" id="id_articulo" placeholder="Ingresa un articulo" name="id_articulo" onclick="">
+                    </div>
+
+                    <div style="display: flex; justify-content: center; align-items: center;">
+                        <div style="padding-top: 16px;">
+                            <i class="fa fa-2x fa-search text_beta" onclick="LupaArticulo(2);"></i>
+                        </div>
+                    </div>
+
+
+                    <div class="col-md-2">
+                        <strong>Precio:</strong>
+                        <input class="form-control solo-numeros" type="text" id="precio_articulo" readonly onkeyup="CalcularImporteArticulo();" onchange="CalcularImporteArticulo();" />
+                    </div>
+
+
+                    <div class="col-md-2 text-center">
+                        <strong>Unidad de medida:</strong>
+                        <br />
+                        <strong id="unidad_medida"></strong>
+                        <input type="text" readonly id="id_unidad_medida" style="display:none;" />
+                    </div>
+
+                    <div class="col-md-2 text-center">
+                        <button class="btn btn_beta" onclick="AgregarArticuloSolicitud();">Agregar</button>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-6">
+                        <strong>Observaciones</strong>
+                        <textarea rows="1" class="form-control" id="observaciones_articulo"></textarea>
+                    </div>
+                    <div class="col-md-2">
+                        <strong>Cantidad:</strong>
+                        <input class="form-control solo-numeros valid_input" type="text" id="cantidad_articulo" onkeyup="CalcularImporteArticulo();" onchange="CalcularImporteArticulo();" value="1" />
+                    </div>
+                    <div class="col-md-2">
+                        <strong>Existencia:</strong>
+                        <input class="form-control" type="text" id="existencia_articulo" readonly />
+                    </div>
+                    <div class="col-md-2">
+                        <strong>Importe:</strong>
+                        <input class="form-control" type="text" id="importe_articulo" readonly />
+                    </div>
+                </div>
+                <br />
+                <hr />
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered text-center" id="articulos_table_solicitud">
+                        <thead>
+                            <tr class="text-center bg-beta">
+                                <th>Artículo</th>
+                                <th>Descripcion</th>
+                                <th>Unidad</th>
+
+                                <th style="display:none;">id_unidad</th>
+
+                                <th>Cantidad</th>
+                                <th>Precio Est</th>
+                                <th>Importe</th>
+                                <th>Cargo Contable</th>
+                                <th>Observaciones</th>
+
+                                <th style="display:none;">id_cuenta</th>
+                                <th style="display:none;">id_cargo</th>
+                                <th>Eliminar</th>
+
+                            </tr>
+                        </thead>
+                        <tbody id="tbody_solicitud_articulos">
+                        </tbody>
+                    </table>
+                </div>
+                <div class="row">
+                    <div class="col-md-10"></div>
+                    <div class="col-md-1">
+                        <br />
+                        <strong>TOTAL:</strong>
+                    </div>
+                    <div class="col-md-1">
+                        <input type="text" readonly id="total_importe" class="form-control solo-numeros" />
+                    </div>
+                </div>
+                <hr />
+                <button class="btn btn_beta" onclick="GenerarSolicitudMercancia();">Generar solicitud</button>
+            </div>
+        }
+
+
+    </div>
+</div>
+<!-- Modal ARTICULOS-->
+<!-- Modal DETALLE SOLICITUD -->
+<div class="modal fade" id="m_detalle_solicitud" tabindex="-1" role="dialog" aria-labelledby="m_detalle_solicitud" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document" style="min-width:90%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Detalle de la solicitud</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" style="overflow: scroll; min-height: 600px; height: 600px; overflow-x: hidden;">
+                <div id="div_detalle_solicitud"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn_beta_danger" data-dismiss="modal">Cerrar</button>
+                @*<button type="button" class="btn btn-primary"></button>*@
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal DETALLE SOLICITUD -->
+
+
+<div class="row">
+    <div class="col-md-1"></div>
+    <div class="col-md-10">
+        <div id="div_solicitud_mercancia_vale" style="display:none;"></div>
+    </div>
+    <div class="col-md-1"></div>
+</div>
+
+
+<!--Modal LUPA Articulos-->
+<div class="modal fade" id="m_lupa_articulos" tabindex="-1" role="dialog" aria-labelledby="m_lupa_articulos" aria-hidden="true">
+    <div class="modal-dialog" role="document" style="min-width:50%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="m_lupa_articulos_lbl">Lista de articulos</h2>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="col-md-4">
+                    <strong>Clasificación</strong>
+                    <select class="form-control " id="id_clasificaciones_art" onchange="LupaArticuloParametro(2);">
+                        <option value="-1">NINGUNA</option>
+                        <option value="0">TODAS</option>
+                        @{ Html.RenderAction("ConsultarClasificacionSelect", "ARTICULOS"); };
+                    </select>
+                </div>
+                <div id="div_lupa_articulos"></div>
+            </div>
+
+            <div class="col-md-12">
+                <label id="mensaje_prueba"></label>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn_beta_danger" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@Scripts.Render("~/bundles_Articulos/js")
+@Scripts.Render("~/bundles_SolicitudesMercancia/js")
+@Scripts.Render("~/bundles_Propiedades/js")
+
+
+<script type="text/javascript">
+    var count_articulos_detalle = 0;
+
+    $(window).on("load", function () {
+        CaracteresControl();
+        ConsultarSolicitudesTable();
+        ConsultarCuentasContablesCargosSelect();
+        ConsultarProductoresAlmacen();
+
+        $("#id_articulo").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    type: "POST",
+                    async: false,
+                    url: "../ARTICULOS/ConsultarArticulosArray",
+                    data: {
+                        search: $("#id_articulo").val(),
+                        id_tipo: 1,
+                        almacenable: 0
+                    },
+                    success: function (data) {
+                        var data2 = $.parseJSON(data);
+                        response($.map(data2, function (item) {
+                            return { label: item.nombre_articulo, value: item.nombre_articulo };
+                        }))
+                    },
+                    error: function (xhr, status, error) {
+                        alert(error);
+                    }
+                });
+            }
+        });
+        $('#id_articulo').on('keydown', function (event) {
+            if (event.keyCode === 13 || event.keyCode === 9) {
+                ConsultarInformacionArticuloNomb();
+                BuscarPrecioArticulo();
+                CalcularImporteArticulo();
+                ConsultarExistenciaArticuloAlmacen();
+            }
+            if ($('#id_articulo').lenght > 5) {
+
+            }
+            if ($('#id_articulo').val() == '') {
+                $("#unidad_medida").text('');
+                $("#id_unidad_medida").val('');
+                $("#id_articulos").val('');
+                $("#precio_articulo").val('0.00');
+                $("#existencia_articulo").val('0');
+                $("#importe_articulo").val('0.00');
+            }
+        });
+        $('#id_articulos').on('keydown', function (event) {
+            if ($("#id_articulos").val() != '') {
+                var articulo_id = parseFloat($("#id_articulos").val());
+                if (event.keyCode === 13 || event.keyCode === 9) {
+                    ConsultarInformacionArticuloID();
+                    BuscarPrecioArticulo();
+                    CalcularImporteArticulo();
+                    ConsultarExistenciaArticuloAlmacen();
+                }
+            }
+            else {
+                $("#id_articulos").css("border-color", "red");
+            }
+            if ($('#id_articulos').val() == '') {
+                $("#unidad_medida").text('');
+                $("#id_unidad_medida").val('');
+                $("#id_articulo").val('');
+                $("#precio_articulo").val('0.00');
+                $("#codigo_articulo").text('');
+            }
+        });
+
+        $("#ui-id-1").on('click', function (event) {
+            ConsultarDtosArticulo();
+            BuscarPrecioArticulo();
+            CalcularImporteArticulo();
+            ConsultarExistenciaArticuloAlmacen();
+
+        });
+
+
+
+
+
+    });
+
+    $('#folio_admin').keyup(function (event) {
+        if (event.keyCode === 13) {
+            ConsultarSolicitudesTable();
+        }
+    });
+
+    function ConsultarProductoresAlmacen() {
+        var id_almacen_g = $("#select_almacen").val();
+        $.ajax({
+            type: "POST",
+            async: true,
+            url: "../CATALOGOS/ConsultarProductoresAlmacen",
+            data: {
+                id_almacen_g: id_almacen_g
+            },
+            success: function (response) {
+                $("#select_productor").html(response);
+                var ninguno = '<option value="0" selected>Ninguno</option>';
+                $("#select_productor").prepend(ninguno);
+            },
+            error: function (xhr, status, error) {
+                console.error(error);
+                jsRemoveWindowLoad();
+            }
+        });
+    }
+
+
+    try {
+        $("#select_solicitante").select2({
+            placeholder: 'Selecciona un solicitante'
+        });
+        $("#select_equipo").select2({
+            placeholder: 'Selecciona un equipo'
+        });
+        $("#select_articulo").select2({
+            placeholder: 'Selecciona un articulo'
+        });
+    }
+    catch (ex) { }
+
+
+    function AgregarArticuloSolicitud() {
+        $(".valid_input").css("border-color", "#ced4da");
+
+        var tabla = $("#tbody_solicitud_articulos");
+
+        //var id_articulo = $("#id_articulos").val();
+        var id_articulo = parseInt($("#codigo_articulo").text());
+        var clave = $("#id_articulos").val();
+
+        var articulo = $("#id_articulo").val();
+        var unidad_medida = $("#unidad_medida").text();
+
+        var precio_articulo = $("#precio_articulo").val();
+        var importe_articulo = $("#importe_articulo").val();
+        var cantidad = parseFloat($("#cantidad_articulo").val());
+        var cargo_contable = $("#select_cuenta option:selected").text() + ". " + $("#select_cargo option:selected").text();
+        var obs = $("#observaciones_articulo").val();
+        var id_cuenta = $("#select_cuenta").val();
+        var id_cargo = $("#select_cargo").val();
+        var existencia = $("#existencia_articulo").val();
+        var ValidArticuloUnico = false;
+        //VALIDO ARTICULO UNICO
+        var id_unidad_medidas = $("#id_unidad_medida").val();
+        var datos = id_unidad_medidas.split('|');
+        var acepta_decimal = datos[1];
+        var id_unidad_medida = datos[0];
+        $(".id_articulos").each(function () {
+            var valor = $(this).text();
+            if (id_articulo == valor) {
+                ValidArticuloUnico = true;
+            }
+        });
+
+        if (precio_articulo <= 0 || precio_articulo == "") {
+            //precio_articulo = 0;
+            iziToast.error({
+                title: 'Asegurese de que el articulo tenga un precio',
+                message: 'Contacte a compras para asignarle uno en el tabulador',
+            });
+        }
+
+        else if (id_articulo == undefined || id_articulo == "") {
+            iziToast.error({
+                title: 'Ingrese un articulo',
+                message: '',
+            });
+            $("#id_articulo").css("border-color", "red");
+        }
+        else if (cantidad <= 0 || cantidad == "") {
+            iziToast.error({
+                title: 'Ingrese una cantidad valida',
+                message: '',
+            });
+            $("#cantidad_articulo").css("border-color", "red");
+        }
+        else if (ValidArticuloUnico == true) {
+            iziToast.error({
+                title: 'Asegurate de solicitar solo 1 vez el articulo o modifica su cantidad',
+                message: '',
+            });
+            $(".valid_input").css("border-color", "#ced4da");
+        }
+        else {
+            //DECIMAL SI
+            if (acepta_decimal == 1) {
+                if (!isNaN(cantidad) && cantidad > 0) {
+                    $.ajax({
+                        type: "POST",
+                        async: false,
+                        url: "../ALMACEN/AgregarArticuloSolicitud",
+                        data: {
+                            count_articulos_detalle: count_articulos_detalle,
+                            id_articulo: id_articulo,
+                            articulo: articulo,
+                            unidad_medida: unidad_medida,
+                            id_unidad_medida: id_unidad_medida,
+                            precio_articulo: precio_articulo,
+                            importe_articulo: importe_articulo,
+                            cantidad: cantidad,
+                            cargo_contable: cargo_contable,
+                            obs: obs,
+                            id_cuenta: id_cuenta,
+                            id_cargo: id_cargo,
+                            clave: clave
+                        },
+                        success: function (response) {
+                            count_articulos_detalle++;
+                            $(".valid_input").css("border-color", "#ced4da");
+                            $("#id_articulo").val('');
+                            $("#observaciones_articulo").val('');
+                            $("#cantidad_articulo").val('1');
+                            tabla.append(response);
+                            CalcularTotalImportes();
+                            $("#id_articulo").focus();
+
+                            $("#id_articulos").val('');
+                            $("#precio_articulo").val('0.00');
+                            $("#cantidad_articulo").val('1');
+                            $("#importe_articulo").val('0.00');
+                        },
+                        error: function (xhr, status, error) {
+                            console.error(error);
+                        }
+                    });
+                }
+                else {
+                    iziToast.warning({
+                        title: '¡Aviso!',
+                        message: 'Ingresa un valor mayor a 0',
+                    });
+                    $(".input_valid").each(function () {
+                        if ($(this).val() == "") { $(this).css("border-color", "red"); }
+                        else { $(this).css("border", ""); }
+                    });
+                    $("#cantidad_articulo").css("border-color", "red");
+                }
+            }
+            //DECIMAL NO
+            else {
+                if (!isNaN(cantidad) && cantidad > 0 && Number.isInteger(cantidad)) {
+                    $.ajax({
+                        type: "POST",
+                        async: false,
+                        url: "../ALMACEN/AgregarArticuloSolicitud",
+                        data: {
+                            count_articulos_detalle: count_articulos_detalle,
+                            id_articulo: id_articulo,
+                            articulo: articulo,
+                            unidad_medida: unidad_medida,
+                            id_unidad_medida: id_unidad_medida,
+                            precio_articulo: precio_articulo,
+                            importe_articulo: importe_articulo,
+                            cantidad: cantidad,
+                            cargo_contable: cargo_contable,
+                            obs: obs,
+                            id_cuenta: id_cuenta,
+                            id_cargo: id_cargo,
+                            clave: clave
+                        },
+                        success: function (response) {
+                            count_articulos_detalle++;
+                            $(".valid_input").css("border-color", "#ced4da");
+                            $("#id_articulo").val('');
+                            $("#observaciones_articulo").val('');
+                            $("#cantidad_articulo").val('1');
+                            tabla.append(response);
+                            CalcularTotalImportes();
+                            $("#id_articulo").focus();
+
+                            $("#id_articulos").val('');
+                            $("#precio_articulo").val('0.00');
+                            $("#cantidad_articulo").val('1');
+                            $("#importe_articulo").val('0.00');
+                        },
+                        error: function (xhr, status, error) {
+                            console.error(error);
+                        }
+                    });
+                }
+                else {
+                    iziToast.warning({
+                        title: '¡Aviso!',
+                        message: 'Ingresa un valor entero y mayor a 0',
+                    });
+                    $(".input_valid").each(function () {
+                        if ($(this).val() == "") { $(this).css("border-color", "red"); }
+                        else { $(this).css("border", ""); }
+                    });
+                    $("#cantidad_articulo").css("border-color", "red");
+                }
+            }
+        }
+    }
+
+    function CancelarVale(id_solicitud_g, modo) {
+        if (modo == 1) {
+            iziToast.question({
+                timeout: 20000,
+                close: false,
+                overlay: true,
+                displayMode: 'once',
+                id: 'question',
+                zindex: 1999,
+                title: 'ATENCION',
+                message: '¿Está seguro de cancelar el vale?',
+                position: 'center',
+                buttons: [
+                    ['<button><b>Si, confirmar</b></button>', function (instance, toast) {
+                        instance.hide({ transitionOut: 'fadeOut' }, toast, 'button');
+                        jsShowWindowLoad();
+                        $.ajax({
+                            type: "POST",
+                            async: true,
+                            url: "../ALMACEN/CancelarVale",
+                            data: {
+                                id_solicitud_g: id_solicitud_g
+                            },
+                            success: function (response) {
+                                jsRemoveWindowLoad();
+                                if (response == "0") {
+                                    $("#m_detalle_solicitud").modal("hide");
+                                    iziToast.success({
+                                        title: 'Exito',
+                                        message: 'Se ha cancelado correctamente el vale',
+                                    });
+                                    ConsultarSolicitudesTable();
+                                }
+                                else {
+                                    $("#m_detalle_solicitud").modal("hide");
+                                    iziToast.warning({
+                                        title: 'Aviso',
+                                        message: 'No se ha cancelado el vale, ya se entrego un articulo',
+                                    });
+                                }
+                            },
+                            error: function (xhr, status, error) {
+                                console.error(error);
+                                jsRemoveWindowLoad();
+                            }
+                        });
+                    }, true],
+                    ['<button>No, cancelar operacion</button>', function (instance, toast) {
+                        instance.hide({ transitionOut: 'fadeOut' }, toast, 'button');
+                    }],
+                ]
+            });
+        }
+        else {
+            jsRemoveWindowLoad();
+            iziToast.warning({
+                title: 'Aviso',
+                message: 'No se puede cancelar el vale, ya se realizarón entregas',
+            });
+        }
+    }
+
+    function ConsultarDtosArticulo() {
+        var nombre_articulo = $("#id_articulo").val();
+        $.ajax({
+            type: "POST",
+            async: false,
+            url: "../ARTICULOS/ConsultarDtosArticulo",
+            data: {
+                nombre_articulo: nombre_articulo
+            },
+            success: function (response) {
+                $("#id_articulos").css("border-color", "");
+                $("#id_articulos_serv").css("border-color", "");
+                if (response.length > 3) {
+                    var data = $.parseJSON(response);
+                    $("#unidad_medida").text(data[0].unidad_medida);
+                    ConsultarDecimalArticulo(data[0].id_unidad_medida);
+                    $("#id_articulo").val(data[0].nombre_articulo);
+                    $("#id_articulos").val(data[0].clave);
+                    $("#codigo_articulo").text(data[0].id_articulo);
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error(error);
+            }
+        });
+    }
+
+</script>

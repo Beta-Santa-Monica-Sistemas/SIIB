@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="dcb2073968844a4d8781a711a7983b6f" Name="Diagram1">
+        <EntityTypeShape EntityType="base_forrajesModel.Proveedo_B" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="base_forrajesModel.fichas_si" Width="1.5" PointX="5.75" PointY="0.75" />
+        <EntityTypeShape EntityType="base_forrajesModel.fichas_sm" Width="1.5" PointX="0.75" PointY="5.75" />
+        <EntityTypeShape EntityType="base_forrajesModel.fichas_sg" Width="1.5" PointX="8.375" PointY="0.75" />
+        <EntityTypeShape EntityType="base_forrajesModel.usuarios" Width="1.5" PointX="10.375" PointY="0.75" />
+        <EntityTypeShape EntityType="base_forrajesModel.areas" Width="1.5" PointX="10.375" PointY="4.75" />
+        <EntityTypeShape EntityType="base_forrajesModel.articulo" Width="1.5" PointX="10.375" PointY="7.75" />
+        <EntityTypeShape EntityType="base_forrajesModel.camiones" Width="1.5" PointX="10.375" PointY="11.75" />
+        <EntityTypeShape EntityType="base_forrajesModel.no_pozos" Width="1.5" PointX="12.375" PointY="0.75" />
+        <EntityTypeShape EntityType="base_forrajesModel.Producto_B" Width="1.5" PointX="12.375" PointY="3.75" />
+        <EntityTypeShape EntityType="base_forrajesModel.proveedo" Width="1.5" PointX="12.375" PointY="7.75" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

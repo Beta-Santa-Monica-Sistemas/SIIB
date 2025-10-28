@@ -1,0 +1,241 @@
+﻿@model IEnumerable<Beta_System.Models.C_nomina_beta_d_areas>
+
+
+@if (Model.Count() > 0)
+{
+    decimal importe_final_nomina = 0;
+    var nomina_g = Model.FirstOrDefault().C_nomina_beta_g;
+    int modo = ViewBag.modo;
+    foreach (var area in Model)
+    {
+        decimal importe_area = (decimal)area.C_nomina_beta_d_areas_empleados.Sum(x => x.importe_final);
+        importe_final_nomina += importe_area;
+    }
+    <div class="row">
+        <div class="col-md-3 text-left">
+            <strong style="margin:5px; font-size: 22px;">Establo: <label class="text_beta">@nomina_g.C_establos.nombre_establo</label></strong>
+            <strong style="margin:5px; font-size: 22px;">@nomina_g.nombre_nomina</strong>
+            <button class="text-white btn btn-sm" style="background-color:@nomina_g.C_nomina_status.color; cursor:pointer;">@nomina_g.C_nomina_status.nombre_nomina</button>
+        </div>
+        <div class="col-md-3 text-left">
+            <h3 style="margin:5px;"><strong>Semana: @nomina_g.no_semana</strong></h3>
+            <strong style="margin:5px;">Fecha registro: <label class="text_beta">@string.Format(nomina_g.fecha_registro.Value.ToShortDateString(), "dd/mm/yyyy")</label></strong>
+            <h3 style="margin:5px;">Total de empleados: <label class="text_beta">#@Model.Sum(x => x.no_empleados)</label></h3>
+        </div>
+        <div class="col-md-3 text-left">
+            <h3 style="margin:5px;"><strong>Del <strong class="text_beta">@string.Format(nomina_g.fecha_inicio.Value.ToShortDateString(), "dd/mm/yyyy")</strong> al <strong class="text_beta">@string.Format(nomina_g.fecha_fin.Value.ToShortDateString(), "dd/mm/yyyy")</strong></strong></h3>
+            <strong style="margin:5px;">Generada por: <label class="text_beta">@nomina_g.C_usuarios_corporativo.C_empleados.nombres @nomina_g.C_usuarios_corporativo.C_empleados.apellido_paterno</label></strong>
+            <h3 style="margin:5px;">Importe total de la prenómina: <label class="text_beta importe_total_prenomina">$@importe_final_nomina.ToString("#,##0.00")</label></h3>
+            <button class="btn btn_beta_icon" style="display:none;" id="btn_refresh_importe" onclick="ConsultarImporteTotalPrenomina(@nomina_g.id_nomina_g);"><i class="fa fa-refresh"></i></button>
+        </div>
+        @if (nomina_g.id_nomina_status == 1 || nomina_g.id_nomina_status == 3)
+        {
+            
+            <div class="col-md-3 text-center">
+                @if (modo == 2 && nomina_g.id_nomina_status == 3)
+                {
+                    <button class="btn btn_beta btn-block text-center" onclick="GenerarTXTExcepciones(@nomina_g.id_nomina_g);"><i class="fa fa-download"></i> Generar TXT exepciones</button>
+                }
+
+                <button class="btn btn_beta btn-block text-center" onclick="DescargarFormatoNominaConceptosPDF(@nomina_g.id_nomina_g, 0, 1);"><i class="fa fa-download"></i> Descargar prenómina general PDF</button>
+                @*<a target="_blank" href="https://localhost:44371//NOMINA/DescargarExcelFormatoNominaConceptos?id_nomina_g=@nomina_g.id_nomina_g&id_departamento=0&modo=2&formato=2&tamano=19"><button class="btn btn_beta btn-block text-center"><i class="fa fa-download"></i> Descargar prenomina general EXCEL</button></a>*@
+                <a target="_blank" href="https://siib.beta.com.mx/NOMINA/DescargarExcelFormatoNominaConceptos?id_nomina_g=@nomina_g.id_nomina_g&id_departamento=0&modo=2&formato=2&tamano=19"><button class="btn btn_beta btn-block text-center"><i class="fa fa-download"></i> Descargar prenómina general EXCEL</button></a>
+
+                @if (modo == 1 && nomina_g.id_nomina_status == 1)
+                {
+                    <button class="btn btn_beta btn-block text-center" onclick="AsignarConceptoMasivoPrenomina(@nomina_g.id_nomina_g);"><i class="fa fa-plus"></i> Agregar concepto masivo</button>
+                }
+            </div>
+        }
+
+
+    </div>
+    <hr />
+
+    <div class="" id="heading_header">
+        <div class="w-100 collapsed p-2" style="border: 1px solid black; background-color: black;">
+            <div class="row">
+                <div class="col-md-3 text-center">
+                    <h3 style="color: white;"><strong>DEPARTAMENTO</strong></h3>
+                </div>
+                <div class="col-md-3 text-center">
+                    <h3 style="color: white;"><strong>No. de empleados</strong></h3>
+                </div>
+                <div class="col-md-2 text-center">
+                    <h3 style="color: white;"><strong>Importe</strong></h3>
+                </div>
+                <div class="col-md-3 text-center">
+                    @if (nomina_g.id_nomina_status == 3 || nomina_g.id_nomina_status == 1)
+                    {
+                        <h3 style="color: white;"><strong>Resumen por área</strong></h3>
+                    }
+                </div>
+                <div class="col-md-1">
+                    <h3 style="color: white;">Ver</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    foreach (var area in Model)
+    {
+        decimal importe_area = (decimal)area.C_nomina_beta_d_areas_empleados.Sum(x => x.importe_final);
+        string id_acordeon = "acordeon_" + modo.ToString() + "_" + area.id_nomina_d_area;
+        <div class="">
+            <div class="" id="heading_@id_acordeon">
+                <div class="w-100 collapsed" style="border: 1px solid black; background-color: rgb(236, 244, 251);">
+                    <div class="row">
+                        <div class="col-md-3 text-center">
+                            <br />
+                            <strong>@area.C_nomina_departamentos.nombre_departamento</strong>
+                        </div>
+                        <div class="col-md-3 text-center">
+                            <br />
+                            <strong>Empleados calculados: @area.no_empleados</strong>
+                        </div>
+                        <div class="col-md-2 text-center">
+                            <br />
+                            <strong>$@importe_area.ToString("#,##0.00")</strong>
+                        </div>
+                        <div class="col-md-3 text-center">
+                            @if (nomina_g.id_nomina_status == 3 || nomina_g.id_nomina_status == 1)
+                            {
+                                <div class="col-md-12 text-center">
+                                    <button class="btn btn_beta" onclick="DescargarFormatoNominaConceptosPDF(@nomina_g.id_nomina_g, @area.id_departamento, 2);"><i class="fa fa-download"></i>PDF</button>
+                                    @*<a target="_blank" href="https://localhost:44371/NOMINA/DescargarExcelFormatoNominaConceptos?id_nomina_g=@nomina_g.id_nomina_g&id_departamento=@area.id_departamento&modo=2&formato=1&tamano=19"><button class="btn btn_beta text-center"><i class="fa fa-download"></i>EXCEL</button></a>*@
+                                    <a target="_blank" href="https://siib.beta.com.mx/NOMINA/DescargarExcelFormatoNominaConceptos?id_nomina_g=@nomina_g.id_nomina_g&id_departamento=@area.id_departamento&modo=2&formato=1&tamano=19"><button class="btn btn_beta text-center"><i class="fa fa-download"></i>EXCEL</button></a>
+                                </div>
+                            }
+                        </div>
+                        <div class="col-md-1">
+                            <button class="btn btn_beta_icon" data-toggle="collapse" data-target="#collapse_@id_acordeon" aria-expanded="false" aria-controls="collapse_@id_acordeon">
+                                <i class="fa fa-bars"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <script>
+            try {
+                $("#datatable_@id_acordeon").dataTable().fnDestroy();
+            } catch (e) { }
+            </script>
+
+            <div id="collapse_@id_acordeon" class="collapse" aria-labelledby="heading_@id_acordeon" data-parent="#accordionSolicitudes">
+                <div class="" style="border: 1px solid black; background-color: rgb(236, 244, 251);">
+                    <div class="" style="border: 1px solid black; background-color: rgb(236, 244, 251);">
+                        <br />
+                        <div class="table-responsive" id="div_nomina_area_@area.id_nomina_d_area">
+                            <table class="table table-bordered table-striped" id="datatable_@id_acordeon">
+                                <thead>
+                                    <tr class="bg-beta text-center">
+                                        <th>Clave</th>
+                                        <th>Empleado</th>
+                                        <th>Puesto</th>
+                                        <th>Salario diario</th>
+                                        <th>Cuenta bancaria</th>
+                                        <th>Dias laborados</th>
+                                        <th>NSS</th>
+                                        <th>Importe</th>
+                                        @if (modo == 1)
+                                        {
+                                            <th>Revisar</th>
+                                        }
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var detalle in area.C_nomina_beta_d_areas_empleados.OrderBy(x => x.C_nomina_empleados.Nombres))
+                                    {
+                                        <tr class="text-center">
+                                            <td>@detalle.C_nomina_empleados.Numero</td>
+                                            <td  class="text-left">@detalle.C_nomina_empleados.Nombres @detalle.C_nomina_empleados.Apellido_paterno @detalle.C_nomina_empleados.Apellido_materno</td>
+                                            <td>@detalle.C_nomina_puestos.nombre_puesto</td>
+                                            <td><strong>$@detalle.salario_diario.Value.ToString("#,##0.00")</strong></td>
+                                            <td>@detalle.cuenta_bancaria</td>
+                                            <td>@detalle.dias_laborados</td>
+                                            <td>@detalle.nss</td>
+                                            <td><strong>$@detalle.importe_final.Value.ToString("#,##0.00")</strong></td>
+                                            @if (modo == 1)
+                                            {
+                                                <td>
+                                                    <button class="btn btn_beta_icon" onclick="ConsultarConceptosEmpleadoNomina(@detalle.id_nomina_d_area_empleado, @nomina_g.id_nomina_g, @detalle.id_nomina_d_area, @detalle.id_empleado, @nomina_g.id_nomina_status);"><i class="fa fa-bars"></i></button>
+                                                </td>
+                                            }
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <script>
+            $('#datatable_@id_acordeon').DataTable({
+                keys: false,
+                ordering: false,
+                paging: true,
+                selecT: true,
+                dom: "Bfrtip",
+                scrollCollapse: false,
+                buttons: [{}],
+                responsive: !0,
+                pagingType: 'simple_numbers'
+            });
+            </script>
+
+
+        </div>
+
+    }
+    <br />
+    <div class="row">
+        <div class="col-md-9">
+
+        </div>
+        <div class="col-md-3 text-center">
+
+        </div>
+    </div>
+    <hr />
+
+
+    if (nomina_g.id_nomina_status == 1)
+    {
+        <div class="row">
+            <div class="col-md-2">
+                <button class="btn btn_beta_danger" onclick="EliminarPrenominaBeta(@nomina_g.id_nomina_g);">Eliminar prenómina <i class="fa fa-trash"></i></button>
+            </div>
+            <div class="col-md-8"></div>
+            <div class="col-md-2 text-right">
+                <button class="btn btn_beta_warning" onclick="FinalizarNóminaBeta(@nomina_g.id_nomina_g);"> Finalizar prenómina <i class="fa fa-warning text-dark"></i></button>
+            </div>
+        </div>
+    }
+
+
+    if (modo == 1 && nomina_g.id_nomina_status == 1)
+    {
+        <script>
+            $("#btn_agregar_concepto").css("display", "block");
+            $(".input_hide").removeAttr("disabled");
+
+        </script>
+    }
+    else
+    {
+
+        <script>
+            $("#btn_agregar_concepto").css("display", "none");
+            $(".input_hide").removeAttr("disabled", "true");
+    </script>
+    }
+
+
+
+
+}
+else
+{
+    <h1 class="text-danger text-center">NO SE ENCONTRARON REGISTROS EN ESTA AREA</h1>
+}

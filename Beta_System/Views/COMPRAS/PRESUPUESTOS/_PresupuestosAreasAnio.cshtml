@@ -1,0 +1,109 @@
+﻿@model IEnumerable<Beta_System.Models.PresupuestosCuentas>
+
+@{
+    List<Beta_System.Models.C_presupuestos_meses> meses_presupuesto = Session["MesesPresupuesto"] as List<Beta_System.Models.C_presupuestos_meses>;
+    var id_anio = ViewBag.id_anio;
+    List<int> permisos = Session["PermisosModulo"] as List<int>;
+    int tipo_vista = Convert.ToInt32(ViewBag.tipo_vista);
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <table class="table table-striped table-bordered" id="datatable_presupuestos" style="width:100%;">
+            <thead>
+                <tr class="bg-beta">
+                    <th>Cargo</th>
+                    <th>Cuenta</th>
+                    <th>Descripción</th>
+                    @foreach (var mes in meses_presupuesto)
+                    {
+                        <th>@mes.mes</th>
+                    }
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Select(x => x.c_cuentas).Distinct().OrderBy(x => x.nombre_cuenta))
+                {
+                    <tr>
+                        <td>@item.C_cargos_contables_g.nombre_cargo</td>
+                        <td>@item.cuenta</td>
+                        <td>@item.nombre_cuenta</td>
+                        @foreach (var mes in meses_presupuesto)
+                        {
+                            var valor = item.C_presupuestos_cuentas_meses_anios;
+                            if (valor != null)
+                            {
+                                var valid = valor.Where(x => x.id_anio == id_anio && x.id_mes == mes.id_mes_presupuesto).FirstOrDefault();
+                                if (valid != null)
+                                {
+                                    if (permisos.Contains(2014) && tipo_vista == 1)
+                                    {
+                                        <td>
+                                            <div onkeyup="CalcularTotalPresupuestoCuenta(@item.id_cuenta_contable);" contenteditable="true" class="divEditable valor_cuenta_@item.id_cuenta_contable mes_@mes.id_mes_presupuesto" name="@id_anio" id="mes_@mes.id_mes_presupuesto">@valid.valor_presupuesto</div>
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td>
+                                            <strong class="valor_cuenta_@item.id_cuenta_contable mes_@mes.id_mes_presupuesto">@valid.valor_presupuesto.Value.ToString("N2")</strong>
+                                        </td>
+                                    }
+                                }
+                                else
+                                {
+                                    if (permisos.Contains(2014) && tipo_vista == 1)
+                                    {
+                                        <td>
+                                            <div onkeyup="CalcularTotalPresupuestoCuenta(@item.id_cuenta_contable);" contenteditable="true" class="divEditable valor_cuenta_@item.id_cuenta_contable mes_@mes.id_mes_presupuesto" name="@id_anio" id="mes_@mes.id_mes_presupuesto">0</div>
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td>
+                                            <strong>0</strong>
+                                        </td>
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                if (permisos.Contains(2014) && tipo_vista == 1)
+                                {
+                                    <td>
+                                        <div onkeyup="CalcularTotalPresupuestoCuenta(@item.id_cuenta_contable);" contenteditable="true" class="divEditable valor_cuenta_@item.id_cuenta_contable mes_@mes.id_mes_presupuesto" name="@id_anio" id="mes_@mes.id_mes_presupuesto">0</div>
+                                    </td>
+                                }
+                                else
+                                {
+                                    <td>
+                                        <strong>0</strong>
+                                    </td>
+                                }
+                            }
+                        }
+                        <td><strong id="lbl_total_@item.id_cuenta_contable"></strong></td>
+
+
+                        <script>CalcularTotalPresupuestoCuenta(@item.id_cuenta_contable);</script>
+                    </tr>
+
+                }
+            </tbody>
+            <tfoot>
+                <tr class="bg-beta text-center">
+                    <td></td>
+                    <td></td>
+                    <td><strong>TOTAL</strong></td>
+                    @foreach (var mes in meses_presupuesto)
+                    {
+                        <td><strong id="m_@mes.id_mes_presupuesto"></strong></td>
+                    }
+                    <td><strong id="mtotal_ptto"></strong></td>
+                </tr>
+            </tfoot>
+        </table>
+
+    </div>
+</div>
+

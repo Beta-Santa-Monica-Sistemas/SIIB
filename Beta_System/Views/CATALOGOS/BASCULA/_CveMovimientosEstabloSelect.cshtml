@@ -1,0 +1,6 @@
+﻿@model IEnumerable<Beta_System.Models.C_bascula_establos_codigos_movimientos>
+
+@foreach (var item in Model)
+{
+    <option value="@item.id_bascula_codigo_movimiento">@item.C_bascula_codigos_movimientos.codigo_mov - @item.C_bascula_codigos_movimientos.descripcion</option>
+}

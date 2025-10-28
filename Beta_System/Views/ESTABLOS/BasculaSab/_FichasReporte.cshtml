@@ -1,0 +1,94 @@
+﻿@model IEnumerable<Beta_System.Models.ReporteFichasBascula>
+
+<table class="table table-bordered table-striped" id="table_fichas_reporte">
+    <thead>
+        <tr class="bg-beta text-center">
+            <th>Establo</th>
+            <th>Ficha</th>
+            <th>Folio</th>
+            <th>Articulo</th>
+            <th>Cliente</th>
+            <th>Fecha pesada 1</th>
+            <th>Fecha pesada 2</th>
+            <th>Linea Transportista</th>
+            <th>Chofer</th>
+            <th>Placas</th>
+            <th>Peso1</th>
+            <th>Peso2</th>
+            <th>PesoT</th>
+            <th>Mat. Seca</th>
+            <th>Maquilador</th>
+            <th>Observacion</th>
+            <th>Movimiento</th>
+            <th>Tipo Movimiento</th>
+            <th>Peso Origen</th>
+            <th>Tabla</th>
+            <th>Variedad</th>
+            <th>Corte</th>
+            <th>Pacas</th>
+            <th>Ensilador</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr class="text-center">
+                <td>@item.Establo</td>
+                <td>@item.Ficha</td>
+                <td>@item.Folio</td>
+                <td>@item.Articulo</td>
+                <td>@item.Cliente</td>
+                <td>@item.Fecha1</td>
+                @if (item.Fecha2 == DateTime.MinValue)
+                {
+                    <td></td>
+                }
+                else
+                {
+                    <td>@item.Fecha2</td>
+                }
+                <td>@item.Linea</td>
+                <td>@item.Chofer</td>
+                <td>@item.Placas</td>
+                <td>@item.P1</td>
+                <td>@item.P2</td>
+                <td>@item.PT</td>
+                <td>@item.Materia</td>
+                <td>@item.Maquilador</td>
+                <td>@item.Observacion</td>
+                <td>@(item.Movimiento == "E" ? "Entrada" : "Salida")</td>
+
+                @switch (item.TMovimiento)
+                {
+                    case "001":
+                        <td>Compra</td>
+                        break;
+                    case "002":
+                        <td>Transf. entre establos</td>
+                        break;
+                    case "003":
+                        <td>Transf. forraje/agricola</td>
+                        break;
+                    case "004":
+                        <td>Venta (salida de leche)</td>
+                        break;
+                    case "005":
+                        <td>Venta (salida de ganado)</td>
+                        break;
+                    case "006":
+                        <td>Inventario</td>
+                        break;
+                    default:
+                        <td>NA</td>
+                        break;
+                }
+                <td>@item.Origen</td>
+                <td>@item.Tabla.ToString().Replace(" ","")</td>
+                <td>@item.Variedad</td>
+                <td>@item.Corte</td>
+                <td>@item.Pacas</td>
+                <td>@item.Ensilador</td>
+            </tr>
+        }
+    </tbody>
+</table>

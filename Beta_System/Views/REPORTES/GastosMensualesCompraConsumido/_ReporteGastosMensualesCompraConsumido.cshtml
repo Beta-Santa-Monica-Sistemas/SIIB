@@ -1,0 +1,71 @@
+﻿@model List<Beta_System.Models.ReportePolizasAlmacenCuentasContables>
+
+@*table-sm table-condensed small*@
+@{
+    string fecha_inicio = string.Format(ViewBag.fecha_inicio, "dd/mm/yyyy");
+    string fecha_fin = string.Format(ViewBag.fecha_fin, "dd/mm/yyyy");
+    string fecha_ultimo_registro = string.Format(ViewBag.fecha_ultimo_registro, "dd/mm/yyyy");
+}
+
+@if (Model != null)
+{
+    <div class="row">
+        <div class="col-md-3">
+            <h3 class="text-left text_beta">Fecha inicio: @fecha_inicio</h3>
+        </div>
+        <div class="col-md-3">
+            <h3 class="text-left text_beta">Fecha fin: @fecha_ultimo_registro</h3>
+        </div>
+    </div>
+
+    <table class="table  table-bordered table-striped" id="datable_gastos_mensuales_compra_consumo">
+        <thead>
+            <tr class="bg-beta">
+                <th>Cuenta</th>
+                <th>Descripción</th>
+                <th>Consumo almacén</th>
+                <th>Gastos</th>
+                <th>Total</th>
+                @*<th>Presupuesto</th>
+                <th>Disponible</th>*@
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.OrderBy(x => x.Cuenta))
+            {
+                string classe_color = "";
+                if (item.Disponible <= 0) { classe_color = "text-danger"; }
+
+                if (item.Id_cargo_contable > 0)
+                {
+                    <tr>
+                        <th>@item.Cuenta</th>
+                        <td>@item.CuentaContable</td>
+                        <td style="cursor:pointer;" onclick="ConsultarDetalleConsumoAlmacenCuentaContable('@fecha_inicio', '@fecha_fin', @item.Id_cuenta_contable,  @item.Id_cargo_contable);">@item.Importe_salida.ToString("N2") <i class="fa fa-search ml-3"></i></td>
+                        <td style="cursor:pointer;" onclick="ConsultarDetalleComprasDirectasCuentaContable('@fecha_inicio', '@fecha_fin', @item.Id_cuenta_contable);">@item.Importe_entrada.ToString("N2") <i class="fa fa-search ml-3"></i></td>
+                        <td style="cursor:pointer;" onclick="ConsultarDetalleConsolidadoCuentaContable('@fecha_inicio', '@fecha_fin', @item.Id_cuenta_contable, @item.Id_cargo_contable);">@item.Importe_total.ToString("N2") <i class="fa fa-search ml-3"></i></td>
+                        @*<td>@item.Presupuesto.ToString("N2")</td>
+                        <td><strong class="@classe_color">@item.Disponible.ToString("N2")</strong></td>*@
+                    </tr>
+                }
+                else
+                {
+                    <tr>
+                        <th>@item.Cuenta</th>
+                        <td>@item.CuentaContable</td>
+                        <td style="cursor:pointer;" >@item.Importe_salida.ToString("N2") </td>
+                        <td style="cursor:pointer;" >@item.Importe_entrada.ToString("N2") </td>
+                        <td style="cursor:pointer;" >@item.Importe_total.ToString("N2") </td>
+                        @*<td>@item.Presupuesto.ToString("N2")</td>
+                        <td><strong class="@classe_color">@item.Disponible.ToString("N2")</strong></td>*@
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <h2 class="text-center text-danger">No se encontraron registros</h2>
+}
+

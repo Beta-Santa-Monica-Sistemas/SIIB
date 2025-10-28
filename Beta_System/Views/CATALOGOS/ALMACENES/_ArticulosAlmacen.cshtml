@@ -1,0 +1,20 @@
+﻿@model IEnumerable<Beta_System.Models.C_articulos_catalogo>
+<style>
+</style>
+<table class="table table-striped table-bordered" id="tabla_articulos_alma" data-toggle="table" data-search="true">
+    <thead>
+        <tr>
+            <th>CLAVE</th>
+            <th>NOMBRE</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.id_articulo</td>
+                <td>@item.nombre_articulo</td>
+            </tr>
+        }
+    </tbody>
+</table>

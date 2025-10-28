@@ -1,0 +1,6 @@
+﻿@model IEnumerable<Beta_System.Models.C_salida_ganado_salas>
+
+@foreach (var item in Model)
+{
+    <option value="@item.id_sala">@item.sala</option>
+}

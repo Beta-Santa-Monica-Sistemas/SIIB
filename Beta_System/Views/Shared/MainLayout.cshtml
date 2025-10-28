@@ -1,0 +1,679 @@
+﻿<!DOCTYPE html>
+<html class=" ">
+<head>
+    <title></title>
+    @*@RenderSection("head", required: false)*@
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <!--ICONO DE LA PAGINA-->
+    <link rel="icon" type="image/png" href="~/Content/img_layout/Logo_beta_icono.png" />
+
+    <meta http-equiv="Last-Modified" content="0">
+    <meta http-equiv='cache-control' content='no-cache'>
+    <meta http-equiv='expires' content='0'>
+    <meta http-equiv='pragma' content='no-cache'>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>SIIB | Sistema Integral de Información BETA</title>
+
+    <!-- bootstrap css -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css">
+
+
+    <!-- site css -->
+    <link rel="stylesheet" href="~/Content/style_v1.css" />
+    <!-- responsive css -->
+    <link rel="stylesheet" href="~/Content/css/responsive.css" />
+    <!-- color css -->
+    <link rel="stylesheet" href="~/Content/css/color_2.css" />
+    <!-- select bootstrap -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.18/css/bootstrap-select.min.css" integrity="sha512-ARJR74swou2y0Q2V9k0GbzQ/5vJ2RBSoCWokg4zkfM29Fb3vZEQyv0iWBMW/yvKgyHSR/7D64pFMmU8nYmbRkg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- scrollbar css -->
+    <link rel="stylesheet" href="~/Content/css/perfect-scrollbar.css" />
+    <!-- custom css -->
+    <link rel="stylesheet" href="~/Content/production/css/custom_v1.css" />
+    <!-- calendar file css -->
+    <link rel="stylesheet" href="~/Content/css/semantic.min.css" />
+
+    <link rel="stylesheet" href="~/Content/css/animate.css" />
+
+    <link href="~/Content/production/css/select/select2.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/css/iziToast.css" integrity="sha512-DIW4FkYTOxjCqRt7oS9BFO+nVOwDL4bzukDyDtMO7crjUZhwpyrWBFroq+IqRe6VnJkTpRAS6nhDvf0w+wHmxg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <link href="~/Content/production/css/font-awesome.css" rel="stylesheet" />
+    <link href="~/Content/production/css/font-awesome-animation.min.css" rel="stylesheet" />
+    <link href="~/Content/production/fonts/css/font-we" rel="stylesheet" />
+
+    <!--jquery-->
+    <link rel="stylesheet" href="~/Content/production/css/datatables/css/jquery.dataTables.css" />
+    <link href="~/Content/production/css/datatables/css/datatables_select.min.css" rel="stylesheet" />
+    @Styles.Render("~/AdminBundles/CSS_v1")
+    <link href="https://cdn.datatables.net/buttons/3.1.0/css/buttons.dataTables.css" rel="stylesheet" />
+
+
+
+    <script type="text/javascript" src="~/Content/js/animate.js"></script>
+    <script type="text/javascript" src="~/Content/production/js/fixed_table_rc.js"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.bundle.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.18/js/bootstrap-select.min.js" integrity="sha512-yDlE7vpGDP7o2eftkCiPZ+yuUyEcaBwoJoIhdXv71KZWugFqEphIS3PU60lEkFaz8RxaVsMpSvQxMBaKVwA5xg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+
+    <script type="text/javascript" src="~/Content/documentation/js/jquery-ui-1.13.1/jquery-ui.min.js"></script>
+
+    @Scripts.Render("~/AdminBundles/JS")
+
+    <script src="~/Content/production/js/datatables/pdfmake.min.js"></script>
+    <script src="~/Content/production/js/datatables/vfs_fonts.js"></script>
+    <script src="~/Content/production/js/datatables/dataTables_select.js"></script>
+
+
+    <!--JSPDF-->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.min.js"></script>
+    <script type="text/javascript" src="https://html2canvas.hertzen.com/dist/html2canvas.js"></script>
+
+    <!--IZITOAST-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/js/iziToast.min.js" integrity="sha512-Zq9o+E00xhhR/7vJ49mxFNJ0KQw1E1TMWkPTxrWcnpfEFDEXgUiwJHIKit93EW/XxE31HSI5GEOW06G6BF1AtA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <!--eCharts-->
+    @*<script src="~/Content/js/echarts.min.js" type="text/javascript"></script>*@
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+
+    <!--SELECT SEARCH-->
+    <script src="~/Content/js/select/select2.full.js"></script>
+
+    <!--CUSTOM JS-->
+    <script type="text/javascript" src="~/Content/js/custom.js"></script>
+
+    <!--MOMENT JS-->
+    <script type="text/javascript" src="~/Content/moment.min.js"></script>
+
+    <!--BOOTSTRAP JS-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha512-YK1Mz9UiZmhbFzXgMbl3bO49wZ78Xj3h8TtTBLFHEAEjUBxsEZdXd8Il5RWbhPOyB653bGQDNVGGny2mORZq4A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <!--LORD ICONS-->
+    <script src="https://cdn.lordicon.com/lordicon-1.1.0.js"></script>
+
+    <link href="~/Content/production/css/datatables/css/datatables_select.min.css" rel="stylesheet" />
+    <script src="~/Content/production/js/datatables/dataTables_select.js"></script>
+
+
+    <!-- Include jsPDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+    <!-- Include html2pdf -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.js"></script>
+
+
+
+    <script>
+        var now = new Date();
+        var day = ("0" + now.getDate()).slice(-2);
+        var month = ("0" + (now.getMonth() + 1)).slice(-2);
+        var today = now.getFullYear() + "-" + (month) + "-" + (day);
+
+        var last_date_3_days = new Date();
+        last_date_3_days.setDate(last_date_3_days.getDate() - 3);
+        var last_3_day = ("0" + last_date_3_days.getDate()).slice(-2);
+        var month_3_day = ("0" + (last_date_3_days.getMonth() + 1)).slice(-2);
+        var last_3_day = last_date_3_days.getFullYear() + "-" + (month_3_day) + "-" + (last_3_day);
+
+        var last_date = new Date();
+        var last = last_date.setDate(last_date.getDate() - 7);
+        var day_last = ("0" + last_date.getDate()).slice(-2);
+        var month_last = ("0" + (last_date.getMonth() + 1)).slice(-2);
+        var last_week = last_date.getFullYear() + "-" + (month_last) + "-" + (day_last);
+
+        var last_month = new Date();
+        var last_mon = last_month.setDate(last_month.getDate() - 60);
+        var day_last_month = ("0" + last_month.getDate()).slice(-2);
+        var month_last_month = ("0" + (last_month.getMonth() + 1)).slice(-2);
+        var last_2_months = last_month.getFullYear() + "-" + (month_last_month) + "-" + (day_last_month);
+
+        var yesterday_date = new Date();
+        var yesterday_last = yesterday_date.setDate(yesterday_date.getDate() - 1);
+        var yesterday_day_last = ("0" + yesterday_date.getDate()).slice(-2);
+        var yesterday_month_last = ("0" + (yesterday_date.getMonth() + 1)).slice(-2);
+        var yesterday = yesterday_date.getFullYear() + "-" + (yesterday_month_last) + "-" + (yesterday_day_last);
+
+        var next_week_date = new Date();
+        var next_week_last = next_week_date.setDate(next_week_date.getDate() + 7);
+        var day_next = ("0" + next_week_date.getDate()).slice(-2);
+        var month_next = ("0" + (next_week_date.getMonth() + 1)).slice(-2);
+        var next_week = next_week_date.getFullYear() + "-" + (month_next) + "-" + (day_next);
+
+        var month = new Date();
+        var mes_actual = month.toISOString().slice(0, 7);
+        var three_month = new Date(month.getFullYear(), month.getMonth() - 3, 1);
+        var last_three_month = three_month.toISOString().slice(0, 7);
+
+        var six_month = new Date(month.getFullYear(), month.getMonth() - 6, 1);
+        var last_six_month = six_month.toISOString().slice(0, 7);
+
+    </script>
+
+    <style>
+    </style>
+
+    @{
+        var userName = Session["Nombre_usuario"]?.ToString() ?? "Invitado";
+    }
+
+</head>
+
+<body class="dashboard dashboard_1">
+    <div class="full_container">
+        <div class="inner_container">
+            <!-- Sidebar  -->
+            <nav id="sidebar">
+                <div class="sidebar_blog_1">
+                    <div class="sidebar-header">
+                        <div class="logo_section">
+                            <a href="#"><img class="logo_icon img-responsive" src="~/Content/img_layout/Logo_beta_icono.png" alt="#" /></a>
+                        </div>
+                    </div>
+                    <div class="sidebar_user_info">
+                        <div class="icon_setting"></div>
+                        <div class="user_profle_side text-center">
+                            <div class="user_img"><a href="/"><img class="img-responsive w-75" src="~/Content/img_layout/Logo_beta_icono.png" /></a></div>
+                            <div class="user_info text-left">
+                                <h6>@Session["Nombre_usuario"]</h6>
+                                <p><label class="online_animation" style="margin-bottom: 0rem;"></label> Online</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="sidebar_blog_2">
+                    @*<h4>General</h4>*@
+                    @if (Session["LoggedUser"] != null)
+                    {
+                        Html.RenderAction("ConsultarModulos", "USUARIOLOGIN", new { id_rol = Session["LoggedIdRol"] });
+
+                    }
+                </div>
+            </nav>
+            <!-- MENU LATERAL -->
+            <!-- right content -->
+            <div id="content">
+
+                <div id="div_mensajes_globales" class="alert fade alert-simple alert-warning text-left faa-flash animated show" role="alert" data-brk-library="component__alert" style="display:none;">
+                    @*<button type="button" class="close font__size-18" data-dismiss="alert">
+                            <span aria-hidden="true">
+                                <i class="fa fa-times warning"></i>
+                            </span>
+                            <span class="sr-only">Close</span>
+                        </button>*@
+                    <div class="row">
+                        <i class="mt-2 start-icon fa fa-2x fa-exclamation-triangle "></i>
+                        <h2 style="margin:2px;" class="ml-2 font__weight-semibold">¡ATENCIÓN!</h2>
+                        <h3 style="margin:2px;" class="ml-2 mt-2" id="mensaje_global"></h3>
+                    </div>
+                </div>
+
+                <!-- BARRA SUPRERIOR -->
+                <div class="topbar">
+                    <nav class="navbar navbar-expand-lg navbar-light">
+                        <div class="full">
+                            <button type="button" id="sidebarCollapse" class="sidebar_toggle"><i class="fa fa-bars text-dark"></i></button>
+                            <div class="logo_section">
+                                @*<a href="index.html"><img class="img-responsive" src="images/logo/logo.png" alt="#" /></a>*@
+                            </div>
+                            <div class="right_topbar">
+                                <div class="icon_info">
+                                    @*<ul>
+                                            <li><a href="#"><i class="fa fa-bell-o"></i><span class="badge">2</span></a></li>
+                                            <li><a href="#"><i class="fa fa-question-circle"></i></a></li>
+                                            <li><a href="#"><i class="fa fa-envelope-o"></i><span class="badge">3</span></a></li>
+                                        </ul>*@
+                                    <ul class="user_profile_dd">
+                                        <li>
+                                            <a class="dropdown-toggle row" data-toggle="dropdown">
+                                                @*<img class="img-responsive rounded-circle" src="~/Content/img_layout/user_circle.png" />*@
+                                                <lord-icon src="https://cdn.lordicon.com/xcxzayqr.json"
+                                                           trigger="in"
+                                                           delay="500"
+                                                           state="in-reveal"
+                                                           style="width:40px;height:40px">
+                                                </lord-icon>
+                                                <span class="name_user">@Session["LoggedUser"]</span>
+                                            </a>
+                                            <div class="dropdown-menu">
+                                                <a class="dropdown-item" href="#" onclick="CerrarSesion()">Cerrar sesion<i class="fa fa-sign-out ml-2"></i></a>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </nav>
+                </div>
+                <!--FIN BARRA SUPRERIOR -->
+                <!-- DASHBOARD -->
+                <div class="midde_cont">
+                    <div class="container-fluid" id="body_layout">
+
+                        @RenderBody()                      
+
+
+                    </div>
+                    <!-- footer -->
+                    <div class="container-fluid">
+                        <div class="footer">
+                            <p>
+                                Copyright © @DateTime.Now.Year Desarrollado por <a href="https://beta.com.mx" target="_blank">BETA SANTA MONICA</a>. Todos los derechos reservados
+                            </p>
+                            <div class="text-center pb-3">
+                                <img src="/Content/img_layout/logo_beta_new.png" alt="Alternate Text" style="width: 10%;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- end dashboard inner -->
+            </div>
+        </div>
+    </div>
+
+
+   
+
+
+
+    <!-- Modal DETALLE REQUISICION-->
+    <div class="modal fade" id="m_detalle_requi_revision" tabindex="-1" role="dialog" aria-labelledby="m_detalle_requi_revision" aria-hidden="true">
+        <div class="modal-dialog" role="document" style="min-width:99%;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="m_detalle_requi_revision_lbl">Detalle de requisición</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" style="height: 40rem; min-height: 40rem; overflow: auto; overflow-x: hidden;">
+                    <div id="div_requis_revision_detalle"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL DETALLE ORDEN-->
+    <div class="modal fade" id="m_orden_compra_detalle" tabindex="-1" role="dialog" aria-labelledby="m_orden_compra_detalleLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document" style="width:90%; min-width:90%;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="m_orden_compra_detalleLabel">Detalle de la orden</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div id="div_ordenes_compra_detalle"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn_beta_danger" data-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Modal TRACKING ORDENES X REQUISICIÓN-->
+    <div class="modal fade" id="m_tracking_ordenes" tabindex="-1" role="dialog" aria-labelledby="m_tracking_ordenesLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document" style="width:80%; min-width:80%;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="m_tracking_ordenesLabel">TRACKING DE ORDENES</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div id="div_tracking_ordenes" style="overflow:scroll; overflow-x:hidden; height:500px; min-height:500px;"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn_beta_danger" data-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div id="div_formato_codigos"></div>
+
+
+    <style>
+        .dataTables_filter > label {
+            justify-content: right;
+        }
+
+        .dataTables_filter {
+            width: 80%;
+        }
+    </style>
+
+    @Scripts.Render("~/bundles_MainLayout/js");
+
+    <!-- Scripts -->
+    <script src="~/Scripts/jquery-3.6.0.min.js"></script>
+    <script src="~/Scripts/jquery.signalR-2.4.3.min.js"></script>
+    <script src="/signalr/hubs"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.0/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.13/jspdf.plugin.autotable.min.js"></script>
+
+    <script type="text/javascript">
+        var audio_noti_global = document.getElementById('audioAnuncio');
+        var sonidoPermitido = false;
+
+        $(window).on("load", function () {
+            //$("#sidebarCollapse").click();
+            setInterval(ValidaSesion, 50000);
+            ValidaSesion();
+        });
+
+        var user = '@Session["LoggedUser"]';
+        var pass = '@Session["LoggedUserPass"]';
+
+        function ValidaSesion() {
+            $.ajax({
+                url: "../USUARIOLOGIN/ValidaSesion",
+                data: {
+                },
+                success: function (result) {
+                    if (result == "0") {
+                        $.ajax({
+                            url: "../USUARIOLOGIN/InicioSesion2",
+                            async: false,
+                            type: "POST",
+                            data: {
+                                usuario: user,
+                                password: pass
+                            },
+                            success: function (result) {
+                                if (result == 0) {
+                                    iziToast.success({
+                                        title: 'Sesión actualizada!',
+                                        message: '',
+                                    });
+                                }
+                                else {
+                                    window.location.replace("/");
+                                }
+                            }
+                        });
+                    }
+                }
+            });
+        }
+
+        $(document).one('click keydown', function () {
+            sonidoPermitido = true;
+        });
+
+
+        $('.select_multiple').multiselect({
+            nonSelectedText: 'Selecciona una opción',
+            includeSelectAllOption: true,
+            buttonWidth: '100%',
+            selectAllText: 'Todas'
+        });
+
+
+        ////#region -------- IMPLEMENTACIÓN DE SIGNAL - R PARA NOTIFICACIONES GLOBALES
+        //var noti = $.connection.notificacionesHub;
+        //noti.client.recibirAnuncioGlobal = function (mensaje) {
+        //    mostrarAnuncio(mensaje);
+        //    reproducirSonidoAnuncio();
+        //};
+
+        //// Quitar anuncio visualmente
+        //noti.client.quitarAnuncioGlobal = function () {
+        //    $('#banner-global').hide();
+        //    if (audio_noti_global) {
+        //        audio_noti_global.pause();
+        //        audio_noti_global.currentTime = 0;
+        //    }
+        //};
+
+        //// Al iniciar conexión, obtener el anuncio persistente
+        //$.connection.hub.start().done(function () {
+        //    noti.server.obtenerAnuncio().done(function (mensaje) {
+        //        if (mensaje) {
+        //            mostrarAnuncio(mensaje);
+        //            reproducirSonidoAnuncio();
+        //        }
+        //    });
+        //});
+
+        //function mostrarAnuncio(mensaje) {
+        //    var $banner = $('#banner-global');
+        //    if ($banner.length === 0) {
+        //        $('body').prepend('<div id="banner-global" style="background:#ff0707; color:#ffffff; padding:10px; text-align:center; font-weight:bold; position:fixed; top:0; left:22%; width:60%; z-index:9999; cursor:pointer;"></div>');
+        //        $banner = $('#banner-global');
+        //    }
+
+        //    $banner.text(mensaje).show();
+        //    $banner.addClass('parpadeo');
+
+        //    $banner.off('mouseenter click').on('mouseenter click', function () {
+        //        $(this).removeClass('parpadeo');
+        //        if (audio_noti_global) {
+        //            audio_noti_global.pause();
+        //            audio_noti_global.currentTime = 0;
+        //        }
+        //    });
+        //}
+
+        //// Reproducir sonido
+        //function reproducirSonidoAnuncio() {
+        //    if (audio_noti_global && sonidoPermitido) {
+        //        audio_noti_global.currentTime = 0;
+        //        audio_noti_global.play();
+        //    }
+        //}
+
+        ////#endregion
+
+
+
+
+        @*//#region IMPLEMENTACIÓN DE SIGNAL - R PARA EL CHAT SIIB
+        var chatsAbiertos = {};
+        var miNombre = '@Html.Raw(HttpUtility.JavaScriptStringEncode(userName))';
+        var chat = $.connection.chatHub;
+        $.connection.hub.qs = { usuario: miNombre };
+
+        $.connection.hub.start().done(function () {
+            console.log('SignalR conectado. ID:', $.connection.hub.id);
+            chat.server.obtenerEstado().done(function (estado) {
+                activo = estado;
+                $("#lbl_status_chat").text('');
+                $("#btnEstadoChat").css("color", "lightgreen");
+                if (activo == false) {
+                    $("#btnEstadoChat").css("color", "gray");
+                }
+            });
+
+        }).fail(function (err) {
+            alert('Error conectar SignalR:', err);
+        });
+
+
+        chat.client.ActualizarUsuarios = function (usuarios) {
+            renderContactList(usuarios);
+        };
+
+        chat.client.RecibirMensaje = function (origenNombre, mensaje) {
+            var esRemitente = origenNombre === miNombre;
+            appendMensaje(origenNombre, mensaje, esRemitente);
+
+            if (!esRemitente) {
+                // reproducir sonido
+                document.getElementById('audio-notificacion').play();
+
+                // abrir chat si no está abierto
+                if (!chatsAbiertos[origenNombre]) abrirChat(origenNombre);
+
+
+            }
+        };
+
+        chat.client.RecibirTyping = function (origenNombre, estaEscribiendo) {
+            var win = chatsAbiertos[origenNombre];
+            if (win) {
+                win.$window.find('.typing-indicator').toggle(estaEscribiendo);
+            }
+        };
+
+
+
+        //$('#contactos-btn').click(function () {
+        //    $('#contactos-panel').slideToggle(150);
+        //});
+
+        function renderContactList(usuarios) {
+            var $list = $('#contactos-list').empty();
+            if (!usuarios || usuarios.length === 0) {
+                $list.append('<div style="padding:10px;color:#777">No hay usuarios conectados</div>');
+                return;
+            }
+            usuarios.forEach(function (nombre) {
+                if (nombre === miNombre) return; // no mostrarme a mí
+                var $item = $('<div class="contact-item" data-nombre="' + nombre + '"><div class="dot"></div><div class="name">' + $('<div/>').text(nombre).html() + '</div></div>');
+                $list.append($item);
+            });
+        }
+
+        $('#contactos-list').on('click', '.contact-item', function () {
+            var nombre = $(this).data('nombre');
+            abrirChat(nombre);
+        });
+
+        function abrirChat(nombre) {
+            if (chatsAbiertos[nombre]) {
+                chatsAbiertos[nombre].$window.find('input').focus();
+                return;
+            }
+
+            var $win = $('<div class="chat-window" data-nombre="' + nombre + '">\
+                <div class="chat-header contact-item"><div class="dot"></div><div class="title">'+ nombre + '</div><div class="close-btn">✕</div></div>\
+                <div class="messages"></div>\
+                <div class="typing-indicator" style="display:none;font-size:12px;color:#777;padding:0 10px;">Escribiendo...</div>\
+                <div class="chat-input"><input type="text" placeholder="Escribe un mensaje..." /><button class="send-btn">Enviar</button></div>\
+             </div>');
+
+            $('#chats-container').append($win);
+            chatsAbiertos[nombre] = { $window: $win };
+
+            // -------------------- Obtener historial --------------------
+            chat.server.obtenerHistorial(nombre).done(function (historial) {
+                historial.forEach(function (m) {
+                    var esRemitente = m.Origen === miNombre; // true si fui yo
+                    appendMensaje(nombre, m.Texto, esRemitente);
+                });
+            });
+
+            var audio = document.getElementById('audio-notificacion');
+
+            // Evento click enviar
+            $win.find('.send-btn').click(function () {
+                var txt = $win.find('input').val().trim();
+                if (!txt) return;
+
+                chat.server.enviarMensaje(nombre, txt);
+                appendMensaje(nombre, txt, true);
+
+                // Avisar que dejó de escribir
+                chat.server.escribiendo(nombre, false);
+
+                $win.find('input').val('');
+            });
+
+            // Enter para enviar
+            $win.find('input').keydown(function (e) {
+                if (e.key === 'Enter') {
+                    $win.find('.send-btn').click();
+                    return false;
+                } else {
+                    // Avisar que está escribiendo
+                    chat.server.escribiendo(nombre, true);
+                    clearTimeout($(this).data('typingTimeout'));
+                    var timeout = setTimeout(function () {
+                        chat.server.escribiendo(nombre, false);
+                    }, 1500); // 1.5s después de dejar de escribir
+                    $(this).data('typingTimeout', timeout);
+                }
+            });
+
+            // Cerrar ventana
+            $win.find('.close-btn').click(function () { cerrarChat(nombre); });
+
+            // Scroll automático
+            $win.find('.messages').on('DOMNodeInserted', function () {
+                $(this).scrollTop(this.scrollHeight);
+            });
+
+            $win.find('input').focus();
+        }
+
+        function appendMensaje(nombreVentana, mensaje, esRemitente) {
+            if (!chatsAbiertos[nombreVentana] && nombreVentana != miNombre) abrirChat(nombreVentana);
+            var windowObj = chatsAbiertos[nombreVentana];
+            if (!windowObj) return;
+
+            var $msg = $('<div class="msg ' + (esRemitente ? 'from-me' : 'from-other') + '"></div>').text(mensaje);
+            var $messages = windowObj.$window.find('.messages');
+            $messages.append($msg);
+            $messages.stop().animate({ scrollTop: $messages.prop("scrollHeight") }, 200);
+        }
+
+        function cerrarChat(nombre) {
+            if (!chatsAbiertos[nombre]) return;
+            chatsAbiertos[nombre].$window.remove();
+            delete chatsAbiertos[nombre];
+        }
+
+        $(document).on('click', function (e) {
+            if ($(e.target).closest('#contactos-panel,#contactos-btn').length === 0)
+                $('#contactos-panel').slideUp(120);
+        });
+
+        let timeout;
+        $('#contactos-buscar').on('keyup', function () {
+            clearTimeout(timeout);
+            let filtro = $(this).val().toLowerCase();
+            timeout = setTimeout(function () {
+                $('#contactos-list .contact-item').each(function () {
+                    var nombre = $(this).data('nombre').toLowerCase();
+                    $(this).toggle(nombre.indexOf(filtro) > -1);
+                });
+            }, 150); // espera 150ms antes de filtrar
+        });
+
+        var activo = true;
+        $('#btnEstadoChat').click(function () {
+            activo = !activo;
+            chat.server.cambiarEstado(activo);
+            $("#lbl_status_chat").text('');
+            $("#btnEstadoChat").css("color", "lightgreen");
+            if (activo == false) {
+                //$("#lbl_status_chat").text(activo ? 'Activo' : 'Desconectado');
+                $("#btnEstadoChat").css("color", "gray");
+            }
+        });
+
+
+        //#endregion*@
+
+    </script>
+
+
+</body>
+</html>

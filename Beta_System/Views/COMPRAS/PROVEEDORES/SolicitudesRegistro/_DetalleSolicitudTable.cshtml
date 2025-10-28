@@ -1,0 +1,156 @@
+﻿@model Beta_System.Models.C_compras_proveedores_portal_solicitudes
+
+<style>
+    h4 {
+        margin: 8px;
+    }
+</style>
+
+@if (Model != null)
+{
+    <div class="card_info">
+        <h3 class="text-center bg-beta p-2">SOLICITUD</h3>
+        <div class="row">
+            <div class="col-md-3 text-center">
+                <h4>Solicitud</h4>
+                <h4>@Model.C_compras_proveedores_portal_tokens.nombre_proveedor</h4>
+            </div>
+
+            <div class="col-md-2 text-center">
+                <h4>Usuario registro</h4>
+                <h4>@Model.C_compras_proveedores_portal_tokens.C_usuarios_corporativo.usuario</h4>
+            </div>
+
+            <div class="col-md-2 text-center">
+                <h4>Fecha de regsitro</h4>
+                <h4>@String.Format(Model.C_compras_proveedores_portal_tokens.fecha_registro.Value.ToShortDateString(), "dd/mm/yyyy")</h4>
+            </div>
+
+            <div class="col-md-2 text-center">
+                <h4>Fecha de aplicación</h4>
+                @try
+                {
+                    <h4>@String.Format(Model.C_compras_proveedores_portal_tokens.fecha_ejercido.Value.ToShortDateString(), "dd/mm/yyyy")</h4>
+                }
+                catch (Exception)
+                {
+                    <h4>N/A</h4>
+                }
+            </div>
+
+            <div class="col-md-3 text-center">
+                <h4>Token ejercido:</h4>
+                <span>( @Model.C_compras_proveedores_portal_tokens.codigo_token )</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="card_info">
+        <h3 class="text-center bg-beta p-2">Información general</h3>
+        <div class="row">
+            <div class="col-md-1">
+                <img src="~/Content/img_layout/user_circle.png" class="img-responsive mt-5" />
+            </div>
+            <div class="col-md-11">
+                <div class="row">
+                    <div class="col-md-8">
+                        <h4>Nombre del proveedor: <strong class="text_beta">@Model.nombre_proveedor</strong></h4>
+
+                        <h4>Razón social: <strong class="text_beta">@Model.razon_social</strong></h4>
+
+                        <h4>RFC: <strong class="text_beta">@Model.RFC</strong></h4>
+
+                        <h4>Correo: <strong class="text_beta">@Model.correo</strong></h4>
+
+                        <h4>Nombre del contacto: <strong class="text_beta">@Model.nombre_contacto</strong></h4>
+
+                        <h4>Teléfono: <strong class="text_beta">@Model.telefono</strong></h4>
+
+                        <h4>Dirección: <strong class="text_beta">@Model.calle @Model.no_exterior @Model.colonia</strong></h4>
+
+                        <h4>Codigo postal: <strong class="text_beta">@Model.codigo_postal</strong></h4>
+                    </div>
+                    <div class="col-md-4">
+                        <h4>Banco: <strong class="text_beta">@Model.banco</strong></h4>
+
+                        <h4>Clave interbancaria: <strong class="text_beta">@Model.clave_interbancaria</strong></h4>
+
+                        <h4>
+                            Tipo de persona:
+                            @if (Model.id_tipo_persona == 2856271)
+                            {<strong class="text_beta">Persona Física</strong> }
+                            else
+                            { <strong class="text_beta">Persona Moral</strong>}
+                        </h4>
+
+                        @if (Model.id_proveedor_solicitud_status == 1)
+                        {
+                            <div class="text-center mt-5">
+                                <button class="btn btn_beta_warning" onclick="EditarSolicitudRegistroProveedor(@Model.id_proveedor_solicitud);"><i class="fa fa-edit"></i> Editar</button>
+                                
+                                <button class="btn btn_beta" onclick="AutorizarRechazarSolicitudRegistroProveedor(@Model.id_proveedor_solicitud, 2, '@Model.razon_social.Trim()');"><i class="fa fa-check"></i> Autorizar</button>
+                                <button class="btn btn_beta btn_beta_danger" onclick="AutorizarRechazarSolicitudRegistroProveedor(@Model.id_proveedor_solicitud, 3, '@Model.razon_social.Trim()');"><i class="fa fa-remove"></i> Rechazar</button>
+                            </div>
+                        }
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card_info">
+        <h3 class="text-center bg-beta p-2">Documentación</h3>
+        <div class="row">
+            <div class="col-md-1"></div>
+
+            <div class="col-md-2 card_info text-center" style=" box-shadow: 2px 2px 5px 5px #eaeaea;">
+                <h3>Constancia de situación fiscal</h3>
+                <button class="btn btn_beta_icon" onclick="MostrarDocumentoSolciitudProveedor('RFC', @Model.C_compras_proveedores_portal_tokens.id_codigo_proveedor);"><i class="fa fa-2x fa-file"></i></button>
+            </div>
+
+            <div class="col-md-2 card_info text-center" style=" box-shadow: 2px 2px 5px 5px #eaeaea;">
+                <h3>Comprobante de domicilio</h3>
+                <button class="btn btn_beta_icon" onclick="MostrarDocumentoSolciitudProveedor('DOMI', @Model.C_compras_proveedores_portal_tokens.id_codigo_proveedor);"><i class="fa fa-2x fa-file"></i></button>
+            </div>
+
+            <div class="col-md-2 card_info text-center" style=" box-shadow: 2px 2px 5px 5px #eaeaea;">
+                <h3>Estado de cuenta bancaria</h3>
+                <button class="btn btn_beta_icon" onclick="MostrarDocumentoSolciitudProveedor('CTA', @Model.C_compras_proveedores_portal_tokens.id_codigo_proveedor);"><i class="fa fa-2x fa-file"></i></button>
+            </div>
+
+            <div class="col-md-2 card_info text-center" style=" box-shadow: 2px 2px 5px 5px #eaeaea;">
+                <h3>Formato 32D</h3>
+                <br />
+                <button class="btn btn_beta_icon" onclick="MostrarDocumentoSolciitudProveedor('32D', @Model.C_compras_proveedores_portal_tokens.id_codigo_proveedor);"><i class="fa fa-2x fa-file"></i></button>
+            </div>
+        </div>
+
+        @if (Model.id_tipo_persona == 2856271)
+        {
+            <br />
+            <div class="row">
+                <div class="col-md-2"></div>
+
+                <div class="col-md-2 card_info text-center" style=" box-shadow: 2px 2px 5px 5px #eaeaea;">
+                    <h3>Acta constitutiva</h3>
+                    <br />
+                    <button class="btn btn_beta_icon" onclick="MostrarDocumentoSolciitudProveedor('ACT_CONST', @Model.C_compras_proveedores_portal_tokens.id_codigo_proveedor);"><i class="fa fa-2x fa-file"></i></button>
+                </div>
+
+                <div class="col-md-2 card_info text-center" style=" box-shadow: 2px 2px 5px 5px #eaeaea;">
+                    <h3>Acta poder</h3>
+                    <br />
+                    <button class="btn btn_beta_icon" onclick="MostrarDocumentoSolciitudProveedor('ACT_POD', @Model.C_compras_proveedores_portal_tokens.id_codigo_proveedor);"><i class="fa fa-2x fa-file"></i></button>
+                </div>
+
+                <div class="col-md-2 card_info text-center" style=" box-shadow: 2px 2px 5px 5px #eaeaea;">
+                    <h3>Identificación apoderado</h3>
+                    <br />
+                    <button class="btn btn_beta_icon" onclick="MostrarDocumentoSolciitudProveedor('IDNT_APO', @Model.C_compras_proveedores_portal_tokens.id_codigo_proveedor);"><i class="fa fa-2x fa-file"></i></button>
+                </div>
+            </div>
+        }
+
+    </div>
+}

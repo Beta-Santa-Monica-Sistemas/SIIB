@@ -1,0 +1,103 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+    int anio_actual = DateTime.Now.Year;
+}
+
+<div class="page_title">
+    <div class="counter_section">
+        <div class="row">
+            <div class="col-md-10">
+                <h1>Recíbos de nómina</h1>
+            </div>
+            <div class="col-md-2">
+                <strong>Frecuencia de pago</strong>
+                <select class="form-control" id="id_frecuencia_pago" onchange="ConsultarNominasMesAnioSelect();">
+                    @{ Html.RenderAction("ConsultarFrecuenciaPagoNominaSelect", "CATALOGOS"); }
+                </select>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="column2 counter_section">
+    <div class="row">
+        <div class="col-md-1">
+            <strong>Año:</strong>
+            <select class="form-control" id="id_anio" onchange="ConsultarNominasMesAnioSelect();">
+                @for (int i = 2011; i <= anio_actual; i++)
+                {
+                    if (i == anio_actual)
+                    {
+                        <option value="@i" selected>@i</option>
+                    }
+                    else
+                    {
+                        <option value="@i">@i</option>
+                    }
+                }
+            </select>
+        </div>
+
+        <div class="col-md-1">
+            <strong>Mes:</strong>
+            <select class="form-control" id="id_mes" onchange="ConsultarNominasMesAnioSelect();">
+                @{ Html.RenderAction("ConsultarMesesSelet", "COMPRAS"); }
+
+            </select>
+        </div>
+
+        <div class="col-md-3">
+            <strong>Nómina:</strong>
+            <select class="form-control" id="id_nomina"></select>
+        </div>
+
+        <div class="col-md-2">
+            <strong>Area:</strong>
+            <select class="form-control" id="id_areas_prenomina_consulta" onchange="ConsultarEmpleadosDepartamentoSelect();"></select>
+        </div>
+
+        <div class="col-md-4">
+            <strong>Empleado:</strong>
+            <select class="form-control" id="id_empleado"></select>
+        </div>
+
+        <div class="col-md-1">
+            <br />
+            <button class="btn btn_beta_icon" onclick="ConsultarReciboNominaEmpleado();"><i class="fa fa-search"></i></button>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-10">
+            <div id="div_recibo">
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+@Scripts.Render("~/bundles_Nomina/js")
+@Scripts.Render("~/bundles_Prenomina/js")
+
+<script>
+    $(window).on("load", function () {
+        $("#id_frecuencia_pago").val(410);
+        ConsultarDepartamentosUsuarioSelect();
+        $("#id_areas_prenomina_consulta option[value='0']").remove();
+        ConsultarNominasMesAnioSelect();
+        ConsultarEmpleadosDepartamentoSelect();
+    });
+
+    try {
+        $("#id_empleado").select2({
+            placeholder: 'Selecciona un empleado',
+            //dropdownParent: $("#tabulador")
+        });
+    }
+    catch (ex) { }
+
+
+
+</script>

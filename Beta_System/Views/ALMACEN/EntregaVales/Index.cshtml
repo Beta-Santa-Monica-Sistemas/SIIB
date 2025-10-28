@@ -1,0 +1,337 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+    List<int> permisos = Session["PermisosModulo"] as List<int>;
+}
+
+<style>
+    #ui-id-1 {
+        z-index: 10000;
+    }
+
+    #m_detalle_solicitud {
+        z-index: 1500;
+    }
+
+    #m_cambio_articulo {
+        z-index: 1510;
+    }
+
+    #m_lupa_articulos {
+        z-index: 1520;
+    }
+
+    #m_cambio_cuenta {
+        z-index: 1520;
+    }
+</style>
+
+<div class="page_title">
+    <div class="counter_section">
+        <h1>Entrega de vales</h1>
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="nav nav-tabs">
+                    @if (permisos.Contains(17))
+                    {
+                        <li> <a data-toggle="tab" href="#atender_vales_tab">ATENDER VALES <i class="fa fa-2x fa-check ml-2"></i></a> </li>
+                    }
+                    @if (permisos.Contains(4054))
+                    {
+                        <li class="active"> <a data-toggle="tab" href="#devolucion_vales">DEVOLUCIÓN DE VALES<i class="fa fa-2x fa-undo ml-2"></i></a> </li>
+                    }
+                    @if (permisos.Contains(18))
+                    {
+                        <li class="active"> <a data-toggle="tab" href="#historial_vales">HISTORIAL DE VALES<i class="fa fa-2x fa-folder-open ml-2"></i></a> </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class=" column2 counter_section">
+    <div class="tab-content">
+
+        @if (permisos.Contains(17))
+        {
+            <div id="atender_vales_tab" class="tab-pane fade in active show">
+                <h3 class="text-center">ENTREGA DE VALES</h3>
+                <div class="row">
+                    <div class="col-md-3">
+                        <strong>Almacén:</strong>
+                        <select class="form-control id_almacen_select" id="id_almacen_g_atender"></select>
+                    </div>
+                    <div class="col-md-3">
+                        <button class="btn btn_beta_icon" onclick="ConsultarSolicitudesAutorizadas();"><i class="fa fa-search"></i></button>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <div id="div_solicitudes_autorizadas"></div>
+                </div>
+            </div>
+        }
+
+
+        @if (permisos.Contains(4054))
+        {
+            <div id="devolucion_vales" class="tab-pane fade">
+                <h3 class="text-center">DEVOLUCIÓN DE VALES</h3>
+                @*<ul class="nav nav-tabs">
+                    <li> <a data-toggle="tab" href="#consultar_devoluciones_tab">CONSULTAR DEVOLUCIONES<i class="fa fa-2x fa-search ml-2"></i></a></li>
+                    <li class="active"> <a data-toggle="tab" href="#realizar_devolucion_tab">GENERAR DEVOLUCIÓN<i class="fa fa-2x fa-undo ml-2"></i></a></li>
+                </ul>
+                <br />
+                <div class="tab-content">
+                    <div id="consultar_devoluciones_tab" class="tab-pane fade in active show">
+
+                    </div>
+
+                    <div id="realizar_devolucion_tab" class="tab-pane fade">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <strong>Almacén:</strong>
+                                <select class="form-control id_almacen_select" id="id_almacen_g_devolucion"></select>
+                            </div>
+                            <div class="col-md-3">
+                                <strong>Folio del vale:</strong>
+                                <input type="text" class="form-control solo-numeros" id="id_vale_devolucion" />
+                            </div>
+                            <div class="col-md-3">
+                                <br />
+                                <button class="btn btn_beta_icon" onclick="ConsultarValeDevolucion();"><i class="fa fa-search"></i></button>
+                            </div>
+                        </div>
+                        <hr />
+                        <h2 class="text-center text_beta">GENERAR DEVOLUCIÓN</h2>
+                        <hr />
+                        <div id="div_vale_devolucion"></div>
+                    </div>
+
+                </div>*@
+                <div class="row">
+                    <div class="col-md-3">
+                        <strong>Almacén:</strong>
+                        <select class="form-control id_almacen_select" id="id_almacen_g_devolucion"></select>
+                    </div>
+                    <div class="col-md-3">
+                        <strong>Folio del vale:</strong>
+                        <input type="text" class="form-control solo-numeros" id="id_vale_devolucion" />
+                    </div>
+                    <div class="col-md-3">
+                        <br />
+                        <button class="btn btn_beta_icon" onclick="ConsultarValeDevolucion();"><i class="fa fa-search"></i></button>
+                    </div>
+                </div>
+                <hr />
+                <div id="div_vale_devolucion"></div>
+
+            </div>
+        }
+
+
+        @if (permisos.Contains(18))
+        {
+            <div id="historial_vales" class="tab-pane fade show">
+                <h3 class="text-center">HISTORIAL</h3>
+                <div class="row">
+                    <div class="col-md-3">
+                        <strong>Almacén</strong>
+                        <select class="form-control id_almacen_select" id="id_almacen_g_historial"></select>
+                    </div>
+                    <div class="col-md-3">
+                        <strong>Fecha inicio:</strong>
+                        <input type="date" class="form-control" id="fecha_inicio_admin" />
+                    </div>
+                    <div class="col-md-3">
+                        <strong>Fecha fin:</strong>
+                        <input type="date" class="form-control" id="fecha_fin_admin" />
+                    </div>
+                    <div class="col-md-3">
+                        <br />
+                        <button class="btn btn_beta_icon" onclick="ConsultarHistorialValesTable();"><i class="fa fa-search"></i></button>
+                    </div>
+                </div>
+                <hr />
+                <div class="table-responsive">
+                    <div id="div_historial_vales"></div>
+                </div>
+
+            </div>
+        }
+
+    </div>
+</div>
+
+
+
+<!-- Modal DETALLE SOLICITUD -->
+<div class="modal fade" id="m_detalle_solicitud" tabindex="-1" role="dialog" aria-labelledby="m_detalle_solicitud" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document" style="min-width:90%;">
+        <div class="modal-content">
+            <div id="div_detalle_solicitud">
+
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal DETALLE SOLICITUD -->
+<!-- Modal CAMBIO DE ARTICULO -->
+<div class="modal fade" id="m_cambio_articulo" tabindex="-1" role="dialog" aria-labelledby="m_cambio_articulo" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document" style="min-width:50%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Cambio de articulo</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-5 text-center">
+                        <h3>Articulo a cambiar</h3>
+                        <strong id="clave_articulo_viejo"></strong>
+                        <br />
+                        <strong id="nombre_articulo_viejo"></strong>
+                    </div>
+                    <div class="col-md-7 text-center">
+                        <h3>Nuevo articulo</h3>
+                        <div style="display: flex; justify-content: center; align-items: center;">
+                            <input class="form-control" type="text" id="id_articulo_nuevo_cambio" placeholder="Ingresa un articulo" name="id_articulo_nuevo_cambio">
+                            <div style="padding-top: 4px; padding-left:8px">
+                                <i class="fa fa-2x fa-search text_beta" onclick="LupaArticulo(1);"></i>
+                            </div>
+                        </div>
+                        <br />
+                        <h3>Cantidad nueva</h3>
+                        <input class="form-control" type="number" id="cantidad_cambio" placeholder="Ingresa una cantidad" />
+                        <br />
+                        <strong>Observaciones</strong>
+                        <textarea class="form-control" rows="2" id="observaciones_cambio"></textarea>
+                    </div>
+                </div>
+                <br />
+                <hr />
+                <div class="row">
+                    <div class="col-md-12 text-center"><button class="btn btn_beta" id="btn_cambio_articulo">Cambiar articulo</button></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn_beta_danger" data-dismiss="modal">CERRAR</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal CAMBIO DE ARTICULO  -->
+<!--Modal LUPA Articulos-->
+<div class="modal fade" id="m_lupa_articulos" tabindex="-1" role="dialog" aria-labelledby="m_lupa_articulos" aria-hidden="true">
+    <div class="modal-dialog" role="document" style="min-width:40%; max-height:80%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="m_lupa_articulos_lbl">Lista de articulos</h2>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="col-md-4">
+                    <strong>Clasificación</strong>
+                    <select class="form-control " id="id_clasificaciones_art" onchange="LupaArticuloParametro(3);">
+                        <option value="-1">NINGUNA</option>
+                        <option value="0">TODAS</option>
+                        @{ Html.RenderAction("ConsultarClasificacionSelect", "ARTICULOS"); };
+                    </select>
+                </div>
+                <div id="div_lupa_articulos"></div>
+            </div>
+
+            <div class="col-md-12">
+                <label id="mensaje_prueba"></label>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn_beta_danger" data-dismiss="modal">CERRAR</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Modal Cambio de Cuenta Contable-->
+<div class="modal fade" id="m_cambio_cuenta" tabindex="-1" role="dialog" aria-labelledby="m_cambio_cuenta" aria-hidden="true">
+    <div class="modal-dialog" role="document" style="min-width:60%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="m_cambio_cuenta_lbl">Cambio de cuenta contable</h2>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <div id="div_cambio_cuenta"></div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn_beta_danger" data-dismiss="modal">CERRAR</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!---->
+
+@Scripts.Render("~/bundles_Articulos/js")
+@Scripts.Render("~/bundles_EntregaMercancia/js")
+@Scripts.Render("~/bundles_Propiedades/js")
+@Scripts.Render("~/bundles_SolicitudesMercancia/js")
+@Scripts.Render("~/bundles_Requisiciones/js")
+
+
+@if (permisos.Contains(17))
+{
+    <script>
+        $(window).on("load", function () {
+            ConsultarSolicitudesAutorizadas();
+            CaracteresControl();
+            ConsultarAlmacenesUsuarioSelect(0);
+            ConsultarDevolucionesTable();
+            CaracteresControl();
+
+            $('#m_lupa_articulos').on('hidden.bs.modal', function () {
+                $('#m_cambio_articulo').focus();
+                $('#m_cambio_articulo').css('overflow', 'auto');
+            });
+            $('#m_cambio_articulo').on('hidden.bs.modal', function () {
+                $('#m_detalle_solicitud').focus();
+                $('#m_detalle_solicitud').css('overflow', 'auto');
+            });
+        });
+    </script>
+}
+
+<script>
+    $("#id_articulo_nuevo_cambio").autocomplete({
+        source: function (request, response) {
+            $.ajax({
+                type: "POST",
+                async: false,
+                url: "../ARTICULOS/ConsultarArticulosArray",
+                data: {
+                    search: $("#id_articulo_nuevo_cambio").val(),
+                    id_tipo: 1,
+                    almacenable: 0
+                },
+                success: function (data) {
+                    var data2 = $.parseJSON(data);
+                    response($.map(data2, function (item) {
+                        return { label: item.clave + " | " + item.nombre_articulo, value: item.clave + "|" + item.nombre_articulo };
+
+                    }))
+                },
+                error: function (xhr, status, error) {
+                    alert(error);
+                }
+            });
+        }
+    });
+</script>

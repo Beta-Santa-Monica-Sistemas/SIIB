@@ -1,0 +1,72 @@
+﻿@model IEnumerable<Beta_System.Models.C_inventario_almacen_mov_g>
+
+<table id="tabla_movimientos_inventario" class="table table-striped table-bordered" style="width:100%;">
+    <thead>
+        <tr class="bg-beta text-center">
+            <th>Folio</th>
+            <th>Almacén</th>
+            <th>Fecha de registro</th>
+            <th>Tipo de movimiento</th>
+            <th>Factura/Remisión</th>
+            <th>Orden Compra</th>
+            <th>Estatus</th>
+            <th>Ver</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr class="text-center">
+                <td>@item.id_inventario_almacen_mov_g</td>
+                <td>
+                    <strong>@item.C_almacen_almacenes_g.nombre_almacen
+                    @if (item.id_almacen_destino != null){<strong> -> @item.C_almacen_almacenes_g1.nombre_almacen</strong>}
+                    </strong>
+                </td>
+                <td>@String.Format(item.fecha_registro.Value.ToShortDateString(), "dd/mm/aaaa")</td>
+                <td>
+                    <button class="btn" style="background-color:@item.C_inventario_mov_tipos.color; color:white;">@item.C_inventario_mov_tipos.nombre_mov</button>
+                </td>
+                <td>
+                    @if (item.id_inventario_mov_tipo == 1 && item.folio_remi_fact != null)  //ENTRADA OC
+                    {
+                        if (item.remision_factura == true)
+                        {<strong>Factura: @item.folio_remi_fact</strong> }
+
+                        else
+                        {
+                            @*<strong>Remisión: @item.folio_remi_fact</strong>*@
+                            <ul>
+                                @foreach (var log in item.C_inventario_almacen_mov_d_recepciones_logs.Select(x => x.folio_remision_factura).Distinct())
+                                {
+                                    <li>@log</li>
+                                }
+                            </ul>
+                        }
+                    }
+
+
+                    else if (item.id_inventario_mov_tipo == 1003) //ENTRADA AJUSTE
+                    {
+                        <strong>Folio entrada: #@item.C_inventario_almacen_mov_d.FirstOrDefault().C_inventario_almacen_ajustes_d.FirstOrDefault().C_inventario_almacen_ajustes_g.id_inventario_ajuste_g</strong>
+                    }
+                    else if (item.id_inventario_mov_tipo == 1003) //SALIDA AJUSTE
+                    {
+                        <strong>Folio salida: #@item.C_inventario_almacen_mov_d.FirstOrDefault().C_inventario_almacen_ajustes_d.FirstOrDefault().C_inventario_almacen_ajustes_g.id_inventario_ajuste_g</strong>
+                    }
+                </td>
+
+                <td>
+                    @if (item.id_transaccion_orden_g.HasValue)
+                    {
+                        <strong>@item.id_transaccion_orden_g</strong>
+                    }
+                </td>
+
+                <td><button class="btn" style="background-color:@item.C_inventario_mov_status.color; color:white;">@item.C_inventario_mov_status.nombre_status</button></td>
+
+                <td><button class="btn btn_beta_icon" onclick="ConsultarDetalleMovimientoInventario(@item.id_inventario_almacen_mov_g);"><i class="fa fa-bars"></i></button></td>
+            </tr>
+        }
+    </tbody>
+</table>

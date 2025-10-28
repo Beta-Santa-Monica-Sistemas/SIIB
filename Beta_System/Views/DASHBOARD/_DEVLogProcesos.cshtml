@@ -1,0 +1,51 @@
+﻿@model List<List<string>>
+
+
+@*<h3 class="text-center">Procesos internos</h3>
+<br />*@
+<div class="c-dashboardInfo col-md-12">
+    <div class="wrap">
+        <h4 class="heading heading5 hind-font medium-font-weight c-dashboardInfo__title">PROCESOS INTERNOS</h4>
+        <div id="leaderboard" class="p-3">
+            <table>
+                @for (int i = 0; i < Model.Count; i++)
+                {
+                    if (i == 0)
+                    {
+                        <tr class="text-dark header_top tr_dashboard">
+                            @if (Model[i][2] == "1")
+                            {
+                                <td class="number"><i class="fa fa-remove" style="color:red;"></i></td>
+                            }
+                            else
+                            {
+                                <td class="number"><i class="fa fa-check-circle" style="color: lawngreen;"></i></td>
+                            }
+
+                            <td class="name"><h3>@Model[i][0]</h3></td>
+                            <td class="points">@Model[i][1]</td>
+                        </tr>
+                    }
+                    else
+                    {
+                        <tr class="text-dark tr_dashboard">
+                            @if (Model[i][2] == "1")
+                            {
+                                <td class="number"><i class="fa fa-remove" style="color:red;"></i></td>
+                            }
+                            else
+                            {
+                                <td class="number"><i class="fa fa-check-circle" style="color: lawngreen;"></i></td>
+                            }
+
+                            <td class="name"><h3>@Model[i][0]</h3></td>
+                            <td class="points">@Model[i][1]</td>
+                        </tr>
+                    }
+
+                }
+            </table>
+        </div>
+
+    </div>
+</div>

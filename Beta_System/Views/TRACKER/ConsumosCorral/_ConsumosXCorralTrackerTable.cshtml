@@ -1,0 +1,53 @@
+﻿@model List<IGrouping<int, Beta_System.Models.C_tracker_movimientos>>
+
+@if (Model.Count() > 0)
+{
+    <table class="table table-striped table-bordered" id="datatable_consumos_corral">
+        <thead>
+            <tr class="text-center bg-beta">
+                <th>Establo</th>
+                <th>Fecha</th>
+                <th>Corral</th>
+                <th>Tipo</th>
+                <th>Cantidad</th>
+                <th>Ración</th>
+                <th>Grupo</th>
+                <th>% MS</th>
+                <th>Ppto</th>
+                <th>Real</th>
+                <th>Dif</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var consumo_establo in Model)
+            {
+                foreach (var consumo in consumo_establo.GroupBy(x => x.ing_nombre))
+                {
+                    var data = consumo.FirstOrDefault();
+                    decimal ppto = (decimal)consumo.Sum(x => x.peso_cargado);
+                    decimal real = (decimal)consumo.Sum(x => x.peso_real);
+                    decimal dif =  real - ppto;
+
+                    <tr>
+                        <td>@data.C_tracker_establos.siglas</td>
+                        <td>@string.Format(data.fecha_registro.Value.ToShortDateString(), "dd/MM/yyyy")</td>
+                        <td>@data.corral</td>
+                        <td>@data.ing_tipo</td>
+                        <td>@data.no_animales</td>
+                        <td>@data.racion</td>
+                        <td>@data.ing_nombre</td>
+                        <td>@consumo.Select(x => x.PMS_R).Max().Value.ToString("N2")</td>
+                        <td>@Convert.ToInt32(ppto).ToString("N2")</td>
+                        <td>@Convert.ToInt32(real).ToString("N2")</td>
+                        <td>@dif.ToString("N2")</td>
+                    </tr>
+                }
+
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <h4 class="text-center">No se encontraron registros</h4>
+}

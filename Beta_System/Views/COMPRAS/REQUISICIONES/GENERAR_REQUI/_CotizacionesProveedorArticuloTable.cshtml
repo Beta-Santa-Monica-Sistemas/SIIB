@@ -1,0 +1,32 @@
+﻿@model IEnumerable<Beta_System.Models.C_compras_cotizaciones_articulos>
+
+@{ 
+    int modo = Convert.ToInt32(ViewBag.modo);
+}
+
+
+<table class="table table-striped table-bordered" id="datatable_cotizaciones_articulo_proveedor">
+    <thead>
+        <tr class="bg-beta text-center">
+            <th>Precio unitario ($)</th>
+            <th>Moneda</th>
+            <th>Descuento (%)</th>
+            <th>Unidad de medida</th>
+            <th>Fecha vigencia</th>
+            <th>Ultima actualización</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr class="text-center"  onclick="SetCotizacionServicio(@item.id_compra_articulo_cotizacion, @modo);">
+                <th>$@item.precio_unitario.Value.ToString("#,##0.00")</th>
+                <th>@item.C_tipos_moneda.clave_fiscal</th>
+                <th>@item.porcentaje_descuento</th>
+                <th>@item.C_unidades_medidas.unidad_medida</th>
+                <th>@String.Format(item.fecha_vigencia.Value.ToShortDateString(), "dd/mm/aaaa")</th>
+                <th>@String.Format(item.fecha_actualizacion.Value.ToShortDateString(), "dd/mm/aaaa")</th>
+            </tr>
+        }
+    </tbody>
+</table>

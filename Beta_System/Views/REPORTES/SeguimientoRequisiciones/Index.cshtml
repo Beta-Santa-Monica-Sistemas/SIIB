@@ -1,0 +1,111 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+}
+
+<div class="page_title">
+    <div class="counter_section">
+        <h1>Reporte de seguimiento de requisiciones</h1>
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="nav nav-tabs">
+                    <li> <a data-toggle="tab" href="#resumen_tab">RESUMEN <i class="fa fa-2x fa-book ml-2"></i></a> </li>
+                    <li class="active"> <a data-toggle="tab" href="#detalle_tab">DETALLE<i class="fa fa-2x fa-list ml-2"></i></a> </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="column2 counter_section">
+    <div class="tab-content">
+
+        <div id="resumen_tab" class="tab-pane fade in active show">
+            <h3 class="text-center">RESUMEN</h3>
+            <div class="row">
+                <div class="col-md-2">
+                    <strong>Fecha inicio</strong>
+                    <input type="date" class="form-control" id="fecha_inicio" />
+                </div>
+                <div class="col-md-2">
+                    <strong>Fecha fin</strong>
+                    <input type="date" class="form-control" id="fecha_fin" />
+                </div>
+                <div class="col-md-3">
+                    <strong>Usuario: </strong>
+                    <select class="form-control" id="id_usuario">
+                        <option value="0" selected>TODOS</option>
+                        @{ Html.RenderAction("ConsultarUsuariosCorporativoSelect", "USUARIOS"); }
+                    </select>
+                </div>
+                <div class="col-md-1">
+                    <br />
+                    <button class="btn btn_beta_icon" onclick="ConsultarRequisicionesSeguimiento();"><i class="fa fa-search"></i></button>
+                </div>
+                <div class="col-md-4 text-right">
+                    <br />
+                    <button class="btn btn_beta" onclick="DescargarExcelRequisicionesSeguimiento();">Descargar excel</button>
+                </div>
+            </div>
+            <hr />
+            <div class="table-responsive" id="div_seguimiento_requisiciones" style="height: 500px; min-height: 500px; overflow:auto; overflow-x:auto;"></div>
+        </div>
+
+        <div id="detalle_tab" class="tab-pane fade show">
+            <h3 class="text-center">DETALLE</h3>
+            <div class="row">
+                <div class="col-md-2">
+                    <strong>Fecha inicio</strong>
+                    <input type="date" class="form-control" id="fecha_inicio_det" />
+                </div>
+                <div class="col-md-2">
+                    <strong>Fecha fin</strong>
+                    <input type="date" class="form-control" id="fecha_fin_det" />
+                </div>
+                <div class="col-md-3">
+                    <strong>Usuario: </strong>
+                    <select class="form-control" id="id_usuario_det">
+                        <option value="0" selected>TODOS</option>
+                        @{ Html.RenderAction("ConsultarUsuariosCorporativoSelect", "USUARIOS"); }
+                    </select>
+                </div>
+                <div class="col-md-1">
+                    <br />
+                    <button class="btn btn_beta_icon" onclick="ConsultarRequisicionesSeguimientoDetalle();"><i class="fa fa-search"></i></button>
+                </div>
+                <div class="col-md-4 text-right">
+                    <br />
+                    <button class="btn btn_beta" onclick="DescargarExcelRequisicionesSeguimientoDetalle();">Descargar excel</button>
+                </div>
+            </div>
+            <hr />
+            <div class="table-responsive" id="div_seguimiento_requisiciones_detalle" style="height: 600px; min-height: 600px; overflow:auto; overflow-x:auto;"></div>
+        </div>
+    </div>
+
+
+        
+    </div>
+
+
+
+    @Scripts.Render("~/bundles_ReportesCompras/js")
+
+    <script>
+        $(window).on("load", function () {
+            $('input[type="date"]').val(today);
+
+            try {
+                $("#id_usuario").select2({
+                    placeholder: 'Selecciona un usuario',
+                    //dropdownParent: $("#tabulador")
+                });
+                $("#id_usuario_det").select2({
+                    placeholder: 'Selecciona un usuario',
+                    //dropdownParent: $("#tabulador")
+                });
+            }
+            catch (ex) { }
+        });
+    </script>

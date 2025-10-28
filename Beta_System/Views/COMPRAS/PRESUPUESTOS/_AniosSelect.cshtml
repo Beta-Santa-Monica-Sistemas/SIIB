@@ -1,0 +1,17 @@
+﻿@model IEnumerable<Beta_System.Models.C_presupuestos_anios>
+
+@{
+    int anio_actual = Convert.ToInt32(DateTime.Now.Year);
+}
+
+@foreach (var item in Model)
+{
+    if (anio_actual == Convert.ToInt32(item.anio))
+    {
+        <option value="@item.id_anio_presupuesto" selected>@item.anio</option>
+    }
+    else
+    {
+        <option value="@item.id_anio_presupuesto">@item.anio</option>
+    }
+}

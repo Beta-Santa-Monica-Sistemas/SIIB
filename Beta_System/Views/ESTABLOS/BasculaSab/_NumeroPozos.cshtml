@@ -1,0 +1,6 @@
+﻿@model Beta_System.Models.ConexionSab.No_Pozos
+
+@foreach (var item in Model.ID.Zip(Model.No_pozo, (id, noPozo) => new { ID = id, No_pozo = noPozo }).OrderBy(x =>x.No_pozo))
+{
+    <option value="@item.No_pozo">@item.No_pozo</option>
+}

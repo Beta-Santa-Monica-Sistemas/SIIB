@@ -1,0 +1,9 @@
+﻿@model IEnumerable<Beta_System.Models.C_establos>
+
+@if (Model != null)
+{
+    foreach (var item in Model)
+    {
+        <option value="@item.id_establo">@item.nombre_establo</option>
+    }
+}

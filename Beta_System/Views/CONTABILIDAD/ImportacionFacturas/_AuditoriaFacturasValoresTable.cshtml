@@ -1,0 +1,128 @@
+﻿@model List<Beta_System.Models.AuditoriaFacturasValoresImportacion>
+
+@if (Model.Count() > 0)
+{
+    <table class="table table-sm table-condensed small table-bordered table-striped" id="datatable_auditoria_valores">
+        <thead>
+            <tr class="text-center text-white">
+                <th colspan="12" class="bg-beta">Datos SIIB</th>
+                <th colspan="6" class="bg-success">Datos Microsip</th>
+
+                <th class="bg-beta">SIIB</th>
+                <th class="bg-orange">CxP</th>
+                <th class="bg-purple">Contabilidad</th>
+                <th class="bg-danger" colspan="2">Diferencias</th>
+            </tr>
+            <tr class="text-center bg-dark text-white">
+                <th>Estatus</th>
+                <th>Fecha</th>
+                <th>Orden</th>
+                <th>Proveedor</th>
+                <th>Cve. prov.</th>
+                <th>Moneda</th>
+                <th>Subtotal (Orden)</th>
+                <th>Descuento</th>
+                <th>IVA</th>
+                <th>IVA ret.</th>
+                <th>ISR</th>
+                <th>IEPS</th>
+
+                @*<th>DOCTO</th>*@
+                <th style="min-width:300px;">Concepto</th>
+                <th>Factura</th>
+                <th>Importe</th>
+                <th>Impuesto</th>
+                <th>IVA ret.</th>
+                <th>ISR ret.</th>
+
+                <th>Total Calculado (Portal)</th>
+                <th>Total CxP</th>
+                <th>Total Contabilidad</th>
+                <th>OC/CxP</th>
+                <th>CxP/CO</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                string clase_texto = "text-success";
+                string clase_texto_co = "text-success";
+
+                string signo_cxp = "";
+                string signo_co = "";
+                decimal diferencias = 0;
+                decimal diferencias_co = 0;
+                if (item.id_docto_cp_ms != null && item.importe_ms > 0)
+                {
+                    diferencias = item.total_ms - item.total_sib;
+                    diferencias_co = item.total_co_ms - item.total_ms;
+
+                    signo_cxp = diferencias > 0 ? "+" : (diferencias < 0 ? "-" : "");
+                    signo_co = diferencias_co > 0 ? "+" : (diferencias_co < 0 ? "-" : "");
+
+                    if (diferencias > 0) { clase_texto = "text-danger"; }
+                    if (diferencias_co > 0) { clase_texto_co = "text-danger"; }
+                }
+
+                <tr class="text-center">
+                    <td style="color:@item.color">@item.estatus</td>
+                    <td>@string.Format(item.fecha_registro.ToShortDateString(), "dd/MM/yyyy")</td>
+                    <td>@item.no_orden</td>
+                    <td>@item.proveedor</td>
+                    <td>@item.cve_proveedor</td>
+                    <th>@item.moneda</th>
+                    <td>@item.subtotal.ToString("N2")</td>
+                    <td>@item.descuento.ToString("N2")</td>
+                    <td>@item.iva_monto.ToString("N2")</td>
+                    <td>@item.iva_retenido_monto.ToString("N2")</td>
+                    <td>@item.isr_monto.ToString("N2")</td>
+                    <td>@item.ieps_monto.ToString("N2")</td>
+
+
+                    @if (item.id_docto_cp_ms != null)
+                    {
+                        @*<td>@item.id_docto_cp_ms</td>*@
+                        <td class="text-left" style="min-width:300px;">@item.concepto_ms</td>
+                        <td>@item.folio_ms</td>
+                        <td>@item.importe_ms.ToString("N2")</td>
+                        <td>@item.impuesto_ms.ToString("N2")</td>
+                        <td>@item.iva_retenido_ms.ToString("N2")</td>
+                        <td>@item.isr_retenido_ms.ToString("N2")</td>
+                    }
+                    else
+                    {
+                        <td></td>
+                        <td style="min-width:300px;"></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    }
+
+                    <td>@item.total_sib.ToString("N2")</td>
+                    <td>@item.total_ms.ToString("N2")</td>
+                    <td>@item.total_co_ms.ToString("N2")</td>
+
+                    <td>
+                        @if (item.id_docto_cp_ms != null)
+                        {<strong class="@clase_texto">@signo_cxp@Math.Abs(diferencias).ToString("N2") @*diferencias.ToString("N2")*@</strong>}
+
+                    </td>
+                    <td>
+                        @if (item.id_docto_cp_ms != null)
+                        {<strong class="@clase_texto_co">@signo_co@Math.Abs(diferencias_co).ToString("N2") @*@diferencias_co.ToString("N2")*@</strong>}
+
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <h3 class="text-center text-danger">NO SE ENCONTRARON FACTURAS</h3>
+}
+
+

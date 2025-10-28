@@ -1,0 +1,67 @@
+﻿@model List<Beta_System.Models.ProgramacionSemanalLeche>
+@{
+    List<int> permisos = Session["PermisosModulo"] as List<int>;
+}
+
+@if (Model.Count() > 0)
+{
+    <table class="table table-striped table-bordered text-center" id="datatable_consulta_programacion_semanal">
+        <thead>
+            <tr class="bg-beta text-center">
+                <th>Semana</th>
+                <th>Fecha inicial</th>
+                <th>Fecha final</th>
+                <th>Programacion SM</th>
+                <th>Programacion SG</th>
+                <th>Total de litros</th>
+                <th>Mostrar</th>
+                @if (permisos.Contains(4047))
+                {
+                    <th>Edición</th>
+                }
+                <th>Cumplimiento</th>
+                <th>Programa</th>
+                <th>Compromiso</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.NoSemana.First()</td>
+                    <td>@item.FechaInicial.First().ToString("dd/MM/yyyy")</td>
+                    <td>@item.FechaFinal.First().ToString("dd/MM/yyyy")</td>
+                    <td>@item.ProgramadoSM.First().ToString("N3")</td>
+                    <td>@item.ProgramadoSG.First().ToString("N3")</td>
+                    <td>@item.TotalLitros.First().ToString("N3")</td>
+                    <td>
+                        <button class="btn btn_beta_icon" onclick="MostrarInformacionProgramaSemanal(@item.Anio.First(), @item.NoSemana.First())"><i class="fa fa-eye"></i></button>
+                    </td>
+                    @if (permisos.Contains(4047))
+                    {
+                        <td>
+                            <button class="btn btn_beta_icon" onclick="EditarProgramaSemanal(@item.Anio.First(), @item.NoSemana.First(),'@item.FechaInicial.First().ToString("dd/MM/yyyy")')"><i class="fa fa-edit"></i></button>
+                        </td>
+                    }
+                    <td>
+                        @*<button class="btn btn_beta_icon" onclick="DescargarCumplimientoEnviosLecheDetalladoPDF('@item.FechaInicial.First().ToString("dd/MM/yyyy")','@item.FechaFinal.First().ToString("dd/MM/yyyy")');"><i class="fa fa-print"></i></button>*@
+                        <button class="btn btn_beta_icon" onclick="DescargarCumplimientoEnviosLecheDetalladoPDF('@item.Anio.First()','@item.NoSemana.First()');"><i class="fa fa-print"></i></button>
+                    </td>
+                    <td>
+                        <button class="btn btn_beta_icon" onclick="GenerarCumplimientoEnviosLecheCompletoPDF('@item.Anio.First()','@item.NoSemana.First()');"><i class="fa fa-print"></i></button>
+                    </td>
+                    <td>
+                        <button class="btn btn_beta_icon" onclick="CompromisosClienteLeche('@item.Anio.First()', '@item.NoSemana.First()','@item.Mes.First()');"><i class="fa fa-eye"></i></button>
+                        @*<button class="btn btn_beta_icon" onclick="GenerarCumplimientoEnviosLecheGeneralPDF('@item.Anio.First()','@item.NoSemana.First()');"><i class="fa fa-print"></i></button>*@
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <div class="col-md-12 text-center">
+        <h2 style="color:red">No se encontró información</h2>
+    </div>
+}

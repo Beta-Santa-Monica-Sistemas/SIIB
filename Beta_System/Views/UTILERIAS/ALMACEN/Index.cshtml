@@ -1,0 +1,198 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+}
+
+<style>
+    #ui-id-1 {
+        z-index: 999999;
+    }
+</style>
+
+<div class="page_title">
+    <div class="counter_section">
+        <div class="row">
+            <h1>Modificación de almacen</h1>
+        </div>
+    </div>
+</div>
+
+
+<div class="column2 counter_section">
+    <div class="row">
+        <div class="col-md-12">
+            <h3 class="text-center">Búsqueda específica</h3>
+            <div class="row">
+                <div class="col-md-1">
+                    <strong>Clave:</strong>
+                    <input type="text" class="form-control" id="clave_buscar" />
+                </div>
+                <div class="col-md-4">
+                    <strong>Articulo:</strong>
+                    <input type="text" class="form-control" id="nombre_buscar" />
+                </div>
+                <div class="col-md-1" style="padding-top:10px">
+                    <button class="btn btn_beta_icon" onclick="ConsultarArticuloUtilerias();"><i class="fa fa-search"></i></button>
+                </div>
+                <div class="col-md-12">
+                    <div class="table-responsive" id="div_tabla_articulo"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12"><hr /></div>
+        <div class="col-md-12">
+            <h3 class="text-center">Consultar existencia</h3>
+            <div class="row">
+                <div class="col-md-3">
+                    <strong>Almacénes asignados:</strong>
+                    <select class="form-control" id="id_almacen_g_inv_cons">
+                        @{ Html.RenderAction("ConsultarAlmacenesUsuarioSelect", "CATALOGOS", new { id_usuario = (int)Session["LoggedId"] }); }
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <strong>ID Articulo:</strong>
+                    <input type="text" class="form-control" id="id_articulo_existencia" />
+                </div>
+                <div class="col-md-3">
+                    <strong>Fecha de consulta</strong>
+                    <input type="date" class="form-control" id="fecha_inventario_cons" />
+                </div>
+                <div class="col-md-3">
+                    <button class="btn btn_beta_icon" onclick="ConsultarInventarioFecha();"><i class="fa fa-search"></i></button>
+                </div>
+                <div class="col-md-12"><br /></div>
+                <div class="col-md-12">
+                    <div class="table-responsive" id="div_inventario_fecha_cons">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*------------ MODAL DE ARTICULO*@
+<div class="modal fade" id="m_agregar_editar_articulo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document" style="min-width: 60%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <!--TITULO-->
+                <h5 class="modal-title" id="lbl_titulo_articulo"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <strong>Nombre:</strong>
+                        <input type="text" class="form-control input_clear_art input_valid" id="nombre" onkeyup="LimpiarNombre();" />
+                        <br />
+                    </div>
+
+                    <div class="col-md-12">
+                        <strong>Observaciones:</strong>
+                        <input type="text" class="form-control input_clear_art" id="descrip" />
+                        <br />
+                    </div>
+
+                    <div class="col-md-12">
+                        <div class="col-md-2">
+                            <strong>Unidad de medida:</strong>
+                            <select class="form-control " id="id_medida" onchange="TipoArticuloRequi();">@{ Html.RenderAction("ConsultarUnidadMedida", "ARTICULOS"); };</select>
+                        </div>
+                        <div class="col-md-5">
+                            <strong>Clasificación:</strong>
+                            <select class="form-control " id="id_clasificacion" onchange="TipoArticuloRequi();">@{ Html.RenderAction("MostrarClasificacionSelect", "CATALOGOS"); };</select>
+                        </div>
+                        <div class="col-md-5">
+                            <strong>Tipo/Almacén:</strong>
+                            <select class="form-control " id="id_tipo" onchange="TipoArticuloRequi();">@{ Html.RenderAction("ConsultarTiposArticulosSelect", "CATALOGOS"); };</select>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <br />
+                        <div class="col-md-2">
+                            <strong>Clave:</strong>
+                            <input type="text" class="form-control input_valid solo_numeros" id="codigo_articulo" onkeyup="LimpiarNombre();" />
+                        </div>
+                        <div class="col-md-3">
+                            <strong>Rubro:</strong>
+                            <select class="form-control " id="id_tipo_requisicion" onchange="TipoArticuloRequi();">@{ Html.RenderAction("ConsultarTipoArticuloRequi", "CATALOGOS"); };</select>
+                        </div>
+                        <div class="col-md-3">
+                            <strong>Marca:</strong>
+                            <select class="form-control " id="id_marca_articulo"></select>
+                        </div>
+                        <div class="col-md-2 text-center">
+                            <strong>Almacenable:</strong>
+                            <input type="checkbox" class="form-control text-center" id="almacenable" style="height:30px;" />
+                        </div>
+                        <div class="col-md-2 text-center">
+                            <strong>Activo:</strong>
+                            <input type="checkbox" class="form-control text-center" id="id_estatus" style="height:30px;" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn_beta_danger" data-dismiss="modal">Cerrar</button>
+                <!--Accion a Realizar-->
+                <button type="button" class="btn btn_beta" id="btn_accion_realizar"></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*------------ MODAL DE CAPTURA*@
+<div class="modal fade" id="m_captura_d" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document" style="min-width: 20%; max-width:30%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <!--TITULO-->
+                <h5 class="modal-title" id="lbl_captura_d"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <strong>Articulo:</strong>
+                        <input type="text" class="form-control" id="articulo_captura" readonly />
+                        <br />
+                    </div>
+                    <div class="col-md-12">
+                        <strong>Cantidad captura:</strong>
+                        <input type="text" class="form-control" id="cantidad_captura"  />
+                        <br />
+                    </div>
+                    <div class="col-md-12">
+                        <strong>Cantidad sistema:</strong>
+                        <input type="text" class="form-control" id="cantidad_sistema"  />
+                        <br />
+                    </div>
+                    <div class="col-md-12">
+                        <strong>Diferencia:</strong>
+                        <input type="text" class="form-control" id="cantidad_diferencia"  />
+                        <br />
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn_beta_danger" data-dismiss="modal">Cerrar</button>
+                <!--Accion a Realizar-->
+                <button type="button" class="btn btn_beta" id="btn_captura_accion">Confirmar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@Scripts.Render("~/bundles_Articulos/js")
+@Scripts.Render("~/bundles_UtileriaInventario/js")
+@Scripts.Render("~/bundles_Propiedades/js")
+
+<script>
+    $('input[type="date"]').val(today);
+</script>

@@ -1,0 +1,31 @@
+﻿@model IEnumerable<Beta_System.Models.C_inventario_almacenes_articulos>
+
+@{
+    List<int> permisos = Session["PermisosModulo"] as List<int>;
+}
+
+<table class="table table-striped table-bordered w-100" id="tabla_articulos_ubicacion" width="100%">
+    <thead>
+        <tr class="bg-beta text-center">
+            <th>Seleccionar</th>
+            <th>Clave</th>
+            <th>Artículo</th>
+            <th>Tipo</th>
+            <th>Ubicacion</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr class="text-center">
+                <td>
+                    <input id="@item.id_articulo" class="form-control" type="checkbox" style="height:25px; width:25px;" />
+                </td>
+                <td>@item.C_articulos_catalogo.clave</td>
+                <td>@item.C_articulos_catalogo.nombre_articulo</td>
+                <td>@item.C_articulos_catalogo.C_articulos_tipos.nombre_tipo</td>
+                <td>@item.C_almacen_ubicaciones_articulos.nombre_ubicacion</td>
+            </tr>
+        }
+    </tbody>
+</table>

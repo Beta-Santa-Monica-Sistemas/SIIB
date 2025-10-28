@@ -1,0 +1,97 @@
+﻿<div class="row p-2">
+    <div class="col-md-2">
+        <strong>Densidad</strong>
+        <input type="text" class="form-control limpiar_cp" id="densidad_cp" readonly value="1.02920" />
+    </div>
+    <div class="col-md-2">
+        <strong>Lts Totales</strong>
+        <input type="text" class="form-control limpiar_cp" id="litros_cp" readonly value="0" />
+    </div>
+    <div class="col-md-2">
+        <strong>Temperatura</strong>
+        <input type="text" class="form-control limpiar_cp solo-numeros" id="temperatura_cp" />
+    </div>
+    <div class="col-md-6">
+        <strong>Sello</strong>
+        <input type="text" class="form-control limpiar_cp" id="sello_cp" />
+    </div>
+</div>
+
+<div class="row p-2">
+    <div class="col-md-6">
+        <strong>Proveedor:</strong>
+        <select class="form-control limpiar_cp borders" id="select_proveedor_cp">
+            <option value="0">Selecciona un proveedor</option>
+        </select>
+    </div>
+    <div class="col-md-6">
+        <strong>Articulo/Producto</strong>
+        <select class="form-control limpiar_cp borders" id="select_articulo_cp">
+            <option value="0">Selecciona un artículo</option>
+        </select>
+    </div>
+</div>
+
+
+<div class="row p-2">
+    <div class="col-md-2">
+        <strong>Movimiento</strong><br />
+        <select class="form-control limpiar_cp" id="tmov_cp">
+            @{ Html.RenderAction("ConsultarTiposMovimientoSelect", "CATALOGOS"); };
+        </select>
+    </div>
+    <div class="col-md-4">
+        <strong>Tipo de movimiento</strong>
+        <select class="form-control limpiar_cp" id="cvemov_cp">
+        </select>
+    </div>
+    <div class="col-md-6">
+        <strong>Línea transportista:</strong>
+        <select class="form-control " id="linea_trasp_cp">@{ Html.RenderAction("ConsultarLineasTrasnportistasSelect", "CATALOGOS"); };</select>
+    </div>
+</div>
+
+
+<div class="row p-2">
+    <div class="col-md-5">
+        <strong>Conductor:</strong>
+        <input type="text" class="form-control limpiar_cp solo-letras borders" id="conductor_cp" oninput="this.value = this.value.toUpperCase();" />
+    </div>
+    <div class="col-md-3">
+        <div class="col-md-5">
+            <strong>Placas:</strong>
+            <input type="text" class="form-control limpiar_cp solo-letras-numeros borders" id="placas_cp" oninput="this.value = this.value.toUpperCase();" />
+        </div>
+        <div class="col-md-7">
+            <strong>Placas Pipa:</strong>
+            <input type="text" class="form-control limpiar_cp solo-letras-numeros borders" id="placas_pipa_cp" oninput="this.value = this.value.toUpperCase();" />
+        </div>
+    </div>
+    <div class="col-md-4">
+        <strong>Tanque</strong>
+        <textarea rows="1" id="obs_cp" class="form-control limpiar_cp solo-letras-numeros" oninput="this.value = this.value.toUpperCase();"></textarea>
+    </div>
+</div>
+
+
+<div class="row p-2">
+    <div class="col-md-6">
+        <button class="btn btn_beta_danger" onclick="LimpiarCamposFicha(1);">Limpiar</button>
+    </div>
+    <div class="col-md-6 text-right">
+        <button class="btn btn_beta" id="confirmar_ficha_completa">Crear ficha</button>
+    </div>
+</div>
+
+
+<script>
+    try {
+        $("#select_proveedor_cp").select2({
+            placeholder: 'Selecciona un proveedor',
+        });
+        $("#select_articulo_cp").select2({
+            placeholder: 'Selecciona un artículo'
+        });
+    }
+    catch (ex) { }
+</script>

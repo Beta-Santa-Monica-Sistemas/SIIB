@@ -1,0 +1,101 @@
+﻿@model IQueryable<Beta_System.Models.C_salida_ganado_d>
+
+@{
+    decimal total_cantidad = 0;
+    decimal total_p_unitario = 0;
+    decimal total_importe = 0;
+    decimal total_peso = 0;
+}
+
+
+<table class="table table-bordered table-striped" id="tabla_salidas">
+    <thead>
+        <tr class="bg-beta text-center">
+            <th>Folio</th>
+            <th>Ficha</th>
+            <th>Fecha</th>
+            <th>Hora</th>
+            <th>Arete</th>
+            <th>Clasificacion</th>
+            <th>Causa Baja</th>
+            <th>Condición</th>
+            <th>Edad</th>
+            <th>Cantidad</th>
+            <th>Peso</th>
+            <th>Chofer</th>
+            <th>Vehículo</th>
+            <th>Placas</th>
+            <th>Comprador</th>
+            <th>Sala</th>
+            <th>Foto</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            total_cantidad += (decimal)item.cantidad;
+            total_peso += (decimal)item.peso;
+            <tr class="text-center">
+                <td>
+                    <strong>@item.folio</strong>
+                    <button class="btn btn_beta_icon" onclick="GenerarPDFSalidaGanado(@item.id_salida_gan_g, '@item.folio');"><i class="fa fa-print"></i></button>
+                </td>
+                <td>
+                    @if (item.C_salida_ganado_g.ficha != null)
+                    {
+                        <strong>@item.C_salida_ganado_g.ficha</strong>
+                        <button class="btn btn_beta_icon" onclick="ReImpresionFichaDirecto(@item.C_salida_ganado_g.ficha, @item.C_salida_ganado_g.id_establo);"><i class="fa fa-print"></i></button>
+                    }
+                </td>
+                <td>@item.C_salida_ganado_g.fecha.Value.ToShortDateString()</td>
+                <td>@item.C_salida_ganado_g.hora</td>
+                <td>@item.arete</td>
+                <td>@item.clasifica</td>
+                <td>@item.causa_b</td>
+                <td>@item.cond_ind</td>
+                <td>@item.edad</td>
+                <td>@item.cantidad</td>
+                <td>@item.peso</td>
+                <td>@item.C_salida_ganado_g.chofer</td>
+                <td>@item.C_salida_ganado_g.vehiculo</td>
+                <td>@item.C_salida_ganado_g.placas</td>
+                <td>@item.C_salida_ganado_g.comprador</td>
+                <td>@item.sala</td>
+                <td>
+                    @if (item.path != null)
+                    {
+                        <a class="btn btn_beta_icon" href="@item.path" target="_blank"><i class="fa fa-eye"></i></a>
+
+                    }
+
+                </td>
+            </tr>
+        }
+    </tbody>
+    <tfoot>
+        <tr class="bg-beta">
+            <td><strong>TOTAL</strong></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>@total_cantidad</td>
+            <td>@total_peso</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+    </tfoot>
+</table>
+
+
+
+
+
+

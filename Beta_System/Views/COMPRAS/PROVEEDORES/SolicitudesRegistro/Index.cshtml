@@ -1,0 +1,158 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+}
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js"></script>
+
+<style>
+    #m_detalle_solicitud {
+        z-index: 1510;
+    }
+</style>
+
+<div class="page_title">
+    <div class="counter_section">
+        <h1>Solicitudes de proveedores</h1>
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="nav nav-tabs">
+                    <li class="active"> <a data-toggle="tab" href="#solicitudes_aut">SOLICITUDES AUTORIZADAS<i class="fa fa-check fa-2x ml-2"></i></a></li>
+                    <li class="active"> <a data-toggle="tab" href="#solicitudes_pend">SOLICITUDES POR AUTORIZAR<i class="fa fa-clock-o fa-2x ml-2"></i></a></li>
+                    <li class="active"> <a data-toggle="tab" href="#solicitudes_rech">SOLICITUDES RECHAZADAS<i class="fa fa-remove fa-2x ml-2"></i></a></li>
+                    <li class="active"> <a data-toggle="tab" href="#generar_token">GENERAR TOKEN DE REGISTRO<i class="fa fa-plus fa-2x ml-2"></i></a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="column2 counter_section">
+    <div class="tab-content">
+
+        <div id="solicitudes_aut" class="tab-pane fade in active show">
+            <h3 class="text-center">Solicitudes autorizadas</h3>
+            <div class="text-right"><button class="btn btn_beta" onclick="ConsultarSolicitudesRegistroProveedor(4);"><i class="fa fa-search"></i> Consultar solicitudes autorizadas</button></div>
+            <div id="div_solicitudes_aut"></div>
+        </div>
+
+        <div id="solicitudes_pend" class="tab-pane">
+            <h3 class="text-center">Solicitudes por autorizar</h3>
+            <div class="text-right"><button class="btn btn_beta" onclick="ConsultarSolicitudesRegistroProveedor(1);"><i class="fa fa-search"></i> Consultar solicitudes pendientes</button></div>
+            <div id="div_solicitudes_pend"></div>
+        </div>
+
+        <div id="solicitudes_rech" class="tab-pane">
+            <h3 class="text-center">Solicitudes rechazadas</h3>
+            <div class="text-right"><button class="btn btn_beta" onclick="ConsultarSolicitudesRegistroProveedor(3);"><i class="fa fa-search"></i> Consultar solicitudes rechazadas</button></div>
+            <div id="div_solicitudes_rech"></div>
+        </div>
+
+        <div id="generar_token" class="tab-pane w-100">
+            <h3>Generar token</h3>
+            <div class="row" style="display:block">
+                <div class="col-md-6 text-left"><button class="btn btn_beta" onclick="ConsultarTokensGenerados();"><i class="fa fa-refresh"></i> Consultar tokens</button></div>
+                <div class="col-md-6 text-right"><button class="btn btn_beta" data-toggle="modal" data-target="#m_registrar_token"><i class="fa fa-plus"></i> Generar token de registro</button></div>
+            </div>
+            <div id="div_tokens_generados" class="table-responsive"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- Modal REGISTRAR TOKEN-->
+<div class="modal fade" id="m_registrar_token" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Generar token de registro</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="container-fluid text-center">
+                    <strong>Nombre del proveedor a registrar:</strong>
+                    <input type="text" class="form-control" id="nombre_token" />
+                    <hr />
+                    <button class="btn btn_beta" onclick="GenerarTokenRegistro();">Generar token</button>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn_beta_danger" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal DETALLE SOLICITUD-->
+<div class="modal fade" id="m_detalle_solicitud" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" >
+    <div class="modal-dialog" role="document" style="width: 90%; min-width: 90%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Detalle de la solicitud</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="div_detalle_solicitud"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn_beta_danger" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+@Scripts.Render("~/bundles_Proveedores/js")
+@Scripts.Render("~/bundles_Propiedades/js")
+
+
+<script>
+    $(window).on("load", function () {
+        ConsultarSolicitudesRegistroProveedor(1);
+        ConsultarSolicitudesRegistroProveedor(3);
+        ConsultarSolicitudesRegistroProveedor(4);
+        ConsultarTokensGenerados();
+    });
+
+
+    function MostrarDocumentoSolciitudProveedor(doc, id_solicitud) {
+        jsShowWindowLoad();
+        $.ajax({
+            type: "POST",
+            async: true,
+            url: "../PROVEEDORES/MostrarDocumentoSolciitudProveedor",
+            data: {
+                id_solicitud: id_solicitud,
+                doc: doc
+            },
+            success: function (response) {
+                jsRemoveWindowLoad();
+                if (response == "0") {
+                    iziToast.error({
+                        title: 'Error',
+                        message: 'No se encontró la orden de compra.',
+                    });
+                }
+                else {
+                    window.open(response, '_blank');
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error(error);
+                jsRemoveWindowLoad();
+            }
+        });
+    }
+
+</script>
+
+

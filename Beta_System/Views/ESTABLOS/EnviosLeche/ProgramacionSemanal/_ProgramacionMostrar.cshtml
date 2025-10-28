@@ -1,0 +1,174 @@
+﻿@model IEnumerable<Beta_System.Models.C_envios_leche_programacion_semanal_cliente_d_dias>
+
+@{
+    decimal total = 0;
+    int dia_incremento = 0;
+    DateTime dia_inicial = Convert.ToDateTime(ViewBag.FechaProduccion);
+    var estimacion = ViewBag.EstimacionEstabloDias as List<Beta_System.Models.C_envios_leche_programacion_diaria_d>;
+
+    var cantidadesPorDia = Model
+    .GroupBy(x => new { x.C_envios_leche_programacion_semanal_cliente_d.C_establos.nombre_establo, x.id_dia_presupuesto }).
+    ToDictionary(g => new { Establo = g.Key.nombre_establo, Dia = g.Key.id_dia_presupuesto }, g => g.Sum(x => x.cantidad_litros));
+}
+
+<h3>Produccion Estimada</h3>
+<table class="table table-striped table-bordered text-center" id="datatable_envio_produccion">
+    <thead>
+        <tr class="bg-beta text-center">
+            <th style="max-width: 22%; min-width: 22%;">Establo</th>
+            @foreach (var item in Model.Select(x => x.id_dia_presupuesto).Distinct())
+            {
+                <th style="max-width:6%; min-width:6%">
+                    <strong>@Model.Where(x => x.id_dia_presupuesto == item).FirstOrDefault().C_presupuestos_dias.dia</strong><br />
+                    @*<strong>@Model.Where(x => x.id_dia_presupuesto == item).FirstOrDefault().fecha_dia.Value.ToString("dd/MM/yyyy")</strong>*@
+                </th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var establo in Model.GroupBy(x => x.C_envios_leche_programacion_semanal_cliente_d.C_establos))
+        {
+            <tr>
+                <td style="max-width:58%; min-width:58%">
+                    @establo.FirstOrDefault().C_envios_leche_programacion_semanal_cliente_d.C_establos.nombre_establo
+                </td>
+                @foreach (var item in Model.Select(x => x.id_dia_presupuesto).Distinct())
+                {
+                    total = Convert.ToDecimal((establo.Where(x => x.id_dia_presupuesto == item).FirstOrDefault().C_envios_leche_programacion_semanal_g.C_envios_leche_programacion_diaria_g.C_envios_leche_programacion_diaria_d.Where(x => x.id_dia_presupuesto == item).FirstOrDefault().produccion + @establo.Where(x => x.id_dia_presupuesto == item).FirstOrDefault().C_envios_leche_programacion_semanal_g.C_envios_leche_programacion_diaria_g.C_envios_leche_programacion_diaria_d.Where(x => x.id_dia_presupuesto == item).FirstOrDefault().sobrante) - @establo.Where(x => x.id_dia_presupuesto == item).FirstOrDefault().C_envios_leche_programacion_semanal_g.C_envios_leche_programacion_diaria_g.C_envios_leche_programacion_diaria_d.Where(x => x.id_dia_presupuesto == item).FirstOrDefault().faltante);
+                    <td style="max-width:6%; min-width:6%">
+                        @total.ToString("N3")
+                    </td>
+                }
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div class="col-md-12"><hr /></div>
+
+<h3>Envios programados</h3>
+<table class="table table-striped table-bordered text-center" id="datatable_envio_cliente">
+    <thead>
+        <tr class="bg-beta text-center">
+            <th style="max-width: 22%; min-width: 22%;">Cliente</th>
+            <th style="max-width: 22%; min-width: 22%;">Destino</th>
+            <th style="max-width: 14%; min-width: 14%; "><strong>Establo</strong></th>
+            @foreach (var item in Model.Select(x => x.id_dia_presupuesto).Distinct())
+            {
+                <th style="max-width:6%; min-width:6%">
+                    <strong>@Model.Where(x => x.id_dia_presupuesto == item).FirstOrDefault().C_presupuestos_dias.dia</strong><br />
+                    @*<strong>@Model.Where(x => x.id_dia_presupuesto == item).FirstOrDefault().fecha_dia.Value.ToString("dd/MM/yyyy")</strong>*@
+                </th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var id_programacion in Model.Select(x => x.id_programacion_semanal_cliente_g).Distinct())
+        {
+            <tr>
+                <td>
+                    @Model.Where(x => x.id_programacion_semanal_cliente_g == id_programacion).FirstOrDefault().C_envios_leche_programacion_semanal_cliente_d.C_envios_leche_clientes.nombre_comercial
+                </td>
+                <td>
+                    @Model.Where(x => x.id_programacion_semanal_cliente_g == id_programacion).FirstOrDefault().C_envios_leche_programacion_semanal_cliente_d.C_envios_leche_destinos.nombre_destino
+                </td>
+                <td>
+                    @Model.Where(x => x.id_programacion_semanal_cliente_g == id_programacion).FirstOrDefault().C_envios_leche_programacion_semanal_cliente_d.C_establos.nombre_establo
+                </td>
+
+                @foreach (var item in Model.Where(x => x.id_programacion_semanal_cliente_g == id_programacion))
+                {
+                    <td>
+                        @item.cantidad_litros.Value.ToString("N3")
+                    </td>
+                }
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div class="col-md-12"><hr /></div>
+
+<h3>Saldo</h3>
+<table class="table table-striped table-bordered text-center" id="datatable_envio_saldo">
+    <thead>
+        <tr class="bg-beta text-center">
+            <th style="max-width: 22%; min-width: 22%;">Establo</th>
+            @foreach (var item in Model.Select(x => x.id_dia_presupuesto).Distinct())
+            {
+                <th style="max-width:6%; min-width:6%">
+                    <strong>@Model.Where(x => x.id_dia_presupuesto == item).FirstOrDefault().C_presupuestos_dias.dia</strong><br />
+                    @*<strong>@Model.Where(x => x.id_dia_presupuesto == item).FirstOrDefault().fecha_dia.Value.ToString("dd/MM/yyyy")</strong>*@
+                </th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var establo in Model.GroupBy(x => x.C_envios_leche_programacion_semanal_cliente_d.C_establos))
+        {
+            <tr>
+                <td style="max-width:58%; min-width:58%">
+                    @establo.FirstOrDefault().C_envios_leche_programacion_semanal_cliente_d.C_establos.nombre_establo
+                </td>
+                @foreach (var item in Model.Select(x => x.id_dia_presupuesto).Distinct())
+                {
+                    var produccion = establo.Where(x => x.id_dia_presupuesto == item).
+                        FirstOrDefault()?.C_envios_leche_programacion_semanal_g.C_envios_leche_programacion_diaria_g.C_envios_leche_programacion_diaria_d.
+                        Where(x => x.id_dia_presupuesto == item).FirstOrDefault();
+
+                    if (produccion != null)
+                    {
+                        total = Convert.ToDecimal(produccion.produccion + produccion.sobrante - produccion.faltante);
+                        var key = new { Establo = establo.FirstOrDefault().C_envios_leche_programacion_semanal_cliente_d.C_establos.nombre_establo, Dia = item };
+                        if (cantidadesPorDia.ContainsKey(key))
+                        {
+                            total -= Convert.ToDecimal(cantidadesPorDia[key]);
+                        }
+
+                        <td style="max-width:6%; min-width:6%">
+                            @total.ToString("N3")
+                        </td>
+                    }
+                    else
+                    {
+                        <td style="max-width:6%; min-width:6%">-</td>
+                    }
+                }
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div class="col-md-12"><hr /></div>
+
+<h3>Resumen</h3>
+<table class="table table-striped table-bordered text-center" id="datatable_envio_resumen">
+    <thead>
+        <tr class="bg-beta text-center">
+            <th style="max-width: 22%; min-width: 22%;">Cliente</th>
+            @foreach (var item in Model.Select(x => x.id_dia_presupuesto).Distinct())
+            {
+                <th style="max-width:6%; min-width:6%">
+                    <strong>@Model.Where(x => x.id_dia_presupuesto == item).FirstOrDefault().C_presupuestos_dias.dia</strong><br />
+                    @*<strong>@Model.Where(x => x.id_dia_presupuesto == item).FirstOrDefault().fecha_dia.Value.ToString("dd/MM/yyyy")</strong>*@
+                </th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var programacion in Model.GroupBy(x => x.C_envios_leche_programacion_semanal_cliente_d.id_cliente_envio_leche))
+        {
+            <tr>
+                <td style="max-width:58%; min-width:58%">
+                    @programacion.FirstOrDefault().C_envios_leche_programacion_semanal_cliente_d.C_envios_leche_clientes.nombre_comercial
+                </td>
+                @foreach (var item in Model.Select(x => x.id_dia_presupuesto).Distinct())
+                {
+                    <td style="max-width:6%; min-width:6%">
+                        @programacion.Where(x => x.id_dia_presupuesto == item).Sum(x => x.cantidad_litros).Value.ToString("N3")
+                    </td>
+                }
+            </tr>
+        }
+    </tbody>
+</table>

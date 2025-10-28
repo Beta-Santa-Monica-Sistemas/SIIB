@@ -1,0 +1,40 @@
+﻿@model IEnumerable<Beta_System.Models.C_nomina_inasistencias>
+@{ 
+    int modo = ViewBag.modo;
+    int id_nomina_g = ViewBag.id_nomina_g;
+    int id_nomina_d_area_empleado = ViewBag.id_nomina_d_area_empleado;
+}
+<div class="col-md-12 text-center">
+    <h2>Faltas</h2>
+</div>
+<table class="table table-striped table-bordered" id="tabla_inasistencia_empleado" data-toggle="table" data-search="true">
+    <thead>
+        <tr class="bg-beta text-center">
+            <th>Fecha falta</th>
+            <th>Usuario registró</th>
+            <th>Observaciónes</th>
+            <th>Eliminar</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.OrderBy(x => x.C_nomina_empleados.Nombre_completo))
+        {
+            <tr class="text-center">
+                <td class="dias_inasistencia_asignados">@String.Format(@item.fecha_inasistencia.Value.ToShortDateString(), "dd/mm/aaaa")</td>
+                <td>@item.C_usuarios_corporativo.C_empleados.nombres @item.C_usuarios_corporativo.C_empleados.apellido_paterno @item.C_usuarios_corporativo.C_empleados.apellido_materno</td>
+                <td>@item.observaciones</td>
+                <td class="text-center">
+                    @if (modo == 1)  //MODULO FALTAS
+                    {
+                        <button class="btn btn_beta_icon btn_beta_danger btn_valid_eliminar_inasistencia" onclick="EliminarInasistencia(@item.id_nomina_inasistencia);"><i class="fa fa-remove"></i></button>
+                    }
+                    else  //MODULO PRENOMINA
+                    {
+                       
+                        <button class="btn btn_beta_icon btn_beta_danger btn_valid_eliminar_inasistencia" onclick="EliminarInasistenciaPrenomina(@item.id_nomina_inasistencia, @id_nomina_g, @item.Empleado_id, @id_nomina_d_area_empleado);"><i class="fa fa-remove"></i></button>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

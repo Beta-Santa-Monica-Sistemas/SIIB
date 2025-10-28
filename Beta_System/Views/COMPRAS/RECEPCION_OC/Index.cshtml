@@ -1,0 +1,72 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+}
+
+
+<div class="page_title">
+    <div class="counter_section">
+        <h1>Recepción de ordenes de compra</h1>
+    </div>
+</div>
+
+<div class="column2 counter_section">
+    <div class="row">
+        <div class="col-md-3">
+            <strong>Centro</strong>
+            <select id="id_centro_recepcion" class="form-control" onchange="">
+                <option value="0">Todos</option>
+                @{ Html.RenderAction("CentrosUsuariosSelect", "CATALOGOS", new { id_usuario = (int)Session["LoggedId"] }); }
+            </select>
+        </div>
+        <div class="col-md-7" style="padding-top:14px">
+            <button class="btn btn_beta_icon" onclick="ConsultarOrdenesPendientesRecepcion();"><i class="fa fa-search"></i></button>
+        </div>
+        <div class="col-md-12">
+            <hr />
+        </div>
+    </div>
+    <hr />
+    <div class="table-responsive">
+        <div id="div_ordenes_pendientes_recepcion"></div>
+    </div>
+</div>
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="m_detalle_orden_recepcion" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document" style="width:80%; min-width:80%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel"><strong>Recepcionar orden de compra</strong></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="div_detalle_orden_recepcion"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn_beta_danger" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn_beta" id="btn_recepcionar_orden">Recepcionar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+@Scripts.Render("~/bundles_Propiedades/js")
+@Scripts.Render("~/bundles_OrdenesCompra/js")
+
+<script>
+    $(window).on("load", function () {
+        ConsultarOrdenesPendientesRecepcion();
+    });
+</script>
+

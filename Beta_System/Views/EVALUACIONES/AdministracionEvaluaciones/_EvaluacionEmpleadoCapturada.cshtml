@@ -1,0 +1,192 @@
+﻿@model List<Beta_System.Models.C_evaluaciones_d_conceptos>
+
+@if (Model.Count() > 0)
+{
+    var empleado = Model.FirstOrDefault().C_evaluaciones_d_empleados.C_nomina_empleados;
+    var evaluacion = Model.FirstOrDefault();
+
+    int id_usuario = ViewBag.id_usuario;
+
+    var id_evaluacion_g = ViewBag.id_evaluacion_g;
+    var id_evaluacion_d_empleado = ViewBag.id_evaluacion_d_empleado;
+    var id_evaluacion_status = ViewBag.id_evaluacion_status;
+
+    string tipo_evaluacion = ViewBag.tipo_evaluacion;
+
+    var usuarios = Model.Where(x => x.activo == true).OrderBy(x => x.fecha_registro).Select(x => x.C_usuarios_corporativo).Distinct();
+
+    var rubros = Model.Select(x => x.C_evaluaciones_conceptos_rubros.C_evaluaciones_rubros).Distinct();
+
+    var comentarios = evaluacion.C_evaluaciones_d_empleados.C_evaluaciones_d_calificaciones.Where(x => x.id_usuario_califica == id_usuario && x.activo == true).FirstOrDefault();
+
+    <div class="row">
+        <div class="col-md-5 text-left">
+            <h2>@tipo_evaluacion</h2>
+        </div>
+        <div class="col-md-7 text-right">
+            <h3 class="porcentaje text-center" style="margin:2px;">@empleado.Apellido_paterno @empleado.Apellido_materno @empleado.Nombres <span id="calificacion_final_empleado"></span></h3>
+        </div>
+    </div>
+    <div style="overflow-x:hidden; overflow:auto; height:500px; min-height:500px;" id="div_scroll_evaluaciones">
+        @foreach (var item in rubros)
+        {
+            var id_rubro = item.id_evaluacion_rubro;
+
+            <h3 class="text-left bg-dark text-white p-2 rubros_id_headers" style="margin:0px;" id="rubro_@id_rubro">@item.nombre_rubro <span id="PorcentajeEquivalente_@id_rubro"></span></h3>
+            <div class="table-responsive">
+                <table class="table  table-bordered table-striped">
+                    <thead>
+                        <tr class="text-center bg-beta">
+                            <th style="width: 500px;"><h4 class="text-white">Concepto</h4></th>
+                            <th style="width: 200px;"><h4 class="text-white">Porcentaje máximo</h4></th>
+                            @foreach (var usuario in usuarios)
+                            {
+                                if (usuario.id_usuario_corporativo == id_usuario)
+                                {
+                                    <th style="width: 200px;"><h4 class="text-white">Porcentaje</h4></th>
+                                    <th style="width: 200px;"><h4 class="text-white">@usuario.usuario</h4></th>
+                                    <th><h4 class="text-white">Comentarios</h4></th>
+                                }
+
+                                else
+                                {
+                                    <th style="width: 200px;" class="text-center">
+                                        <strong class="text-white">@usuario.usuario</strong>
+                                        <br />
+                                        <strong class="text-white">(@string.Format(Model.Where(x => x.id_usuario_registra == usuario.id_usuario_corporativo).FirstOrDefault().fecha_registro.Value.ToShortDateString(), "dd/MM/yyyy"))</strong>
+                                    </th>
+                                }
+                            }
+
+                            @if (!usuarios.Select(x => x.id_usuario_corporativo).Contains(id_usuario))
+                            {
+                                <th style="width: 200px;"><h4 class="text-white">Porcentaje</h4></th>
+                                <th style="width: 200px;"><h4 class="text-white">@ViewBag.nombre_usuario</h4></th>
+                                <th><h4 class="text-white">Comentarios</h4></th>
+                            }
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var concepto in Model.Where(x => x.C_evaluaciones_conceptos_rubros.id_evaluacion_rubro == item.id_evaluacion_rubro && x.activo == true).Select(x => x.C_evaluaciones_conceptos_rubros).Distinct())
+                        {
+                            var id_concepto = concepto.id_evaluacion_concepto_rubro;
+
+                            <tr class="text-center">
+                                <td style="width: 500px;">@concepto.nombre_concepto</td>
+                                <td style="width: 200px;">
+                                    <strong class="porcentaje">@Convert.ToInt32(concepto.porcentaje)%</strong>
+                                    <label id="porcentaje_maximo_@id_concepto" style="display:none;">@Convert.ToInt32(concepto.porcentaje)</label>
+                                </td>
+
+                                @foreach (var usuario in usuarios)
+                                {
+                                    var data = Model.Where(x => x.id_usuario_registra == usuario.id_usuario_corporativo && x.id_evaluacion_concepto_rubro == id_concepto && x.activo == true).FirstOrDefault();
+                                    if (data != null)
+                                    {
+                                        if (usuario.id_usuario_corporativo == id_usuario)
+                                        {
+                                            <td style="width: 200px;">
+                                                <strong id="porcentaje_calificacion_@id_concepto" class="porcentaje porcentajes_@id_rubro">@Convert.ToInt32(data.porcentaje_calificacion)%</strong>
+                                            </td>
+
+                                            <td style="width: 100px;">
+                                                <input type="number" class="form-control calificaciones_inputs calificaciones_@id_rubro" max="100"
+                                                       id="calificacion_@id_concepto" value="@Convert.ToInt32(data.calificacion)"
+                                                       onkeyup="ValidarCalificacionMaxima(@id_concepto ,@Convert.ToInt32(data.C_evaluaciones_conceptos_rubros.porcentaje), @id_rubro)"
+                                                       onchange="ValidarCalificacionMaxima(@id_concepto ,@Convert.ToInt32(data.C_evaluaciones_conceptos_rubros.porcentaje), @id_rubro)" />
+                                            </td>
+                                            <td style="width: 500px;">
+                                                <textarea rows="2" class="form-control" id="obs_@id_concepto">@data.comentarios</textarea>
+                                            </td>
+                                        }
+                                        else
+                                        {
+                                            <td style="width: 200px;">
+                                                <h4 class="text_beta" style="margin:3px;">@Convert.ToInt32(data.porcentaje_calificacion)% - @Convert.ToInt32(data.calificacion) pts</h4>
+                                                <label>@data.comentarios</label>
+                                            </td>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <td style="width: 200px;">ERROR</td>
+                                    }
+                                }
+                                @if (!usuarios.Select(x => x.id_usuario_corporativo).Contains(id_usuario))
+                                {
+                                    <td style="width: 200px;">
+                                        <strong id="porcentaje_calificacion_@id_concepto" class="porcentaje porcentajes_@id_rubro"></strong>
+                                    </td>
+
+                                    <td style="width: 100px;">
+                                        <input type="number" class="form-control calificaciones_inputs calificaciones_@id_rubro" max="100"
+                                               id="calificacion_@id_concepto" value=""
+                                               onkeyup="ValidarCalificacionMaxima(@id_concepto ,@Convert.ToInt32(concepto.porcentaje), @id_rubro)" />
+                                    </td>
+                                    <td style="width: 500px;">
+                                        <textarea rows="2" class="form-control" id="obs_@id_concepto"></textarea>
+                                    </td>
+                                }
+                            </tr>
+                        }
+                    </tbody>
+                    <tfoot>
+                        <tr class="text-center bg-blue-sky">
+                            <td></td>
+                            <td>
+                                <h4 class="text-white">Calificacion total:</h4>
+                            </td>
+                            @foreach (var usuario in usuarios.Where(x => x.id_usuario_corporativo != id_usuario))
+                            {
+                                var data = Model.Where(x => x.id_usuario_registra == usuario.id_usuario_corporativo && x.C_evaluaciones_conceptos_rubros.C_evaluaciones_rubros.id_evaluacion_rubro == id_rubro && x.activo == true).ToList();
+                                if (data != null)
+                                {
+                                    <td style="width: 200px;">
+                                        <h4 class="text-white">@Convert.ToInt32(data.Sum(x => x.porcentaje_calificacion))%</h4>
+                                    </td>
+                                }
+                                else
+                                {
+                                    <td style="width: 200px;">ERROR</td>
+                                }
+                            }
+                            <td style="width: 200px;">
+                                <h4 class="text-white calificaciones_finales" id="CalificacionFinal_@id_rubro" name="@Convert.ToInt32(item.porcentaje)"></h4>
+                            </td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        }
+        <hr />
+        <div class="col-md-6 text-center">
+            <strong class="btn bg-beta">Fortalezas:</strong>
+            @if (comentarios != null) { <textarea rows="3" class="form-control" id="txt_fortalezas">@comentarios.fortalezas</textarea> }
+            else { <textarea rows="3" class="form-control" id="txt_fortalezas"></textarea>}
+        </div>
+        <div class="col-md-6 text-center">
+            <strong class="btn bg-danger text-white">Áreas de oportunidad:</strong>
+            @if (comentarios != null) { <textarea rows="3" class="form-control" id="txt_areasOportunidad">@comentarios.area_oportunidad</textarea>}
+            else{<textarea rows="3" class="form-control" id="txt_areasOportunidad"></textarea>}
+        </div>
+        <br />
+    </div>
+    <hr />
+    <div class="text-left">
+        <button class="btn btn_beta" onclick="GuardarEvaluacionEmpleado(@id_evaluacion_d_empleado, @id_evaluacion_g, @id_evaluacion_status);"><i class="fa fa-check"></i> Guardar evaluación</button>
+    </div>
+}
+else
+{
+    <h3 class="text-center text-danger">No se encontraron conceptos para evaluar</h3>
+}
+
+<script>
+    CalularTotalesRubros();
+</script>
+
+
+
+

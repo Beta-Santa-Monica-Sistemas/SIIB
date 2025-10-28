@@ -1,0 +1,95 @@
+﻿@model IEnumerable<Beta_System.Models.C_compras_ordenes_d>
+
+@if (Model != null)
+{
+    var orden_g = Model.FirstOrDefault().C_compras_ordenes_g;
+    <h2 class="text-center">DIVIDIR ORDEN</h2>
+
+    <div class="row bg-dark p-2">
+        <div class="col-md-4">
+            <h3 class="text-left text-white" style="margin:3px;">Orden de compra: #@orden_g.id_compras_orden_g</h3>
+            <h4 class="text-left text-white" style="margin:3px;">Requisición: @orden_g.C_centros_g.siglas @orden_g.id_requisicion_articulo_g</h4>
+        </div>
+        <div class="col-md-4">
+            <h3 class="text-left text-white" style="margin:3px;">Fecha: @string.Format(orden_g.fecha_registro.Value.ToShortDateString(), "dd/MM/yyyy")</h3>
+            <h4 class="text-left text-white" style="margin:3px;">Usuario genera: @orden_g.C_usuarios_corporativo.usuario</h4>
+        </div>
+        <div class="col-md-4 text-right">
+            <button class="btn btn_beta_success mt-2" onclick="GenerarNuevaOrdenDividir(@orden_g.id_compras_orden_g);">GENERAR NUEVA ORDEN <i class="fa fa-share-alt ml-1"></i></button>
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col-md-5" style="padding: 1rem; margin-top: 1rem; margin-left: 1rem;">
+            <h3 style="margin:3px;" class="text-center p-">ORDEN ORIGINAL</h3>
+
+            <div style="height: 350px;min-height:350px; overflow:auto; overflow-x:hidden;">
+                <table class="table table-striped table-bordered table-hover table-sm">
+                    <thead>
+                        <tr class="text-center bg-beta">
+                            <th>Selección</th>
+                            <th>Clave</th>
+                            <th>Artículo</th>
+                            <th>Unidad</th>
+                            <th>Precio</th>
+                            <th>Cantidad</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody_orden_dividir_original">
+                        @foreach (var item in Model)
+                        {
+                            <tr class="text-center" id="trArticuloDividirOriginal_@item.id_compras_orden_d">
+                                <td>
+                                    <input type="radio" value="@item.id_compras_orden_d" name="radio_articulo_dividir_orden" class="form-control" style="height:20px;" onclick="SetControlCaracteresOrdenDividir(@item.C_unidades_medidas.acepta_decimal);" />
+                                </td>
+                                <td id="clave_@item.id_compras_orden_d">@item.C_articulos_catalogo.clave</td>
+                                <td id="art_@item.id_compras_orden_d" class="text-left">@item.C_articulos_catalogo.nombre_articulo.ToUpper()</td>
+                                <td id="unid_@item.id_compras_orden_d">@item.C_articulos_catalogo.C_unidades_medidas.unidad_medida</td>
+                                <td id="precio_@item.id_compras_orden_d" class="precios_orden_dividir_original">@item.precio_unitario.Value.ToString("N2")</td>
+                                <td id="cant_@item.id_compras_orden_d">@item.cantidad_compra.Value.ToString("N2")</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <h3 class="text-dark col-md-2">TOTAL:</h3>
+            <h3 class="text-dark col-md-3" id="total_orden_dividir">$@Model.Select(x => x.cantidad_compra * x.precio_unitario).Sum().Value.ToString("N2")</h3>
+            <h3 class="text-dark col-md-2">@Model.FirstOrDefault().C_tipos_moneda.clave_fiscal</h3>
+        </div>
+        <div class="col-md-1 text-center">
+            <br />
+            <br />
+            <h4 class="text-center">Cantidad:</h4>
+            <input class="form-control" id="cantidad_orden_dividir" />
+            <br />
+            <button class="btn btn_beta" onclick="MoverArticuloDividirOrden();"><label>Agregar a</label><br /><label>nueva orden</label><i class="fa fa-arrow-right ml-1"></i></button>
+        </div>
+        <div class="col-md-5" style="padding: 1rem; margin-top: 1rem; margin-left: 3rem;">
+            <h3 style="margin:3px;" class="text-center p-">NUEVA ORDEN</h3>
+            <div style="height: 350px;min-height:350px; overflow:auto; overflow-x:hidden;">
+                <table class="table table-striped table-bordered table-hover table-sm">
+                    <thead>
+                        <tr class="text-center bg-beta">
+                            <th>Clave</th>
+                            <th>Artículo</th>
+                            <th>Unidad</th>
+                            <th>Precio</th>
+                            <th>Cantidad</th>
+                            <th>Regresar</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody_orden_dividir">
+                    </tbody>
+                </table>
+            </div>
+
+            <h3 class="text-dark col-md-2">TOTAL:</h3>
+            <h3 class="text-dark col-md-3" id="total_orden_dividir_new">$0</h3>
+            <h3 class="text-dark col-md-2">@Model.FirstOrDefault().C_tipos_moneda.clave_fiscal</h3>
+        </div>
+        
+    </div>
+}
+
+

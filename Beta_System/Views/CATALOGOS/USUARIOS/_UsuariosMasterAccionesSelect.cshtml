@@ -1,0 +1,7 @@
+﻿@model List<Beta_System.Models.C_usuarios_masters_acciones>
+
+@foreach (var accion in Model.OrderBy(x => x.accion))
+{
+    <option value="@accion.id_usuario_master_accion">@accion.accion</option>
+}
+

@@ -1,0 +1,347 @@
+﻿@model List<Beta_System.Models.ReporteSeguimientoRequisiciones>
+
+@{ 
+    int modo = ViewBag.modo;
+}
+
+@if (modo == 1)
+{
+    <table class="table table-sm table-condensed small table-bordered table-striped" id="datatable_seguimiento_requisiciones_detalle">
+        <thead>
+            <tr class="bg-beta text-center">
+                <th></th>
+                <th>Tipo</th>
+                <th>Requisicion</th>
+                <th>Centro</th>
+                <th>Fecha</th>
+                <th style="width:400px;">Concepto</th>
+
+                <th>Clave</th>
+                <th>Art.</th>
+                <th>Obs.</th>
+                <th>Unidad</th>
+                <th>Cantidad</th>
+                <th>Precio</th>
+                <th>Total</th>
+
+
+                <th>Usuario registra</th>
+                <th>Usuario 1ra Firma</th>
+                <th>Fecha 1ra firma</th>
+                <th>Usuario cotiza</th>
+                <th>Fecha cotizacióm</th>
+                <th>Tiempo cotización</th>
+                <th>Usuario autoriza</th>
+
+
+                <th>Cotizada</th>
+                <th>Parcializada</th>
+                <th>OC. generada</th>
+                <th>Fecha orden</th>
+                <th>Recepcionada</th>
+                <th>Fecha recepción</th>
+                <th>Usuario recepción</th>
+                <th>Importada</th>
+                <th>Proveedores</th>
+                <th>Ordenes</th>
+                <th>Factura</th>
+                <th>Estatus</th>
+                <th>Cuenta</th>
+                <th>Ver</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                string facturas_string = "";
+                try
+                { facturas_string = item.facturas_string.Substring(0, item.facturas_string.Length - 2); }
+                catch (Exception) { }
+
+                string ordenes_string = "";
+                try
+                { ordenes_string = item.ordenes_string.Substring(0, item.ordenes_string.Length - 2); }
+                catch (Exception) { }
+
+                string proveedores_string = "";
+                try
+                { proveedores_string = item.nombre_proveedor.Substring(0, item.nombre_proveedor.Length - 2); }
+                catch (Exception) { }
+
+
+
+                string transcurrido = "NA";
+                if (item.id_tipo_requisicion != 2 && item.fecha_cotiza != DateTime.MinValue)
+                {
+                    transcurrido = "";
+                    if (item.tiempo_cotizacion.TotalDays >= 1) { transcurrido += item.tiempo_cotizacion.Days + " Dias con "; }
+                    if (item.tiempo_cotizacion.TotalHours == 1) { transcurrido += item.tiempo_cotizacion.Hours + " hr "; }
+                    else if (item.tiempo_cotizacion.TotalHours > 1) { transcurrido += item.tiempo_cotizacion.Hours + " hrs "; }
+
+                    if (item.tiempo_cotizacion.TotalMinutes > 1) { transcurrido += item.tiempo_cotizacion.Minutes + " min "; }
+                    else { transcurrido += item.tiempo_cotizacion.Seconds + " seg "; }
+                }
+
+                string fecha_orden = "";
+                if (item.fecha_orden != DateTime.MinValue)
+                {
+                    fecha_orden = string.Format(item.fecha_orden.ToShortDateString(), "dd/MM/yyyy");
+                }
+
+                string fecha_recepcion = "";
+                if (item.fecha_recepcion != DateTime.MinValue)
+                {
+                    fecha_recepcion = string.Format(item.fecha_recepcion.ToShortDateString(), "dd/MM/yyyy");
+                }
+
+                <tr class="text-center">
+                    @if (item.anomalia == true) { <td class="bg-danger text-white"><i class="fa fa-warning"></i></td> }
+                    else{ <td class=""></td> }
+
+
+                    <td style="color:@item.color_tipo_requisicion">@item.tipo_requisicion</td>
+                    <td>@item.id_requisicion</td>
+                    <td>@item.centro</td>
+                    <td>@string.Format(item.fecha_registro.ToShortDateString(), "dd/MM/yyyy")</td>
+                    <td style="width:400px;">@item.concepto</td>
+
+                    <td>@item.clave</td>
+                    <td>@item.articulo</td>
+                    <td>@item.observaciones</td>
+                    <td>@item.unidad</td>
+                    <td>@item.cantidad.ToString("N2")</td>
+                    <td>@item.precio.ToString("N2")</td>
+                    <td>@item.total.ToString("N2")</td>
+
+
+                    <td>@item.usuario_registra</td>
+                    <td>@item.usuario_revisa</td>
+                    <td>
+                        @if (item.id_tipo_requisicion != 2)
+                        {
+                            <strong>@string.Format(item.fecha_revisa.ToShortDateString(), "dd/MM/yyyy")</strong>
+                        }
+                    </td>
+                    <td>@item.usuario_cotiza</td>
+                    <td>
+                        @if (item.id_tipo_requisicion != 2)
+                        {
+                            if (item.fecha_cotiza != DateTime.MinValue)
+                            {
+                                <strong>@string.Format(item.fecha_cotiza.ToShortDateString(), "dd/MM/yyyy")</strong>
+                            }
+                        }
+                    </td>
+                    <td><strong>@transcurrido</strong></td>
+                    <td>@item.usuario_autoriza</td>
+                    <td>
+                        @if (item.no_cotizaciones > 0)
+                        {<i class="fa fa-2x fa-check" style="color:#46E63E;"></i> }
+                        else
+                        { <i class="fa fa-2x fa-remove text-danger"></i>}
+                    </td>
+                    <td>
+                        @if (item.no_parcialidades > 0)
+                        {<i class="fa fa-2x fa-check" style="color:#46E63E;"></i> }
+                        else
+                        { <i class="fa fa-2x fa-remove text-danger"></i>}
+                    </td>
+                    <td>
+                        @if (item.no_ordenes > 0)
+                        {<i class="fa fa-2x fa-check" style="color:#46E63E;"></i> }
+                        else
+                        { <i class="fa fa-2x fa-remove text-danger"></i>}
+                    </td>
+                    <td>@fecha_orden</td>
+                    <td>
+                        @if (item.recepcionada == true)
+                        {<i class="fa fa-2x fa-check" style="color:#46E63E;"></i> }
+                        else
+                        { <i class="fa fa-2x fa-remove text-danger"></i>}
+                    </td>
+                    <td>@fecha_recepcion</td>
+                    <td>@item.usuario_recepcion</td>
+                    <td>
+                        @if (item.importada == true)
+                        {<i class="fa fa-2x fa-check" style="color:#46E63E;"></i> }
+                        else
+                        { <i class="fa fa-2x fa-remove text-danger"></i>}
+                    </td>
+                    <td>@proveedores_string</td>
+                    <td>@ordenes_string</td>
+                    <td>@facturas_string</td>
+                    <td>@item.estatus_requisicion</td>
+                    <td>@item.cuenta</td>
+                    <td>
+                        <button class="btn btn_beta_icon" onclick="ConsultarDetalleRequiGeneral(@item.id_requisicion);"><i class="fa fa-bars"></i></button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+<table class="table table-responsive table-striped" id="datatable_seguimiento_requisiciones_detalle">
+    <tr class="bg-beta text-center">
+        <th class="headerConcepto">Tipo</th>
+        <th class="headerConcepto">Requisicion</th>
+        <th class="headerConcepto">Centro</th>
+        <th class="headerConcepto">Fecha</th>
+        <th class="headerConcepto">Concepto</th>
+
+        <th class="headerConcepto">Clave</th>
+        <th class="headerConcepto">Art.</th>
+        <th class="headerConcepto">Obs.</th>
+        <th class="headerConcepto">Unidad</th>
+        <th class="headerConcepto">Cantidad</th>
+        <th class="headerConcepto">Precio</th>
+        <th class="headerConcepto">Total</th>
+
+
+        <th class="headerConcepto">Usuario registra</th>
+        <th class="headerConcepto">Usuario 1ra Firma</th>
+        <th class="headerConcepto">Fecha 1ra firma</th>
+        <th class="headerConcepto">Usuario cotiza</th>
+        <th class="headerConcepto">Fecha cotizacióm</th>
+        <th class="headerConcepto">Tiempo cotización</th>
+        <th class="headerConcepto">Usuario autoriza</th>
+
+        <th class="headerConcepto">Cotizada</th>
+        <th class="headerConcepto">Parcializada</th>
+        <th class="headerConcepto">OC. generada</th>
+        <th class="headerConcepto">Fecha OC.</th>
+        <th class="headerConcepto">Recepcionada</th>
+        <th class="headerConcepto">Fecha rececpción</th>
+        <th class="headerConcepto">Usuario rececpción</th>
+        <th class="headerConcepto">Importada</th>
+        <th class="headerConcepto">Proveedores</th>
+        <th class="headerConcepto">Ordenes</th>
+        <th class="headerConcepto">Factura</th>
+        <th class="headerConcepto">Estatus</th>
+        <th class="headerConcepto">Cuenta</th>
+    </tr>
+    @foreach (var item in Model)
+    {
+        string facturas_string = "";
+        try
+        { facturas_string = item.facturas_string.Substring(0, item.facturas_string.Length - 2); }
+        catch (Exception) { }
+
+        string ordenes_string = "";
+        try
+        { ordenes_string = item.ordenes_string.Substring(0, item.ordenes_string.Length - 2); }
+        catch (Exception) { }
+
+        string proveedores_string = "";
+        try
+        { proveedores_string = item.nombre_proveedor.Substring(0, item.nombre_proveedor.Length - 2); }
+        catch (Exception) { }
+
+
+        string cotizada = "NO";
+        if (item.no_cotizaciones > 0) { cotizada = "SI"; }
+
+        string parcializada = "NO";
+        if (item.no_parcialidades > 0) { parcializada = "SI"; }
+
+        string ord_generada = "NO";
+        if (item.no_ordenes > 0) { ord_generada = "SI"; }
+
+        string recepcionada = "NO";
+        if (item.recepcionada == true) { recepcionada = "SI"; }
+
+        string importada = "NO";
+        if (item.importada == true) { importada = "SI"; }
+
+
+        string transcurrido = "NA";
+        if (item.id_tipo_requisicion != 2 && item.fecha_cotiza != DateTime.MinValue)
+        {
+            transcurrido = "";
+            if (item.tiempo_cotizacion.TotalDays >= 1) { transcurrido += item.tiempo_cotizacion.Days + " Dias con "; }
+            if (item.tiempo_cotizacion.TotalHours == 1) { transcurrido += item.tiempo_cotizacion.Hours + " hr "; }
+            else if (item.tiempo_cotizacion.TotalHours > 1) { transcurrido += item.tiempo_cotizacion.Hours + " hrs "; }
+
+            if (item.tiempo_cotizacion.TotalMinutes > 1) { transcurrido += item.tiempo_cotizacion.Minutes + " min "; }
+            else { transcurrido += item.tiempo_cotizacion.Seconds + " seg "; }
+        }
+
+
+        string fecha_autoriza = "";
+        if (item.fecha_autoriza != DateTime.MinValue)
+        { fecha_autoriza = string.Format(item.fecha_autoriza.ToShortDateString(), "dd/MM/yyyy"); }
+
+        string fecha_1ra_firma = "";
+        if (item.id_tipo_requisicion != 2)
+        {
+            fecha_1ra_firma = string.Format(item.fecha_revisa.ToShortDateString(), "dd/MM/yyyy");
+        }
+
+        string fecha_cotiza = "";
+        if (item.id_tipo_requisicion != 2)
+        {
+            if (item.fecha_cotiza != DateTime.MinValue)
+            {
+                fecha_cotiza = string.Format(item.fecha_cotiza.ToShortDateString(), "dd/MM/yyyy");
+            }
+        }
+
+
+        string fecha_orden = "";
+        if (item.fecha_orden != DateTime.MinValue)
+        {
+            fecha_orden = string.Format(item.fecha_orden.ToShortDateString(), "dd/MM/yyyy");
+        }
+
+        string fecha_recepcion = "";
+        if (item.fecha_recepcion != DateTime.MinValue)
+        {
+            fecha_recepcion = string.Format(item.fecha_recepcion.ToShortDateString(), "dd/MM/yyyy");
+        }
+
+
+
+        <tr class="text-center">
+            <td style="color:@item.color_tipo_requisicion">@item.tipo_requisicion</td>
+            <td>@item.id_requisicion</td>
+            <td>@item.centro</td>
+            <td>@string.Format(item.fecha_registro.ToShortDateString(), "dd/MM/yyyy")</td>
+            <td style="width:400px;">@item.concepto</td>
+
+            <td>@item.clave</td>
+            <td>@item.articulo</td>
+            <td>@item.observaciones</td>
+            <td>@item.unidad</td>
+            <td>@item.cantidad.ToString("N2")</td>
+            <td>@item.precio.ToString("N2")</td>
+            <td>@item.total.ToString("N2")</td>
+
+            <td>@item.usuario_registra</td>
+            <td>@item.usuario_revisa</td>
+            <td>@fecha_1ra_firma</td>
+            <td>@item.usuario_cotiza</td>
+            <td>@item.fecha_cotiza</td>
+            <td>@transcurrido</td>
+            <td>@item.usuario_autoriza</td>
+
+
+
+            <td>@cotizada</td>
+            <td>@parcializada</td>
+            <td>@ord_generada</td>
+            <td>@fecha_orden</td>
+            <td>@recepcionada</td>
+            <td>@fecha_recepcion</td>
+            <td>@item.usuario_recepcion</td>
+            <td>@importada</td>
+            <td>@proveedores_string</td>
+            <td>@ordenes_string</td>
+            <td>@facturas_string</td>
+            <td>@item.estatus_requisicion</td>
+            <td>@item.cuenta</td>
+        </tr>
+    }
+</table>
+}
+

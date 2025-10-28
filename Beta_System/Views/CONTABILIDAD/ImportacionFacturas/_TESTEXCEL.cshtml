@@ -1,0 +1,62 @@
+﻿@model IEnumerable<Beta_System.Models.C_contabilidad_importacion_facturas_d>
+
+@{
+    var importacion = Model.FirstOrDefault().C_contabilidad_importacion_facturas_g;
+}
+
+<div class="table-responsive">
+    <table class="table table-striped table-bordered" id="datatable_detalle_importacion">
+        <tr class="bg-beta text-center">
+            <th>Cuenta</th>
+            <th>Razón social</th>
+            <th>Nombre fiscal</th>
+            <th>Descripción</th>
+            <th>Factura</th>
+            <th>Fecha factura</th>
+            <th>Fecha importación</th>
+            <th>Subtotal</th>
+            <th>IVA (16)</th>
+            <th>Total importe</th>
+            <th>Tipo cambio</th>
+            <th>Orden compra</th>
+            <th>IVA retenido</th>
+            <th>ISR</th>
+            <th>Usuario registra</th>
+        </tr>
+        @foreach (var item in Model.GroupBy(x => x.C_compras_facturas_proveedores.C_compras_ordenes_g.C_compras_requisiciones_tipos.id_requisicion_tipo).Distinct())
+        {
+            <tr>
+                <td class="text-center" colspan="11">@item.FirstOrDefault().C_compras_facturas_proveedores.C_compras_ordenes_g.C_compras_requisiciones_tipos.tipo_requisicion</td>
+            </tr>
+
+            foreach (var detalle in item.Distinct())
+            {
+                <tr class="text-center">
+                    <td>@detalle.C_cuentas_contables_g.cuenta.</td>
+                    <td>@detalle.C_compras_facturas_proveedores.C_compras_proveedores.razon_social</td>
+                    <td>@detalle.C_compras_facturas_proveedores.C_compras_proveedores.nombre_prov</td>
+                    <td>@detalle.concepto</td>
+                    <td>@detalle.C_compras_facturas_proveedores.folio_factura</td>
+                    <td>@String.Format(detalle.C_compras_facturas_proveedores.fecha_factura.Value.ToShortDateString(), "dd/mm/yyyy")</td>
+                    <td>@String.Format(detalle.C_contabilidad_importacion_facturas_g.fecha_registro.Value.ToShortDateString(), "dd/mm/yyyy")</td>
+
+                    <td>@string.Format("{0:C}", detalle.C_compras_facturas_proveedores.subtotal)</td>
+                    <td>@string.Format("{0:C}", detalle.C_compras_facturas_proveedores.iva_monto)</td>
+                    <td>@string.Format("{0:C}", detalle.C_compras_facturas_proveedores.total)</td>
+
+                    <td>
+                        @if (detalle.id_moneda != 1)
+                        {<label>@detalle.tipo_cambio </label>}
+                    </td>
+                    <td>@detalle.C_compras_facturas_proveedores.id_compras_orden_g</td>
+
+                    <td>@string.Format("{0:C}", detalle.C_compras_facturas_proveedores.iva_retenido_monto)</td>
+                    <td>@string.Format("{0:C}", detalle.C_compras_facturas_proveedores.isr_monto)</td>
+                    <td>@detalle.C_contabilidad_importacion_facturas_g.C_usuarios_corporativo.usuario</td>
+                </tr>
+            }
+
+        }
+    </table>
+</div>
+

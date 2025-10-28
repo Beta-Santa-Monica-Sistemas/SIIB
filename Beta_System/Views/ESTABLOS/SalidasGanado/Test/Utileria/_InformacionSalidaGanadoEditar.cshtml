@@ -1,0 +1,97 @@
+﻿@model List<Beta_System.Models.C_salida_ganado_d>
+
+@if (Model != null)
+{
+    var salida_g = Model.FirstOrDefault().C_salida_ganado_g;
+
+    if (salida_g.rstatus != "A")
+    {
+        <h3 class="text-center text-danger">Salida de ganado cancelada</h3>
+    }
+    else
+    {
+        int last_index_detalle = Model.Count() + 1;
+
+        <div class="row">
+            <div class="col-md-12">
+                <hr />
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                            <tr class="bg-beta text-center">
+                                <th># Arete</th>
+                                <th>Siniiga</th>
+                                <th>Clasificación</th>
+                                <th>Causa de la baja</th>
+                                <th>Condición</th>
+                                <th>Sala</th>
+                                <th>Edad</th>
+                                <td>Foto</td>
+                                <th>Eliminar</th>
+                            </tr>
+                        </thead>
+                        <tbody id="thead_ganado_edit">
+                            @foreach (var item in Model)
+                            {
+                                <tr id="tbody_row_ganado_@item.id_saliga_gan_d">
+                                    <td>
+                                        <input type="text" value="@item.arete" class="form-control arete_edit" id="IdDetalleSalida_@item.id_saliga_gan_d" />
+                                    </td>
+                                    <td>
+                                        <input type="text" value="@item.siniiga" class="form-control siniiga_edit" id="siniiga_@item.id_saliga_gan_d" readonly />
+                                    </td>
+                                    <td>
+                                        <input type="text" value="@item.clasifica" class="form-control clasif_edit" id="clasif_@item.id_saliga_gan_d" />
+                                    </td>
+                                    <td>
+                                        <input type="text" value="@item.causa_b" class="form-control causa_edit" id="causa_@item.id_saliga_gan_d" />
+                                    </td>
+                                    <td>
+                                        <input type="text" value="@item.cond_ind" class="form-control condicion_edit" id="condicion_@item.id_saliga_gan_d" />
+                                    </td>
+                                    <td>
+                                        <input type="text" value="@item.sala" class="form-control sala_edit" id="sala_@item.id_saliga_gan_d" />
+                                    </td>
+                                    <td>
+                                        <input type="text" value="@item.edad" class="form-control edad_edit" id="edad_@item.id_saliga_gan_d" />
+                                    </td>
+                                    <td class="text-center">
+                                        <div class="mb-2">
+                                            @if (item.path != null || item.path_2 != null)
+                                            {
+                                                <div class="d-flex justify-content-center gap-2">
+                                                    @if (item.path != null)
+                                                    {
+                                                        <a class="btn btn_beta_icon" href="@item.path" target="_blank"><i class="fa fa-eye"></i></a>
+                                                    }
+                                                    @if (item.path_2 != null)
+                                                    {
+                                                        <a class="btn btn_beta_icon" href="@item.path_2" target="_blank"><i class="fa fa-eye"></i></a>
+                                                    }
+                                                </div>
+                                            }
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <button class="btn btn_beta_danger" onclick="EliminarDetalleSalidaGanado(@item.id_saliga_gan_d);"><i class="fa fa-remove"></i></button>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="col-md-6 text-left">
+                <button class="btn btn_beta_danger" onclick="EliminarSalidaGanado(@salida_g.id_salida_gan_g);">ELIMINAR SALIDA</button>
+            </div>
+            <div class="col-md-6 text-right">
+                <button class="btn btn_beta" onclick="ActualizarSalidaGanado(@salida_g.id_salida_gan_g, '@salida_g.folio');">ACTUALIZAR SALIDA</button>
+            </div>
+        </div>
+    }
+}
+else
+{
+    <div class="col-md-12"><hr /></div>
+    <h3 class="text-center text-danger">Folio no encontrado</h3>
+}

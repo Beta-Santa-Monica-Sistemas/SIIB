@@ -1,0 +1,6 @@
+﻿@model IEnumerable<Beta_System.Models.C_salida_ganado_tipos_salidas_clasificaciones>
+
+@foreach (var item in Model)
+{
+    <option value="@item.id_clasificacion_ganado">@item.C_salida_ganado_clasificaciones_ganado.clasificacion</option>
+}

@@ -1,0 +1,244 @@
+﻿@model List<Beta_System.Models.C_salida_ganado_d>
+
+@if (Model != null)
+{
+    var salida_g = Model.FirstOrDefault().C_salida_ganado_g;
+
+    if (salida_g.rstatus != "A")
+    {
+        <h3 class="text-center text-danger">Salida de ganado cancelada</h3>
+    }
+    else
+    {
+        int last_index_detalle = Model.Count() + 1;
+        <div class="row">
+            <div class="col-md-3" style="border-right: 1px solid #2e87d7; ">
+                <h5 class="text-center"><strong>Tipo de salida</strong></h5>
+                <div class="row">
+                    <div class="col-md-6 text-center">
+                        @if (salida_g.id_tipo_salida == 1)
+                        {<input type="radio" name="tipo_salida" value="1" style="height: 30px; width: 30px;" checked disabled /><br /> }
+                        else
+                        { <input type="radio" name="tipo_salida" value="1" style="height: 30px; width: 30px;" disabled /><br />}
+                        <label>Lote: </label>
+                    </div>
+                    <div class="col-md-6 text-center">
+                        @if (salida_g.id_tipo_salida == 2)
+                        {<input type="radio" name="tipo_salida" value="2" style="height: 30px; width: 30px;" checked disabled /><br />}
+                        else
+                        { <input type="radio" name="tipo_salida" value="2" style="height: 30px; width: 30px;" disabled /><br />}
+                        <label>Diario</label>
+                    </div>
+                </div>
+                <hr />
+
+                <strong>Establo: @salida_g.C_salida_ganado_establos.establo</strong>
+                <br />
+                <strong>Fecha registro: @string.Format(salida_g.fecha.Value.ToShortDateString(), "dd/MM/yyyy")</strong>
+                <br />
+                <strong>Hora: @salida_g.fecha.Value.ToShortTimeString()</strong>
+                <br />
+                <br />
+                <strong>Ganado:</strong>
+                <select class="form-control" id="ganado_g" onchange="ConsultarCondicionesClasificacion();">
+                    @{ Html.RenderAction("ConsultarClasificacionesGanado", "SALIDASGANADO"); }
+                </select>
+                <br />
+                <strong>Condición:</strong>
+                <select class="form-control input_valid" id="condicion_g"></select>
+                <br />
+                <strong>Ficha:</strong><strong id="ficha_g">@salida_g.ficha</strong>
+                <div class="row">
+                    <div class="col-md-4">
+                        <strong>Peso 1</strong>
+                        <input type="text" class="form-control input_clean input_ficha" readonly id="peso_1_g" value="@salida_g.peso1" />
+                    </div>
+                    <div class="col-md-4">
+                        <strong>Peso 2</strong>
+                        <input type="text" class="form-control input_clean input_ficha" readonly id="peso_2_g" value="@salida_g.peso2" />
+                    </div>
+                    <div class="col-md-4">
+                        <strong>Peso T</strong>
+                        <input type="text" class="form-control input_clean input_ficha" readonly id="peso_t_g" value="@salida_g.peso_t" />
+                    </div>
+                </div>
+                <br />
+
+
+            </div>
+            <div class="col-md-9">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="col-md-4">
+                            <strong>Pesador</strong>
+                            <input type="text" class="form-control input_clean input_ficha" id="pesador_g" value="@salida_g.pesador" />
+                        </div>
+                        <div class="col-md-4">
+                            <strong>Chofer</strong>
+                            <input type="text" class="form-control input_clean input_ficha" id="chofer_g" value="@salida_g.chofer" />
+                        </div>
+                        <div class="col-md-2">
+                            <strong>Placas</strong>
+                            <input type="text" class="form-control input_clean input_ficha" id="placas_g" value="@salida_g.placas" />
+                        </div>
+                        <div class="col-md-2">
+                            <strong>Vehículo</strong>
+                            <input type="text" class="form-control input_clean input_ficha" id="vehiculo_g" value="@salida_g.vehiculo" />
+                        </div>
+                    </div>
+
+                    <div class="col-md-12">
+                        <br />
+                        <div class="col-md-12">
+                            <strong>Comprador</strong>
+                            <input type="text" class="form-control input_clean input_ficha" id="comprador_g" value="@salida_g.comprador" />
+                        </div>
+
+                        <div class="col-md-12">
+                            <br />
+                            <div class="col-md-2">
+                                <strong>Arete</strong>
+                                <input type="text" class="form-control input_detalle input_clean solo-letras-numeros" id="arete" />
+                            </div>
+                            <div class="col-md-4">
+                                <strong>Causa de la baja</strong>
+                                <input type="text" class="form-control input_detalle input_clean solo-letras-numeros" id="causa" />
+                            </div>
+                            <div class="col-md-4">
+                                <strong>Edad</strong>
+                                <input type="text" class="form-control input_detalle input_clean solo-letras-numeros" id="edad" />
+                            </div>
+                            <div class="col-md-2">
+                                <strong>Sala</strong>
+                                <input type="text" class="form-control input_detalle input_clean solo-letras-numeros" id="sala" />
+                            </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <br />
+                            <div class="col-md-2">
+                                <strong>Cantidad</strong>
+                                <input type="number" class="form-control input_valid" id="cantidad" value="1" readonly />
+                            </div>
+                            <div class="col-md-2">
+                                <strong>Peso Neto</strong>
+                                <input type="number" class="form-control input_detalle input_valid input_clean solo-numeros" id="peso_neto" />
+                            </div>
+                            <div class="col-md-2" style="display:none;">
+                                <strong>P. Unitario</strong>
+                                <input type="number" class="form-control input_detalle input_clean" id="p_unitario" />
+                            </div>
+
+                            <div class="col-md-2">
+                                <br />
+                                <button class="btn btn_beta_icon" id="btn_agregar_vaca" onclick="AgregarVacaTablaUtileria(@last_index_detalle);"><i class="fa fa-plus"></i></button>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <hr />
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-striped">
+                                    <thead>
+                                        <tr class="bg-beta text-center">
+                                            <th># Arete</th>
+                                            <th>Clasificación</th>
+                                            <th>Causa de la baja</th>
+                                            <th>Condición</th>
+                                            <th>Sala</th>
+                                            <th>Edad</th>
+                                            <th>Cantidad</th>
+                                            <th>Peso Neto</th>
+                                            <th>Eliminar</th>
+                                        </tr>
+                                    </thead>
+                                    <thead id="thead_ganado">
+                                        @foreach (var item in Model)
+                                        {
+                                            //var importe = item.cantidad * item.cantidad;
+                                            <tr id="tbody_row_@item.id_saliga_gan_d">
+                                                <td>
+                                                    <input type="text" value="@item.arete" class="form-control arete" id="IdDetalleSalida_@item.id_saliga_gan_d" />
+                                                </td>
+                                                <td>
+                                                    <input type="text" value="@item.clasifica" class="form-control clasif" id="clasif_@item.id_saliga_gan_d" />
+                                                </td>
+                                                <td>
+                                                    <input type="text" value="@item.causa_b" class="form-control causa" id="causa_@item.id_saliga_gan_d" />
+                                                </td>
+                                                <td>
+                                                    <input type="text" value="@item.cond_ind" class="form-control condicion" id="condicion_@item.id_saliga_gan_d" />
+                                                </td>
+                                                <td>
+                                                    <input type="text" value="@item.sala" class="form-control sala" id="sala_@item.id_saliga_gan_d" />
+                                                </td>
+                                                <td>
+                                                    <input type="text" value="@item.edad" class="form-control edad" id="edad_@item.id_saliga_gan_d" />
+                                                </td>
+                                                <td>
+                                                    <input type="number" value="@item.cantidad" class="form-control cantidad" id="cantidad_@item.id_saliga_gan_d" />
+                                                </td>
+                                                <td>
+                                                    <input type="number" value="@item.peso" class="form-control peso_neto" id="peso_neto_@item.id_saliga_gan_d" />
+                                                </td>
+                                                <td>
+                                                    <button class="btn btn_beta_danger" onclick="EliminarDetalleSalida(@item.id_saliga_gan_d);"><i class="fa fa-remove"></i></button>
+                                                </td>
+                                            </tr>
+                                        }
+                                    </thead>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12 text-center">
+                            <div class="col-md-2"></div>
+                            <div class="col-md-3">
+                                <strong>Cantidad Total</strong>
+                                <input type="number" class="form-control input_clean" id="cantidad_total" readonly />
+                            </div>
+                            <div class="col-md-2"></div>
+                            <div class="col-md-3">
+                                <strong>Total Kilos</strong>
+                                <input type="number" class="form-control input_clean" id="kilos_total" readonly />
+                            </div>
+                            <div class="col-md-1"></div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="mt-3" style="border-top: 1px solid #2e87d7"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4 text-left mt-4">
+                                <button class="btn btn_beta_danger" onclick="EliminarSalidaGanado(@salida_g.id_salida_gan_g);">ELIMINAR SALIDA</button>
+                            </div>
+                            <div class="col-md-8 text-right mt-4">
+                                <button class="btn btn_beta" onclick="ActualizarSalidaGanado(@salida_g.id_salida_gan_g, '@salida_g.folio');">ACTUALIZAR SALIDA</button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div>
+
+                </div>
+            </div>
+        </div>
+
+        <script>
+            var $option = $("#ganado_g option").filter(function () {
+                return $(this).text() == "@salida_g.ganado"
+            }).prop("selected", true);
+
+            ConsultarCondicionesClasificacion();
+            var $option_cond = $("#condicion_g option").filter(function () {
+                return $(this).text() == "@salida_g.condicion"
+            }).prop("selected", true);
+
+        </script>
+    }
+}
+else
+{
+    <h3 class="text-center text-danger">Folio no encontrado</h3>
+}
+

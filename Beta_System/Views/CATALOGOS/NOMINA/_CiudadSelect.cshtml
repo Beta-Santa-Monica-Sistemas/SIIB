@@ -1,0 +1,6 @@
+﻿@model IEnumerable<Beta_System.Models.C_direcciones_ciudades>
+
+@foreach (var item in Model)
+{
+    <option value="@item.id_ciudad">@item.nombre_ciudad, @item.C_direcciones_estados.nombre_estado, @item.C_direcciones_estados.C_direcciones_paises.nombre_pais</option>
+}

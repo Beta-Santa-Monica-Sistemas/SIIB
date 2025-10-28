@@ -1,0 +1,134 @@
+﻿@model IEnumerable<Beta_System.Models.C_compras_ordenes_d>
+@{
+    var contador = 0;
+    var modo = ViewBag.modo_recepcion;
+}
+
+<style>
+    #datatable_precargas th:nth-child(2),
+    #datatable_precargas td:nth-child(2) {
+        display: none;
+    }
+</style>
+
+@if (Model.Count() > 0)
+{
+    Html.RenderAction("ConsultarInformacionRequisicionHeader", "REQUISICIONES", new { id_requisicion = Model.FirstOrDefault().C_compras_ordenes_g.id_requisicion_articulo_g });
+
+    <div class="col-md-12 text-center">
+        <label id="modo_orden" style="display:none">@modo</label>
+        @if (modo == 1)
+        {
+            <h3 style="margin: 0px;"><strong>NUEVA PRECARGA</strong></h3>
+        }
+        else
+        {
+            <h3 style="margin: 0px;"><strong>MODIFICAR PRECARGA</strong></h3>
+        }
+
+    </div>
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered text-center" id="datatable_precargas" style="width:100%">
+            <thead>
+                <tr class="bg-beta">
+                    <th>#</th>
+                    <th>ocultar</th>
+                    <th>Articulo</th>
+                    <th>Solicita</th>
+                    <th>Entrega</th>
+                    <th>Pendiente</th>
+                    <th>Precarga</th>
+                    <th>Precargar</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    var id_articulo = @item.id_articulo + "_" + @contador;
+                    <tr>
+                        @*@if (item.C_articulos_catalogo.almacenable == true)
+                            {
+                                <td><input id="check_@item.id_compras_orden_d" type="checkbox" class="form-control check_entrega_articulo" style="min-height: 25px; width: 100%;" onclick="ActivarEntrega(@item.id_compras_orden_d,@item.id_compras_orden_d);" /></td>
+                            }
+                            else
+                            {
+                                <td style="color: red"><i class="fa fa-times"></i></td>
+                            }*@
+
+                        <td><input id="check_@item.id_compras_orden_d" type="checkbox" class="form-control check_entrega_articulo" style="min-height: 25px; width: 100%;" onclick="ActivarEntrega(@item.id_compras_orden_d,@modo);" /></td>
+                        <td id="@item.id_compras_orden_d" class="orden_articuloD"></td>
+                        <td id="@id_articulo" class="orden_articulo">@item.C_articulos_catalogo.nombre_articulo</td>
+                        <td id="cant_solicita_@item.id_compras_orden_d" class="orden_compra">@string.Format("{0:0.00}", @item.cantidad_compra)</td>
+                        <td id="cant_entrega_@item.id_compras_orden_d" class="orden_entrega">@string.Format("{0:0.00}", @item.cantidad_entregada)</td>
+                        @{
+                            var pendiente = @item.cantidad_compra - @item.cantidad_entregada;
+                        }
+                        <td id="cant_pendiente_@item.id_compras_orden_d">@pendiente</td>
+                        @if (modo == 1)
+                        {
+                            <td id="cant_precarga_@item.id_compras_orden_d">0.00</td>
+                        }
+                        else
+                        {
+                            <td id="cant_precarga_@item.id_compras_orden_d">@string.Format("{0:0.00}", @item.cantidad_precarga)</td>
+                        }
+
+                        <td>
+                            <input onkeypress="return isNumberOrDecimalKey(event,@item.C_articulos_catalogo.C_unidades_medidas.acepta_decimal)" type="text" id="cant_recibido_@item.id_compras_orden_d" oninput="TablaDecimal(this);" class="orden_recibido form-control" onkeyup="ValidarEntregaArticuloPrecarga(@item.id_compras_orden_d)" disabled />
+                        </td>
+                    </tr>
+                    contador++;
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="row">
+        <div class="col-md-8 text-center">
+            <strong>Comentario</strong>
+            <br />
+            <textarea rows="1" class="form-control" id="comentario_precarga">@ViewBag.comentario</textarea>
+        </div>
+        <div class="col-md-4 text-right ">
+            <br />
+            <button class="btn btn_beta" onclick="RegistrarCapturaMovimientoInventarioPrecarga(@modo);">Confirmar</button>
+        </div>
+    </div>
+}
+else
+{
+    <h2 class="text-center" style="color:red">NO SE ENCONTRO LA ORDEN DE COMPRA O YA SE RECIBIO</h2>
+    <br />
+    <label>@ViewBag.ex_msj</label>
+}
+
+<script>
+    $(window).on("load", function () {
+        CaracteresControl();
+
+    });
+
+    function isNumberOrDecimalKey(evt, unidad) {
+        var charCode = (evt.which) ? evt.which : event.keyCode;
+        //UNIDAD 1 DECIMAL
+        //UNIDAD 0 ENTERO
+        if (unidad == 1) {
+            // Allow only numbers and a single decimal point
+            if (charCode > 31 && (charCode < 48 || charCode > 57) && charCode !== 46) {
+                return false;
+            }
+            // Allow only one decimal point
+            var input = evt.target.value;
+            if (input.indexOf('.') !== -1 && charCode === 46) {
+                return false;
+            }
+            return true;
+        }
+        else {
+            // Allow only numbers and a single decimal point
+            if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+                return false;
+            }
+            return true;
+        }
+    }
+</script>

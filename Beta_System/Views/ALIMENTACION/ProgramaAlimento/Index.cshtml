@@ -1,0 +1,130 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+    List<int> permisos = Session["PermisosModulo"] as List<int>;
+}
+
+<div class="page_title">
+    <div class="counter_section">
+        <h1>Programa de alimento</h1>
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="nav nav-tabs">
+                    <li> <a data-toggle="tab" href="#consultar_prg_tab">Consultar programas <i class="fa fa-2x fa-search ml-2"></i></a> </li>
+
+                    @if (permisos.Contains(4046))
+                    {
+                        <li> <a data-toggle="tab" href="#generar_prg_tab">Generar nuevo programa <i class="fa fa-2x fa-plus ml-2"></i></a> </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="column2 counter_section">
+    <div class="tab-content">
+
+        <div id="consultar_prg_tab" class="tab-pane fade in active show">
+            <h3 class="text-center">CONSULTAR PROGRAMAS</h3>
+            <div class="row">
+                <div class="col-md-3">
+                    <strong>Establo</strong>
+                    <select class="form-control id_establo_select" id="id_establo_consulta_prg"></select>
+                </div>
+                <div class="col-md-3">
+                    <strong>Fecha inicio</strong>
+                    <input type="date" class="form-control fechas_inicio" id="fecha_inicio_consulta_prg" />
+                </div>
+                <div class="col-md-3">
+                    <strong>Fecha fin</strong>
+                    <input type="date" class="form-control" id="fecha_fin_consulta_prg" />
+                </div>
+                <div class="col-md-3 text-left">
+                    <br />
+                    <button class="btn btn_beta_icon" onclick="ConsultarProgramasAlimentacionTable();"><i class="fa fa-search"></i></button>
+                </div>
+            </div>
+            <hr />
+            <div id="div_consulta_prg" class="table-responsive"></div>
+        </div>
+
+
+        <div id="generar_prg_tab" class="tab-pane fade">
+            <h3 class="text-center">GENERAR NUEVO PROGRAMA</h3>
+            <div class="row">
+                <div class="col-md-2">
+                    <strong>Establo</strong>
+                    <select class="form-control id_establo_select" id="id_establo_gen_prg"></select>
+                </div>
+                <div class="col-md-3">
+                    <strong>Referencia</strong>
+                    <input type="text" class="form-control form-valid" id="referencia_gen_prg" />
+                </div>
+                <div class="col-md-2">
+                    <strong>Fecha inicial (Inicia lunes)</strong>
+                    <input type="date" class="form-control form-valid form-secure" id="fecha_incio_gen_prg" />
+                </div>
+                <div class="col-md-2">
+                    <strong># de semanas</strong>
+                    <input type="number" class="form-control form-valid form-secure" id="no_semanas_gen_prg" />
+                </div>
+                <div class="col-md-2 text-left">
+                    <br />
+                    <button class="btn btn_beta_danger" id="btn_secure_prg" onclick="BloquearCamposPrg(2);" style="display:none;">Cambiar</button>
+                </div>
+                <div class="col-md-1 text-right">
+                    <br />
+                    <button class="btn btn_beta" onclick="CalcularSemanasNuevoPrograma();"><i class="fa fa-calculator"></i> Mostrar</button>
+                </div>
+            </div>
+            <hr />
+            <div id="div_programacion_nueva"></div>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- Modal DETALLE PROGRAMACIÓN-->
+<div class="modal fade" id="m_detalle_programacion" tabindex="-1" role="dialog" aria-labelledby="m_detalle_programacionLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document" style="width: 80%; min-width:80%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="m_detalle_programacionLabel">DETALLE DEL PROGRAMA</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="div_detalle_programacion" class="container">
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn_beta_danger" data-dismiss="modal">Regresar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@Scripts.Render("~/bundles_AlimentacionProgramacion/js")
+
+<script>
+    $(window).on("load", function () {
+        ConsultarEstablosUsuarioSelect(0);
+        $('input[type="date"]').val(today);
+        $('.fechas_inicio').val(last_2_months);
+
+        var todos_option = $('<option>', { value: '0', text: 'Todos' });
+        $("#id_establo_consulta_prg").prepend(todos_option);
+        $("#id_establo_consulta_prg").val('0');
+
+    });
+</script>
+
+

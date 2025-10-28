@@ -1,0 +1,67 @@
+﻿@model IEnumerable<Beta_System.Models.C_compras_ordenes_precarga_d>
+
+@if (Model != null)
+{
+    <table class="table table-striped table-bordered small" id="datatable_precargas_historial">
+        <thead>
+            <tr class="text-center">
+                <th colspan="9" class="bg-green">PRECARGA</th>
+                <th colspan="3" class="bg-danger text-white">RECEPCIÓN</th>
+            </tr>
+            <tr class="bg-beta text-center">
+                <th>Orden</th>
+                <th>Requisición</th>
+                <th>Fecha precarga</th>
+                <th>Ubicación entrega</th>
+                <th>Destinatario</th>
+                <th>Clave</th>
+                <th>Artículo</th>
+                <th>Unidad med.</th>
+                <th>Precarga</th>
+
+                <th>Recepción</th>
+                <th>Usuario recep.</th>
+
+                <th>Fecha recep.</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (var item in Model.OrderBy(x => x.C_compras_ordenes_precarga_g.fecha_registro))
+            {
+                int id_orden_d = (int)item.id_compras_orden_d;
+                <tr>
+                    <td>@item.C_compras_ordenes_precarga_g.id_compras_orden_g</td>
+                    <td>@item.C_compras_ordenes_precarga_g.C_compras_ordenes_g.C_compras_requi_g.C_centros_g.siglas @item.C_compras_ordenes_precarga_g.C_compras_ordenes_g.id_requisicion_articulo_g</td>
+                    <td>@string.Format(item.C_compras_ordenes_precarga_g.fecha_registro.Value.ToString(), "dd/mm/yyyy hh:ss tt")</td>
+                    <td class="text-left">@item.C_compras_ordenes_precarga_g.C_compras_ordenes_g.C_compras_ordenes_ubicaciones_entrega.nombre_ubicacion.ToUpper()</td>
+                    <td class="text-left">@item.C_compras_ordenes_precarga_g.C_compras_ordenes_g.C_compras_requi_g.C_usuarios_corporativo5.C_empleados.nombres.ToUpper() @item.C_compras_ordenes_precarga_g.C_compras_ordenes_g.C_compras_requi_g.C_usuarios_corporativo5.C_empleados.apellido_paterno.ToUpper()</td>
+                    <td>@item.C_compras_ordenes_d.C_articulos_catalogo.clave</td>
+                    <td>@item.C_compras_ordenes_d.C_articulos_catalogo.nombre_articulo.ToUpper()</td>
+                    <td>@item.C_compras_ordenes_d.C_articulos_catalogo.C_unidades_medidas.unidad_medida.ToUpper()</td>
+                    <td>@item.cantidad_precarga.Value.ToString("N2")</td>
+
+                    @if (item.C_compras_ordenes_recepciones_d != null)
+                    {
+                        <td>@item.C_compras_ordenes_recepciones_d.cantidad_recepcion.Value.ToString("N2")</td>
+                        <th>@item.C_compras_ordenes_recepciones_d.C_compras_ordenes_recepciones_g.C_usuarios_corporativo.C_empleados.nombres @item.C_compras_ordenes_recepciones_d.C_compras_ordenes_recepciones_g.C_usuarios_corporativo.C_empleados.apellido_paterno</th>
+                        <th>@string.Format(item.C_compras_ordenes_recepciones_d.C_compras_ordenes_recepciones_g.fecha_registro.Value.ToString(), "dd/mm/yyyy HH:ss tt")</th>
+                    }
+                    else
+                    {
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                    }
+                </tr>
+            }
+        </tbody>
+
+    </table>
+}
+else
+{
+    <h3 class="text-center text-danger">NO SE ENCONTRÓ INFORMACIÓN</h3>
+}
+
+

@@ -1,0 +1,67 @@
+﻿@model IEnumerable<Beta_System.Models.C_articulos_catalogo>
+
+@{
+    List<int> permisos = Session["PermisosModulo"] as List<int>;
+    var almacenmin = ViewBag.almacenmin;
+    var sinvalor = 0;
+}
+
+<table class="table table-striped table-bordered w-100" id="tabla_articulos_minimo" width="100%">
+    <thead>
+        <tr class="bg-beta text-center">
+            <th>Clave</th>
+            <th>Artículo</th>
+            <th>Observaciónes</th>
+            <th>Medida</th>
+            <th>Inv. Minimo</th>
+            <th>Inv. Maximo</th>
+            <th>Inv. Promedio</th>
+            <th>Confirmacion</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr class="text-center">
+                <td id="@item.id_articulo">@item.clave</td>
+                <td>@item.nombre_articulo</td>
+                <td>@item.descripcion_articulo</td>
+                <td>@item.C_unidades_medidas.unidad_medida</td>
+                @{
+                    var cantidad = item.C_inventario_almacen_establo_maximo_minimo.Where(x => x.activo == true && x.id_articulo == item.id_articulo && x.id_almacen_g == almacenmin).FirstOrDefault();
+                }
+                @if (cantidad == null)
+                {
+                    <td>
+                        <input onkeyup="CalcularPromedio(@item.id_articulo);" onkeypress="return isNumberOrDecimalKey(event)" type="text" id="articulomin_@item.id_articulo" value="@sinvalor" class="articulos_inventario_cantidad1 solo-numeros form-control" />
+                    </td>
+                    <td>
+                        <input onkeyup="CalcularPromedio(@item.id_articulo);" onkeypress="return isNumberOrDecimalKey(event)" type="text" id="articulomax_@item.id_articulo" value="@sinvalor" class="articulos_inventario_cantidad2 solo-numeros form-control" />
+                    </td>
+                    <td>
+                        <input type="text" id="articuloprom_@item.id_articulo" value="@sinvalor" class="form-control articulos_inventario_cantidad3" disabled />
+                    </td>
+                }
+                else
+                {
+                    <td>
+                        <input onkeyup="CalcularPromedio(@item.id_articulo);" onkeypress="return isNumberOrDecimalKey(event)" type="text" id="articulomin_@item.id_articulo" value="@Convert.ToInt32(@cantidad.cantidad_minima)" class="articulos_inventario_cantidad1 solo-numeros form-control" />
+                    </td>
+                    <td>
+                        <input onkeyup="CalcularPromedio(@item.id_articulo);" onkeypress="return isNumberOrDecimalKey(event)" type="text" id="articulomax_@item.id_articulo" value="@Convert.ToInt32(@cantidad.cantidad_maxima)" class="articulos_inventario_cantidad2 solo-numeros form-control" />
+                    </td>
+                    <td>
+                        <input type="text" id="articuloprom_@item.id_articulo" class="form-control articulos_inventario_cantidad3" value="@Convert.ToInt32(@cantidad.cantidad_promedio)" disabled />
+                    </td>
+                }
+            <td>
+                <button class="btn btn_beta_icon" id="articuloconfirma_@item.id_articulo" onclick="RegistrarMaximoMinimo(@item.id_articulo);"><i class="fa fa-pencil"></i></button>
+            </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div class="col-md-12">
+    <button class="btn btn_beta" onclick="RegistrarInventarioMinimo();"><i class="fa fa-pencil"></i>Confirmar todo</button>
+</div>

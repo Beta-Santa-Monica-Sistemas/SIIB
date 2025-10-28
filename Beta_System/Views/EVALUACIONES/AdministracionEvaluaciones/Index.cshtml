@@ -1,0 +1,165 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+    List<int> permisos = Session["PermisosModulo"] as List<int>;
+}
+
+<div class="page_title">
+    <div class="counter_section">
+        <div class="row">
+            <div class="col-md-8">
+                <h1>Evaluaciones pendientes</h1>
+            </div>
+            <div class="col-md-4 text-right">
+                @if (permisos.Contains(4051))
+                {
+                    <button class="btn btn_beta" data-toggle="modal" data-target="#m_generar_evaluacion"><i class="fa fa-plus"></i> APERTURAR EVALUACIONES</button>
+                }
+            </div>
+        </div>
+        @*<div class="row">
+                <div class="col-md-12">
+                    <ul class="nav nav-tabs">
+                        <li class="active"> <a data-toggle="tab" href="#consultar_evaluaciones_tab">CONSULTAR EVALUACIONES<i class="fa fa-2x fa-list-ul ml-2"></i></a> </li>
+                        <li class="active"> <a data-toggle="tab" href="#generar_evaluaciones_tab">GENERAR EVALUACIONES<i class="fa fa-2x fa-check-circle ml-2"></i></a> </li>
+                    </ul>
+                </div>
+            </div>*@
+    </div>
+</div>
+
+
+<div class="row column2 counter_section">
+    <div class="row">
+        <div class="col-md-3">
+            <strong>Evaluaciones disponibles</strong>
+            <select id="id_evaluacion_g_consulta" class="form-control"></select>
+        </div>
+        <div class="col-md-3">
+            <strong>Departamentos:</strong>
+            <select id="id_departamento_consulta" class="form-control">
+                @{ Html.RenderAction("ConsultarDepartamentosUsuariosSelect", "EVALUACIONES");
+                }
+            </select>
+        </div>
+        <div class="col-md-2 text-center">
+            <br />
+            <button class="btn btn_beta" onclick="ConsultarEvaluacionesPendientes();"><i class="fa fa-search"></i> Consultar</button>
+        </div>
+
+        @if (permisos.Contains(4052))
+        {
+            <div class="col-md-4 text-right">
+                <br />
+                <button class="btn btn_beta_warning" onclick="FinalizarEvaluacionGeneral();"><i class="fa fa-check text-dark"></i> <strong>Finalizar evaluación</strong></button>
+            </div>
+        }
+
+    </div>
+    <hr />
+    <div id="div_evaluaciones"></div>
+</div>
+
+
+
+<!-- Modal GENERAR EVALUACIÓN-->
+<div class="modal fade" id="m_generar_evaluacion" tabindex="-1" role="dialog" aria-labelledby="m_generar_evaluacionLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document" style="width: 70%; min-width: 70%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="m_generar_evaluacionLabel">GENERAR EVALUACIÓN</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        <strong>Descripción:</strong>
+                        <input type="text" class="form-control" id="descripcion_new" />
+                    </div>
+                    <div class="col-md-2">
+                        <strong>Fecha apertura:</strong>
+                        <input type="date" class="form-control" id="fecha_apertura_new" />
+                    </div>
+                    <div class="col-md-2">
+                        <strong>Fecha cierre:</strong>
+                        <input type="date" class="form-control" id="fecha_cierre_new" />
+                    </div>
+                    <div class="col-md-2 text-center">
+                        <br />
+                        <button class="btn btn_beta" onclick="GenerarAperturaEvaluaciones();">GENERAR PLANTILLAS</button>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn_beta_danger" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- Modal EVALUAR EMPLEADO-->
+<div class="modal fade" id="m_evaluacion_empleado" tabindex="-1" role="dialog" aria-labelledby="m_evaluacion_empleadoLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document" style="width: 95%; min-width: 95%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="m_evaluacion_empleadoLabel">EVALUAR EMPLEADO</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="div_evaluacion_empleado"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn_beta_danger" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- Modal EVALUAR EMPLEADO-->
+<div class="modal fade" id="m_departamentos_pendientes" tabindex="-1" role="dialog" aria-labelledby="m_departamentos_pendientesLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document" style="width: 95%; min-width: 95%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="m_departamentos_pendientesLabel">DEPARTAMENTOS PENDIENTES POR EVALUAR</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="div_departamentos_pendientes"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn_beta_danger" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+@Scripts.Render("~/bundles_Evaluaciones/js")
+@Scripts.Render("~/bundles_Propiedades/js")
+
+<script>
+    $(window).on("load", function () {
+        $('input[type="date"]').val(today);
+        ConsultarEvaluacionesSelect(1);
+    });
+
+    $('.valid_concepto').on('keyup', function (event) {
+        if (event.key === "Enter" || event.keyCode === 13) {
+            AgregarConceptoRubro();
+        }
+    });
+
+</script>

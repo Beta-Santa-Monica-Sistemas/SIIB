@@ -1,0 +1,55 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+}
+
+<div class="page_title">
+    <div class="counter_section">
+        <h1>Consumos por corral</h1>
+    </div>
+</div>
+
+<div class="column2 counter_section">
+    <div class="row">
+        <div class="col-md-3 form-group">
+            <strong>Establo:</strong>
+            <select class="form-control id_establo_select" id="id_establo"></select>
+        </div>
+        <div class="col-md-3 form-group">
+            <strong>Fecha inicio</strong>
+            <input type="date" id="fecha_inicio" class="form-control" />
+        </div>
+        <div class="col-md-3 form-group">
+            <strong>Fecha fin</strong>
+            <input type="date" id="fecha_fin" class="form-control" />
+        </div>
+
+        <div class="col-md-3 form-group">
+            <br />
+            <button class="btn btn_beta_icon" onclick="ConsultarConsumosXCorralTracker();"><i class="fa fa-search"></i></button>
+        </div>
+    </div>
+    <br />
+    <div id="div_datatable_consumos_corral" class="table-responsive"></div>
+</div>
+
+@Scripts.Render("~/bundles_AlimentacionTracker/js")
+
+<script>
+    $(window).on("load", function () {
+        ConsultarEstablosUsuarioSelect(0);
+
+        $('input[type="date"]').val(today);
+        $('.id_establo_select option[value="4"]').remove();
+
+        const todos_option = $('<option>', { value: '0', text: 'Todos' });
+        $(".id_establo_select").prepend(todos_option);
+        $("#id_status_consultar_dietas").prepend(todos_option);
+    });
+</script>
+
+
+
+
+

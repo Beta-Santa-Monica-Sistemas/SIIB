@@ -1,0 +1,19 @@
+﻿@model List<Beta_System.Models.C_articulos_catalogo>
+
+<div class="row">
+    @foreach (var item in Model.Distinct())
+    {
+        <div class="col-md-4" style="height: 100px;">
+            <br />
+            <div class="row">
+                <div class="col-md-4 text-center mt-2">
+                    <img src="@item.descripcion_articulo" alt="Código de Barras" style="width:100%; min-width:100%;" />
+                </div>
+                <div class="col-md-8 text-center  mt-2">
+                    <h4 style="margin: 3px; font-size: 10px;"><strong>@item.clave</strong></h4>
+                    <h4 style="margin: 3px; font-size: 10px;" class="text-left"><strong>@item.nombre_articulo</strong></h4>
+                </div>
+            </div>
+        </div>
+    }
+</div>

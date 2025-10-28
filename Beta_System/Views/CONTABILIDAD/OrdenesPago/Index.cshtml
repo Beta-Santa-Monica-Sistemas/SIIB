@@ -1,0 +1,183 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+    List<int> permisos = Session["PermisosModulo"] as List<int>;
+}
+
+<div class="page_title">
+    <div class="counter_section">
+        <h1>Ordenes de pago</h1>
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="nav nav-tabs">
+                    @if (permisos.Contains(4049))
+                    {
+                        <li class="active"> <a data-toggle="tab" href="#ordenes_pago_tab" id="consultar_requi">Ordenes generadas<i class="fa fa-file-text fa-2x ml-2"></i></a></li>
+                    }
+                    @if (permisos.Contains(4050))
+                    {
+                        <li class="active"> <a data-toggle="tab" href="#generar_orden_tab">Generar nueva orden de pago<i class="fa fa-plus fa-2x ml-2"></i></a></li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="column2 counter_section">
+    <div class="tab-content">
+
+        <div id="ordenes_pago_tab" class="tab-pane fade in active show">
+            <h3 class="text-center">Ordenes generadas</h3>
+            <hr />
+            <div id="div_ordenes_pago"></div>
+        </div>
+
+        <div id="generar_orden_tab" class="tab-pane fade in active">
+            <h3 class="text-center">Generar nueva orden de pago</h3>
+            <hr />
+            <h3 class="text-left text_beta">Información general</h3>
+            <div class="row">
+                <div class="col-md-3">
+                    <strong>Nombre de la orden:</strong>
+                    <input type="text" class="form-control input_valid_form" id="nombre_orden_pago" />
+                </div>
+                <div class="col-md-2">
+                    <strong>No. de sucursal origen:</strong>
+                    <input type="text" class="form-control input_valid_form" id="numero_sucursal_orden_pago" />
+                </div>
+
+                <div class="col-md-2">
+                    <strong>No. cuenta:</strong>
+                    <input type="text" class="form-control input_valid_form" id="numero_cuenta_orden_pago" />
+                </div>
+
+                <div class="col-md-2">
+                    <strong>Fecha de aplicación:</strong>
+                    <input type="date" class="form-control" id="fecha_orden_pago" />
+                </div>
+
+                <div class="col-md-3">
+                    <strong>Hora de aplicación (HH:MM):</strong>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <select class="form-control" id="hra_orden_pago">
+                                @for (int i = 0; i < 24; i++)
+                                {
+                                    <option value="@i">@i.ToString().PadLeft(2, '0')</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="col-md-1"><h2>:</h2></div>
+                        <div class="col-md-5">
+                            <select class="form-control" id="minutos_orden_pago">
+                                @for (int i = 0; i < 60; i++)
+                                {
+                                    <option value="@i">@i.ToString().PadLeft(2, '0')</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br />
+            <h3 class="text-left text_beta">Información del beneficiario</h3>
+            <div class="row">
+                <div class="col-md-2 text-left p-2 div_valid_det">
+                    <strong>Tipo cuenta origen:</strong><br />
+                    <input type="radio" name="orden_pago_tipo_transaccion" value="01" checked/><label id="lbl_01">Cheques</label><br />
+                    @*<input type="radio" name="orden_pago_tipo_transaccion" value="03" /><label id="lbl_03">Tarjeta</label><br />
+                    <input type="radio" name="orden_pago_tipo_transaccion" value="06" /><label id="lbl_06">Cuenta Maestra</label>*@
+                </div>
+                <div class="col-md-10">
+                    <div class="row">
+                        <div class="col-md-5">
+                            <strong>Nombre del beneficiario:</strong>
+                            <input type="text" class="form-control input_valid_det" id="nombre_beneficiario_orden_pago" />
+                        </div>
+                        <div class="col-md-2">
+                            <strong>No. sucursal destino:</strong>
+                            <input type="text" class="form-control input_valid_det" id="sucursal_destino_orden_pago" />
+                        </div>
+                        <div class="col-md-2">
+                            <strong>Importe:</strong>
+                            <input type="number" class="form-control input_valid_det" id="importe_orden_pago" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-5">
+                            <strong>Concepto/Instrucciones:</strong>
+                            <input type="text" class="form-control" id="instrucciones_orden_pago" />
+                        </div>
+                        <div class="col-md-2">
+                            <strong>Remitente:</strong>
+                            <input type="text" class="form-control" id="remitente_orden_pago" value="BNMX" readonly disabled />
+                        </div>
+                        <div class="col-md-2 text-center">
+                            <br />
+                            <button class="btn btn_beta_icon" onclick="AgregarBeneficiarioOrden();"><i class="fa fa-plus"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <hr />
+            <h3 class="text-left text_beta">Detalle de la orden</h3>
+            <div class="table-responsive">
+                <table class="table table-striped table-bordered">
+                    <thead>
+                        <tr class="bg-beta text-center">
+                            <th>Tipo cuenta origen</th>
+                            <th>Beneficiario</th>
+                            <th>Concepto/Instrucciones</th>
+                            <th>Sucursal destino</th>
+                            <th>Importe</th>
+                            <th>Remitente</th>
+                            <th>Eliminar</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody_orden_pago">
+                    </tbody>
+                </table>
+            </div>
+            <hr />
+            <div class="text-right"><button onclick="GuardarOrdenPago();" class="btn btn_beta">Generar orden de pago</button></div>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- Modal DETALLE ORDEN PAGO -->
+<div class="modal fade" id="m_detalle_orden" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document" style="width:95%; min-width:95%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Detalle de la orden</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="div_orden_pago_detalle"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn_beta_danger" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@Scripts.Render("~/bundles_OrdenesPagos/js")
+<script>
+    $(window).on("load", function () {
+        $('input[type="date"]').val(today);
+        $("#fecha_inicio_pagos").val(last_week);
+        ConsultarOrdenesPago();
+    });
+</script>
+
+
+

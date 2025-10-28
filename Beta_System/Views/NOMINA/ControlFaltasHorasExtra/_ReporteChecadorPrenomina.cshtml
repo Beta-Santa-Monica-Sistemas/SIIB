@@ -1,0 +1,176 @@
+﻿@model List<Beta_System.Models.ReporteChecadorNomina>
+@using System.Globalization;
+
+@{
+    DateTime[] fechas_semana = ViewBag.fechas_semana;
+    List<Beta_System.Models.C_nomina_checador_conceptos> lista_conceptos = Session["lista_conceptos"] as List<Beta_System.Models.C_nomina_checador_conceptos>;
+
+}
+
+<i class="fa fa-2x fa-square" aria-hidden="true" style="background-color: #FFC900; color: #FFC900; "></i><strong class="ml-1">Valor modificado del checador a la prenómina revisada</strong>
+<br />
+<i class="fa fa-2x fa-square" aria-hidden="true" style="background-color: #eb3c3c; color: #eb3c3c; "></i><strong class="ml-1">Falta</strong>
+@foreach (var item in Model.GroupBy(x => x.id_departamento))
+{
+    <table class="table table-striped table-bordered table-hover small table-sm" id="datatable_@item.FirstOrDefault().id_departamento">
+        <thead>
+            <tr class="text-center bg-beta">
+                <th colspan="15" class="text-left"><strong>@item.FirstOrDefault().nombre_departamento</strong></th>
+
+                <th rowspan="2"><b>Total hrs</b></th>
+                <th rowspan="2"><b>Pagar hrs extra</b></th>
+                <th rowspan="2"><b>Pagar estímulo extra</b></th>
+            </tr>
+            <tr class="text-center bg-dark text-white">
+                <th>EMPLEADO</th>
+                @for (int i = 0; i < fechas_semana.Length; i++)
+                {
+                    <th colspan="2">@fechas_semana[i].ToString("dddd", new CultureInfo("es-ES")).ToUpper() @fechas_semana[i].Day</th>
+                }
+            </tr>
+        </thead>
+        <tbody>
+
+            @foreach (var punch_g in item.OrderBy(x => x.nombre_empleado).GroupBy(x => x.id_empleado))
+            {
+                int id_empleado = punch_g.FirstOrDefault().id_empleado;
+
+                decimal valor_hora = punch_g.FirstOrDefault().valor_hra;
+
+                int totalMinutes = punch_g.Sum(x => (int)x.hrs_totales.TotalMinutes);
+                int totalHours = totalMinutes / 60;
+                int minutos_restantes = totalMinutes % 60;
+                //totalHours += (int)punch_g.Sum(x => x.hrs_totales.TotalHours);
+
+                int total_hrs_estimulo = punch_g.Sum(x => x.hrs_estimulo);
+                decimal total_hrs_estimulo_valor = punch_g.Sum(x => x.hrs_estimulo_valor);
+
+
+                int hrs_extra = punch_g.Sum(x => x.hrs_extra);
+                decimal hrs_extra_monto = punch_g.Sum(x => x.hrs_extra_valor);
+
+                if (punch_g.Sum(x => x.hrs_estimulo) > 0)
+                {
+                    hrs_extra = 9;
+                    hrs_extra_monto = hrs_extra * valor_hora;
+
+                    total_hrs_estimulo = punch_g.FirstOrDefault().hrs_estimulo;
+                    total_hrs_estimulo_valor = punch_g.FirstOrDefault().hrs_estimulo_valor;
+                }
+
+                string identificador_hrs_extras_estimulos = "valores_" + id_empleado.ToString();
+                <tr class="text-center">
+                    <td class="text-left">@punch_g.FirstOrDefault().nombre_empleado <input class="empleados" value="@id_empleado" style="display: none;" /></td>
+                    @for (int i = 0; i < fechas_semana.Length; i++)
+                    {
+                        var punch_d = punch_g.Where(x => x.fecha_punch == fechas_semana[i]).FirstOrDefault();
+
+                        string color_celda = "";
+                        string color_texto_celda = "#2e87d7";
+                        string identificador_faltas = id_empleado.ToString() + "_" + punch_d.no_dia;
+
+                        if (punch_d.id_checador_concepto == 2) { color_celda = "#eb3c3c"; color_texto_celda = "white"; }
+                        else if (punch_d.concepto_modificado == true) { color_celda = "#FFC900"; color_texto_celda = "black"; }
+                        else { color_celda = ""; color_texto_celda = "#2e87d7"; }
+
+                        <td colspan="2" style="width:300px; background-color:@color_celda; color:@color_texto_celda;" id="cell_@identificador_faltas">
+                            <div class="row">
+                                @if (punch_d.fecha_punch_e == DateTime.MinValue)
+                                {
+                                    <div class="col-md-6 text-center">
+                                        <strong>N/A</strong>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="col-md-6 text-center">
+                                        <strong>@punch_d.fecha_punch_e.ToString("hh:mm tt")</strong>
+                                    </div>
+                                }
+
+                                @if (punch_d.fecha_punch_s == DateTime.MinValue)
+                                {
+                                    <div class="col-md-6 text-center">
+                                        <strong>N/A</strong>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="col-md-6 text-center">
+                                        <strong>@punch_d.fecha_punch_s.ToString("hh:mm tt")</strong>
+                                    </div>
+                                }
+                            </div>
+                            <input type="text" value="@fechas_semana[i].ToString("yyyy-MM-dd")" id="fecha_@identificador_faltas" style="display:none;" />
+                            <select class="form-control" id="select_conceptos_@identificador_faltas" onchange="CambiarColorCeldaConceptoDia('@identificador_faltas');">
+                                @foreach (var concepto in lista_conceptos)
+                                {
+                                    <option value="@concepto.id_nomina_checador_concepto">@concepto.nombre_concepto</option>
+                                }
+                            </select>
+                            <input type="text" value="@punch_d.id_checador_concepto" id="select_conceptos_reales_@identificador_faltas" style="display: none;" />
+                        </td>
+
+                        <script>
+                $("#select_conceptos_@identificador_faltas").val(@punch_d.id_checador_concepto);
+                        </script>
+                    }
+
+                    @* TOTAL DE HORAS *@
+                    <td>
+                        <strong>@totalHours:@minutos_restantes hrs</strong>
+                    </td>
+
+                    @* HORAS EXTRA *@
+                    <td>
+                        @if (hrs_extra > 0)
+                        {
+                            <strong>@hrs_extra hrs</strong>
+                            <br />
+                            <strong>$@hrs_extra_monto.ToString("N2")</strong>
+                            <br />
+                            if (punch_g.FirstOrDefault().pagar_hrs_extra == true)
+                            { <input type="checkbox" style="height: 20px; width:20px;" id="hrs_extra_pagar_@identificador_hrs_extras_estimulos" checked /> }
+                            else
+                            { <input type="checkbox" style="height: 20px; width:20px;" id="hrs_extra_pagar_@identificador_hrs_extras_estimulos" />}
+
+                            <input value="@hrs_extra" id="hrs_extra_no_@identificador_hrs_extras_estimulos" style="display:none;" />
+                            <input value="@hrs_extra_monto" id="hrs_extra_monto_@identificador_hrs_extras_estimulos" style="display:none;" />
+                        }
+                    </td>
+
+                    @* ESTIMULO DE HORAS EXTRA *@
+                    <td>
+                        @if (total_hrs_estimulo > 0)
+                        {
+                            <strong>@total_hrs_estimulo hrs</strong>
+                            <br />
+                            <strong>$@total_hrs_estimulo_valor.ToString("N2")</strong>
+                            <br />
+                            if (punch_g.FirstOrDefault().pagar_hrs_estimulo == true)
+                            { <input type="checkbox" style="height: 20px; width:20px;" id="estimulo_pagar_@identificador_hrs_extras_estimulos" checked /> }
+                            else
+                            { <input type="checkbox" style="height: 20px; width:20px;" id="estimulo_pagar_@identificador_hrs_extras_estimulos" />}
+
+                            <input value="@total_hrs_estimulo" id="estimulo_no_@identificador_hrs_extras_estimulos" style="display:none;" />
+                            <input value="@total_hrs_estimulo_valor" id="estimulo_monto_@identificador_hrs_extras_estimulos" style="display:none;" />
+
+
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <hr />
+    <div class="text-left">
+        <button class="btn btn_beta" onclick="GuardarControlAsistencias();">Guardar cambios</button>
+    </div>
+
+
+}
+
+
+
+
+

@@ -1,0 +1,200 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+}
+
+<div class="page_title">
+    <div class="counter_section">
+        <h1>Administrador de dispositivos</h1>
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="nav nav-tabs">
+                    <li class="active"> <a data-toggle="tab" href="#dispositivos_activos">DISPOSITIVOS ACTIVOS<i class="fa fa-2x fa-tablet ml-2"></i></a> </li>
+                    <li> <a data-toggle="tab" href="#dispositivos_monitoreo_comandos">MONITOREO DE DISPOSITIVOS Y COMANDOS<i class="fa fa-2x fa-desktop ml-2"></i></a> </li>
+                    <li> <a data-toggle="tab" href="#dispositivos_logs">LOGS DE DISPOSITIVOS<i class="fa fa-2x fa-paperclip ml-2"></i></a> </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="counter_section">
+    <div class="tab-content">
+        <div id="dispositivos_activos" class="tab-pane fade in active show">
+            <div class="row">
+                <div class="col-md-2">
+                    <strong>Tipo</strong>
+                    <select class="form-control" id="id_tipo_dispositivo">
+                        <option value="0">Todos</option>
+                        @{ Html.RenderAction("ConsultarTipoDispositivoSelect", "UTILERIAS"); };
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <strong>Establo</strong>
+                    <select class="form-control" id="id_establo">
+                        <option value="0">Todos</option>
+                        @{ Html.RenderAction("ConsultarEstablosUsuarios", "BASCULA", new { id_usuario = (int)Session["LoggedId"] }); };
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <strong>Estatus</strong>
+                    <select class="form-control" id="id_estatus">
+                        <option value="0">Todos</option>
+                        <option value="1">Offline</option>
+                        <option value="2">Online</option>
+                    </select>
+                </div>
+                <div class="col-md-2 p-3">
+                    <button class="btn btn_beta_icon" onclick="DispositivosActivosTable();"><i class="fa fa-search"></i></button>
+                </div>
+            </div>
+            <hr />
+            <div class="row" id="div_dispositivos_activos_table"></div>
+        </div>
+
+        <div id="dispositivos_monitoreo_comandos" class="tab-pane">
+            <div class="col-md-8 p-3">
+                <button class="btn btn_beta" onclick="DispositivosGlobalesTable();">Consultar</button>
+            </div>
+            <div class="col-md-2 p-3 text-right">
+                <button class="btn btn_beta" onclick="ModalDesactivarComando();">Desactivar comando</button>
+            </div>
+            <div class="col-md-2 p-3 text-right">
+                <button class="btn btn_beta" onclick="ModalNuevoComando();">Ejecutar comando</button>
+            </div>
+            <div class="col-md-12">
+                <hr />
+            </div>
+            <div class="row" id="div_dispositivos_comandos_table"></div>
+        </div>
+
+        <div id="dispositivos_logs" class="tab-pane">
+            <div class="row">
+                <div class="col-md-2">
+                    <strong>Fecha inicio</strong>
+                    <input type="date" value="" class="form-control" id="fecha_i">
+                </div>
+                <div class="col-md-2">
+                    <strong>Fecha fin</strong>
+                    <input type="date" value="" class="form-control" id="fecha_f">
+                </div>
+                <div class="col-md-3">
+                    <strong>MAC</strong>
+                    <input type="text" class="form-control input_clear solo-letras-numeros" id="logs_mac">
+                </div>
+                <div class="col-md-1 p-3">
+                    <button class="btn btn_beta_icon" onclick="DispositivosLogsTable();"><i class="fa fa-search"></i></button>
+                </div>
+                <div class="col-md-12"><hr /></div>
+                <div class="col-md-12">
+                    <div class="row" id="div_dispositivos_logs_table"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@* MODAL NUEVO COMANDO *@
+<div class="modal fade" id="m_nuevo_comando" tabindex="1" role="dialog" aria-labelledby="m_nuevo_comando" aria-hidden="true">
+    <div class="modal-dialog" role="document" style="min-width:80%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="m_nuevo_comando">Comando a ejecutar</h2>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <strong>Comando</strong>
+                        <select class="form-control" id="id_comando">
+                            @{ Html.RenderAction("ConsultarComandosSelect", "UTILERIAS"); };
+                        </select>
+                    </div>
+                    <div class="col-md-5">
+                        <strong>Tipo</strong>
+                        <select class="form-control" id="id_comando_tipo">
+                            <option value="0">Ninguno</option>
+                            @{ Html.RenderAction("ConsultarTipoDispositivoSelect", "UTILERIAS"); };
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <strong>MAC</strong>
+                        <input type="text" class="form-control input_clear solo-letras-numeros" id="comando_mac">
+                    </div>
+                    <div class="col-md-2 text-center">
+                        <strong>Perpetuo</strong>
+                        <div class="row">
+                            <input type="checkbox" class="form-control" id="perpetuo" style="height:30px;">
+                        </div>
+                    </div>
+                    <div class="col-md-2 text-center">
+                        <strong>General</strong>
+                        <div class="row">
+                            <input type="checkbox" class="form-control" id="general" style="height:30px;">
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <strong>Parametro</strong>
+                        <input type="text" class="form-control input_clear solo-letras-numeros" id="comando_parametro">
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <div class="col-md-6 p-3">
+                    <button type="button" class="btn btn_beta_danger" data-dismiss="modal">Cerrar</button>
+                </div>
+                <div class="col-md-6 p-3 text-right">
+                    <button class="btn btn_beta" onclick="EjecutarComandoGlobal();">Confirmar</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@* MODAL DESACTIVAR COMANDO *@
+<div class="modal fade" id="m_desactivar_comando" tabindex="1" role="dialog" aria-labelledby="m_desactivar_comando" aria-hidden="true">
+    <div class="modal-dialog" role="document" style="min-width:80%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Comando a ejecutar</h2>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <div class="col-md-12">
+                    <div class="row" id="div_desactivar_table"></div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <div class="col-md-12 p-3 text-right">
+                    <button type="button" class="btn btn_beta_danger" data-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@Scripts.Render("~/bundles_Propiedades/js")
+@Scripts.Render("~/bundles_UtileriasDispositivos/js")
+<script type="text/javascript">
+    $(window).on("load", function () {
+        CaracteresControl();
+        DispositivosActivosTable();
+        DispositivosGlobalesTable();
+        FechaParametros();
+    });
+
+</script>
+
+

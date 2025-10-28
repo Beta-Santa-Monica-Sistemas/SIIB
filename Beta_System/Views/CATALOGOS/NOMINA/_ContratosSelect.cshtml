@@ -1,0 +1,6 @@
+﻿@model IEnumerable<Beta_System.Models.C_nomina_contrato>
+
+@foreach (var item in Model.OrderByDescending(x => x.nombre_contrato))
+{
+    <option value="@item.id_contrato">@item.nombre_contrato</option>
+}

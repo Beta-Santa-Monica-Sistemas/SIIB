@@ -1,0 +1,34 @@
+﻿@model IEnumerable<Beta_System.Models.C_establos_caseta_logs_g>
+
+<table class="table table-striped table-bordered" id="entradas_pendientes_table">
+    <thead>
+        <tr class="text-center bg-beta">
+            <th>Nombre ingresante</th>
+            <th>Placas/Identificador</th>
+            <th>Tipo entrada</th>
+            <th>Fecha ingreso</th>
+            <th>Hora ingreso</th>
+            <th>Asunto</th>
+            <th>Registrar salida</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr class="text-center">
+                <td>@item.nombre_registro</td>
+                <td>@item.placas</td>
+                <td><button class="btn" style="color:white; background-color:@item.C_establos_caseta_tipos_entradas.color">@item.C_establos_caseta_tipos_entradas.tipo_entrada</button></td>
+                <td>@string.Format(item.fecha_entrada.Value.ToShortDateString(), "dd/mm/yyyy")</td>
+                <td>@string.Format(item.fecha_entrada.Value.ToShortTimeString(), "dd/mm/yyyy")</td>
+                <td>@item.asunto</td>
+                <td>
+                    @*<button class="btn btn_beta_icon" onclick="BuscarVisitantePlacas('@item.placas');"><i class="fa fa-check"></i></button>*@
+                    <button class="btn btn_beta_icon" onclick="BuscarVisitanteID(@item.id_caseta_log_g);"><i class="fa fa-check"></i></button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+

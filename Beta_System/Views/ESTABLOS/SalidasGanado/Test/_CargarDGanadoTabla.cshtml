@@ -1,0 +1,43 @@
+﻿@model Beta_System.Models.C_salida_ganado_d
+
+<tr id="row_@ViewBag.count">
+    <th><label class="aretes" id="arete_@ViewBag.count">@Model.arete</label></th>
+    <th><label class="sinigas" id="siniiga_@ViewBag.count">@Model.siniiga</label></th>
+    <th><label class="clasificaciones" id="clasif_@ViewBag.count">@Model.clasifica</label></th>
+    <th><label class="t_salida_ganado" id="salida_@ViewBag.count">@ViewBag.tipo_salida_g</label></th>
+    <th><label class="causa_baja_nombre" id="causa_baja_nombre_@ViewBag.count">@ViewBag.causa_muerte</label></th>
+    <th><label class="condiciones" id="condicion_@ViewBag.count">@Model.cond_ind</label></th>
+    <th><label class="causas" id="causa_@ViewBag.count">@Model.causa_b</label></th>
+    <th><label class="salas" id="sala_@ViewBag.count">@Model.sala</label></th>
+    <th><label class="edades" id="edad_@ViewBag.count">@Model.edad</label></th>
+
+    <th><label class="medico_nombre" id="nombre_medico_@ViewBag.count">@ViewBag.arete_medico</label></th>
+    <th><label class="estado" id="estado_medico_@ViewBag.count">@Model.estado</label></th>
+    <th><label class="estado_ginecologico" id="estado_ginecologico_@ViewBag.count">@Model.estado_ginecologico</label></th>
+    @*
+        <th><label class="cantidades" id="cantidad_@ViewBag.count">@Model.cantidad</label></th>
+        <th><label class="pesos" id="peso_@ViewBag.count">@Model.peso</label></th>
+        <th><label class="p_unitarios" id="p_unitario_@ViewBag.count">@Model.p_unitario</label></th>
+        <th><label class="importes_d" id="importe_@ViewBag.count">@ViewBag.importe</label></th>
+    *@
+    <th style="display:none"><label class="arete_manual" id="arete_manual_@ViewBag.count">@Model.arete_manual</label></th>
+    <th style="display:none"><label class="medico" id="id_arete_medico_@ViewBag.count">@Model.id_medico</label></th>
+    <th style="display:none"><label class="causa_baja_vaca" id="causa_baja_vaca_@ViewBag.count">@Model.id_causa_muerte</label></th>
+    <th class="text-center">
+        <div style="display: flex; gap: 10px; justify-content: center;">
+            <input type="hidden" id="imagen_base64_@ViewBag.count" value="@ViewBag.imagen_base64" />
+            <input type="hidden" id="imagen_base64_2_@ViewBag.count" value="@ViewBag.imagen_base64_2" />
+
+            <img id="img_vaca_@ViewBag.count"
+                 class="imagen_vaca"
+                 style="width: 140px; height:auto; border-radius:5px;" />
+
+            <img id="img_vaca_2_@ViewBag.count"
+                 class="imagen_vaca_2"
+                 style="width: 140px; height:auto; border-radius:5px;" />
+        </div>
+    </th>
+
+
+    <th><button class="btn btn_beta_danger" onclick="EliminarFilaSalida(@ViewBag.count);"><i class="fa fa-remove"></i></button></th>
+</tr>

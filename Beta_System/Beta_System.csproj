@@ -1,0 +1,2813 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\EntityFramework.6.4.4\build\EntityFramework.props" Condition="Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.props')" />
+  <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{33166169-FDC3-46DC-AE72-DC1E7980E8F8}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Beta_System</RootNamespace>
+    <AssemblyName>Beta_System</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <MvcBuildViews>false</MvcBuildViews>
+    <UseIISExpress>true</UseIISExpress>
+    <Use64BitIISExpress />
+    <IISExpressSSLPort>44371</IISExpressSSLPort>
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="BouncyCastle.Cryptography, Version=2.0.0.0, Culture=neutral, PublicKeyToken=072edcf4a5328938, processorArchitecture=MSIL">
+      <HintPath>..\packages\BouncyCastle.Cryptography.2.5.1\lib\net461\BouncyCastle.Cryptography.dll</HintPath>
+    </Reference>
+    <Reference Include="ClosedXML, Version=0.102.2.0, Culture=neutral, PublicKeyToken=fd1eb21b62ae805b, processorArchitecture=MSIL">
+      <HintPath>..\packages\ClosedXML.0.102.2\lib\netstandard2.0\ClosedXML.dll</HintPath>
+    </Reference>
+    <Reference Include="DocumentFormat.OpenXml, Version=2.16.0.0, Culture=neutral, PublicKeyToken=8fb06cb64d019a17, processorArchitecture=MSIL">
+      <HintPath>..\packages\DocumentFormat.OpenXml.2.16.0\lib\net46\DocumentFormat.OpenXml.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="EPPlus, Version=4.5.3.2, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPPlus.4.5.3.2\lib\net40\EPPlus.dll</HintPath>
+    </Reference>
+    <Reference Include="EPPlus.Interfaces, Version=6.1.1.0, Culture=neutral, PublicKeyToken=a694d7f3b0907a61, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPPlus.Interfaces.6.1.1\lib\net462\EPPlus.Interfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="EPPlus.System.Drawing, Version=6.1.1.0, Culture=neutral, PublicKeyToken=2308d35469c9bac0, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPPlus.System.Drawing.6.1.1\lib\net462\EPPlus.System.Drawing.dll</HintPath>
+    </Reference>
+    <Reference Include="ExcelNumberFormat, Version=1.1.0.0, Culture=neutral, PublicKeyToken=23c6f5d73be07eca, processorArchitecture=MSIL">
+      <HintPath>..\packages\ExcelNumberFormat.1.1.0\lib\net20\ExcelNumberFormat.dll</HintPath>
+    </Reference>
+    <Reference Include="FirebirdSql.Data.FirebirdClient, Version=5.9.1.0, Culture=neutral, PublicKeyToken=3750abcc3150b00c, processorArchitecture=MSIL">
+      <HintPath>..\packages\FirebirdSql.Data.FirebirdClient.5.9.1\lib\net452\FirebirdSql.Data.FirebirdClient.dll</HintPath>
+    </Reference>
+    <Reference Include="HtmlAgilityPack, Version=1.11.57.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
+      <HintPath>..\packages\HtmlAgilityPack.1.11.57\lib\Net45\HtmlAgilityPack.dll</HintPath>
+    </Reference>
+    <Reference Include="Irony, Version=1.0.11.0, Culture=neutral, PublicKeyToken=ca48ace7223ead47, processorArchitecture=MSIL">
+      <HintPath>..\packages\Irony.NetCore.1.0.11\lib\net461\Irony.dll</HintPath>
+    </Reference>
+    <Reference Include="itextsharp, Version=5.5.13.4, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
+      <HintPath>..\packages\iTextSharp.5.5.13.4\lib\net461\itextsharp.dll</HintPath>
+    </Reference>
+    <Reference Include="MailKit, Version=4.12.0.0, Culture=neutral, PublicKeyToken=4e064fe7c44a8f1b, processorArchitecture=MSIL">
+      <HintPath>..\packages\MailKit.4.12.1\lib\net47\MailKit.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.SignalR.Core, Version=2.4.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.SignalR.Core.2.4.3\lib\net45\Microsoft.AspNet.SignalR.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.SignalR.SystemWeb, Version=2.4.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.SignalR.SystemWeb.2.4.3\lib\net45\Microsoft.AspNet.SignalR.SystemWeb.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.EntityFrameworkCore, Version=2.2.3.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.EntityFrameworkCore.2.2.3\lib\netstandard2.0\Microsoft.EntityFrameworkCore.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.EntityFrameworkCore.Abstractions, Version=2.2.3.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.EntityFrameworkCore.Abstractions.2.2.3\lib\netstandard2.0\Microsoft.EntityFrameworkCore.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.EntityFrameworkCore.Relational, Version=2.1.3.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.EntityFrameworkCore.Relational.2.1.3\lib\netstandard2.0\Microsoft.EntityFrameworkCore.Relational.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.EntityFrameworkCore.SqlServer, Version=2.1.3.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.EntityFrameworkCore.SqlServer.2.1.3\lib\netstandard2.0\Microsoft.EntityFrameworkCore.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Caching.Abstractions, Version=2.2.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.Caching.Abstractions.2.2.0\lib\netstandard2.0\Microsoft.Extensions.Caching.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Caching.Memory, Version=2.2.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.Caching.Memory.2.2.0\lib\netstandard2.0\Microsoft.Extensions.Caching.Memory.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Configuration, Version=2.2.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.Configuration.2.2.0\lib\netstandard2.0\Microsoft.Extensions.Configuration.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Configuration.Abstractions, Version=2.2.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.Configuration.Abstractions.2.2.0\lib\netstandard2.0\Microsoft.Extensions.Configuration.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Configuration.Binder, Version=2.2.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.Configuration.Binder.2.2.0\lib\netstandard2.0\Microsoft.Extensions.Configuration.Binder.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.DependencyInjection, Version=2.2.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.DependencyInjection.2.2.0\lib\net461\Microsoft.Extensions.DependencyInjection.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.DependencyInjection.Abstractions, Version=2.2.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.DependencyInjection.Abstractions.2.2.0\lib\netstandard2.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Logging, Version=2.2.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.Logging.2.2.0\lib\netstandard2.0\Microsoft.Extensions.Logging.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Logging.Abstractions, Version=2.2.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.Logging.Abstractions.2.2.0\lib\netstandard2.0\Microsoft.Extensions.Logging.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Options, Version=2.2.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.Options.2.2.0\lib\netstandard2.0\Microsoft.Extensions.Options.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Primitives, Version=2.2.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.Primitives.2.2.0\lib\netstandard2.0\Microsoft.Extensions.Primitives.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.IO.RecyclableMemoryStream, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.IO.RecyclableMemoryStream.3.0.0\lib\netstandard2.0\Microsoft.IO.RecyclableMemoryStream.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin, Version=4.2.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.4.2.2\lib\net45\Microsoft.Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Host.SystemWeb, Version=4.2.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Host.SystemWeb.4.2.2\lib\net45\Microsoft.Owin.Host.SystemWeb.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security, Version=2.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Security.2.1.0\lib\net45\Microsoft.Owin.Security.dll</HintPath>
+    </Reference>
+    <Reference Include="MimeKit, Version=4.12.0.0, Culture=neutral, PublicKeyToken=bede1c8a46c66814, processorArchitecture=MSIL">
+      <HintPath>..\packages\MimeKit.4.12.0\lib\net47\MimeKit.dll</HintPath>
+    </Reference>
+    <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
+      <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="Remotion.Linq, Version=2.2.0.0, Culture=neutral, PublicKeyToken=fee00910d6e5f53b, processorArchitecture=MSIL">
+      <HintPath>..\packages\Remotion.Linq.2.2.0\lib\net45\Remotion.Linq.dll</HintPath>
+    </Reference>
+    <Reference Include="SixLabors.Fonts, Version=1.0.0.0, Culture=neutral, PublicKeyToken=d998eea7b14cab13, processorArchitecture=MSIL">
+      <HintPath>..\packages\SixLabors.Fonts.1.0.0\lib\netstandard2.0\SixLabors.Fonts.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Buffers, Version=4.0.4.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Buffers.4.6.0\lib\net462\System.Buffers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Collections.Immutable, Version=1.2.3.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Collections.Immutable.1.5.0\lib\netstandard2.0\System.Collections.Immutable.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ComponentModel.Annotations, Version=4.2.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ComponentModel.Annotations.5.0.0\lib\net461\System.ComponentModel.Annotations.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.Configuration.ConfigurationManager, Version=4.0.1.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Configuration.ConfigurationManager.4.5.0\lib\net461\System.Configuration.ConfigurationManager.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.OracleClient" />
+    <Reference Include="System.Data.SqlClient, Version=4.4.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Data.SqlClient.4.5.1\lib\net461\System.Data.SqlClient.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Diagnostics.DiagnosticSource, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Diagnostics.DiagnosticSource.4.5.0\lib\net46\System.Diagnostics.DiagnosticSource.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Formats.Asn1, Version=8.0.0.2, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Formats.Asn1.8.0.2\lib\net462\System.Formats.Asn1.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Interactive.Async, Version=3.2.0.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Interactive.Async.3.2.0\lib\net46\System.Interactive.Async.dll</HintPath>
+    </Reference>
+    <Reference Include="System.IO, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.IO.4.3.0\lib\net462\System.IO.dll</HintPath>
+      <Private>True</Private>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.IO.Packaging, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.IO.Packaging.6.0.0\lib\net461\System.IO.Packaging.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Memory, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Memory.4.6.0\lib\net462\System.Memory.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net" />
+    <Reference Include="System.Net.Http, Version=4.1.1.3, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Net.Http.4.3.4\lib\net46\System.Net.Http.dll</HintPath>
+      <Private>True</Private>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Net.Http.Formatting, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Numerics.Vectors, Version=4.1.5.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Numerics.Vectors.4.6.0\lib\net462\System.Numerics.Vectors.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Reflection.TypeExtensions, Version=4.1.3.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Reflection.TypeExtensions.4.5.0\lib\net461\System.Reflection.TypeExtensions.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.4.3.0\lib\net462\System.Runtime.dll</HintPath>
+      <Private>True</Private>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=6.0.3.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.6.1.2\lib\net462\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Security.AccessControl, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Security.AccessControl.4.5.0\lib\net461\System.Security.AccessControl.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Security.Cryptography.Algorithms, Version=4.2.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Security.Cryptography.Algorithms.4.3.0\lib\net463\System.Security.Cryptography.Algorithms.dll</HintPath>
+      <Private>True</Private>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Security.Cryptography.Encoding, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Security.Cryptography.Encoding.4.3.0\lib\net46\System.Security.Cryptography.Encoding.dll</HintPath>
+      <Private>True</Private>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Security.Cryptography.Primitives, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Security.Cryptography.Primitives.4.3.0\lib\net46\System.Security.Cryptography.Primitives.dll</HintPath>
+      <Private>True</Private>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Security.Cryptography.X509Certificates, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Security.Cryptography.X509Certificates.4.3.0\lib\net461\System.Security.Cryptography.X509Certificates.dll</HintPath>
+      <Private>True</Private>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Security.Permissions, Version=4.0.1.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Security.Permissions.4.5.0\lib\net461\System.Security.Permissions.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Security.Principal.Windows, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Security.Principal.Windows.4.5.0\lib\net461\System.Security.Principal.Windows.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ServiceProcess" />
+    <Reference Include="System.Text.RegularExpressions, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Text.RegularExpressions.4.3.1\lib\net463\System.Text.RegularExpressions.dll</HintPath>
+      <Private>True</Private>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.4.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Threading.Tasks.Extensions.4.6.3\lib\net462\System.Threading.Tasks.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Transactions" />
+    <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ValueTuple.4.5.0\lib\net47\System.ValueTuple.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.Routing" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="Microsoft.Web.Infrastructure, Version=2.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.2.0.1\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http.WebRequest">
+    </Reference>
+    <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.9\lib\net45\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=5.2.9.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.9\lib\net45\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Optimization">
+      <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.1.1.3\lib\net40\System.Web.Optimization.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.9\lib\net45\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.9\lib\net45\System.Web.WebPages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.9\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.9\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="WebGrease">
+      <Private>True</Private>
+      <HintPath>..\packages\WebGrease.1.6.0\lib\WebGrease.dll</HintPath>
+    </Reference>
+    <Reference Include="Antlr3.Runtime">
+      <Private>True</Private>
+      <HintPath>..\packages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="WindowsBase" />
+    <Reference Include="XLParser, Version=1.5.2.0, Culture=neutral, PublicKeyToken=63397e1e46bb91b4, processorArchitecture=MSIL">
+      <HintPath>..\packages\XLParser.1.5.2\lib\net461\XLParser.dll</HintPath>
+    </Reference>
+    <Reference Include="Z.EntityFramework.Extensions.EFCore, Version=2.103.7.2, Culture=neutral, PublicKeyToken=59b66d028979105b, processorArchitecture=MSIL">
+      <HintPath>..\packages\Z.EntityFramework.Extensions.EFCore.2.103.7.2\lib\netstandard2.0\Z.EntityFramework.Extensions.EFCore.dll</HintPath>
+    </Reference>
+    <Reference Include="Z.EntityFramework.Plus.EFCore, Version=2.103.7.2, Culture=neutral, PublicKeyToken=59b66d028979105b, processorArchitecture=MSIL">
+      <HintPath>..\packages\Z.EntityFramework.Plus.EFCore.2.103.7.2\lib\netstandard2.0\Z.EntityFramework.Plus.EFCore.dll</HintPath>
+    </Reference>
+    <Reference Include="Z.Expressions.Eval, Version=6.2.8.0, Culture=neutral, PublicKeyToken=59b66d028979105b, processorArchitecture=MSIL">
+      <HintPath>..\packages\Z.Expressions.Eval.6.2.8\lib\net45\Z.Expressions.Eval.dll</HintPath>
+    </Reference>
+    <Reference Include="zxing, Version=0.16.10.0, Culture=neutral, PublicKeyToken=4e88037ac681fe60, processorArchitecture=MSIL">
+      <HintPath>..\packages\ZXing.Net.0.16.10\lib\net47\zxing.dll</HintPath>
+    </Reference>
+    <Reference Include="zxing.presentation, Version=0.16.10.0, Culture=neutral, PublicKeyToken=4e88037ac681fe60, processorArchitecture=MSIL">
+      <HintPath>..\packages\ZXing.Net.0.16.10\lib\net47\zxing.presentation.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform">
+      <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App_Start\BundleConfig.cs" />
+    <Compile Include="App_Start\FilterConfig.cs" />
+    <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\ACCESSController.cs" />
+    <Compile Include="Controllers\ADMIN_SIIBController.cs" />
+    <Compile Include="Controllers\ALIMENTACIONController.cs" />
+    <Compile Include="Controllers\ALMACENController.cs" />
+    <Compile Include="Controllers\ARTICULOSController.cs" />
+    <Compile Include="Controllers\BASCULASABController.cs" />
+    <Compile Include="Controllers\BASCULAController.cs" />
+    <Compile Include="Controllers\CASETAS_ESTABLOSController.cs" />
+    <Compile Include="Controllers\CATALOGOSController.cs" />
+    <Compile Include="Controllers\CENTROSController.cs" />
+    <Compile Include="Controllers\CLASIFICACIONESController.cs" />
+    <Compile Include="Controllers\COMPRASController.cs" />
+    <Compile Include="Controllers\CONFIGURACIONController.cs" />
+    <Compile Include="Controllers\CONTABILIDADController.cs" />
+    <Compile Include="Controllers\DASHBOARDController.cs" />
+    <Compile Include="Controllers\EMPLEADOSController.cs" />
+    <Compile Include="Controllers\ENVIOLECHEController.cs" />
+    <Compile Include="Controllers\EQUIPOS_ESTABLOSController.cs" />
+    <Compile Include="Controllers\EVALUACIONESController.cs" />
+    <Compile Include="Controllers\MODULOSController.cs" />
+    <Compile Include="Controllers\NOMINAController.cs" />
+    <Compile Include="Controllers\NOTIFICACIONESController.cs" />
+    <Compile Include="Controllers\ORDENES_COMPRAController.cs" />
+    <Compile Include="Controllers\PERMISOSController.cs" />
+    <Compile Include="Controllers\PORTALController.cs" />
+    <Compile Include="Controllers\PROVEEDORESController.cs" />
+    <Compile Include="Controllers\PRUEBASController.cs" />
+    <Compile Include="Controllers\RECURSOSHUMANOSController.cs" />
+    <Compile Include="Controllers\REPORTESController.cs" />
+    <Compile Include="Controllers\REQUISICIONESController.cs" />
+    <Compile Include="Controllers\ROLESController.cs" />
+    <Compile Include="Controllers\SALIDASGANADOController.cs" />
+    <Compile Include="Controllers\TRACKERController.cs" />
+    <Compile Include="Controllers\USUARIOLOGINController.cs" />
+    <Compile Include="Controllers\USUARIOSController.cs" />
+    <Compile Include="Controllers\UTILERIASController.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Helper\ElmahErrorAttribute.cs" />
+    <Compile Include="Helper\PasswordHelper.cs" />
+    <Compile Include="HUBS\ChatHub.cs" />
+    <Compile Include="HUBS\NotificacionesHub.cs" />
+    <Compile Include="Models\areas.cs">
+      <DependentUpon>Model2.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\articulo.cs">
+      <DependentUpon>Model3.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ArticulosPreciosForrajes.cs" />
+    <Compile Include="Models\att_punches.cs">
+      <DependentUpon>Model5.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\AuditoriaFacturasValoresImportacion.cs" />
+    <Compile Include="Models\BasculaReader.cs" />
+    <Compile Include="Models\BasculaSab.cs" />
+    <Compile Include="Models\BonosEmpleados.cs" />
+    <Compile Include="Models\camiones.cs">
+      <DependentUpon>Model2.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\CapturaInventarioDiferencias.cs" />
+    <Compile Include="Models\CapturaInventarioDiferenciasUtileria.cs" />
+    <Compile Include="Models\Cargas_Tracker.cs" />
+    <Compile Include="Models\CompromisoEntregaLeche.cs" />
+    <Compile Include="Models\ConexionDinamicaMS.cs" />
+    <Compile Include="Models\ConexionMS.cs" />
+    <Compile Include="Models\ConexionSab.cs" />
+    <Compile Include="Models\ConexionSIIB.cs" />
+    <Compile Include="Models\ContabilidadMS\Prov_LibresMS.cs" />
+    <Compile Include="Models\ContabilidadMS\SolicitudPagoDetalleMS.cs" />
+    <Compile Include="Models\CriticidadArticulosAlmacen.cs" />
+    <Compile Include="Models\CuentasUsuario.cs" />
+    <Compile Include="Models\C_alimentacion_articulos_precios.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_alimentacion_dietas_d.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_alimentacion_dietas_g.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_alimentacion_dietas_grupos.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_alimentacion_dietas_grupos_tipos.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_alimentacion_dietas_g_comentarios.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_alimentacion_dietas_g_valores.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_alimentacion_dietas_g_valores_tipos.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_alimentacion_dietas_status.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_alimentacion_forrajes_facturas_d.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_alimentacion_forrajes_facturas_g.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_alimentacion_productores.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_alimentacion_productores_origenes.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_alimentacion_programa_d.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_alimentacion_programa_g.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_alimentacion_tracker_articulos_ingredientes.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_almacen_almacenes_centros.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_almacen_almacenes_g.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_almacen_almacenes_ubicaciones_entrega.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_almacen_almacenes_usuarios.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_almacen_criticidad_articulos.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_almacen_criticidad_tipos_consumos.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_almacen_criticidad_tipos_operacion.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_almacen_envio_correos_log.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_almacen_solicitudes_cambios_articulos.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_almacen_solicitudes_mercancia_d.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_almacen_solicitudes_mercancia_d_logs.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_almacen_solicitudes_mercancia_g.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_almacen_solicitudes_status.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_almacen_ubicaciones_articulos.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_articulos_catalogo.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_articulos_catalogo_bascula.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_articulos_clasificaciones.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_articulos_lineas.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_articulos_logs.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_articulos_marcas.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_articulos_precios.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_articulos_tipos.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_articulos_tipos_requisicion.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_bascula_choferes.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_bascula_codigos_movimientos.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_bascula_establos_codigos_movimientos.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_bascula_establos_codigos_puertos.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_bascula_establos_fichas_tipos.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_bascula_fichas.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_bascula_fichas_tipos.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_bascula_lineas_transportistas.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_bascula_no_pozos.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_bascula_tipos_movimientos.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_cargos_contables_g.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_centros_g.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_compras_bancos.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_compras_cotizaciones_articulos.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_compras_cotizaciones_confirmadas_d.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_compras_cotizaciones_confirmadas_g.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_compras_cotizaciones_confirmadas_status.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_compras_cotizaciones_requisiciones.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_compras_facturas_proveedores.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_compras_inversiones_programadas.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_compras_ordenes_d.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_compras_ordenes_g.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_compras_ordenes_precarga_d.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_compras_ordenes_precarga_g.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_compras_ordenes_recepciones_d.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_compras_ordenes_recepciones_g.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_compras_ordenes_status.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_compras_ordenes_ubicaciones_entrega.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_compras_proveedores.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_compras_proveedores_bloqueos.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_compras_proveedores_giros.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_compras_proveedores_portal_solicitudes.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_compras_proveedores_portal_solicitudes_status.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_compras_proveedores_portal_tokens.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_compras_proveedores_status.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_compras_requisiciones_links_autorizacion.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_compras_requisiciones_logs.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_compras_requisiciones_logs_tipos.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_compras_requisiciones_status.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_compras_requisiciones_tipos.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_compras_requi_d.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_compras_requi_g.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_compras_requi_g_solicita_autorizacion.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_contabilidad_importacion_facturas_d.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_contabilidad_importacion_facturas_g.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_contabilidad_importacion_status.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_contabilidad_ordenes_pago_d.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_contabilidad_ordenes_pago_g.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_contabilidad_solicitudes_pago_d.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_contabilidad_solicitudes_pago_g.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_contabilidad_solicitudes_pago_status.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_cuentas_contables_g.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_dashboard_tipos.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_dashboard_usuarios.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_departamentos_g.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_direcciones_ciudades.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_direcciones_estados.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_direcciones_paises.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_dispositivos_autorizados.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_dispositivos_comandos_catalogo.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_dispositivos_comandos_ejecutados.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_dispositivos_comandos_globales.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_dispositivos_latidos.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_dispositivos_logs.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_dispositivos_modulos.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_dispositivos_modulos_items.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_dispositivos_tipos.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_dispositivos_tipos_modulo.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_empleados.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_empresas.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_empresas_patrones.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_envios_leche_calidad.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_envios_leche_calidad_silos.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_envios_leche_clientes.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_envios_leche_cliente_destinos.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_envios_leche_confirmacion.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_envios_leche_cumplimiento_mensual.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_envios_leche_cumplimiento_semanal.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_envios_leche_cumplimiento_semanal_comentario.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_envios_leche_destinos.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_envios_leche_d_calidad.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_envios_leche_d_fichas.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_envios_leche_g.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_envios_leche_lote_d.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_envios_leche_lote_g.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_envios_leche_lote_logs.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_envios_leche_lote_status.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_envios_leche_precios.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_envios_leche_productos.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_envios_leche_programacion_diaria_d.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_envios_leche_programacion_diaria_g.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_envios_leche_programacion_semanal_cliente_d.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_envios_leche_programacion_semanal_cliente_d_dias.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_envios_leche_programacion_semanal_cliente_d_dias_horas.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_envios_leche_programacion_semanal_g.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_envios_leche_silos.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_envios_leche_silos_establo.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_envios_leche_status.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_envios_leche_tipos_envio.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_envios_leche_tipos_tanques.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_establos.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_establos_areas.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_establos_bastones.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_establos_caseta_logs_d_visita_bascula.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_establos_caseta_logs_d_visita_general.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_establos_caseta_logs_d_visita_taller.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_establos_caseta_logs_g.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_establos_caseta_tipos_entradas.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_establos_caseta_tipos_entradas_areas.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_establos_caseta_vales_salida.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_establos_caseta_vales_tipos_salidas.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_establos_equipos.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_establos_predios.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_evaluaciones_conceptos_rubros.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_evaluaciones_departamentos.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_evaluaciones_departamentos_empleados.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_evaluaciones_departamentos_rubros.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_evaluaciones_departamentos_usuarios.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_evaluaciones_d_calificaciones.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_evaluaciones_d_conceptos.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_evaluaciones_d_empleados.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_evaluaciones_empleados_bonos.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_evaluaciones_g.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_evaluaciones_rubros.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_evaluaciones_status.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_firmas_cargo_permisos.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_firmas_usuarios.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_firmas_usuarios_montos.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_inventario_almacenes_articulos.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_inventario_almacen_ajustes_d.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_inventario_almacen_ajustes_g.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_inventario_almacen_captura_d.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_inventario_almacen_captura_g.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_inventario_almacen_devoluciones_d.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_inventario_almacen_devoluciones_g.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_inventario_almacen_establo_maximo_minimo.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_inventario_almacen_mov_d.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_inventario_almacen_mov_d_recepciones_logs.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_inventario_almacen_mov_g.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_inventario_mov_status.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_inventario_mov_tipos.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_inventario_status.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_inventario_tipos.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_logs_correos_enviados.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_logs_procesos.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_logs_procesos_tipos.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_logs_sesiones_diarias.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_logs_sesiones_usuarios.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_modulos.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_modulos_sub.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_modulos_sub_permisos.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_modulos_sub_permisos_usuarios.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_modulos_sub_permisos_usuarios_asignados.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_nomina_bancos.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_nomina_beta_d_areas.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_nomina_beta_d_areas_empleados.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_nomina_beta_d_areas_empleados_conceptos.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_nomina_beta_g.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_nomina_checador_conceptos.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_nomina_checador_hrs_extras_estimulos.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_nomina_checador_prenomina.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_nomina_conceptos.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_nomina_contrato.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_nomina_cuenta_bancaria.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_nomina_departamentos.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_nomina_empleados.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_nomina_empleados_checador.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_nomina_empleados_solicitudes.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_nomina_empleados_solicitudes_status.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_nomina_estado_civil.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_nomina_forma_pago.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_nomina_frecuencias_pagos.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_nomina_grupos_pagos.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_nomina_inasistencias.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_nomina_incidencias.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_nomina_incidencias_tipos.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_nomina_parametros_porcentajes_integracion.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_nomina_puestos.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_nomina_regimen_patronal.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_nomina_status.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_nomina_tipo_cuenta_bancaria.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_nomina_tipo_isn.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_parametros_configuracion.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_parametros_correos_almacen.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_presupuestos_almacenes_cuentas_meses_anios.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_presupuestos_anios.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_presupuestos_cuentas_meses_anios.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_presupuestos_dias.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_presupuestos_meses.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_prioridades_g.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_rh_formacion_academica_d.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_rh_formacion_academica_g.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_rh_formacion_escolaridades.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_rh_formacion_estudio.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_rh_formacion_status.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_rh_formacion_universidades.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_salida_ganado_causas_muerte.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_salida_ganado_causas_muerte_tipos.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_salida_ganado_clasificaciones_ganado.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_salida_ganado_condiciones_ganado.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_salida_ganado_d.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_salida_ganado_establos.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_salida_ganado_g.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_salida_ganado_logs_d.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_salida_ganado_logs_g.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_salida_ganado_medicos.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_salida_ganado_salas.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_salida_ganado_tipos_salidas.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_salida_ganado_tipos_salidas_clasificaciones.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_sistemas_equipos_areas.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_sistemas_equipos_caracteristicas.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_sistemas_equipos_clasificaciones.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_sistemas_equipos_d.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_sistemas_equipos_g.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_sistemas_equipos_movs.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_sistemas_equipos_mov_tipos.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_soporte_categorias.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_soporte_estado.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_soporte_logs.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_soporte_prioridad.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_soporte_tickets_d.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_soporte_tickets_g.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_soporte_tipos.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_tipos_moneda.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_tracker_establos.cs">
+      <DependentUpon>Model6.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_tracker_ingredientes_establos.cs">
+      <DependentUpon>Model6.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_tracker_movimientos.cs">
+      <DependentUpon>Model6.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_tracker_movimientos_tipos.cs">
+      <DependentUpon>Model6.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_tracker_parametros.cs">
+      <DependentUpon>Model6.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_tracker_parametros_tipos.cs">
+      <DependentUpon>Model6.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_unidades_medidas.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_usuarios_areas_nomina.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_usuarios_cargos_contables.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_usuarios_centros.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_usuarios_corporativo.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_usuarios_cuentas_contables.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_usuarios_establos.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_usuarios_masters.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_usuarios_masters_acciones.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_usuarios_proveedores.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_usuarios_roles.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_usuarios_tipo.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DatosTablaArticulo.cs" />
+    <Compile Include="Models\Departamentos_MS.cs" />
+    <Compile Include="Models\DeviceAndroidRegistroDto.cs" />
+    <Compile Include="Models\DeviceClaveAdmin.cs" />
+    <Compile Include="Models\DeviceLatidoDto.cs" />
+    <Compile Include="Models\DeviceLogDispositivo.cs" />
+    <Compile Include="Models\DeviceStatus.cs" />
+    <Compile Include="Models\Doctos_CP_MS.cs" />
+    <Compile Include="Models\EmpleadoNChecador.cs" />
+    <Compile Include="Models\Empleados_MS.cs" />
+    <Compile Include="Models\ExistenciaAlmacenArticulo.cs" />
+    <Compile Include="Models\FacturaLecheVenta_MS.cs" />
+    <Compile Include="Models\FichaSab.cs" />
+    <Compile Include="Models\FichasPendienteSab.cs" />
+    <Compile Include="Models\fichas_sg.cs">
+      <DependentUpon>Model2.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\fichas_si.cs">
+      <DependentUpon>Model2.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\fichas_sm.cs">
+      <DependentUpon>Model2.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\GastosMensualesMS\DOCTOS_CP_IMPORTES_PROVEEDORES.cs" />
+    <Compile Include="Models\GastosMensualesMS\GastosMensualesConsolidadoConsumoCompra.cs" />
+    <Compile Include="Models\GraficasReporteLine.cs" />
+    <Compile Include="Models\HistoricoFacturasLeche.cs" />
+    <Compile Include="Models\hr_employee.cs">
+      <DependentUpon>Model5.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Incidencias_MS.cs" />
+    <Compile Include="Models\IngredientesEstablo.cs" />
+    <Compile Include="Models\MesSemanas.cs" />
+    <Compile Include="Models\Model1.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Model1.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Model1.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Model1.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Model1.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Model2.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Model2.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Model2.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Model2.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Model2.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Model2.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Model3.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Model3.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Model3.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Model3.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Model3.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Model3.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Model4.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Model4.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Model4.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Model4.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Model4.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Model4.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Model5.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Model5.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Model5.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Model5.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Model5.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Model5.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Model6.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Model6.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Model6.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Model6.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Model6.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Model6.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ModulosUsuario.cs" />
+    <Compile Include="Models\no_pozos.cs">
+      <DependentUpon>Model2.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\orden_de.cs">
+      <DependentUpon>Model3.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\orden_ge.cs">
+      <DependentUpon>Model3.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PermisosUsuario.cs" />
+    <Compile Include="Models\PermisosUsuarioAsignados.cs" />
+    <Compile Include="Models\precios.cs">
+      <DependentUpon>Model3.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PreciosLecheDestinos.cs" />
+    <Compile Include="Models\PresupuestosCuentas.cs" />
+    <Compile Include="Models\PresupuestosCuentasAlmacen.cs" />
+    <Compile Include="Models\PresupuestosOrdenCompra.cs" />
+    <Compile Include="Models\Producto_B.cs">
+      <DependentUpon>Model2.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ProgramacionSemanalLeche.cs" />
+    <Compile Include="Models\proveedo.cs">
+      <DependentUpon>Model2.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Proveedores_MS.cs" />
+    <Compile Include="Models\Proveedo_B.cs">
+      <DependentUpon>Model2.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\proveedo_sab.cs">
+      <DependentUpon>Model3.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PttoSab.cs" />
+    <Compile Include="Models\Puestos_MS.cs" />
+    <Compile Include="Models\QuickViewArticulo.cs" />
+    <Compile Include="Models\RecFactura.cs">
+      <DependentUpon>Model4.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ReciboNominaEmpleado.cs" />
+    <Compile Include="Models\ReporteConceptosNomina.cs" />
+    <Compile Include="Models\ReporteCumplimientoEnviosLecheData.cs" />
+    <Compile Include="Models\ReporteCumplimientoEnviosLecheDetalleData.cs" />
+    <Compile Include="Models\ReporteFichasBascula.cs" />
+    <Compile Include="Models\ReporteInversiones.cs" />
+    <Compile Include="Models\ReporteJornadaLaboral.cs" />
+    <Compile Include="Models\ReporteMensualCuentaAlmacen.cs" />
+    <Compile Include="Models\ReportePolizasAlmacenCuentasContables.cs" />
+    <Compile Include="Models\ReportePolizasAlmacenCuentasContablesDetalle.cs" />
+    <Compile Include="Models\ReporteSeguimientoRequisiciones.cs" />
+    <Compile Include="Models\REPORTE_ALMACEN_AnalisisConsumos.cs" />
+    <Compile Include="Models\ReporteChecadorNomina.cs" />
+    <Compile Include="Models\REPORTE_ALMACEN_AnalisisConsumosAnual.cs" />
+    <Compile Include="Models\RequiFolio.cs" />
+    <Compile Include="Models\RequiServicio.cs" />
+    <Compile Include="Models\ResumenPresupuestoCuentaRequi.cs" />
+    <Compile Include="Models\GraficasReportePie.cs" />
+    <Compile Include="Models\SalidasGanadoGraficasReporte.cs" />
+    <Compile Include="Models\SolicitudPagoDetalleMS.cs" />
+    <Compile Include="Models\SolPago.cs">
+      <DependentUpon>Model4.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SolPagoDetalle.cs">
+      <DependentUpon>Model4.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SubModulosRol.cs" />
+    <Compile Include="Models\SubmodulosUsuario.cs" />
+    <Compile Include="Models\Tracker\KardexIngredientes.cs" />
+    <Compile Include="Models\Tracker\TiradasDiarias.cs" />
+    <Compile Include="Models\TrackingRequisiciones.cs" />
+    <Compile Include="Models\TransitoArticulo.cs" />
+    <Compile Include="Models\usuarios.cs">
+      <DependentUpon>Model2.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\UsuariosAlmacenes.cs" />
+    <Compile Include="Models\UsuariosEstablo.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Startup.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\Audios\aivso_alerta.mp3" />
+    <Content Include="Content\Audios\msj_notificacion.mp3" />
+    <Content Include="Content\Audios\zelda_health.mp3" />
+    <Content Include="Content\bootstrap-theme.css" />
+    <Content Include="Content\bootstrap-theme.min.css" />
+    <Content Include="Content\bootstrap.css" />
+    <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\css\animate.css" />
+    <Content Include="Content\css\baguetteBox.min.css" />
+    <Content Include="Content\css\bootstrap-grid.css" />
+    <Content Include="Content\css\bootstrap-grid.min.css" />
+    <Content Include="Content\css\bootstrap-multiselect.css" />
+    <Content Include="Content\css\bootstrap-multiselect.min.css" />
+    <Content Include="Content\css\bootstrap-reboot.css" />
+    <Content Include="Content\css\bootstrap-reboot.min.css" />
+    <Content Include="Content\css\bootstrap-select.css" />
+    <Content Include="Content\css\bootstrap.css" />
+    <Content Include="Content\css\bootstrap.min.css" />
+    <Content Include="Content\css\calendar.css" />
+    <Content Include="Content\css\calendar.min.css" />
+    <Content Include="Content\css\color_2.css" />
+    <Content Include="Content\css\custom.css" />
+    <Content Include="Content\css\flaticon.css" />
+    <Content Include="Content\css\font-awesome.css" />
+    <Content Include="Content\css\font-awesome.min.css" />
+    <Content Include="Content\css\iziToast.min.css" />
+    <Content Include="Content\css\jquery.fancybox.css" />
+    <Content Include="Content\css\jquery.fancybox.min.css" />
+    <Content Include="Content\css\login.css" />
+    <Content Include="Content\css\NotFound.css" />
+    <Content Include="Content\css\owl.carousel.css" />
+    <Content Include="Content\css\PDFCortes.css" />
+    <Content Include="Content\css\perfect-scrollbar.css" />
+    <Content Include="Content\css\responsive.css" />
+    <Content Include="Content\css\semantic_v1.min.css" />
+    <Content Include="Content\css\style.css" />
+    <Content Include="Content\documentation\css\animate.min.css" />
+    <Content Include="Content\documentation\css\bootstrap.min.css" />
+    <Content Include="Content\documentation\css\docs.min.css" />
+    <Content Include="Content\documentation\css\shCoreDefault.css" />
+    <Content Include="Content\documentation\fonts\css\font-awesome.css" />
+    <Content Include="Content\documentation\fonts\css\font-awesome.min.css" />
+    <Content Include="Content\documentation\fonts\fonts\fontawesome-webfont.svg" />
+    <Content Include="Content\documentation\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Content\documentation\js\bootstrap.min.js" />
+    <Content Include="Content\documentation\js\jquery-3.6.0.min.js" />
+    <Content Include="Content\documentation\js\jquery-ui-1.13.1\AUTHORS.txt" />
+    <Content Include="Content\documentation\js\jquery-ui-1.13.1\external\jquery\jquery.js" />
+    <Content Include="Content\documentation\js\jquery-ui-1.13.1\images\ui-icons_444444_256x240.png" />
+    <Content Include="Content\documentation\js\jquery-ui-1.13.1\images\ui-icons_555555_256x240.png" />
+    <Content Include="Content\documentation\js\jquery-ui-1.13.1\images\ui-icons_777620_256x240.png" />
+    <Content Include="Content\documentation\js\jquery-ui-1.13.1\images\ui-icons_777777_256x240.png" />
+    <Content Include="Content\documentation\js\jquery-ui-1.13.1\images\ui-icons_cc0000_256x240.png" />
+    <Content Include="Content\documentation\js\jquery-ui-1.13.1\images\ui-icons_ffffff_256x240.png" />
+    <Content Include="Content\documentation\js\jquery-ui-1.13.1\index.html" />
+    <Content Include="Content\documentation\js\jquery-ui-1.13.1\jquery-ui.css" />
+    <Content Include="Content\documentation\js\jquery-ui-1.13.1\jquery-ui.js" />
+    <Content Include="Content\documentation\js\jquery-ui-1.13.1\jquery-ui.min.css" />
+    <Content Include="Content\documentation\js\jquery-ui-1.13.1\jquery-ui.min.js" />
+    <Content Include="Content\documentation\js\jquery-ui-1.13.1\jquery-ui.structure.css" />
+    <Content Include="Content\documentation\js\jquery-ui-1.13.1\jquery-ui.structure.min.css" />
+    <Content Include="Content\documentation\js\jquery-ui-1.13.1\jquery-ui.theme.css" />
+    <Content Include="Content\documentation\js\jquery-ui-1.13.1\jquery-ui.theme.min.css" />
+    <Content Include="Content\documentation\js\jquery-ui-1.13.1\LICENSE.txt" />
+    <Content Include="Content\documentation\js\jquery.min.js" />
+    <Content Include="Content\documentation\js\shBrushXml.js" />
+    <Content Include="Content\documentation\js\shCore.js" />
+    <Content Include="Content\fichaSab.css" />
+    <Content Include="Content\img_layout\beta_03.jpeg" />
+    <Content Include="Content\img_layout\beta_logo_fondo_blanco.png" />
+    <Content Include="Content\img_layout\BSM_Wallpaper.png" />
+    <Content Include="Content\img_layout\cowgif.gif" />
+    <Content Include="Content\img_layout\fondo_beta.png" />
+    <Content Include="Content\img_layout\GodinAsteric.png" />
+    <Content Include="Content\img_layout\logo_beta.png" />
+    <Content Include="Content\img_layout\Logo_beta_icono.png" />
+    <Content Include="Content\img_layout\logo_beta_new.png" />
+    <Content Include="Content\img_layout\pacman-gif.gif" />
+    <Content Include="Content\img_layout\pattern.png" />
+    <Content Include="Content\img_layout\pattern_h.png" />
+    <Content Include="Content\img_layout\portal_proveeodres_wallpaper.jpg" />
+    <Content Include="Content\img_layout\siib1.jpg" />
+    <Content Include="Content\img_layout\siib2.jpg" />
+    <Content Include="Content\img_layout\user_circle.png" />
+    <Content Include="Content\jquery-ui.css" />
+    <Content Include="Content\jquery-ui.structure.css" />
+    <Content Include="Content\jquery-ui.theme.css" />
+    <Content Include="Content\jsPDF.js" />
+    <Content Include="Content\js\analyser.js" />
+    <Content Include="Content\js\animate.js" />
+    <Content Include="Content\js\bootstrap-multiselect.js" />
+    <Content Include="Content\js\bootstrap-multiselect.min.js" />
+    <Content Include="Content\js\bootstrap-select.js" />
+    <Content Include="Content\js\bootstrap.bundle.js" />
+    <Content Include="Content\js\bootstrap.bundle.min.js" />
+    <Content Include="Content\js\bootstrap.js" />
+    <Content Include="Content\js\bootstrap.min.js" />
+    <Content Include="Content\js\calendar.js" />
+    <Content Include="Content\js\calendar.min.js" />
+    <Content Include="Content\js\Chart.bundle.js" />
+    <Content Include="Content\js\Chart.bundle.min.js" />
+    <Content Include="Content\js\custom.js" />
+    <Content Include="Content\js\DataTable\buttons.bootstrap.min.js" />
+    <Content Include="Content\js\DataTable\buttons.html5.min.js" />
+    <Content Include="Content\js\DataTable\buttons.print.min.js" />
+    <Content Include="Content\js\DataTable\dataTables.bootstrap.js" />
+    <Content Include="Content\js\DataTable\dataTables.buttons.min.js" />
+    <Content Include="Content\js\DataTable\dataTables.keyTable.min.js" />
+    <Content Include="Content\js\DataTable\dataTables.responsive.min.js" />
+    <Content Include="Content\js\DataTable\responsive.bootstrap.min.js" />
+    <Content Include="Content\js\echarts.min.js" />
+    <Content Include="Content\js\iziToast.min.js" />
+    <Content Include="Content\js\jquery-3.3.1.min.js" />
+    <Content Include="Content\js\jquery.fancybox.js" />
+    <Content Include="Content\js\jquery.fancybox.min.js" />
+    <Content Include="Content\js\jquery.min.js" />
+    <Content Include="Content\js\owl.carousel.js" />
+    <Content Include="Content\js\perfect-scrollbar.min.js" />
+    <Content Include="Content\js\popper.min.js" />
+    <Content Include="Content\js\select\jquery.multiselect.js" />
+    <Content Include="Content\js\select\select2.full.js" />
+    <Content Include="Content\js\semantic.min.js" />
+    <Content Include="Content\js\settings.html" />
+    <Content Include="Content\js\utils.js" />
+    <Content Include="Content\LICENSE.txt" />
+    <Content Include="Content\moment.min.js" />
+    <Content Include="Content\production\css\animate.min.css" />
+    <Content Include="Content\production\css\autocomplete\jquery.auto-complete.css" />
+    <Content Include="Content\production\css\bootstrap-table.css" />
+    <Content Include="Content\production\css\bootstrap-table.min.css" />
+    <Content Include="Content\production\css\bootstrap.min.css" />
+    <Content Include="Content\production\css\calendar\fullcalendar.css" />
+    <Content Include="Content\production\css\calendar\fullcalendar.min.css" />
+    <Content Include="Content\production\css\calendar\fullcalendar.print.css" />
+    <Content Include="Content\production\css\colorpicker\bootstrap-colorpicker.min.css" />
+    <Content Include="Content\production\css\colorpicker\img\bootstrap-colorpicker\alpha-horizontal.png" />
+    <Content Include="Content\production\css\colorpicker\img\bootstrap-colorpicker\alpha.png" />
+    <Content Include="Content\production\css\colorpicker\img\bootstrap-colorpicker\hue-horizontal.png" />
+    <Content Include="Content\production\css\colorpicker\img\bootstrap-colorpicker\hue.png" />
+    <Content Include="Content\production\css\colorpicker\img\bootstrap-colorpicker\saturation.png" />
+    <Content Include="Content\production\css\custom_v1.css" />
+    <Content Include="Content\production\css\datatables\css\buttons.bootstrap.min.css" />
+    <Content Include="Content\production\css\datatables\css\buttons_dataTables.css" />
+    <Content Include="Content\production\css\datatables\css\datatables_select.min.css" />
+    <Content Include="Content\production\css\datatables\css\demo_page.css" />
+    <Content Include="Content\production\css\datatables\css\demo_table.css" />
+    <Content Include="Content\production\css\datatables\css\demo_table_jui.css" />
+    <Content Include="Content\production\css\datatables\css\fixedHeader.bootstrap.min.css" />
+    <Content Include="Content\production\css\datatables\css\jquery.dataTables.css" />
+    <Content Include="Content\production\css\datatables\css\jquery.dataTables.min.css" />
+    <Content Include="Content\production\css\datatables\css\jquery.dataTables_themeroller.css" />
+    <Content Include="Content\production\css\datatables\css\responsive.bootstrap.min.css" />
+    <Content Include="Content\production\css\datatables\css\scroller.bootstrap.min.css" />
+    <Content Include="Content\production\css\datatables\images\back_disabled.png" />
+    <Content Include="Content\production\css\datatables\images\back_enabled.png" />
+    <Content Include="Content\production\css\datatables\images\back_enabled_hover.png" />
+    <Content Include="Content\production\css\datatables\images\favicon.ico" />
+    <Content Include="Content\production\css\datatables\images\forward_disabled.png" />
+    <Content Include="Content\production\css\datatables\images\forward_enabled.png" />
+    <Content Include="Content\production\css\datatables\images\forward_enabled_hover.png" />
+    <Content Include="Content\production\css\datatables\images\sort_asc.png" />
+    <Content Include="Content\production\css\datatables\images\sort_asc_disabled.png" />
+    <Content Include="Content\production\css\datatables\images\sort_both.png" />
+    <Content Include="Content\production\css\datatables\images\sort_desc.png" />
+    <Content Include="Content\production\css\datatables\images\sort_desc_disabled.png" />
+    <Content Include="Content\production\css\datatables\tools\css\dataTables.tableTools.css" />
+    <Content Include="Content\production\css\editor\external\google-code-prettify\prettify.css" />
+    <Content Include="Content\production\css\editor\index.css" />
+    <Content Include="Content\production\css\fixed_table_rc.css" />
+    <Content Include="Content\production\css\floatexamples.css" />
+    <Content Include="Content\production\css\font-awesome-animation.min.css" />
+    <Content Include="Content\production\css\font-awesome.css" />
+    <Content Include="Content\production\css\font-awesome.min.css" />
+    <Content Include="Content\production\css\font\css\font-awesome.css" />
+    <Content Include="Content\production\css\font\css\font-awesome.min.css" />
+    <Content Include="Content\production\css\font\fontawesome-webfont.svg" />
+    <Content Include="Content\production\css\font\fonts\fontawesome-webfont.svg" />
+    <Content Include="Content\production\css\font\glyphicons-halflings-regular.svg" />
+    <Content Include="Content\production\css\icheck\flat\aero%402x.png" />
+    <Content Include="Content\production\css\icheck\flat\aero.css" />
+    <Content Include="Content\production\css\icheck\flat\aero.png" />
+    <Content Include="Content\production\css\icheck\flat\blue%402x.png" />
+    <Content Include="Content\production\css\icheck\flat\blue.css" />
+    <Content Include="Content\production\css\icheck\flat\blue.png" />
+    <Content Include="Content\production\css\icheck\flat\flat%402x.png" />
+    <Content Include="Content\production\css\icheck\flat\flat.css" />
+    <Content Include="Content\production\css\icheck\flat\flat.png" />
+    <Content Include="Content\production\css\icheck\flat\green%402x.png" />
+    <Content Include="Content\production\css\icheck\flat\green.css" />
+    <Content Include="Content\production\css\icheck\flat\green.png" />
+    <Content Include="Content\production\css\icheck\flat\grey%402x.png" />
+    <Content Include="Content\production\css\icheck\flat\grey.css" />
+    <Content Include="Content\production\css\icheck\flat\grey.png" />
+    <Content Include="Content\production\css\icheck\flat\orange%402x.png" />
+    <Content Include="Content\production\css\icheck\flat\orange.css" />
+    <Content Include="Content\production\css\icheck\flat\orange.png" />
+    <Content Include="Content\production\css\icheck\flat\pink%402x.png" />
+    <Content Include="Content\production\css\icheck\flat\pink.css" />
+    <Content Include="Content\production\css\icheck\flat\pink.png" />
+    <Content Include="Content\production\css\icheck\flat\purple%402x.png" />
+    <Content Include="Content\production\css\icheck\flat\purple.css" />
+    <Content Include="Content\production\css\icheck\flat\purple.png" />
+    <Content Include="Content\production\css\icheck\flat\red%402x.png" />
+    <Content Include="Content\production\css\icheck\flat\red.css" />
+    <Content Include="Content\production\css\icheck\flat\red.png" />
+    <Content Include="Content\production\css\icheck\flat\yellow%402x.png" />
+    <Content Include="Content\production\css\icheck\flat\yellow.css" />
+    <Content Include="Content\production\css\icheck\flat\yellow.png" />
+    <Content Include="Content\production\css\icheck\flat\_all.css" />
+    <Content Include="Content\production\css\ion.rangeSlider.css" />
+    <Content Include="Content\production\css\ion.rangeSlider.skinFlat.css" />
+    <Content Include="Content\production\css\maps\jquery-jvectormap-2.0.3.css" />
+    <Content Include="Content\production\css\morris.css" />
+    <Content Include="Content\production\css\normalize.css" />
+    <Content Include="Content\production\css\nprogress.css" />
+    <Content Include="Content\production\css\progressbar\bootstrap-progressbar-3.3.0.css" />
+    <Content Include="Content\production\css\responsive.bootstrap.min.css" />
+    <Content Include="Content\production\css\select\select2.min.css" />
+    <Content Include="Content\production\css\switchery\switchery.min.css" />
+    <Content Include="Content\production\css\table.css" />
+    <Content Include="Content\production\demo_test.txt" />
+    <Content Include="Content\production\fonts\css\font-awesome.css" />
+    <Content Include="Content\production\fonts\css\font-awesome.min.css" />
+    <Content Include="Content\production\fonts\fontawesome-webfont.svg" />
+    <Content Include="Content\production\fonts\fonts\fontawesome-webfont.svg" />
+    <Content Include="Content\production\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Content\production\js\alert\sweetalert.min.js" />
+    <Content Include="Content\production\js\autocomplete\countries.js" />
+    <Content Include="Content\production\js\autocomplete\jquery.auto-complete.js" />
+    <Content Include="Content\production\js\autocomplete\jquery.auto-complete.min.js" />
+    <Content Include="Content\production\js\autocomplete\jquery.autocomplete.js" />
+    <Content Include="Content\production\js\bootstrap-table-contextmenu.js" />
+    <Content Include="Content\production\js\bootstrap-table-es-MX.js" />
+    <Content Include="Content\production\js\bootstrap-table.js" />
+    <Content Include="Content\production\js\bootstrap-table.min.js" />
+    <Content Include="Content\production\js\bootstrap.min.js" />
+    <Content Include="Content\production\js\calendar\fullcalendar.min.js" />
+    <Content Include="Content\production\js\colorpicker\bootstrap-colorpicker.min.js" />
+    <Content Include="Content\production\js\colorpicker\docs.js" />
+    <Content Include="Content\production\js\cropping\cropper.min.js" />
+    <Content Include="Content\production\js\cropping\main.js" />
+    <Content Include="Content\production\js\cropping\main2.js" />
+    <Content Include="Content\production\js\custom.js" />
+    <Content Include="Content\production\js\custom2.js" />
+    <Content Include="Content\production\js\datatables\buttons.bootstrap.min.css" />
+    <Content Include="Content\production\js\datatables\buttons.bootstrap.min.js" />
+    <Content Include="Content\production\js\datatables\buttons.html5.min.js" />
+    <Content Include="Content\production\js\datatables\buttons.print.min.js" />
+    <Content Include="Content\production\js\datatables\dataTables.bootstrap.js" />
+    <Content Include="Content\production\js\datatables\dataTables.buttons.min.js" />
+    <Content Include="Content\production\js\datatables\dataTables.fixedHeader.min.js" />
+    <Content Include="Content\production\js\datatables\dataTables.keyTable.min.js" />
+    <Content Include="Content\production\js\datatables\dataTables.responsive.min.js" />
+    <Content Include="Content\production\js\datatables\dataTables.scroller.min.js" />
+    <Content Include="Content\production\js\datatables\dataTables_select.js" />
+    <Content Include="Content\production\js\datatables\fixedHeader.bootstrap.min.css" />
+    <Content Include="Content\production\js\datatables\jquery.dataTables.min.css" />
+    <Content Include="Content\production\js\datatables\jquery.dataTables.min.js" />
+    <Content Include="Content\production\js\datatables\jszip.min.js" />
+    <Content Include="Content\production\js\datatables\pdfmake.min.js" />
+    <Content Include="Content\production\js\datatables\responsive.bootstrap.min.css" />
+    <Content Include="Content\production\js\datatables\responsive.bootstrap.min.js" />
+    <Content Include="Content\production\js\datatables\scroller.bootstrap.min.css" />
+    <Content Include="Content\production\js\datatables\vfs_fonts.js" />
+    <Content Include="Content\production\js\datepicker\daterangepicker.js" />
+    <Content Include="Content\production\js\dropzone\dropzone.js" />
+    <Content Include="Content\production\js\easypie\jquery.easypiechart.min.js" />
+    <Content Include="Content\production\js\editor\bootstrap-wysiwyg.js" />
+    <Content Include="Content\production\js\editor\external\google-code-prettify\lang-apollo.js" />
+    <Content Include="Content\production\js\editor\external\google-code-prettify\lang-basic.js" />
+    <Content Include="Content\production\js\editor\external\google-code-prettify\lang-clj.js" />
+    <Content Include="Content\production\js\editor\external\google-code-prettify\lang-css.js" />
+    <Content Include="Content\production\js\editor\external\google-code-prettify\lang-dart.js" />
+    <Content Include="Content\production\js\editor\external\google-code-prettify\lang-erlang.js" />
+    <Content Include="Content\production\js\editor\external\google-code-prettify\lang-go.js" />
+    <Content Include="Content\production\js\editor\external\google-code-prettify\lang-hs.js" />
+    <Content Include="Content\production\js\editor\external\google-code-prettify\lang-lisp.js" />
+    <Content Include="Content\production\js\editor\external\google-code-prettify\lang-llvm.js" />
+    <Content Include="Content\production\js\editor\external\google-code-prettify\lang-lua.js" />
+    <Content Include="Content\production\js\editor\external\google-code-prettify\lang-matlab.js" />
+    <Content Include="Content\production\js\editor\external\google-code-prettify\lang-ml.js" />
+    <Content Include="Content\production\js\editor\external\google-code-prettify\lang-mumps.js" />
+    <Content Include="Content\production\js\editor\external\google-code-prettify\lang-n.js" />
+    <Content Include="Content\production\js\editor\external\google-code-prettify\lang-pascal.js" />
+    <Content Include="Content\production\js\editor\external\google-code-prettify\lang-proto.js" />
+    <Content Include="Content\production\js\editor\external\google-code-prettify\lang-r.js" />
+    <Content Include="Content\production\js\editor\external\google-code-prettify\lang-rd.js" />
+    <Content Include="Content\production\js\editor\external\google-code-prettify\lang-scala.js" />
+    <Content Include="Content\production\js\editor\external\google-code-prettify\lang-sql.js" />
+    <Content Include="Content\production\js\editor\external\google-code-prettify\lang-tcl.js" />
+    <Content Include="Content\production\js\editor\external\google-code-prettify\lang-tex.js" />
+    <Content Include="Content\production\js\editor\external\google-code-prettify\lang-vb.js" />
+    <Content Include="Content\production\js\editor\external\google-code-prettify\lang-vhdl.js" />
+    <Content Include="Content\production\js\editor\external\google-code-prettify\lang-wiki.js" />
+    <Content Include="Content\production\js\editor\external\google-code-prettify\lang-xq.js" />
+    <Content Include="Content\production\js\editor\external\google-code-prettify\lang-yaml.js" />
+    <Content Include="Content\production\js\editor\external\google-code-prettify\prettify.js" />
+    <Content Include="Content\production\js\editor\external\google-code-prettify\run_prettify.js" />
+    <Content Include="Content\production\js\editor\external\jquery.hotkeys.js" />
+    <Content Include="Content\production\js\fixed_table_rc.js" />
+    <Content Include="Content\production\js\flot\curvedLines.js" />
+    <Content Include="Content\production\js\flot\date.js" />
+    <Content Include="Content\production\js\flot\jquery.flot.js" />
+    <Content Include="Content\production\js\flot\jquery.flot.orderBars.js" />
+    <Content Include="Content\production\js\flot\jquery.flot.pie.js" />
+    <Content Include="Content\production\js\flot\jquery.flot.resize.js" />
+    <Content Include="Content\production\js\flot\jquery.flot.spline.js" />
+    <Content Include="Content\production\js\flot\jquery.flot.stack.js" />
+    <Content Include="Content\production\js\flot\jquery.flot.time.min.js" />
+    <Content Include="Content\production\js\flot\jquery.flot.tooltip.min.js" />
+    <Content Include="Content\production\js\gauge\gauge.min.js" />
+    <Content Include="Content\production\js\gauge\gauge_demo.js" />
+    <Content Include="Content\production\js\icheck\icheck.min.js" />
+    <Content Include="Content\production\js\impresion\qz-tray.js" />
+    <Content Include="Content\production\js\index.js" />
+    <Content Include="Content\production\js\input_mask\jquery.inputmask.js" />
+    <Content Include="Content\production\js\ion_range\ion.rangeSlider.min.js" />
+    <Content Include="Content\production\js\jquery.min.js" />
+    <Content Include="Content\production\js\knob\jquery.knob.min.js" />
+    <Content Include="Content\production\js\maps\gdp-data.js" />
+    <Content Include="Content\production\js\maps\jquery-jvectormap-2.0.3.min.js" />
+    <Content Include="Content\production\js\maps\jquery-jvectormap-us-aea-en.js" />
+    <Content Include="Content\production\js\maps\jquery-jvectormap-world-mill-en.js" />
+    <Content Include="Content\production\js\moment\moment.min.js" />
+    <Content Include="Content\production\js\moris\example.js" />
+    <Content Include="Content\production\js\moris\morris.min.js" />
+    <Content Include="Content\production\js\moris\raphael-min.js" />
+    <Content Include="Content\production\js\morris.min.js" />
+    <Content Include="Content\production\js\nicescroll\jquery.nicescroll.min.js" />
+    <Content Include="Content\production\js\notify\pnotify.buttons.js" />
+    <Content Include="Content\production\js\notify\pnotify.core.js" />
+    <Content Include="Content\production\js\notify\pnotify.nonblock.js" />
+    <Content Include="Content\production\js\nprogress.js" />
+    <Content Include="Content\production\js\pace\pace.min.js" />
+    <Content Include="Content\production\js\parsley\parsley.min.js" />
+    <Content Include="Content\production\js\progressbar\bootstrap-progressbar.min.js" />
+    <Content Include="Content\production\js\qz-tray.js" />
+    <Content Include="Content\production\js\sidebar\classie.js" />
+    <Content Include="Content\production\js\sidebar\component.css" />
+    <Content Include="Content\production\js\sidebar\modernizr.custom.js" />
+    <Content Include="Content\production\js\sidebar\sidebarEffects.js" />
+    <Content Include="Content\production\js\skycons\skycons.min.js" />
+    <Content Include="Content\production\js\sparkline\jquery.sparkline.min.js" />
+    <Content Include="Content\production\js\switchery\switchery.min.js" />
+    <Content Include="Content\production\js\tags\jquery.tagsinput.min.js" />
+    <Content Include="Content\production\js\textarea\autosize.min.js" />
+    <Content Include="Content\production\js\validator\validator.js" />
+    <Content Include="Content\production\js\wizard\jquery.smartWizard.js" />
+    <Content Include="Content\production\less\custom.css" />
+    <Content Include="Content\production\sounds\1.mp3" />
+    <Content Include="Content\production\sounds\1.wav" />
+    <Content Include="Content\production\sounds\1m.mp3" />
+    <Content Include="Content\production\sounds\2.mp3" />
+    <Content Include="Content\production\sounds\3.mp3" />
+    <Content Include="Content\Site.css" />
+    <Content Include="Content\style_v1.css" />
+    <Content Include="favicon.ico" />
+    <Content Include="Global.asax" />
+    <Content Include="JS\AdminSiib\Admin_siib.js" />
+    <Content Include="JS\Alimentacion\Dietas.js" />
+    <Content Include="JS\Alimentacion\Programacion.js" />
+    <Content Include="JS\Alimentacion\Recepcion.js" />
+    <Content Include="JS\Alimentacion\Tracker.js" />
+    <Content Include="JS\Almacen\EntregaMercancia.js" />
+    <Content Include="JS\Almacen\Inventario.js" />
+    <Content Include="JS\Configuracion\CuentaContable.js" />
+    <Content Include="JS\Nomina\FormacionAcademica.js" />
+    <Content Include="JS\Reportes\Dashboard.js" />
+    <Content Include="JS\Reportes\ReportesAlmacen.js" />
+    <Content Include="JS\Almacen\SolicitudesMercancia.js" />
+    <Content Include="JS\Catalogos\Articulos.js" />
+    <Content Include="JS\Catalogos\Centros.js" />
+    <Content Include="JS\Catalogos\Equipos_Establos.js" />
+    <Content Include="JS\Compras\OrdenesCompra.js" />
+    <Content Include="JS\Compras\Presupuestos.js" />
+    <Content Include="JS\Compras\Requisiciones_v1.js" />
+    <Content Include="JS\Configuracion\Almacen.js" />
+    <Content Include="JS\Configuracion\Area.js" />
+    <Content Include="JS\Configuracion\CatalogosBascula.js" />
+    <Content Include="JS\Configuracion\CargoContable.js" />
+    <Content Include="JS\Configuracion\CatalogosEnviosLeche.js" />
+    <Content Include="JS\Configuracion\CatalogosForrajes.js" />
+    <Content Include="JS\Configuracion\Centro.js" />
+    <Content Include="JS\Configuracion\Empleado.js" />
+    <Content Include="JS\Configuracion\Establo.js" />
+    <Content Include="JS\Configuracion\Firmas.js" />
+    <Content Include="JS\Configuracion\Modulo.js" />
+    <Content Include="JS\Configuracion\Permiso.js" />
+    <Content Include="JS\Configuracion\Rol.js" />
+    <Content Include="JS\Configuracion\Usuario.js" />
+    <Content Include="JS\Contabilidad\ImportacionFacturas.js" />
+    <Content Include="JS\Contabilidad\OrdenesPagos.js" />
+    <Content Include="JS\Contabilidad\SolicitudesPagos.js" />
+    <Content Include="JS\Establo\BasculaSab.js" />
+    <Content Include="JS\Establo\Bascula.js" />
+    <Content Include="JS\Establo\BasculaSistemas.js" />
+    <Content Include="JS\Establo\Casetas.js" />
+    <Content Include="JS\Establo\EnviosLeche.js" />
+    <Content Include="JS\Establo\SalidasGanado.js" />
+    <Content Include="JS\Evaluaciones\Evaluaciones.js" />
+    <Content Include="JS\MainLayout.js" />
+    <Content Include="JS\Compras\Proveedores.js" />
+    <Content Include="JS\Nomina\EmpleadoChecador.js" />
+    <Content Include="JS\Nomina\Nomina.js" />
+    <Content Include="JS\Nomina\Prenomina.js" />
+    <Content Include="JS\Parametros\Propiedades.js" />
+    <Content Include="JS\PortalProveedores\Index.js" />
+    <Content Include="JS\Portal\FormatoOrdenCompra.js" />
+    <Content Include="JS\Reportes\ReportesAlimentacion.js" />
+    <Content Include="JS\Reportes\ReportesCompras.js" />
+    <Content Include="JS\Reportes\ReportesEnviosLeche.js" />
+    <Content Include="JS\Reportes\ReportesNominas.js" />
+    <Content Include="JS\Seguridad\Password.js" />
+    <Content Include="JS\Utilerias\Almacen\UtileriaInventario.js" />
+    <Content Include="JS\Utilerias\Bascula\UtileriaBascula.js" />
+    <Content Include="JS\Utilerias\Dispositivos\UtileriasDispositivos.js" />
+    <Content Include="JS\Utilerias\Pruebas\Prueba.js" />
+    <Content Include="JS\Utilerias\SalidasGanado\UtileriaSalidasGanado.js" />
+    <Content Include="JS\Utilerias\Soporte\UtileriaSoporte.js" />
+    <Content Include="JS\Utilerias\VinculoSab.js" />
+    <Content Include="JS\Utilerias\Requisiciones\UtileriaRequisiciones.js" />
+    <Content Include="Models\Model1.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>Model1.edmx</DependentUpon>
+      <LastGenOutput>Model1.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="Models\Model1.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>Model1.edmx</DependentUpon>
+      <LastGenOutput>Model1.cs</LastGenOutput>
+    </Content>
+    <Content Include="Models\Model2.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>Model2.edmx</DependentUpon>
+      <LastGenOutput>Model2.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="Models\Model2.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>Model2.edmx</DependentUpon>
+      <LastGenOutput>Model2.cs</LastGenOutput>
+    </Content>
+    <Content Include="Models\Model3.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>Model3.edmx</DependentUpon>
+      <LastGenOutput>Model3.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="Models\Model3.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>Model3.edmx</DependentUpon>
+      <LastGenOutput>Model3.cs</LastGenOutput>
+    </Content>
+    <Content Include="Models\Model4.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>Model4.edmx</DependentUpon>
+      <LastGenOutput>Model4.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="Models\Model4.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>Model4.edmx</DependentUpon>
+      <LastGenOutput>Model4.cs</LastGenOutput>
+    </Content>
+    <Content Include="Models\Model5.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>Model5.edmx</DependentUpon>
+      <LastGenOutput>Model5.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="Models\Model5.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>Model5.edmx</DependentUpon>
+      <LastGenOutput>Model5.cs</LastGenOutput>
+    </Content>
+    <Content Include="Models\Model6.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>Model6.edmx</DependentUpon>
+      <LastGenOutput>Model6.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="Models\Model6.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>Model6.edmx</DependentUpon>
+      <LastGenOutput>Model6.cs</LastGenOutput>
+    </Content>
+    <Content Include="Scripts\jquery.signalR-2.4.3.js" />
+    <Content Include="Scripts\jquery.signalR-2.4.3.min.js" />
+    <Content Include="Views\Scripts\bootstrap.bundle.js" />
+    <Content Include="Views\Scripts\bootstrap.bundle.min.js" />
+    <Content Include="Views\Scripts\bootstrap.esm.js" />
+    <Content Include="Views\Scripts\bootstrap.esm.min.js" />
+    <Content Include="Views\Scripts\bootstrap.js" />
+    <Content Include="Views\Scripts\bootstrap.min.js" />
+    <Content Include="Content\bootstrap-theme.css.map" />
+    <Content Include="Content\bootstrap-theme.min.css.map" />
+    <Content Include="Content\bootstrap.css.map" />
+    <Content Include="Content\bootstrap.min.css.map" />
+    <Content Include="Content\changelog.md" />
+    <Content Include="Content\css\bootstrap-grid.css.map" />
+    <Content Include="Content\css\bootstrap-grid.min.css.map" />
+    <Content Include="Content\css\bootstrap-reboot.css.map" />
+    <Content Include="Content\css\bootstrap-reboot.min.css.map" />
+    <Content Include="Content\css\bootstrap.css.map" />
+    <Content Include="Content\css\bootstrap.min.css.map" />
+    <Content Include="Content\documentation\fonts\fonts\fontawesome-webfont.eot" />
+    <Content Include="Content\documentation\fonts\fonts\fontawesome-webfont.ttf" />
+    <Content Include="Content\documentation\fonts\fonts\fontawesome-webfont.woff" />
+    <Content Include="Content\documentation\fonts\fonts\FontAwesome.otf" />
+    <Content Include="Content\documentation\fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Content\documentation\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="Content\documentation\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="Content\documentation\fonts\glyphicons-halflings-regular.woff2" />
+    <Content Include="Content\documentation\fonts\less\bordered-pulled.less" />
+    <Content Include="Content\documentation\fonts\less\core.less" />
+    <Content Include="Content\documentation\fonts\less\fixed-width.less" />
+    <Content Include="Content\documentation\fonts\less\font-awesome.less" />
+    <Content Include="Content\documentation\fonts\less\icons.less" />
+    <Content Include="Content\documentation\fonts\less\larger.less" />
+    <Content Include="Content\documentation\fonts\less\list.less" />
+    <Content Include="Content\documentation\fonts\less\mixins.less" />
+    <Content Include="Content\documentation\fonts\less\path.less" />
+    <Content Include="Content\documentation\fonts\less\rotated-flipped.less" />
+    <Content Include="Content\documentation\fonts\less\spinning.less" />
+    <Content Include="Content\documentation\fonts\less\stacked.less" />
+    <Content Include="Content\documentation\fonts\less\variables.less" />
+    <Content Include="Content\documentation\fonts\scss\font-awesome.scss" />
+    <Content Include="Content\documentation\fonts\scss\_bordered-pulled.scss" />
+    <Content Include="Content\documentation\fonts\scss\_core.scss" />
+    <Content Include="Content\documentation\fonts\scss\_fixed-width.scss" />
+    <Content Include="Content\documentation\fonts\scss\_icons.scss" />
+    <Content Include="Content\documentation\fonts\scss\_larger.scss" />
+    <Content Include="Content\documentation\fonts\scss\_list.scss" />
+    <Content Include="Content\documentation\fonts\scss\_mixins.scss" />
+    <Content Include="Content\documentation\fonts\scss\_path.scss" />
+    <Content Include="Content\documentation\fonts\scss\_rotated-flipped.scss" />
+    <Content Include="Content\documentation\fonts\scss\_spinning.scss" />
+    <Content Include="Content\documentation\fonts\scss\_stacked.scss" />
+    <Content Include="Content\documentation\fonts\scss\_variables.scss" />
+    <Content Include="Content\documentation\js\jquery-ui-1.13.1\package.json" />
+    <Content Include="Content\js\bootstrap.bundle.js.map" />
+    <Content Include="Content\js\bootstrap.bundle.min.js.map" />
+    <Content Include="Content\js\bootstrap.js.map" />
+    <Content Include="Content\js\bootstrap.min.js.map" />
+    <Content Include="Content\production\css\fontawesome-webfont.eot" />
+    <Content Include="Content\production\css\font\fontawesome-webfont.eot" />
+    <Content Include="Content\production\css\font\fontawesome-webfont.ttf" />
+    <Content Include="Content\production\css\font\fontawesome-webfont.woff" />
+    <Content Include="Content\production\css\font\fontawesome-webfont.woff2" />
+    <Content Include="Content\production\css\font\FontAwesome.otf" />
+    <Content Include="Content\production\css\font\fonts\fontawesome-webfont.eot" />
+    <Content Include="Content\production\css\font\fonts\fontawesome-webfont.ttf" />
+    <Content Include="Content\production\css\font\fonts\fontawesome-webfont.woff" />
+    <Content Include="Content\production\css\font\fonts\fontawesome-webfont.woff2" />
+    <Content Include="Content\production\css\font\fonts\FontAwesome.otf" />
+    <Content Include="Content\production\css\font\glyphicons-halflings-regular.eot" />
+    <Content Include="Content\production\css\font\glyphicons-halflings-regular.ttf" />
+    <Content Include="Content\production\css\font\glyphicons-halflings-regular.woff" />
+    <Content Include="Content\production\css\font\glyphicons-halflings-regular.woff2" />
+    <Content Include="Content\production\css\font\less\animated.less" />
+    <Content Include="Content\production\css\font\less\bordered-pulled.less" />
+    <Content Include="Content\production\css\font\less\core.less" />
+    <Content Include="Content\production\css\font\less\fixed-width.less" />
+    <Content Include="Content\production\css\font\less\font-awesome.less" />
+    <Content Include="Content\production\css\font\less\icons.less" />
+    <Content Include="Content\production\css\font\less\larger.less" />
+    <Content Include="Content\production\css\font\less\list.less" />
+    <Content Include="Content\production\css\font\less\mixins.less" />
+    <Content Include="Content\production\css\font\less\path.less" />
+    <Content Include="Content\production\css\font\less\rotated-flipped.less" />
+    <Content Include="Content\production\css\font\less\spinning.less" />
+    <Content Include="Content\production\css\font\less\stacked.less" />
+    <Content Include="Content\production\css\font\less\variables.less" />
+    <Content Include="Content\production\css\font\scss\font-awesome.scss" />
+    <Content Include="Content\production\css\font\scss\_animated.scss" />
+    <Content Include="Content\production\css\font\scss\_bordered-pulled.scss" />
+    <Content Include="Content\production\css\font\scss\_core.scss" />
+    <Content Include="Content\production\css\font\scss\_fixed-width.scss" />
+    <Content Include="Content\production\css\font\scss\_icons.scss" />
+    <Content Include="Content\production\css\font\scss\_larger.scss" />
+    <Content Include="Content\production\css\font\scss\_list.scss" />
+    <Content Include="Content\production\css\font\scss\_mixins.scss" />
+    <Content Include="Content\production\css\font\scss\_path.scss" />
+    <Content Include="Content\production\css\font\scss\_rotated-flipped.scss" />
+    <Content Include="Content\production\css\font\scss\_spinning.scss" />
+    <Content Include="Content\production\css\font\scss\_stacked.scss" />
+    <Content Include="Content\production\css\font\scss\_variables.scss" />
+    <Content Include="Content\production\fonts\fontawesome-webfont.eot" />
+    <Content Include="Content\production\fonts\fontawesome-webfont.ttf" />
+    <Content Include="Content\production\fonts\fontawesome-webfont.woff" />
+    <Content Include="Content\production\fonts\fontawesome-webfont.woff2" />
+    <Content Include="Content\production\fonts\FontAwesome.otf" />
+    <Content Include="Content\production\fonts\fonts\fontawesome-webfont.eot" />
+    <Content Include="Content\production\fonts\fonts\fontawesome-webfont.ttf" />
+    <Content Include="Content\production\fonts\fonts\fontawesome-webfont.woff" />
+    <Content Include="Content\production\fonts\fonts\fontawesome-webfont.woff2" />
+    <Content Include="Content\production\fonts\fonts\FontAwesome.otf" />
+    <Content Include="Content\production\fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Content\production\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="Content\production\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="Content\production\fonts\glyphicons-halflings-regular.woff2" />
+    <Content Include="Content\production\fonts\less\animated.less" />
+    <Content Include="Content\production\fonts\less\bordered-pulled.less" />
+    <Content Include="Content\production\fonts\less\core.less" />
+    <Content Include="Content\production\fonts\less\fixed-width.less" />
+    <Content Include="Content\production\fonts\less\font-awesome.less" />
+    <Content Include="Content\production\fonts\less\icons.less" />
+    <Content Include="Content\production\fonts\less\larger.less" />
+    <Content Include="Content\production\fonts\less\list.less" />
+    <Content Include="Content\production\fonts\less\mixins.less" />
+    <Content Include="Content\production\fonts\less\path.less" />
+    <Content Include="Content\production\fonts\less\rotated-flipped.less" />
+    <Content Include="Content\production\fonts\less\spinning.less" />
+    <Content Include="Content\production\fonts\less\stacked.less" />
+    <Content Include="Content\production\fonts\less\variables.less" />
+    <Content Include="Content\production\fonts\scss\font-awesome.scss" />
+    <Content Include="Content\production\fonts\scss\_animated.scss" />
+    <Content Include="Content\production\fonts\scss\_bordered-pulled.scss" />
+    <Content Include="Content\production\fonts\scss\_core.scss" />
+    <Content Include="Content\production\fonts\scss\_fixed-width.scss" />
+    <Content Include="Content\production\fonts\scss\_icons.scss" />
+    <Content Include="Content\production\fonts\scss\_larger.scss" />
+    <Content Include="Content\production\fonts\scss\_list.scss" />
+    <Content Include="Content\production\fonts\scss\_mixins.scss" />
+    <Content Include="Content\production\fonts\scss\_path.scss" />
+    <Content Include="Content\production\fonts\scss\_rotated-flipped.scss" />
+    <Content Include="Content\production\fonts\scss\_spinning.scss" />
+    <Content Include="Content\production\fonts\scss\_stacked.scss" />
+    <Content Include="Content\production\fonts\scss\_variables.scss" />
+    <Content Include="Content\production\js\datatables\json\scroller-demo.json" />
+    <Content Include="Content\production\js\maps\us-unemployment.json" />
+    <Content Include="Content\README.md" />
+    <EntityDeploy Include="Models\Model1.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>Model1.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="Models\Model1.edmx.diagram">
+      <DependentUpon>Model1.edmx</DependentUpon>
+    </Content>
+    <EntityDeploy Include="Models\Model2.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>Model2.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="Models\Model2.edmx.diagram">
+      <DependentUpon>Model2.edmx</DependentUpon>
+    </Content>
+    <EntityDeploy Include="Models\Model3.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>Model3.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="Models\Model3.edmx.diagram">
+      <DependentUpon>Model3.edmx</DependentUpon>
+    </Content>
+    <EntityDeploy Include="Models\Model4.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>Model4.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="Models\Model4.edmx.diagram">
+      <DependentUpon>Model4.edmx</DependentUpon>
+    </Content>
+    <EntityDeploy Include="Models\Model5.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>Model5.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="Models\Model5.edmx.diagram">
+      <DependentUpon>Model5.edmx</DependentUpon>
+    </Content>
+    <Content Include="Content\production\css\datatables\images\Sorting icons.psd" />
+    <Content Include="Views\ALMACEN\ReporteSolicitudesMercancia\_ReporteSolicitudesMercancia.cshtml" />
+    <Content Include="Views\ALMACEN\ReporteSolicitudesMercancia\Index.cshtml" />
+    <Content Include="Views\ALMACEN\CodigosQR\_CodigosQR.cshtml" />
+    <Content Include="Views\ALMACEN\CodigosQR\Index.cshtml" />
+    <Content Include="Views\ESTABLOS\EnviosLeche\InfoFacturaLeche\Index.cshtml" />
+    <Content Include="Views\ESTABLOS\EnviosLeche\InfoFacturaLeche\_HistoricoFacturaLecheTable.cshtml" />
+    <Content Include="Views\ESTABLOS\EnviosLeche\ProgramacionSemanal\_ProgramacionDetalleDias.cshtml" />
+    <Content Include="Views\CATALOGOS\LECHE\_TiposTanqueSelect.cshtml" />
+    <Content Include="Views\ALIMENTACION\Dietas\Index.cshtml" />
+    <Content Include="Views\CATALOGOS\ALIMENTACION\Dietas\_GruposDietasSelect.cshtml" />
+    <Content Include="Views\CATALOGOS\ALIMENTACION\Dietas\_DietasAutorizadasSelect.cshtml" />
+    <Content Include="Views\ALIMENTACION\Dietas\_CopiaDietaExistenteNewDieta.cshtml" />
+    <Content Include="Views\ALIMENTACION\Dietas\_DietasStatusTable.cshtml" />
+    <Content Include="Views\ALIMENTACION\Dietas\_DietaDetalle.cshtml" />
+    <Content Include="Views\ALIMENTACION\Dietas\_ProyeccionValoresDieta.cshtml" />
+    <Content Include="Views\CATALOGOS\ALIMENTACION\Dietas\_EstatusDietasSelect.cshtml" />
+    <Content Include="Views\ALIMENTACION\Dietas\_DietasGeneralTable.cshtml" />
+    <Content Include="Views\NOMINA\ControlFaltasHorasExtra\_ChecadorNominaEmpleado.cshtml" />
+    <Content Include="Views\REPORTES\Nomina\ReporteConceptosNomina\ReporteConceptosNomina.cshtml" />
+    <Content Include="Views\REPORTES\Nomina\ReporteConceptosNomina\_ReporteConceptosNomina.cshtml" />
+    <Content Include="Views\CATALOGOS\FORMACION_ACADEMICA\_CarreraSelect.cshtml" />
+    <Content Include="Views\CATALOGOS\FORMACION_ACADEMICA\_EscolaridadSelect.cshtml" />
+    <Content Include="Views\CATALOGOS\FORMACION_ACADEMICA\_EscolaridadStatusSelect.cshtml" />
+    <Content Include="Views\CATALOGOS\FORMACION_ACADEMICA\_HistorialEstudiosEmpleadoTable.cshtml" />
+    <Content Include="Views\CATALOGOS\FORMACION_ACADEMICA\_InstitucionSelect.cshtml" />
+    <Content Include="Views\ALMACEN\CodigosQR\_ArticulosTipoTable.cshtml" />
+    <Content Include="Views\ESTABLOS\SalidasGanado\_SelectTiposCausaMuerte.cshtml" />
+    <Content Include="Views\ESTABLOS\SalidasGanado\_SelectCausaMuerte.cshtml" />
+    <Content Include="Views\ESTABLOS\SalidasGanado\_SelectTiposSalida.cshtml" />
+    <Content Include="Views\ESTABLOS\SalidasGanado\_ReporteIndicadoresTable.cshtml" />
+    <Content Include="Views\ESTABLOS\SalidasGanado\Test\GenerarSalida.cshtml" />
+    <Content Include="Views\ESTABLOS\SalidasGanado\Test\_TheadArete.cshtml" />
+    <Content Include="Views\ESTABLOS\SalidasGanado\Test\_SelectTiposSalida.cshtml" />
+    <Content Include="Views\ESTABLOS\SalidasGanado\Test\_SelectTiposCausaMuerte.cshtml" />
+    <Content Include="Views\ESTABLOS\SalidasGanado\Test\_SelectCausaMuerte.cshtml" />
+    <Content Include="Views\ESTABLOS\SalidasGanado\Test\_ReporteIndicadoresTable.cshtml" />
+    <Content Include="Views\ESTABLOS\SalidasGanado\Test\_GanadoPendiente.cshtml" />
+    <Content Include="Views\ESTABLOS\SalidasGanado\Test\_EstablosSelect.cshtml" />
+    <Content Include="Views\ESTABLOS\SalidasGanado\Test\_CondicionesGanado.cshtml" />
+    <Content Include="Views\ESTABLOS\SalidasGanado\Test\_ClasificacionesGanado.cshtml" />
+    <Content Include="Views\ESTABLOS\SalidasGanado\Test\_CargarDGanadoTabla.cshtml" />
+    <Content Include="Views\ESTABLOS\SalidasGanado\Test\ReporteSalidaDetalle\_InfoFicha.cshtml" />
+    <Content Include="Views\ESTABLOS\SalidasGanado\Test\ReporteSalidaDetalle\_PDFSalida.cshtml" />
+    <Content Include="Views\ESTABLOS\SalidasGanado\Test\ReporteSalidaDetalle\_SalidasGanadoEstablo.cshtml" />
+    <Content Include="Views\ESTABLOS\SalidasGanado\Test\ReporteSalidaDetalle\ReporteSalidas.cshtml" />
+    <Content Include="Views\DASHBOARD\_TopImportesComprasProveedores.cshtml" />
+    <Content Include="Views\DASHBOARD\_DEVLogProcesos.cshtml" />
+    <Content Include="Views\DASHBOARD\_DEVCardsKPI.cshtml" />
+    <Content Include="Views\DASHBOARD\_GeneralRequisicionesGeneradas.cshtml" />
+    <Content Include="Views\DASHBOARD\_ValesPendientesCardsKPI.cshtml" />
+    <Content Include="Views\ALMACEN\AnalisisConsumos\_AnalisisConsumoReporteAnual.cshtml" />
+    <Content Include="Views\COMPRAS\REQUISICIONES\_TrackingLogRequisicion.cshtml" />
+    <EntityDeploy Include="Models\Model6.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>Model6.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="Models\Model6.edmx.diagram">
+      <DependentUpon>Model6.edmx</DependentUpon>
+    </Content>
+    <Content Include="Views\ESTABLOS\SalidasGanado\_MedicosSelect.cshtml" />
+    <Content Include="Views\COMPRAS\PROVEEDORES\SolicitudesRegistro\_DetalleSolicitudEdit.cshtml" />
+    <Content Include="Views\ESTABLOS\SalidasGanado\Test\_TiposSalidasSelect.cshtml" />
+    <Content Include="Views\ESTABLOS\SalidasGanado\Test\_ClasificacionesGanadoSelect.cshtml" />
+    <Content Include="Views\NOMINA\RecibosNomina\Index.cshtml" />
+    <Content Include="Views\NOMINA\RecibosNomina\_NominasGeneradasSelect.cshtml" />
+    <Content Include="Views\NOMINA\RecibosNomina\_ReciboNominaEmpleado.cshtml" />
+    <Content Include="Views\CONFIGURACION\USUARIOS_MASTERS\Index.cshtml" />
+    <Content Include="Views\CONFIGURACION\USUARIOS_MASTERS\_UsuariosMastersTable.cshtml" />
+    <Content Include="Views\CATALOGOS\USUARIOS\_UsuariosMasterAccionesSelect.cshtml" />
+    <Content Include="Views\CATALOGOS\ALIMENTACION\Tracker\_TipoMovimientosSelect.cshtml" />
+    <Content Include="Views\ALMACEN\_ReporteExistenciasGlobalAlmacenes.cshtml" />
+    <Content Include="Views\ESTABLOS\SalidasGanado\Test\_SelectSalaEstablo.cshtml" />
+    <Content Include="Views\ESTABLOS\SalidasGanado\Test\Utileria\_InformacionSalidaGanadoEditar.cshtml" />
+    <Content Include="Views\ESTABLOS\SalidasGanado\Test\Utileria\_BitacoraCarga.cshtml" />
+    <Content Include="Views\ALMACEN\CriticidadArticulos\Index.cshtml" />
+    <Content Include="Views\ALMACEN\CriticidadArticulos\_ArticulosCriticidadTable.cshtml" />
+    <Content Include="Views\CATALOGOS\ALMACENES\_TiposConsumoCriticidadSelect.cshtml" />
+    <Content Include="Views\CATALOGOS\ALMACENES\_TiposOperacionCriticidadSelect.cshtml" />
+    <Content Include="Views\ALMACEN\Inventario\InventarioCritico\_InventarioCriticoTable.cshtml" />
+    <Content Include="Views\NOMINA\Checador\_ReporteChecador.cshtml" />
+    <Content Include="Views\ALMACEN\Inventario\ConsultarInventario\_DiferenciasAnalsisiInventariosTable.cshtml" />
+    <Content Include="Views\CATALOGOS\SOPORTE\_SoporteCategoriaSelect.cshtml" />
+    <Content Include="Views\CATALOGOS\SOPORTE\_SoporteEstatusSelect.cshtml" />
+    <Content Include="Views\CATALOGOS\SOPORTE\_SoportePrioridadSelect.cshtml" />
+    <Content Include="Views\CATALOGOS\SOPORTE\_SoporteTiposSelect.cshtml" />
+    <Content Include="Views\REPORTES\ReporteOrdenesCompra\Index.cshtml" />
+    <Content Include="Views\REPORTES\ReporteOrdenesCompra\_ConsultarReporteOrdenesCompraTable.cshtml" />
+    <Content Include="Views\CATALOGOS\CUENTAS_CONTABLES\_CuentasCargosUsuarioSelect.cshtml" />
+    <Content Include="Views\CONFIGURACION\CUENTACONTABLE\Index.cshtml" />
+    <Content Include="Views\CONFIGURACION\CUENTACONTABLE\_CuentaContableUsuario.cshtml" />
+    <Content Include="Views\ADMIN_SIIB\Notificaciones\Index.cshtml" />
+    <Content Include="Views\COMPRAS\PRECARGA\_PrecargasRealizadasTable.cshtml" />
+    <Content Include="Views\COMPRAS\PRECARGA\_FormatoPrecargasPDF.cshtml" />
+    <Content Include="Views\NOMINA\Checador\_ReporteChecadorMensual.cshtml" />
+    <Content Include="Views\COMPRAS\PRECARGA\_RecepcionesHistorial.cshtml" />
+    <Content Include="Views\ADMIN_SIIB\AdminMenu\Index.cshtml" />
+    <Content Include="Views\ADMIN_SIIB\AdminMenu\_MenuSIIBTree.cshtml" />
+    <None Include="Views\Scripts\jquery-3.4.1.intellisense.js" />
+    <Content Include="Views\Scripts\jquery-3.4.1.js" />
+    <Content Include="Views\Scripts\jquery-3.4.1.min.js" />
+    <Content Include="Views\Scripts\jquery-3.4.1.slim.js" />
+    <Content Include="Views\Scripts\jquery-3.4.1.slim.min.js" />
+    <None Include="Views\Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Views\Scripts\jquery.validate.js" />
+    <Content Include="Views\Scripts\jquery.validate.min.js" />
+    <Content Include="Views\Scripts\jquery.validate.unobtrusive.js" />
+    <Content Include="Views\Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Views\Scripts\modernizr-2.8.3.js" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Views\Web.config" />
+    <Content Include="Views\Shared\Error.cshtml" />
+    <Content Include="Views\Shared\MainLayout.cshtml" />
+    <Content Include="Views\Login\Index.cshtml" />
+    <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Login\_VisualizaModulos.cshtml" />
+    <Content Include="Views\ESTABLOS\Bascula\Index.cshtml" />
+    <Content Include="Views\CATALOGOS\BASCULA\_NumeroPozos.cshtml" />
+    <Content Include="Views\CATALOGOS\_Establos.cshtml" />
+    <Content Include="Views\CONFIGURACION\MODULOS\Index.cshtml" />
+    <Content Include="Views\CATALOGOS\USUARIOS\UsuariosCorporativoSelect.cshtml" />
+    <Content Include="Views\CONFIGURACION\MODULOS\_SubModulosRol.cshtml" />
+    <Content Include="Views\CATALOGOS\ROLES\_RolesSistemaSelect.cshtml" />
+    <Content Include="Views\CONFIGURACION\EMPLEADOS\AdministradorEmpleados.cshtml" />
+    <Content Include="Views\CONFIGURACION\EMPLEADOS\_EmpleadosTable.cshtml" />
+    <Content Include="Views\CONFIGURACION\USUARIOS\_UsuariosEmpleado.cshtml" />
+    <Content Include="Views\CATALOGOS\ROLES\_RolesSistemaTable.cshtml" />
+    <Content Include="Views\CATALOGOS\ROLES\_UsuariosRolesTable.cshtml" />
+    <Content Include="Views\CATALOGOS\ROLES\_TiposUsuarioSelect.cshtml" />
+    <Content Include="Views\ESTABLOS\SalidasGanado\GenerarSalida.cshtml" />
+    <Content Include="Views\ESTABLOS\SalidasGanado\_TheadSalida.cshtml" />
+    <Content Include="Views\ESTABLOS\SalidasGanado\_EstablosSelect.cshtml" />
+    <Content Include="Views\ESTABLOS\SalidasGanado\_ClasificacionesGanado.cshtml" />
+    <Content Include="Views\ESTABLOS\SalidasGanado\_CondicionesGanado.cshtml" />
+    <Content Include="Views\ESTABLOS\SalidasGanado\ReporteSalidaDetalle\ReporteSalidas.cshtml" />
+    <Content Include="Views\ESTABLOS\SalidasGanado\ReporteSalidaDetalle\_SalidasGanadoEstablo.cshtml" />
+    <Content Include="Views\RedirectPages\CambioPassword.cshtml" />
+    <Content Include="Views\RedirectPages\SesionIniciada.cshtml" />
+    <Content Include="Views\ESTABLOS\Bascula\_EstablosUsuarioSelect.cshtml" />
+    <Content Include="Views\CONFIGURACION\ESTABLOS\AsignadorEstablosUsuario\Index.cshtml" />
+    <Content Include="Views\CONFIGURACION\ESTABLOS\AsignadorEstablosUsuario\_UsuariosEstablos.cshtml" />
+    <Content Include="Views\CATALOGOS\BASCULA\_TiposMovimientosSelect.cshtml" />
+    <Content Include="Views\CATALOGOS\BASCULA\_CveMovimientosSelect.cshtml" />
+    <Content Include="Views\CATALOGOS\BASCULA\_LineasTransportistasSelect.cshtml" />
+    <Content Include="Views\ESTABLOS\Bascula\_FichasReporte.cshtml" />
+    <Content Include="Views\CONFIGURACION\PERMISOS\Index.cshtml" />
+    <Content Include="Views\CONFIGURACION\MODULOS\_ModulosSelect.cshtml" />
+    <Content Include="Views\CONFIGURACION\MODULOS\_SubModulosSelect.cshtml" />
+    <Content Include="Views\CONFIGURACION\PERMISOS\_PermisosSubmoduloTable.cshtml" />
+    <Content Include="Views\ALMACEN\SolicitudesMercancia\Index.cshtml" />
+    <Content Include="Views\CATALOGOS\CENTROS\_CentrosSelect.cshtml" />
+    <Content Include="Views\CATALOGOS\ALMACENES\_AlmacenesSelect.cshtml" />
+    <Content Include="Views\CATALOGOS\CARGOS_CONTABLES\_CargosContablesSelect.cshtml" />
+    <Content Include="Views\CATALOGOS\CUENTAS_CONTABLES\_CuentasContablesSelect.cshtml" />
+    <Content Include="Views\CATALOGOS\DEPARTAMENTOS\_DepartamentosSelect.cshtml" />
+    <Content Include="Views\CATALOGOS\EQUIPOS_ESTABLOS\_EquiposEstabloSelect.cshtml" />
+    <Content Include="Views\CONFIGURACION\EMPLEADOS\_EmpleadosSistemaSelect.cshtml" />
+    <Content Include="Views\CATALOGOS\ARTICULOS\_ArticulosSelect.cshtml" />
+    <Content Include="Views\ALMACEN\SolicitudesMercancia\_TbodyArticulosSolicitud.cshtml" />
+    <Content Include="Views\ALMACEN\SolicitudesMercancia\_SolicitudesMercanciaTable.cshtml" />
+    <Content Include="Views\ALMACEN\SolicitudesMercancia\_SolicitudesMercanciaDetalle.cshtml" />
+    <Content Include="Views\ALMACEN\EntregaVales\Index.cshtml" />
+    <Content Include="Views\CATALOGOS\ARTICULOS\_ArticulosTable.cshtml" />
+    <Content Include="Views\ALMACEN\EntregaVales\_SolicitudesAutorizadas.cshtml" />
+    <Content Include="Views\ALMACEN\EntregaVales\_SolicitudesMercanciaDetalleAtender.cshtml" />
+    <Content Include="Views\ALMACEN\EntregaVales\_CambiosArticuloSolicitud.cshtml" />
+    <Content Include="Views\ALMACEN\EntregaVales\_HistorialValesTable.cshtml" />
+    <Content Include="Views\ALMACEN\EntregaVales\_PDFVale.cshtml" />
+    <Content Include="Views\ALMACEN\Inventario\Index.cshtml" />
+    <Content Include="Views\CATALOGOS\INVENTARIO\_TiposMovimientosSelect.cshtml" />
+    <Content Include="Views\ALMACEN\Inventario\MovimientosInventario\_ArticulosAlmacen.cshtml" />
+    <Content Include="Views\CATALOGOS\ARTICULOS\_TiposArticulosSelect.cshtml" />
+    <Content Include="Views\ALMACEN\Inventario\MovimientosInventario\_MovimientosInventarioTable.cshtml" />
+    <Content Include="Views\ALMACEN\Inventario\MovimientosInventario\_MovimientoInventarioDetalle.cshtml" />
+    <Content Include="Views\ALMACEN\Inventario\CapturaInventario\_CapturaInventarioDiferencias.cshtml" />
+    <Content Include="Views\ALMACEN\Inventario\ConsultarInventario\_InventariosCapturadosTable.cshtml" />
+    <Content Include="Views\ALMACEN\Inventario\ConsultarInventario\_InventarioCapturadoDetalleTable.cshtml" />
+    <Content Include="Views\ALMACEN\Inventario\ConsultarInventario\_InventarioFechaTable.cshtml" />
+    <Content Include="Views\CATALOGOS\ALMACENES\_ArticulosAlmacen.cshtml" />
+    <Content Include="Views\COMPRAS\CATEGORIZACION\Index.cshtml" />
+    <Content Include="Views\COMPRAS\ARTICULOS\Index.cshtml" />
+    <Content Include="Views\CATALOGOS\ARTICULOS\_UnidadMedidaSelect.cshtml" />
+    <Content Include="Views\CATALOGOS\ARTICULOS\_ClasificacionSelect.cshtml" />
+    <Content Include="Views\CATALOGOS\ARTICULOS\_LineaSelect.cshtml" />
+    <Content Include="Views\CATALOGOS\ARTICULOS\_ArticulosCompletoTable.cshtml" />
+    <Content Include="Views\CONFIGURACION\ALMACENES\UsuariosAlmacen\Index.cshtml" />
+    <Content Include="Views\CONFIGURACION\ALMACENES\UsuariosAlmacen\_AlmacenesUsuario.cshtml" />
+    <Content Include="Views\COMPRAS\PRESUPUESTOS\Index.cshtml" />
+    <Content Include="Views\COMPRAS\PRESUPUESTOS\_PresupuestosAreasAnio.cshtml" />
+    <Content Include="Views\COMPRAS\PRESUPUESTOS\_AniosSelect.cshtml" />
+    <Content Include="Views\ESTABLOS\SalidasGanado\ReporteSalidaDetalle\_PDFSalida.cshtml" />
+    <Content Include="Views\ESTABLOS\SalidasGanado\ReporteSalidaDetalle\_InfoFicha.cshtml" />
+    <Content Include="Views\COMPRAS\REQUISICIONES\GENERAR_REQUI\Index.cshtml" />
+    <Content Include="Views\COMPRAS\REQUISICIONES\GENERAR_REQUI\_ArticuloRequi.cshtml" />
+    <Content Include="Views\CATALOGOS\PRIORIDADES\_PrioriedadSelect.cshtml" />
+    <Content Include="Views\COMPRAS\REQUISICIONES\AUTORIZACIONES\AutRevision\_RequisicionesRevision.cshtml" />
+    <Content Include="Views\COMPRAS\REQUISICIONES\_DetalleRequisicion.cshtml" />
+    <Content Include="Views\COMPRAS\REQUISICIONES\AUTORIZACIONES\AutRevision\Index.cshtml" />
+    <Content Include="Views\COMPRAS\REQUISICIONES\_ResumenPresupuestoCuentaRequi.cshtml" />
+    <Content Include="Views\COMPRAS\REQUISICIONES\GENERAR_REQUI\_DetallesRequisicion.cshtml" />
+    <Content Include="Views\COMPRAS\REQUISICIONES\GENERAR_REQUI\_RequisicionInfo.cshtml" />
+    <Content Include="Views\CONFIGURACION\CENTROS\UsuariosCentro\Index.cshtml" />
+    <Content Include="Views\CONFIGURACION\CENTROS\UsuariosCentro\_CentrosUsuario.cshtml" />
+    <Content Include="Views\COMPRAS\REQUISICIONES\AUTORIZACIONES\ValAutorizar\Index.cshtml" />
+    <Content Include="Views\COMPRAS\REQUISICIONES\AUTORIZACIONES\ValAutorizar\_RequisicionesAutValidar.cshtml" />
+    <Content Include="Views\COMPRAS\REQUISICIONES\COTIZACION\Index.cshtml" />
+    <Content Include="Views\COMPRAS\PROVEEDORES\Index.cshtml" />
+    <Content Include="Views\COMPRAS\PROVEEDORES\_ProveedoresTable.cshtml" />
+    <Content Include="Views\COMPRAS\PROVEEDORES\_EstatusSelect.cshtml" />
+    <Content Include="Views\COMPRAS\PROVEEDORES\_BancosSelect.cshtml" />
+    <Content Include="Views\COMPRAS\PROVEEDORES\_GiroEmpresaSelect.cshtml" />
+    <Content Include="Views\COMPRAS\PROVEEDORES\_ProveedoresBloqueoTable.cshtml" />
+    <Content Include="Views\CONFIGURACION\FIRMASAREA\Index.cshtml" />
+    <Content Include="Views\CONFIGURACION\FIRMASAREA\_CargosUsuario.cshtml" />
+    <Content Include="Views\COMPRAS\PROVEEDORES\_TiposMonedaSelect.cshtml" />
+    <Content Include="Views\CATALOGOS\ESTATUS\_EstatusSolicitudesMercanciaSelect.cshtml" />
+    <Content Include="Views\COMPRAS\REQUISICIONES\COTIZACION\_ArticulosCotizar.cshtml" />
+    <Content Include="Views\COMPRAS\REQUISICIONES\COTIZACION\_ArticulosPorCotizar.cshtml" />
+    <Content Include="Views\ALMACEN\EntregaVales\_SolicitudesMercanciaDetalleHistorial.cshtml" />
+    <Content Include="Views\COMPRAS\REQUISICIONES\COTIZACION\_ArticulosRequid.cshtml" />
+    <Content Include="Views\COMPRAS\REQUISICIONES\COTIZACION\_HistorialCotizacion.cshtml" />
+    <Content Include="Views\CATALOGOS\ARTICULOS\_TipoArticuloRequi.cshtml" />
+    <Content Include="Views\COMPRAS\REQUISICIONES\COTIZACION\_ArticuloProveedor.cshtml" />
+    <Content Include="Views\COMPRAS\REQUISICIONES\CONFIRMACION_COTIZACIONES\Index.cshtml" />
+    <Content Include="Views\COMPRAS\REQUISICIONES\CONFIRMACION_COTIZACIONES\_CotizacionesArticuloRequi.cshtml" />
+    <Content Include="Views\COMPRAS\REQUISICIONES\CONFIRMACION_COTIZACIONES\_ArticulosCotizadosPendientes.cshtml" />
+    <Content Include="Views\COMPRAS\REQUISICIONES\COTIZACION\_VigenciaProveedor.cshtml" />
+    <Content Include="Views\COMPRAS\REQUISICIONES\COTIZACIONES_CONFIRMADAS\Index.cshtml" />
+    <Content Include="Views\COMPRAS\REQUISICIONES\COTIZACIONES_CONFIRMADAS\_CotizacionesPendientesConfirmar.cshtml" />
+    <Content Include="Views\COMPRAS\REQUISICIONES\COTIZACIONES_CONFIRMADAS\_CotizacionesConfirmadas.cshtml" />
+    <Content Include="Views\COMPRAS\REQUISICIONES\COTIZACIONES_CONFIRMADAS\_SolicitudesCompraAgrupadas.cshtml" />
+    <Content Include="Views\COMPRAS\REQUISICIONES\COTIZACIONES_CONFIRMADAS\_SolicitudCompraAgrupadaDetalle.cshtml" />
+    <Content Include="Views\COMPRAS\REQUISICIONES\FIRMAS\Index.cshtml" />
+    <Content Include="Views\COMPRAS\REQUISICIONES\GENERAR_REQUI\_CotizacionesProveedorArticuloTable.cshtml" />
+    <Content Include="Views\CATALOGOS\REQUISICIONES\_TiposRequisicionesSelect.cshtml" />
+    <Content Include="Views\COMPRAS\REQUISICIONES\ORDENES\ConfirmacionMaster.cshtml" />
+    <Content Include="Views\COMPRAS\REQUISICIONES\ORDENES\_DetalleRequisiciones.cshtml" />
+    <Content Include="Views\COMPRAS\REQUISICIONES\ORDENES\_RequisicionesAutorizar.cshtml" />
+    <Content Include="Views\COMPRAS\REQUISICIONES\FIRMAS\AutFinal\_RequisicionesPorFirmar.cshtml" />
+    <Content Include="Views\COMPRAS\REQUISICIONES\FIRMAS\AutFinal\_RequisicionesPorFirmarDetalle.cshtml" />
+    <Content Include="Views\COMPRAS\ORDENES_COMPRA\ADMINISTRAR_ORDENES\Index.cshtml" />
+    <Content Include="Views\CATALOGOS\PROVEEDORES\_ProveedoresSelect.cshtml" />
+    <Content Include="Views\COMPRAS\ORDENES_COMPRA\ADMINISTRAR_ORDENES\_OrdenesCompraGeneradasTable.cshtml" />
+    <Content Include="Views\COMPRAS\ORDENES_COMPRA\ADMINISTRAR_ORDENES\_OrdenCompraDetalleTable.cshtml" />
+    <Content Include="Views\COMPRAS\REQUISICIONES\FIRMAS\AutFinalMasterView\AutorizacionRequisicionIndividual.cshtml" />
+    <Content Include="Views\COMPRAS\ORDENES_COMPRA\_PDFOrdenCompra.cshtml" />
+    <Content Include="Views\Shared\PublicLayout.cshtml" />
+    <Content Include="Views\PORTAL\FormatoOrdenCompra\Index.cshtml" />
+    <Content Include="Views\ALMACEN\Recepcion\Index.cshtml" />
+    <Content Include="Views\ALMACEN\Recepcion\_OrdenCompraTable.cshtml" />
+    <Content Include="Views\COMPRAS\PRECARGA\Index.cshtml" />
+    <Content Include="Views\COMPRAS\PRECARGA\_OrdenCompraPrecargaTable.cshtml" />
+    <Content Include="Views\CATALOGOS\REQUISICIONES\_StatusRequisicionesSelect.cshtml" />
+    <Content Include="Views\CATALOGOS\REQUISICIONES\_UbicacionesEntregaSelect.cshtml" />
+    <Content Include="Views\COMPRAS\REQUISICIONES\_TrackingRequisicion.cshtml" />
+    <Content Include="Views\CATALOGOS\ARTICULOS\_LupaArticulosTable.cshtml" />
+    <Content Include="Views\COMPRAS\PROVEEDORES\_LupaProveedoresTable.cshtml" />
+    <Content Include="Views\CATALOGOS\CENTROS\Index.cshtml" />
+    <Content Include="Views\CATALOGOS\CENTROS\_CentrosTable.cshtml" />
+    <Content Include="Views\CATALOGOS\EQUIPOS_ESTABLOS\Index.cshtml" />
+    <Content Include="Views\CATALOGOS\EQUIPOS_ESTABLOS\_EquiposEstabloTable.cshtml" />
+    <Content Include="Views\CONFIGURACION\PROVEEDORES\Index.cshtml" />
+    <Content Include="Views\CONTABILIDAD\ImportacionFacturas\Index.cshtml" />
+    <Content Include="Views\CONTABILIDAD\ImportacionFacturas\_FacturasPendientesImportacionTable.cshtml" />
+    <Content Include="Views\ALMACEN\KardexArticulos\Index.cshtml" />
+    <Content Include="Views\ALMACEN\KardexArticulos\_MovimientosArticuloTable.cshtml" />
+    <Content Include="Views\COMPRAS\PROVEEDORES\_ProveedoresCuentasTable.cshtml" />
+    <Content Include="Views\COMPRAS\PROVEEDORES\_FacturasProveedorTable.cshtml" />
+    <Content Include="Views\ALMACEN\Recepcion\_OrdenCompraPendienteTable.cshtml" />
+    <Content Include="Views\ESTABLOS\BasculaSab\_ArticulosSelect.cshtml" />
+    <Content Include="Views\ESTABLOS\BasculaSab\_CveMovimientosSelect.cshtml" />
+    <Content Include="Views\ESTABLOS\BasculaSab\_EstablosUsuarioSelect.cshtml" />
+    <Content Include="Views\ESTABLOS\BasculaSab\_FichasReporte.cshtml" />
+    <Content Include="Views\ESTABLOS\BasculaSab\_LineasTransportistasSelect.cshtml" />
+    <Content Include="Views\ESTABLOS\BasculaSab\_NumeroPozos.cshtml" />
+    <Content Include="Views\ESTABLOS\BasculaSab\_ProveedoresSelect.cshtml" />
+    <Content Include="Views\ESTABLOS\BasculaSab\_TiposMovimientosSelect.cshtml" />
+    <Content Include="Views\ESTABLOS\BasculaSab\Index.cshtml" />
+    <Content Include="Views\ESTABLOS\BasculaSab\_PDFBascula.cshtml" />
+    <Content Include="Views\CONTABILIDAD\ImportacionFacturas\_ExcelDetalleImportacion.cshtml" />
+    <Content Include="Views\CONTABILIDAD\ImportacionFacturas\_ImportacionDetalle.cshtml" />
+    <Content Include="Views\CONTABILIDAD\ImportacionFacturas\_ImportacionesHistorialTable.cshtml" />
+    <Content Include="Views\CONTABILIDAD\ImportacionFacturas\_TESTEXCEL.cshtml" />
+    <Content Include="Views\ALMACEN\Recepcion\_OrdenCompraEntregaTable.cshtml" />
+    <Content Include="Views\ALMACEN\Recepcion\_OrdenCompraRecepcion.cshtml" />
+    <Content Include="Views\ESTABLOS\BasculaSab\_FichasPendienteSab.cshtml" />
+    <Content Include="Views\ALMACEN\AnalisisConsumos\_AnalisisConsumoReporte.cshtml" />
+    <Content Include="Views\ALMACEN\AnalisisConsumos\Index.cshtml" />
+    <Content Include="Views\ALMACEN\EntregaVales\_CambiarCuentaVale.cshtml" />
+    <Content Include="Views\UTILERIAS\REQUISICIONES\EditarRequisiciones\Index.cshtml" />
+    <Content Include="Views\UTILERIAS\REQUISICIONES\EditarRequisiciones\_InformacionRequisicionEditar.cshtml" />
+    <Content Include="Views\UTILERIAS\REQUISICIONES\EditarRequisiciones\_OrdenCompraDetalleEditar.cshtml" />
+    <Content Include="Views\UTILERIAS\REQUISICIONES\EditarRequisiciones\_RequisicionDetalleEditar.cshtml" />
+    <Content Include="Views\ESTABLOS\EnviosLeche\Index.cshtml" />
+    <Content Include="Views\COMPRAS\RECEPCION_OC\Index.cshtml" />
+    <Content Include="Views\COMPRAS\RECEPCION_OC\_OrdenesPendientesRecepcion.cshtml" />
+    <Content Include="Views\COMPRAS\RECEPCION_OC\_DetalleOrdenPendienteRecepcion.cshtml" />
+    <Content Include="Views\CATALOGOS\ARTICULOS_CLASIFICACIONES\Index.cshtml" />
+    <Content Include="Views\CATALOGOS\ARTICULOS_CLASIFICACIONES\_ClasificacionesTable.cshtml" />
+    <Content Include="Views\CATALOGOS\ARTICULOS_MARCAS\_MarcasTable.cshtml" />
+    <Content Include="Views\CATALOGOS\ARTICULOS_MARCAS\_MarcasSelect.cshtml" />
+    <Content Include="Views\CONFIGURACION\CARGOCONTABLE\Index.cshtml" />
+    <Content Include="Views\CONFIGURACION\CARGOCONTABLE\_CargoContableUsuario.cshtml" />
+    <Content Include="Views\ALMACEN\Inventario\InventarioMinimoMaximo\_InventarioMaxMin.cshtml" />
+    <Content Include="Views\ALMACEN\Inventario\InventarioMinimoMaximo\_ReporteInventarioMaximoMinimo.cshtml" />
+    <Content Include="Views\CONTABILIDAD\SolicitudesPago\Index.cshtml" />
+    <Content Include="Views\CONTABILIDAD\SolicitudesPago\_SolicitudesPendientesFirmar.cshtml" />
+    <Content Include="Views\CONTABILIDAD\SolicitudesPago\_PagosPendientesMS.cshtml" />
+    <Content Include="Views\CONTABILIDAD\SolicitudesPago\_DetalleSolicitudPago.cshtml" />
+    <Content Include="Views\COMPRAS\PRESUPUESTOS_ALMACEN\Index.cshtml" />
+    <Content Include="Views\COMPRAS\PRESUPUESTOS_ALMACEN\_PresupuestosAreasAnioAlmacen.cshtml" />
+    <Content Include="Views\COMPRAS\PRESUPUESTOS_ALMACEN\_ReportePresupuestoAlmacen.cshtml" />
+    <Content Include="Views\ALMACEN\ReportePresupuestoAlmacen\Index.cshtml" />
+    <Content Include="Views\ESTABLOS\BasculaSistemas\Index.cshtml" />
+    <Content Include="Views\COMPRAS\PRESUPUESTOS_ALMACEN\_ReportePTTOMensual.cshtml" />
+    <Content Include="Views\CATALOGOS\LECHE\_TiposTanqueRadio.cshtml" />
+    <Content Include="Views\ESTABLOS\Casetas\BitacoraCaseta\Index.cshtml" />
+    <Content Include="Views\ESTABLOS\Casetas\BitacoraCaseta\_TiposEntradaCasetaRadio.cshtml" />
+    <Content Include="Views\ESTABLOS\Casetas\BitacoraCaseta\_InfoFichaBusqueda.cshtml" />
+    <Content Include="Views\ESTABLOS\Casetas\BitacoraCaseta\_InfoEntradaPendiente.cshtml" />
+    <Content Include="Views\ESTABLOS\Casetas\BitacoraCaseta\_AreasEstabloTipoEntradaSelect.cshtml" />
+    <Content Include="Views\ESTABLOS\Casetas\BitacoraCaseta\_EntradasPendientesTable.cshtml" />
+    <Content Include="Views\ESTABLOS\Casetas\BitacoraCaseta\_ReporteBitacoraFechas.cshtml" />
+    <Content Include="Views\COMPRAS\PROVEEDORES\SolicitudesRegistro\Index.cshtml" />
+    <Content Include="Views\COMPRAS\PROVEEDORES\SolicitudesRegistro\_TokensGenerados.cshtml" />
+    <Content Include="Views\COMPRAS\PROVEEDORES\SolicitudesRegistro\_SolicitudesEjercidasTable.cshtml" />
+    <Content Include="Views\COMPRAS\PROVEEDORES\SolicitudesRegistro\_DetalleSolicitudTable.cshtml" />
+    <Content Include="Views\NOMINA\Catalogos\CatalogosNomina.cshtml" />
+    <Content Include="Views\CATALOGOS\NOMINA\_PuestosTable.cshtml" />
+    <Content Include="Views\CATALOGOS\NOMINA\_PuestosSelect.cshtml" />
+    <Content Include="Views\CATALOGOS\NOMINA\_DepartamentoTable.cshtml" />
+    <Content Include="Views\CATALOGOS\NOMINA\_DepartamentoSelect.cshtml" />
+    <Content Include="Views\CATALOGOS\NOMINA\_RegimenPatronalTable.cshtml" />
+    <Content Include="Views\CATALOGOS\NOMINA\_EmpleadosTable.cshtml" />
+    <Content Include="Views\NOMINA\Catalogos\_EditarEmpleado.cshtml" />
+    <Content Include="Views\CATALOGOS\NOMINA\_BancosSelect.cshtml" />
+    <Content Include="Views\CATALOGOS\NOMINA\_ContratosSelect.cshtml" />
+    <Content Include="Views\ESTABLOS\Casetas\BitacoraCaseta\_ValeSalidaImpresion.cshtml" />
+    <Content Include="Views\ESTABLOS\Casetas\BitacoraCaseta\_ValeSalidaFormato.cshtml" />
+    <Content Include="Views\ESTABLOS\Casetas\BitacoraCaseta\_HistorialValesGenerados.cshtml" />
+    <Content Include="Views\ESTABLOS\Casetas\BitacoraCaseta\_DetalleValeSalidaTable.cshtml" />
+    <Content Include="Views\CATALOGOS\NOMINA\_FormaPagoSelect.cshtml" />
+    <Content Include="Views\CATALOGOS\NOMINA\_FrecuenciasPagosSelect.cshtml" />
+    <Content Include="Views\CATALOGOS\NOMINA\_GruposPagosSelect.cshtml" />
+    <Content Include="Views\CATALOGOS\NOMINA\_EstadoCivilSelect.cshtml" />
+    <Content Include="Views\CATALOGOS\NOMINA\_RegimenPatronalSelect.cshtml" />
+    <Content Include="Views\CATALOGOS\NOMINA\_TipoCuentaBancariaSelect.cshtml" />
+    <Content Include="Views\CATALOGOS\NOMINA\_CiudadSelect.cshtml" />
+    <Content Include="Views\CATALOGOS\NOMINA\_LupaChecadorTable.cshtml" />
+    <Content Include="Views\NOMINA\Movimientos\MovimientosNomina.cshtml" />
+    <Content Include="Views\CATALOGOS\NOMINA\_TiposIncidenciasSelect.cshtml" />
+    <Content Include="Views\CATALOGOS\NOMINA\_LupaEmpleadoTable.cshtml" />
+    <Content Include="Views\CATALOGOS\NOMINA\_IncidenciasTable.cshtml" />
+    <Content Include="Views\NOMINA\Prenomina\Index.cshtml" />
+    <Content Include="Views\NOMINA\Prenomina\_NominasGeneradasSelect.cshtml" />
+    <Content Include="Views\NOMINA\Prenomina\_NominasAreasTable.cshtml" />
+    <Content Include="Views\NOMINA\Prenomina\_ConceptosNominaEmpleadoTable.cshtml" />
+    <Content Include="Views\CATALOGOS\NOMINA\_ConceptosNominaSelect.cshtml" />
+    <Content Include="Views\CATALOGOS\ALMACENES\_AlmacenUbicacionArticuloSelect.cshtml" />
+    <Content Include="Views\CATALOGOS\ARTICULOS\_ArticulosNoAlmacenableTable.cshtml" />
+    <Content Include="Views\CATALOGOS\ARTICULOS\_ArticulosUbicaionAlmacenTable.cshtml" />
+    <Content Include="Views\COMPRAS\REQUISICIONES\_TrackingOrdenesRequisicion.cshtml" />
+    <Content Include="Views\CONFIGURACION\EMPLEADOSCHECADOR\Index.cshtml" />
+    <Content Include="Views\CATALOGOS\NOMINA\_EmpleadoChecadorNominaTable.cshtml" />
+    <Content Include="Views\CATALOGOS\NOMINA\_EmpleadoNominaTable.cshtml" />
+    <Content Include="Views\CONFIGURACION\AREAS\Index.cshtml" />
+    <Content Include="Views\CONFIGURACION\AREAS\_AreasUsuario.cshtml" />
+    <Content Include="Views\NOMINA\Inasistencias\_DiasInasistenciaCheck.cshtml" />
+    <Content Include="Views\NOMINA\Inasistencias\_DiasInasistenciaEmpleadoTable.cshtml" />
+    <Content Include="Views\NOMINA\Inasistencias\_InasistenciasEmpleadosTable.cshtml" />
+    <Content Include="Views\COMPRAS\PRESUPUESTOS\_MesesSelect.cshtml" />
+    <Content Include="Views\NOMINA\Prenomina\_FormatoNominaConceptos.cshtml" />
+    <Content Include="Views\NOMINA\Inasistencias\_DetalleInasistenciaEmpleado.cshtml" />
+    <Content Include="Views\NOMINA\Prenomina\_PrenominaAreaTable.cshtml" />
+    <Content Include="Views\NOMINA\Inasistencias\_PDFReporteFaltas.cshtml" />
+    <Content Include="Views\NOMINA\Inasistencias\_ReporteInasistencia.cshtml" />
+    <Content Include="Views\COMPRAS\REQUISICIONES\_RequisicionInfoHeader.cshtml" />
+    <Content Include="Views\CONFIGURACION\ALMACENES\UbicacionAlmacen\Index.cshtml" />
+    <Content Include="Views\CONFIGURACION\ALMACENES\UbicacionAlmacen\_UbicacionesEntregaAlmacen.cshtml" />
+    <Content Include="Views\NOMINA\Checador\Index.cshtml" />
+    <Content Include="Views\NOMINA\Prenomina\_CheckOutAreasPrenomina.cshtml" />
+    <Content Include="Views\NOMINA\Checador\_PDFReporteChecadorSemanal.cshtml" />
+    <Content Include="Views\REPORTES\ComparativoPresupuestoOrdenesCompra\Index.cshtml" />
+    <Content Include="Views\REPORTES\ComparativoPresupuestoOrdenesCompra\_ComparativoPresupuestoOrdenesCompra.cshtml" />
+    <Content Include="Views\REPORTES\ComparativoPresupuestoOrdenesCompra\_OrdenesEjericdasMesDetalle.cshtml" />
+    <Content Include="Views\REPORTES\ComparativoPresupuestoOrdenesCompra\_ComparativoPresupuestoOrdenesCompraConsolidado.cshtml" />
+    <Content Include="Views\ALMACEN\PolizasContables\Index.cshtml" />
+    <Content Include="Views\ALMACEN\PolizasContables\_PolizaSemanal.cshtml" />
+    <Content Include="Views\REPORTES\GastosMensualesCompraConsumido\Index.cshtml" />
+    <Content Include="Views\REPORTES\GastosMensualesCompraConsumido\_ReporteGastosMensualesCompraConsumido.cshtml" />
+    <Content Include="Views\REPORTES\GastosMensualesCompraConsumido\_DetalleConsumoAlmacen.cshtml" />
+    <Content Include="Views\REPORTES\GastosMensualesCompraConsumido\_DetalleComprasDirectas.cshtml" />
+    <Content Include="Views\ALMACEN\PolizasContables\_PolizaSemanalDetalle.cshtml" />
+    <Content Include="Views\REPORTES\GastosMensualesCompraConsumido\_DetalleComprasDirectasMicrosip.cshtml" />
+    <Content Include="Views\REPORTES\GastosMensualesCompraConsumido\_DetalleConsolidadoAlmacenCompras.cshtml" />
+    <Content Include="Views\CATALOGOS\ARTICULOS\_LupaArticuloSinPrecio.cshtml" />
+    <Content Include="Views\CATALOGOS\ARTICULOS\_LupaArticuloConPrecio.cshtml" />
+    <Content Include="Views\CATALOGOS\ALIMENTACION\ProductoresAlimento\_ProductoresAlimentoSelect.cshtml" />
+    <Content Include="Views\COMPRAS\TRANSITO\Articulo\Index.cshtml" />
+    <Content Include="Views\COMPRAS\TRANSITO\Articulo\_TransitoArticulo.cshtml" />
+    <Content Include="Views\ALMACEN\QuickViewArticulos\Index.cshtml" />
+    <Content Include="Views\ALMACEN\QuickViewArticulos\_QuickViewArticulo.cshtml" />
+    <Content Include="Views\ALMACEN\SolicitudesMercancia\_ExistenciaAlmacenArticulo.cshtml" />
+    <Content Include="Views\REPORTES\HistorialCotizacion\Index.cshtml" />
+    <Content Include="Views\REPORTES\HistorialCotizacion\_HistorialCotizacionesTable.cshtml" />
+    <Content Include="Views\TRANSITO\Articulo\Index.cshtml" />
+    <Content Include="Views\TRANSITO\Articulo\_TransitoArticulo.cshtml" />
+    <Content Include="Views\NOMINA\SolicitudesAltaEmpleados\Index.cshtml" />
+    <Content Include="Views\NOMINA\SolicitudesAltaEmpleados\_SolicitudesRevision.cshtml" />
+    <Content Include="Views\NOMINA\SolicitudesAltaEmpleados\_FormatoSolicitud.cshtml" />
+    <Content Include="Views\NOMINA\Preregistro_Empleados\Index.cshtml" />
+    <Content Include="Views\NOMINA\Preregistro_Empleados\_PreregistroEmpTable.cshtml" />
+    <Content Include="Views\UTILERIAS\ALMACEN\Index.cshtml" />
+    <Content Include="Views\UTILERIAS\ALMACEN\_InventarioFechaTableEditar.cshtml" />
+    <Content Include="Views\UTILERIAS\ALMACEN\_ArticulosTable.cshtml" />
+    <Content Include="Views\NOMINA\Prenomina\_EmpleadosFiltroMasivoTable.cshtml" />
+    <Content Include="Views\NOMINA\Movimientos\_IncidenciasReporteTable.cshtml" />
+    <Content Include="Views\NOMINA\Movimientos\_EmpleadosCambioSalarioTable.cshtml" />
+    <Content Include="Views\CATALOGOS\NOMINA\_EstatusPreAltaEmpleadoNomina.cshtml" />
+    <Content Include="Views\NOMINA\Prenomina\_FormatoNominaConceptosExcel.cshtml" />
+    <Content Include="Views\REPORTES\ReporteEntradaOrdenes\_ReporteEntradaRecepcionOrdenesExcel.cshtml" />
+    <Content Include="Views\REPORTES\ReporteEntradaOrdenes\Index.cshtml" />
+    <Content Include="Views\REPORTES\ReporteEntradaOrdenes\_ConsultarEntradasVsRecepcionOrdenesTable.cshtml" />
+    <Content Include="Views\REPORTES\ReporteRequisicionesOrdenesCompra\Index.cshtml" />
+    <Content Include="Views\REPORTES\ReporteRequisicionesOrdenesCompra\_ConsultarReporteRequisicionesOrdenesCompraTable.cshtml" />
+    <Content Include="Views\REPORTES\ReporteRequisicionesOrdenesCompra\_ReporteRequisicionesOrdenesCompraExcel.cshtml" />
+    <Content Include="Views\CATALOGOS\LECHE\_DestinoEnvLecheSelect.cshtml" />
+    <Content Include="Views\CATALOGOS\LECHE\_TipoEnvioLecheSelect.cshtml" />
+    <Content Include="Views\CONFIGURACION\BASCULA\Index.cshtml" />
+    <Content Include="Views\CONFIGURACION\BASCULA\Catalogos\_ArticulosCatalogoBasculaTable.cshtml" />
+    <Content Include="Views\CONFIGURACION\BASCULA\Catalogos\_ProveedoresCatalogoBasculaTable.cshtml" />
+    <Content Include="Views\CONFIGURACION\BASCULA\Catalogos\_DestinosCatalogoBasculaTable.cshtml" />
+    <Content Include="Views\CONFIGURACION\ENVIOS_LECHE\Asociacion\_ClienteDestinosTable.cshtml" />
+    <Content Include="Views\REPORTES\SeguimientoRequisiciones\Index.cshtml" />
+    <Content Include="Views\REPORTES\SeguimientoRequisiciones\_Seguimiento_requisiciones_table.cshtml" />
+    <Content Include="Views\CONFIGURACION\ENVIOS_LECHE\Asociacion\_DestinoAsociacion.cshtml" />
+    <Content Include="Views\CONFIGURACION\ENVIOS_LECHE\Asociacion\_ClienteAsociacion.cshtml" />
+    <Content Include="Views\REPORTES\SeguimientoRequisiciones\_Seguimiento_requisiciones_detalle_table.cshtml" />
+    <Content Include="Views\ESTABLOS\Casetas\BitacoraCaseta\_ReporteBitacoraFechasExcel.cshtml" />
+    <Content Include="Views\CATALOGOS\LECHE\_TiposTanqueRadioEscala.cshtml" />
+    <Content Include="Views\REPORTES\GastosMensualesCompraConsumido\_ExcelConsolidadoComprasDirectasCargoContable.cshtml" />
+    <Content Include="Views\ESTABLOS\EnviosLeche\_EnviosDeLecheTable.cshtml" />
+    <Content Include="Views\ESTABLOS\Bascula\_PDFBascula.cshtml" />
+    <Content Include="Views\ESTABLOS\Bascula\_ExcelReporteBascula.cshtml" />
+    <Content Include="Views\ESTABLOS\Bascula\_FichasPendientes.cshtml" />
+    <Content Include="Views\UTILERIAS\BASCULA\Index.cshtml" />
+    <Content Include="Views\ESTABLOS\EnviosLeche\EstimacionDiaria\_EstimacionProduccion.cshtml" />
+    <Content Include="Views\ESTABLOS\EnviosLeche\EstimacionDiaria\_EstimacionDiariaTable.cshtml" />
+    <Content Include="Views\ESTABLOS\EnviosLeche\EstimacionDiaria\_ConsultaEstimacionDiariaTable.cshtml" />
+    <Content Include="Views\ESTABLOS\EnviosLeche\ProgramacionSemanal\_ProgramacionDetalle.cshtml" />
+    <Content Include="Views\CATALOGOS\LECHE\_ClienteDestinoLecheSelect.cshtml" />
+    <Content Include="Views\ESTABLOS\EnviosLeche\ProgramacionSemanal\_ConsultaProduccionEstimadaSemanaTable.cshtml" />
+    <Content Include="Views\ESTABLOS\EnviosLeche\ProgramacionSemanal\_ProgramacionClienteDetalle.cshtml" />
+    <Content Include="Views\ESTABLOS\EnviosLeche\ProgramacionSemanal\_ProgramacionResumenDetalle.cshtml" />
+    <Content Include="Views\ESTABLOS\EnviosLeche\ProgramacionSemanal\_ConsultaProgramacionSemanalTable.cshtml" />
+    <Content Include="Views\NOMINA\ControlFaltasHorasExtra\Index.cshtml" />
+    <Content Include="Views\REPORTES\HistorialCotizacion\_HistorialCotizacionesGeneralTable.cshtml" />
+    <Content Include="Views\ALIMENTACION\Recepcion\Index.cshtml" />
+    <Content Include="Views\ALIMENTACION\Recepcion\_FichasPendientesRecepcionTableCheck.cshtml" />
+    <Content Include="Views\CONFIGURACION\ENVIOS_LECHE\Index.cshtml" />
+    <Content Include="Views\CONFIGURACION\BASCULA\Proveedores_bascula_compras\_ProveedoresBasculaSinAsignacionTable.cshtml" />
+    <Content Include="Views\CONFIGURACION\BASCULA\Proveedores_bascula_compras\_ProveedoresComprasSinAsignacionTable.cshtml" />
+    <Content Include="Views\CONFIGURACION\BASCULA\Proveedores_bascula_compras\_ProveedoresAsociadosBasculaCompras.cshtml" />
+    <Content Include="Views\CONTABILIDAD\ImportacionFacturas\_AuditoriaFacturasValoresTable.cshtml" />
+    <Content Include="Views\ESTABLOS\EnviosLeche\LoteLeche\_AgrupacionLeche.cshtml" />
+    <Content Include="Views\ESTABLOS\EnviosLeche\ConfirmacionLeche\_EnvioConfirmadoPorAgruparTable.cshtml" />
+    <Content Include="Views\ESTABLOS\EnviosLeche\ConfirmacionLeche\_ConsultaConfirmacionLecheTable.cshtml" />
+    <Content Include="Views\COMPRAS\ARTICULOS\Bascula\_TipoArticuloBasculaDiv.cshtml" />
+    <Content Include="Views\COMPRAS\ARTICULOS\Bascula\_ArticulosBasculaTable.cshtml" />
+    <Content Include="Views\CATALOGOS\BASCULA\_ConsultarTipoFichasSelect.cshtml" />
+    <Content Include="Views\CATALOGOS\BASCULA\_ProveedorRegularSelect.cshtml" />
+    <Content Include="Views\CATALOGOS\LECHE\_ProveedorLecheSelect.cshtml" />
+    <Content Include="Views\CATALOGOS\BASCULA\_TipoArticuloBasculaSelect.cshtml" />
+    <Content Include="Views\ESTABLOS\Bascula\TipoFicha\_FichaRegularSp.cshtml" />
+    <Content Include="Views\ESTABLOS\Bascula\TipoFicha\_FichaLecheSp.cshtml" />
+    <Content Include="Views\CATALOGOS\LECHE\_EnvioLecheFichasTable.cshtml" />
+    <Content Include="Views\ESTABLOS\Bascula\EnvioLeche\_AgrupacionFichasLeche.cshtml" />
+    <Content Include="Views\ALIMENTACION\Recepcion\_FichasRecepcionadasTableCheck.cshtml" />
+    <Content Include="Views\REPORTES\Alimentacion\MovimientosPorProveedor\Index.cshtml" />
+    <Content Include="Views\ESTABLOS\Bascula\TipoFicha\_FichaLechePp.cshtml" />
+    <Content Include="Views\ESTABLOS\Bascula\TipoFicha\_FichaRegularPp.cshtml" />
+    <Content Include="Views\CATALOGOS\LECHE\Clientes\_ClientesEnvioLecheTable.cshtml" />
+    <Content Include="Views\REPORTES\Alimentacion\MovimientosPorProveedor\_ReporteMovimientosProveedor.cshtml" />
+    <Content Include="Views\REPORTES\Alimentacion\MovimientosPorProveedor\_ReporteMovimientosProveedorPDF.cshtml" />
+    <Content Include="Views\ALIMENTACION\Recepcion\_FacturasForrajesTable.cshtml" />
+    <Content Include="Views\ALIMENTACION\Recepcion\_FacturasForrajesDetalle.cshtml" />
+    <Content Include="Views\REPORTES\Alimentacion\MovimientosPorProveedor\_ReporteMovimientosProveedorEXCEL.cshtml" />
+    <Content Include="Views\CATALOGOS\LECHE\_DestinosClienteLecheSelect.cshtml" />
+    <Content Include="Views\CATALOGOS\LECHE\_EstatusLoteSelect.cshtml" />
+    <Content Include="Views\ESTABLOS\EnviosLeche\LoteLeche\_ConsultaLoteAgrupacionLecheTable.cshtml" />
+    <Content Include="Views\ESTABLOS\EnviosLeche\LoteLeche\_ConsultaLoteFacturaTable.cshtml" />
+    <Content Include="Views\ESTABLOS\EnviosLeche\LoteLeche\_MostrarLoteFacturaLeche.cshtml" />
+    <Content Include="Views\REPORTES\EnviosLeche\MovimientosClienteEnviosLeche\Index.cshtml" />
+    <Content Include="Views\REPORTES\EnviosLeche\MovimientosClienteEnviosLeche\_ReporteMovimientosClientesEnviosLechePDF.cshtml" />
+    <Content Include="Views\REPORTES\EnviosLeche\MovimientosClienteEnviosLeche\_ReporteMovimientosClientesEnviosLecheExcel.cshtml" />
+    <Content Include="Views\REPORTES\EnviosLeche\MovimientosClienteEnviosLeche\_ReporteMovimientosClientesEnviosLeche.cshtml" />
+    <Content Include="Views\CATALOGOS\BASCULA\_ConsultarTipoFichasEstabloSelect.cshtml" />
+    <Content Include="Views\CATALOGOS\BASCULA\_CveMovimientosEstabloSelect.cshtml" />
+    <Content Include="Views\CONFIGURACION\ALIMENTACION\Index.cshtml" />
+    <Content Include="Views\CONFIGURACION\ALIMENTACION\PreciosForrajes\_PreciosForrajesTable.cshtml" />
+    <Content Include="Views\CONFIGURACION\ENVIOS_LECHE\PreciosLeche\_PreciosLecheTable.cshtml" />
+    <Content Include="Views\CATALOGOS\LECHE\_EstablosUsuarioLecheSelect.cshtml" />
+    <Content Include="Views\ESTABLOS\EnviosLeche\EstimacionDiaria\_EstimacionDiariaInfoTable.cshtml" />
+    <Content Include="Views\ESTABLOS\EnviosLeche\ProgramacionSemanal\_ProgramacionMostrar.cshtml" />
+    <Content Include="Views\REPORTES\EnviosLeche\CalidadEnviosLeche\Index.cshtml" />
+    <Content Include="Views\REPORTES\EnviosLeche\CalidadEnviosLeche\_ReporteCalidadEnviosLeche.cshtml" />
+    <Content Include="Views\REPORTES\EnviosLeche\CalidadEnviosLeche\_ReporteCalidadEnviosLecheExcel.cshtml" />
+    <Content Include="Views\ALIMENTACION\ProgramaAlimento\Index.cshtml" />
+    <Content Include="Views\ALIMENTACION\ProgramaAlimento\_DetalleProgramaAlimentacion.cshtml" />
+    <Content Include="Views\ALIMENTACION\ProgramaAlimento\_FormularioNuevoPrograma.cshtml" />
+    <Content Include="Views\ALIMENTACION\ProgramaAlimento\_ProgramasAlimentacionTable.cshtml" />
+    <Content Include="Views\UTILERIAS\SALIDAS_GANADO\Index.cshtml" />
+    <Content Include="Views\UTILERIAS\SALIDAS_GANADO\_InformacionSalidaGanadoEditar.cshtml" />
+    <Content Include="Views\REPORTES\EnviosLeche\CumplimientoProgramaEnvioLeche\_ReporteCumplimientoEnviosLeche.cshtml" />
+    <Content Include="Views\REPORTES\EnviosLeche\CumplimientoProgramaEnvioLeche\Index.cshtml" />
+    <Content Include="Views\NOMINA\Prenomina\_FormatoNominaConceptosPDF.cshtml" />
+    <Content Include="Views\NOMINA\ControlFaltasHorasExtra\_ReporteChecadorPrenomina.cshtml" />
+    <Content Include="Views\ESTABLOS\Bascula\TipoFicha\_FichaForrajePp.cshtml" />
+    <Content Include="Views\ESTABLOS\Bascula\TipoFicha\_FichaForrajeSp.cshtml" />
+    <Content Include="Views\REPORTES\EnviosLeche\FichaLeche\_ReporteCumplimientoEnviosLeche.cshtml" />
+    <Content Include="Views\EVALUACIONES\AdministracionDepartamentos\_EmpleadosSinDepartamentoCheckTable.cshtml" />
+    <Content Include="Views\EVALUACIONES\AdministracionDepartamentos\Index.cshtml" />
+    <Content Include="Views\EVALUACIONES\AdministracionDepartamentos\_DepartamentosEmpleadosTable.cshtml" />
+    <Content Include="Views\EVALUACIONES\AdministracionDepartamentos\_UsuariosCheckTable.cshtml" />
+    <Content Include="Views\EVALUACIONES\AdministracionDepartamentos\_DepartamentodTable.cshtml" />
+    <Content Include="Views\EVALUACIONES\AdministracionDepartamentos\_DepartamentosUsuariosTable.cshtml" />
+    <Content Include="Views\EVALUACIONES\AdministracionRubros\_RubrosConceptosCards.cshtml" />
+    <Content Include="Views\EVALUACIONES\AdministracionRubros\Index.cshtml" />
+    <Content Include="Views\CONTABILIDAD\OrdenesPago\Index.cshtml" />
+    <Content Include="Views\CONTABILIDAD\OrdenesPago\_OrdenesPagoGeneradasTable.cshtml" />
+    <Content Include="Views\CONTABILIDAD\OrdenesPago\_OrdenPagoDetalle.cshtml" />
+    <Content Include="Views\EVALUACIONES\AdministracionRubros\_DepartamentosRubrosCards.cshtml" />
+    <Content Include="Views\COMPRAS\INVERSIONES\Index.cshtml" />
+    <Content Include="Views\COMPRAS\INVERSIONES\_ReporteInversionTable.cshtml" />
+    <Content Include="Views\COMPRAS\INVERSIONES\_InversionesTable.cshtml" />
+    <Content Include="Views\COMPRAS\INVERSIONES\_ExcelReporteInversionTable.cshtml" />
+    <Content Include="Views\EVALUACIONES\AdministracionRubros\_RubrosDepartamentoCard.cshtml" />
+    <Content Include="Views\EVALUACIONES\AdministracionEvaluaciones\Index.cshtml" />
+    <Content Include="Views\EVALUACIONES\AdministracionEvaluaciones\_EvaluacionesPendientesTable.cshtml" />
+    <Content Include="Views\EVALUACIONES\AdministracionEvaluaciones\_EvaluacionesSelect.cshtml" />
+    <Content Include="Views\EVALUACIONES\_DepartamentosSelect.cshtml" />
+    <Content Include="Views\EVALUACIONES\AdministracionEvaluaciones\_EvaluacionEmpleadoCapturada.cshtml" />
+    <Content Include="Views\EVALUACIONES\AdministracionEvaluaciones\_EvaluacionEmpleadoNuevaCaptura.cshtml" />
+    <Content Include="Views\EVALUACIONES\HistorialEvaluaciones\Index.cshtml" />
+    <Content Include="Views\EVALUACIONES\HistorialEvaluaciones\_EvaluacionesDepartamentoAcordeon.cshtml" />
+    <Content Include="Views\EVALUACIONES\HistorialEvaluaciones\_EvaluacionesEmpleadoTable.cshtml" />
+    <Content Include="Views\ALMACEN\_ReporteExistenciasArticulosAlmacenes.cshtml" />
+    <Content Include="Views\EVALUACIONES\HistorialEvaluaciones\_EvaluacionesDepartamentoExcel.cshtml" />
+    <Content Include="Views\EVALUACIONES\AdministracionBonos\Index.cshtml" />
+    <Content Include="Views\EVALUACIONES\AdministracionBonos\_BonosEmpleadosTable.cshtml" />
+    <Content Include="Views\EVALUACIONES\AdministracionEvaluaciones\_DepartamentosPendientesEvaluacion.cshtml" />
+    <Content Include="Views\EVALUACIONES\PagoBonos\Index.cshtml" />
+    <Content Include="Views\EVALUACIONES\PagoBonos\_BonosEmpleadosTable.cshtml" />
+    <Content Include="Views\ESTABLOS\EnviosLeche\ProgramacionSemanal\_CompromisosClienteLeche.cshtml" />
+    <Content Include="Views\CONFIGURACION\ENVIOS_LECHE_CUMPLIMIENTO\Index.cshtml" />
+    <Content Include="Views\CONFIGURACION\ENVIOS_LECHE_CUMPLIMIENTO\_MostrarCompromisoCliente.cshtml" />
+    <Content Include="Views\CONFIGURACION\ENVIOS_LECHE_CUMPLIMIENTO\_CompromisosClienteTable.cshtml" />
+    <Content Include="Views\CONFIGURACION\ENVIOS_LECHE_CUMPLIMIENTO\_CompromisoClienteTable.cshtml" />
+    <Content Include="Views\CATALOGOS\LECHE\_ClienteSelect.cshtml" />
+    <Content Include="Views\ALMACEN\Inventario\AjusteInventario\_HistorialAjustesTable.cshtml" />
+    <Content Include="Views\ALMACEN\Inventario\AjusteInventario\_AjusteInventarioDetalle.cshtml" />
+    <Content Include="Views\ALMACEN\Inventario\AjusteInventario\_ImpresionAjusteInventario.cshtml" />
+    <Content Include="Views\ALMACEN\EntregaVales\_DevolucionNuevaValeTable.cshtml" />
+    <Content Include="Views\CATALOGOS\NOMINA\_EmpleadosSelect.cshtml" />
+    <Content Include="Views\UTILERIAS\PRUEBAS\Index.cshtml" />
+    <Content Include="Views\UTILERIAS\PRUEBAS\_VParcial.cshtml" />
+    <Content Include="Views\UTILERIAS\BASCULA\TipoFicha\_FichaForrajePp.cshtml" />
+    <Content Include="Views\UTILERIAS\BASCULA\TipoFicha\_FichaLechePp.cshtml" />
+    <Content Include="Views\UTILERIAS\BASCULA\TipoFicha\_FichaRegularPp.cshtml" />
+    <Content Include="Views\UTILERIAS\BASCULA\_FichasPendientes.cshtml" />
+    <Content Include="Views\TRACKER\Movimientos\Index.cshtml" />
+    <Content Include="Views\TRACKER\ConfigurarIngredientes\_IngredientesTrackerTable.cshtml" />
+    <Content Include="Views\TRACKER\ConfigurarIngredientes\_ArticulosForrajesTable.cshtml" />
+    <Content Include="Views\TRACKER\ConfigurarIngredientes\Index.cshtml" />
+    <Content Include="Views\TRACKER\ConfigurarIngredientes\_ArticulosIngredientesTrackerTable.cshtml" />
+    <Content Include="Views\TRACKER\Centralizador\Index.cshtml" />
+    <Content Include="Views\TRACKER\Movimientos\_CargasTrackerDataTable.cshtml" />
+    <Content Include="Views\TRACKER\Movimientos\_DescargasTrackerDataTable.cshtml" />
+    <Content Include="Views\TRACKER\KardexIngredientes\Index.cshtml" />
+    <Content Include="Views\TRACKER\KardexIngredientes\_KardexIngredientesFechaTable.cshtml" />
+    <Content Include="Views\TRACKER\TiradasDiarias\_TiradasDiariasTable.cshtml" />
+    <Content Include="Views\TRACKER\TiradasDiarias\Index.cshtml" />
+    <Content Include="Views\TRACKER\ConsumosCorral\Index.cshtml" />
+    <Content Include="Views\TRACKER\ConsumosCorral\_ConsumosXCorralTrackerTable.cshtml" />
+    <Content Include="Views\TRACKER\KardexIngredientes\_KardexIngredientesDetalleTable.cshtml" />
+    <Content Include="Views\UTILERIAS\REQUISICIONES\EditarRequisiciones\_DivisionOrden.cshtml" />
+    <Content Include="Views\UTILERIAS\REQUISICIONES\EditarRequisiciones\_MoverArticulosOrden.cshtml" />
+    <Content Include="Views\UTILERIAS\REQUISICIONES\EditarRequisiciones\_MoverArticuloOrdenChecks.cshtml" />
+    <Content Include="Views\UTILERIAS\DISPOSITIVOS\Index.cshtml" />
+    <Content Include="Views\UTILERIAS\DISPOSITIVOS\_TipoDispositivoSelect.cshtml" />
+    <Content Include="Views\UTILERIAS\DISPOSITIVOS\_DispositivosLogsTable.cshtml" />
+    <Content Include="Views\UTILERIAS\DISPOSITIVOS\_DispositivosGlobalesTable.cshtml" />
+    <Content Include="Views\UTILERIAS\DISPOSITIVOS\_DispositivosAdmComandosTable.cshtml" />
+    <Content Include="Views\UTILERIAS\DISPOSITIVOS\_DispositivosActivosTable.cshtml" />
+    <Content Include="Views\UTILERIAS\DISPOSITIVOS\_ComandosSelect.cshtml" />
+    <Content Include="Views\UTILERIAS\SOPORTE\Index.cshtml" />
+    <Content Include="Views\UTILERIAS\SOPORTE\_HistorialSoporteTable.cshtml" />
+    <Content Include="Views\TRACKER\KardexIngredientes\_KardexIngredientesResumenTable.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Data\" />
+    <Folder Include="Content\production\js\NewFolder1\" />
+    <Folder Include="Views\ALMACEN\Inventario\AsignadorArticulos\" />
+    <Folder Include="Views\CATALOGOS\ARTICULOS\AdministrarArticulos\" />
+    <Folder Include="Views\ESTABLOS\SalidasGanado\Test\Bitacora\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+    <Content Include="Views\Scripts\bootstrap.min.js.map" />
+    <Content Include="Views\Scripts\bootstrap.js.map" />
+    <Content Include="Views\Scripts\bootstrap.esm.min.js.map" />
+    <Content Include="Views\Scripts\bootstrap.esm.js.map" />
+    <Content Include="Views\Scripts\bootstrap.bundle.min.js.map" />
+    <Content Include="Views\Scripts\bootstrap.bundle.js.map" />
+    <Content Include="Views\Scripts\jquery-3.4.1.slim.min.map" />
+    <Content Include="Views\Scripts\jquery-3.4.1.min.map" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
+    <AspNetCompiler VirtualPath="temp" PhysicalPath="$(WebProjectOutputDir)" />
+  </Target>
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>50067</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>https://localhost:44371/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>Este proyecto hace referencia a los paquetes NuGet que faltan en este equipo. Use la restauración de paquetes NuGet para descargarlos. Para obtener más información, consulte http://go.microsoft.com/fwlink/?LinkID=322105. El archivo que falta es {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
+    <Error Condition="!Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.4.4\build\EntityFramework.props'))" />
+    <Error Condition="!Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.4.4\build\EntityFramework.targets'))" />
+  </Target>
+  <Import Project="..\packages\EntityFramework.6.4.4\build\EntityFramework.targets" Condition="Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.targets')" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target> -->
+</Project>

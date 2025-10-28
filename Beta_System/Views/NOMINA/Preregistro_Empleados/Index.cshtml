@@ -1,0 +1,988 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+    List<int> permisos = Session["PermisosModulo"] as List<int>;
+}
+
+<style>
+    tr {
+        font-size: 12px;
+    }
+
+    #m_empleados {
+        z-index: 1500;
+    }
+
+    #m_lupa_checador {
+        z-index: 1590;
+    }
+</style>
+
+<div class="page_title">
+    <div class="counter_section">
+        <h1>Pre-alta de empleados</h1>
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="nav nav-tabs">
+                    @if (permisos.Contains(4036))
+                    {
+                        <li class="active">
+                            <a data-toggle="tab" href="#tab_registro_empleado_nomina" onclick="">
+                                <strong style="padding-left:6px;">Registró de empleados</strong><i class="fa fa-briefcase fa-2x ml-2"></i>
+                            </a>
+                        </li>
+                    }
+                    @if (permisos.Contains(4037))
+                    {
+                        <li class="active">
+                            <a data-toggle="tab" href="#tab_consultar_registro_nomina" onclick="">
+                                <strong style="padding-left:6px;">Consulta de altas</strong><i class="fa fa-search fa-2x ml-2"></i>
+                            </a>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row column2 counter_section">
+    <div class="tab-content">
+        <div id="tab_registro_empleado_nomina" class="tab-pane fade in  show">
+            <div class="col-md-12 text-center"><h3>FORMULARIO DE REGISTRO</h3></div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="counter_section">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <ul class="nav nav-tabs">
+                                    <li class="active"> <a data-toggle="tab" href="#tab_general" onclick=""><strong style="padding-left:6px;">GENERAL</strong></a></li>
+                                    <li class="active"> <a data-toggle="tab" href="#tab_salario" onclick=""><strong style="padding-left:6px;">SALARIO</strong></a></li>
+                                    <li class="active"> <a data-toggle="tab" href="#tab_datos_personales" onclick=""><strong style="padding-left:6px;">DATOS PERSONALES</strong></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row column2 counter_section">
+                        <div class="tab-content">
+                            <div id="tab_general" class="tab-pane fade in active show">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <strong>Nombre completo</strong>
+                                        <input type="text" id="nombre_completo_emp" class="form-control limpiar_input_s" readonly />
+                                    </div>
+
+                                    <div class="col-md-12" style="padding-top: 14px">
+                                        <div class="col-md-4" style="padding-top:14px">
+                                            <strong>Nombre(s)</strong>
+                                            <input type="text" id="nombre_emp" class="form-control limpiar_input_s obligatorio solo-letras" onkeyup="NombreCompleto(1);" onchange="GenerarRFC();" oninput="this.value = this.value.toUpperCase();" />
+                                        </div>
+                                        <div class="col-md-4" style="padding-top:14px">
+                                            <strong>Apellido paterno</strong>
+                                            <input type="text" id="apellido_paterno_emp" class="form-control limpiar_input_s obligatorio solo-letras" onkeyup="NombreCompleto(2);" onchange="GenerarRFC();" oninput="this.value = this.value.toUpperCase();" />
+                                        </div>
+                                        <div class="col-md-4" style="padding-top:14px">
+                                            <strong>Apellido materno</strong>
+                                            <input type="text" id="apellido_materno_emp" class="form-control limpiar_input_s obligatorio solo-letras" onkeyup="NombreCompleto(3);" onchange="GenerarRFC();" oninput="this.value = this.value.toUpperCase();" />
+                                        </div>
+
+                                        <div class="col-md-12">
+                                            <div class="col-md-7">
+                                                <div class="col-md-12" style="padding-top:14px;">
+                                                    <strong>Tipo: </strong>
+                                                    <select class="form-control limpiar_select_s" id="tipo_emp">
+                                                        <option value="0">Sueldos y salarios</option>
+                                                        <option value="2">Asimilados a asalarios</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-12" style="padding-top:14px;">
+                                                    <strong>Puesto: </strong>
+                                                    <select class="form-control limpiar_select_s" id="puesto_emp">
+                                                        @{ Html.RenderAction("ConsultarPuestoNominaSelect", "CATALOGOS"); }
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-12" style="padding-top:14px;">
+                                                    <strong>Departamento: </strong>
+                                                    <select class="form-control limpiar_select_s" id="departamento_emp">
+                                                        @{ Html.RenderAction("ConsultarDepartamentoNominaSelect", "CATALOGOS"); }
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-6" style="padding-top:14px;">
+                                                    <strong>Forma de pago</strong>
+                                                    <select class="form-control limpiar_select_s" id="forma_pago_emp" onchange="ValidarFormaPago();">
+                                                        @{ Html.RenderAction("ConsultarFormaPagoNominaSelect", "CATALOGOS"); }
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-6" style="padding-top:14px;">
+                                                    <strong>Grupo de pagos electronicos</strong>
+                                                    <select class="form-control limpiar_select_s" id="grupo_pago_emp">
+                                                        @{ Html.RenderAction("ConsultarGruposPagosNominaSelect", "CATALOGOS"); }
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-6" style="padding-top:14px;">
+                                                    <strong>Tipo de cuenta bancaria</strong>
+                                                    <select class="form-control limpiar_select_s" id="tipo_cuenta_emp">
+                                                        @{ Html.RenderAction("ConsultarTipoCuentaBancariaNominaSelect", "CATALOGOS"); }
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-6" style="padding-top:14px;">
+                                                    <strong>Número de cuenta</strong>
+                                                    <input type="text" id="numero_cuenta_emp" class="form-control limpiar_input_s solo-numeros-spunto" />
+                                                </div>
+                                            </div>
+                                            <div class="col-md-5">
+                                                <div class="col-md-12" style="padding-top:14px;">
+                                                    <strong>Jefe inmediato: </strong>
+                                                    <select class="form-control limpiar_select_s" id="jefe_inmediato_emp" disabled></select>
+                                                </div>
+                                                <div class="col-md-12 text-center" style="padding-top:14px;">
+                                                    <strong>Es jefe</strong>
+                                                    <input id="es_jefe_emp" type="checkbox" style="display: block; height: 35px;" class="form-control limpiar_check_s" />
+                                                </div>
+
+                                                <div class="col-md-12" style="padding-top:14px;">
+                                                    <strong>Frecuencia</strong>
+                                                    <select class="form-control limpiar_select_s" id="frecuencia_emp">
+                                                        @{ Html.RenderAction("ConsultarFrecuenciaPagoNominaSelect", "CATALOGOS"); }
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-12" style="padding-top:14px;">
+                                                    <strong>Registro patronal</strong>
+                                                    <select class="form-control limpiar_select_s" id="registro_patronal_emp">
+                                                        @{ Html.RenderAction("ConsultarRegimenPatronalNominaSelect", "CATALOGOS"); }
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-12" style="padding-top:14px;">
+                                                    <strong>Contrato</strong>
+                                                    <select class="form-control limpiar_select_s" id="contrato_general_emp">
+                                                        @{ Html.RenderAction("ConsultarContratoNominaSelect", "CATALOGOS"); }
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12"><hr /></div>
+
+                                    <div class="col-md-12">
+                                        <div class="col-md-12">
+                                            <div class="col-md-3" style="padding-top:14px;">
+                                                <strong>Turno</strong>
+                                                <select class="form-control limpiar_select_s" id="turno_emp">
+                                                    <option value="M">Matutino</option>
+                                                    <option value="V">Vespertino</option>
+                                                    <option value="N">Nocturno</option>
+                                                    <option value="X">Mixto</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-3" style="padding-top:14px;">
+                                                <strong>Turno laboral</strong>
+                                                <select class="form-control limpiar_select_s" id="turno_laboral_emp">
+                                                    <option value="0">Oficina</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-3" style="padding-top:14px;">
+                                                <strong>Jornada (horas)</strong>
+                                                <input type="text" id="jornada_emp" class="form-control limpiar_input_s solo-numeros-spunto" disabled />
+                                            </div>
+                                            <div class="col-md-3" style="padding-top:14px;">
+                                                <strong>Estatus: </strong>
+                                                <select class="form-control limpiar_select_s" id="estatus_emp" disabled>
+                                                    <option value="A">Activo</option>
+                                                    <option value="I">Inactivo</option>
+                                                    <option value="B">Baja</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-5">
+                                            <div class="col-md-12" style="padding-top:14px; display:none;" id="div_ingreso">
+                                                <strong>Fecha de ingreso: </strong>
+                                                <input type="date" id="fecha_ingreso_emp" class="form-control limpiar_datetime_s" />
+                                            </div>
+                                            <div class="col-md-12" style="padding-top:14px; display:none;" id="div_baja">
+                                                <strong>Fecha de baja: </strong>
+                                                <input type="date" id="fecha_baja_emp" class="form-control limpiar_datetime_s" />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-12"><hr /></div>
+
+                                    <div class="col-md-12">
+                                        <div class="col-md-12">
+                                            <strong style="font-size:14px;">Informacion fiscal</strong>
+                                        </div>
+                                        <div class="col-md-5" style="padding-top:14px;">
+                                            <strong>Régimen: </strong>
+                                            <select class="form-control limpiar_select_s" id="regimen_emp">
+                                                <option value="02">Sueldos (Incluye ingresos señalados en la fracción I del artículo 94 de LISR)</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-3" style="padding-top:14px;">
+                                            <strong>Contrato: </strong>
+                                            <select class="form-control limpiar_select_s" id="contrato_sat_emp">
+                                                <option value="01">Tiempo indeterminado</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-2" style="padding-top:14px;">
+                                            <strong>Jornada: </strong>
+                                            <select class="form-control limpiar_select_s" id="jornada_sat_emp">
+                                                <option value="01">Diurno</option>
+                                                <option value="03">Mixta</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-2 text-center" style="padding-top:14px;">
+                                            <strong>Sindicalizado</strong>
+                                            <input id="sindicalizado_emp" type="checkbox" style="display: block; height: 35px;" class="form-control limpiar_check_s" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="tab_salario" class="tab-pane">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="col-md-3">
+                                            <div class="col-md-12"><h3>Salario</h3><hr /></div>
+                                            <div class="col-md-12" style="padding-top:14px;">
+                                                <strong>Tipo de salario</strong>
+                                                <select class="form-control limpiar_select_s" id="tipo_salario_emp" onchange="TipoSalarioIntegral();">
+                                                    <option value="0">Fijo</option>
+                                                    <option value="1">Variable</option>
+                                                    <option value="2">Mixto</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-12" style="padding-top:14px;">
+                                                <strong>Porcentaje de integracion (%)</strong>
+                                                <input type="text" id="porcentaje_integracion_emp" class="form-control limpiar_input_s obligatorio solo-numeros" readonly />
+                                            </div>
+                                            <div class="col-md-12" style="padding-top:14px;">
+                                                <strong>Sueldo diario</strong>
+                                                <input type="text" id="sueldo_diario_emp" class="form-control limpiar_input_s obligatorio solo-numeros" onkeyup="CalcularSalarioIntegral(); CalcularSalarioHora();" />
+                                            </div>
+                                            <div class="col-md-12" style="padding-top:14px;">
+                                                <strong>Sueldo diario integrado: </strong>
+                                                <input type="text" id="sueldo_diario_integrado_emp" class="form-control limpiar_input_s solo-numeros" disabled />
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <div class="col-md-12"><h3>Otros</h3><hr /></div>
+                                            <div class="col-md-12" style="padding-top:14px;">
+                                                <strong>Zona de salario minimo: </strong>
+                                                <select class="form-control limpiar_select_s" id="zona_salario_minimo_emp">
+                                                    <option value="A">A</option>
+                                                    <option value="B">B</option>
+                                                    <option value="C">C</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-12" style="padding-top:14px;">
+                                                <strong>Tabla de antigüedades</strong>
+                                                <select class="form-control limpiar_select_s" id="antigüedades_emp">
+                                                    <option value="143">Vacaciones y aguinaldos/LFT</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-12" style="padding-top:14px;">
+                                                <strong>Sueldo por hora</strong>
+                                                <input type="text" id="sueldo_hora_emp" class="form-control limpiar_input_s solo-numeros" disabled />
+                                            </div>
+                                        </div>
+
+
+                                        <div class="col-md-5 text-center">
+                                            <div class="col-md-12"><h3>PARÁMETROS</h3><hr /></div>
+                                            <div class="col-md-6" style="padding-top:14px;">
+                                                <strong>Director o administrador gral.</strong>
+                                                <input type="checkbox" id="director_emp" style="display: block; height: 35px;" class="form-control limpiar_check_s" />
+                                            </div>
+                                            <div class="col-md-6" style="padding-top:14px;">
+                                                <strong>Derecho a PTU</strong>
+                                                <input type="checkbox" id="derecho_ptu_emp" style="display: block; height: 35px;" class="form-control limpiar_check_s" />
+                                            </div>
+                                            <div class="col-md-12"></div>
+                                            <div class="col-md-6" style="padding-top:14px;">
+                                                <strong>Retener seguro social</strong>
+                                                <input type="checkbox" id="retener_seguro_emp" style="display: block; height: 35px;" class="form-control limpiar_check_s" />
+                                            </div>
+                                            <div class="col-md-6" style="padding-top:14px;">
+                                                <strong>Aplicar subsidio para el empleo</strong>
+                                                <input type="checkbox" id="aplicar_subsidio_emp" style="display: block; height: 35px;" class="form-control limpiar_check_s" />
+                                            </div>
+                                            <div class="col-md-12"></div>
+                                            <div class="col-md-6" style="padding-top:14px;">
+                                                <strong>Calcular ISR anual</strong>
+                                                <input type="checkbox" id="calcular_isr_emp" style="display: block; height: 35px;" class="form-control limpiar_check_s" />
+                                            </div>
+                                            <div class="col-md-6" style="padding-top:14px;">
+                                                <strong>Deshabilitar impuestos</strong>
+                                                <input type="checkbox" id="deshabilitar_impuestos_emp" style="display: block; height: 35px;" class="form-control limpiar_check_s" />
+                                            </div>
+                                            <div class="col-md-12"></div>
+                                            <div class="col-md-6" style="padding-top:14px;">
+                                                <strong>Empleado pensionado</strong>
+                                                <input type="checkbox" style="display: block; height: 35px;" class="form-control" disabled />
+                                            </div>
+                                            <div class="col-md-6" style="padding-top:14px;">
+                                                <strong>Tipo de pension: </strong>
+                                                <select class="form-control" id="antigüedades_emp" disabled>
+                                                    <option value="NA"></option>
+                                                    <option value="I">Invalidez</option>
+                                                    <option value="C">Cesantía y vejez</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="tab_datos_personales" class="tab-pane">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="col-md-9">
+                                            <div class="col-md-12"><h3>Datos Personales</h3><hr /></div>
+                                            <div class="col-md-3" style="padding-top:14px;">
+                                                <strong>Sexo: </strong>
+                                                <select class="form-control limpiar_select_s" id="sexo_emp">
+                                                    <option value="F">Femenino</option>
+                                                    <option value="M">Masculino</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-3" style="padding-top:14px;">
+                                                <strong>Estado civil: </strong>
+                                                <select class="form-control limpiar_select_s" id="estado_civil_emp">
+                                                    @{ Html.RenderAction("ConsultarEstadoCivilNominaSelect", "CATALOGOS"); }
+                                                </select>
+                                            </div>
+                                            <div class="col-md-3" style="padding-top:14px;">
+                                                <strong>Número de hijos: </strong>
+                                                <input type="text" id="numero_hijos_emp" class="form-control limpiar_input_s solo-numeros-spunto" />
+                                            </div>
+                                            <div class="col-md-3" style="padding-top:14px;">
+                                                <strong>Fecha de nacimiento: </strong>
+                                                <input class="form-control limpiar_datetime_s" type="date" id="fecha_nacimiento_emp" onchange="GenerarRFC();" />
+                                            </div>
+                                            <div class="col-md-12" style="padding-top:14px;">
+                                                <strong>Lugar de nacimiento</strong>
+                                                <select class="form-control limpiar_select_s" id="lugar_nacimiento_emp">
+                                                    @{ Html.RenderAction("ConsultarCiudadNominaSelect", "CATALOGOS"); }
+                                                </select>
+                                            </div>
+                                            <div class="col-md-12" style="padding-top:14px;">
+                                                <strong>Nombre del padre: </strong>
+                                                <input class="form-control limpiar_input_s solo-letras" type="text" id="nombre_padre_emp" oninput="this.value = this.value.toUpperCase();" />
+                                            </div>
+                                            <div class="col-md-12" style="padding-top:14px;">
+                                                <strong>Nombre de la madre: </strong>
+                                                <input class="form-control limpiar_input_s solo-letras" type="text" id="nombre_madre_emp" oninput="this.value = this.value.toUpperCase();" />
+                                            </div>
+                                            <div class="col-md-12" style="padding-top:14px;">
+                                                <strong>Unidad médica: </strong>
+                                                <input class="form-control limpiar_input_s" type="text" id="unidad_medica_emp" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+
+                                            <div class="col-md-10">
+                                                <h3>Subir documentos </h3>
+
+                                            </div>
+                                            <div class="col-md-1">
+                                                <lord-icon src="https://cdn.lordicon.com/yksgklbm.json"
+                                                           trigger="hover"
+                                                           style="width:60px;height:50px;bottom: 11px;">
+                                                </lord-icon>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <strong>Constancia de situacion fiscal (pdf):</strong>
+                                                <input class="form-control" type="file" id="pdf_upload" accept="application/pdf">
+                                            </div>
+
+                                            <div class="col-md-12"><br /><br /></div>
+                                            <div class="col-md-12"><h3>REGISTROS</h3><hr /></div>
+                                            <div class="col-md-12" style="padding-top:14px;">
+                                                <strong>RFC: </strong>
+                                                <div class="row">
+                                                    <div class="col-md-4">
+                                                        <input class="form-control limpiar_input_s" id="rfc_emp_1" type="text" maxlength="4" disabled oninput="this.value = this.value.toUpperCase();" />
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <input class="form-control limpiar_input_s" id="rfc_emp_2" type="text" maxlength="6" disabled oninput="this.value = this.value.toUpperCase();" />
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <input class="form-control limpiar_input_s solo-letras-numeros-s-espacio-decimal" id="rfc_emp_3" type="text" maxlength="3" oninput="this.value = this.value.toUpperCase();" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12" style="padding-top:14px;">
+                                                <strong>CURP: </strong>
+                                                <input class="form-control limpiar_input_s obligatorio solo-letras-numeros-s-espacio-decimal" id="curp_emp" type="text" oninput="this.value = this.value.toUpperCase();" />
+                                            </div>
+                                            <div class="col-md-12" style="padding-top:14px;">
+                                                <strong>Seguridad social: </strong>
+                                                <input class="form-control limpiar_input_s obligatorio solo-letras-numeros-s-espacio-decimal" id="seguridad_social_emp" type="text" oninput="this.value = this.value.toUpperCase();" />
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="col-md-12"><br /></div>
+
+
+                                    <div class="col-md-12">
+                                        <div class="col-md-12"><h3>DIRECCIÓN</h3><hr /></div>
+                                        <div class="col-md-12">
+                                            <strong>Domicilio</strong>
+                                            <input class="form-control limpiar_input_s" id="direc_domicilio_emp" type="text" disabled />
+                                        </div>
+                                        <div class="col-md-10" style="padding-top:14px;">
+                                            <strong>Calle</strong>
+                                            <input class="form-control limpiar_input_s obligatorio" id="direc_calle_emp" type="text" onkeyup="Domicilio();" />
+                                        </div>
+                                        <div class="col-md-2" style="padding-top:14px;">
+                                            <strong>No. exterior</strong>
+                                            <input class="form-control limpiar_input_s obligatorio solo-letras-numeros" id="direc_no_exterior_emp" type="text" onkeyup="Domicilio();" />
+                                        </div>
+                                        <div class="col-md-4" style="padding-top:14px;">
+                                            <strong>Colonia</strong>
+                                            <input class="form-control limpiar_input_s obligatorio" id="direc_colonia_emp" type="text" onkeyup="Domicilio();" />
+                                        </div>
+                                        <div class="col-md-4" style="padding-top:14px;">
+                                            <strong>Población</strong>
+                                            <input class="form-control limpiar_input_s" id="direc_poblacion_emp" type="text" onkeyup="Domicilio();" />
+                                        </div>
+                                        <div class="col-md-4" style="padding-top:14px;">
+                                            <strong>Ciudad</strong>
+                                            <select class="form-control" id="direc_ciudad_emp">
+                                                @{ Html.RenderAction("ConsultarCiudadNominaSelect", "CATALOGOS"); }
+                                            </select>
+                                        </div>
+                                        <div class="col-md-10" style="padding-top:14px;">
+                                            <strong>Referencia</strong>
+                                            <input class="form-control limpiar_input_s" id="direc_referencia_emp" type="text" />
+                                        </div>
+                                        <div class="col-md-2" style="padding-top:14px;">
+                                            <strong>C.P</strong>
+                                            <input class="form-control limpiar_input_s obligatorio solo-numeros-spunto" id="direc_cp_emp" type="text" />
+                                        </div>
+                                        <div class="col-md-3" style="padding-top:14px;">
+                                            <strong>Telefono 1</strong>
+                                            <input class="form-control limpiar_input_s" id="direc_telefono1_emp" type="text" />
+                                        </div>
+                                        <div class="col-md-9" style="padding-top:14px;">
+                                            <strong>Email</strong>
+                                            <input class="form-control limpiar_input_s" id="direc_email_emp" type="text" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="col-md-6 text-left">
+                        <br />
+                        <button class="btn btn_beta" onclick="GuardarSolicitudAltaEmpleado();" id="emp_registrar">Confirmar registro</button>
+                    </div>
+                    <div class="col-md-6 text-right">
+                        <br />
+                        <button class="btn btn_beta_danger" onclick="limpiarFormulario();">Cancelar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="tab_consultar_registro_nomina" class="tab-pane">
+            <div class="col-md-12 text-center">
+                <h3>ADMINISTRACION DE SOLICITUDES DE REGISTRO</h3>
+                <br />
+            </div>
+
+            <div class="col-md-4" style="padding-top:14px;">
+                <strong>Estatus de solicitud</strong>
+                <select class="form-control limpiar_select" id="id_estatus" onchange="TipoIncidenciaAccion();">
+                    <option value="0">TODAS</option>
+                    @{ Html.RenderAction("ConsultarEstatusPreaAltaNomina", "CATALOGOS"); }
+                </select>
+            </div>
+            <div class="col-md-2" style="padding-top:14px;">
+                <strong>Fecha inicial</strong>
+                <input class="form-control limpiar_datetime" type="date" id="fecha_incidencia_reporte1" />
+            </div>
+            <div class="col-md-2" style="padding-top:14px;">
+                <strong>Fecha final</strong>
+                <input class="form-control limpiar_datetime" type="date" id="fecha_incidencia_reporte2" />
+            </div>
+            <div class="col-md-1 text-left" style="padding-top:26px">
+                <button class="btn btn_beta_icon" onclick="ConsultarSolicitudesEmpleadosRegistradas();"><i class="fa fa-search"></i></button>
+
+            </div>
+            <div class="col-md-3 text-right" style="padding-top:26px">
+                <button class="btn btn_beta" onclick="ExportarPreRegistroExcel();"><i class="fa fa-file"></i>  Exportar excel</button>
+            </div>
+            <div class="col-md-12"><br /><hr /></div>
+            <div class="table-responsive" id="div_tabla_solicitud_empleado">
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+
+@*------------ MODAL DE CLASIFICACION*@
+<div class="modal fade" id="m_solicitud_registro_empleado" tabindex="-1" role="dialog" aria-labelledby="m_solicitud_registro_empleado" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document" style="min-width: 80%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <!--TITULO-->
+                <h5 class="modal-title" id="lbl_solicitud_registro_empleado">Solicitud de registro de empleado</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="tab_registro_empleado_nomina" class="tab-pane fade in active show">
+                    <div class="col-md-12 text-center">
+                        <h2>FORMULARIO DE REGISTRO</h2>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="counter_section">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <ul class="nav nav-tabs">
+                                            <li class="active"> <a data-toggle="tab" href="#tab_general_s" onclick=""><strong style="padding-left:6px;">GENERAL</strong></a></li>
+                                            <li class="active"> <a data-toggle="tab" href="#tab_salario_s" onclick=""><strong style="padding-left:6px;">SALARIO</strong></a></li>
+                                            <li class="active"> <a data-toggle="tab" href="#tab_datos_personales_s" onclick=""><strong style="padding-left:6px;">DATOS PERSONALES</strong></a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row column2 counter_section">
+                                <div class="tab-content">
+                                    <div id="tab_general_s" class="tab-pane fade in active show">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <strong>Nombre completo</strong>
+                                                <input type="text" id="nombre_completo_emp_s" class="form-control limpiar_input" readonly />
+                                            </div>
+
+                                            <div class="col-md-12" style="padding-top: 14px">
+                                                <div class="col-md-4" style="padding-top:14px">
+                                                    <strong>Nombre(s)</strong>
+                                                    <input type="text" id="nombre_emp_s" readonly class="form-control limpiar_input" onkeyup="NombreCompleto(1);" onchange="GenerarRFC();" oninput="this.value = this.value.toUpperCase();" />
+                                                </div>
+                                                <div class="col-md-4" style="padding-top:14px">
+                                                    <strong>Apellido paterno</strong>
+                                                    <input type="text" id="apellido_paterno_emp_s" readonly class="form-control limpiar_input " onkeyup="NombreCompleto(2);" onchange="GenerarRFC();" oninput="this.value = this.value.toUpperCase();" />
+                                                </div>
+                                                <div class="col-md-4" style="padding-top:14px">
+                                                    <strong>Apellido materno</strong>
+                                                    <input type="text" id="apellido_materno_emp_s" readonly class="form-control limpiar_input " onkeyup="NombreCompleto(3);" onchange="GenerarRFC();" oninput="this.value = this.value.toUpperCase();" />
+                                                </div>
+
+                                                <div class="col-md-12">
+                                                    <div class="col-md-7">
+                                                        <div class="col-md-12" style="padding-top:14px;">
+                                                            <strong>Tipo: </strong>
+                                                            <select class="form-control limpiar_select" disabled id="tipo_emp_s">
+                                                                <option value="0">Sueldos y salarios</option>
+                                                                <option value="2">Asimilados a asalarios</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="col-md-12" style="padding-top:14px;">
+                                                            <strong>Puesto: </strong>
+                                                            <select class="form-control limpiar_select" disabled id="puesto_emp_s">
+                                                                @{ Html.RenderAction("ConsultarPuestoNominaSelect", "CATALOGOS"); }
+                                                            </select>
+                                                        </div>
+                                                        <div class="col-md-12" style="padding-top:14px;">
+                                                            <strong>Departamento: </strong>
+                                                            <select class="form-control limpiar_select" disabled id="departamento_emp_s">
+                                                                @{ Html.RenderAction("ConsultarDepartamentoNominaSelect", "CATALOGOS"); }
+                                                            </select>
+                                                        </div>
+                                                        <div class="col-md-6" style="padding-top:14px;">
+                                                            <strong>Forma de pago</strong>
+                                                            <select class="form-control limpiar_select" id="forma_pago_emp_s" onchange="ValidarFormaPagoS();" disabled>
+                                                                @{ Html.RenderAction("ConsultarFormaPagoNominaSelect", "CATALOGOS"); }
+                                                            </select>
+                                                        </div>
+                                                        <div class="col-md-6" style="padding-top:14px;">
+                                                            <strong>Grupo de pagos electronicos</strong>
+                                                            <select class="form-control limpiar_select" id="grupo_pago_emp_s" disabled>
+                                                                @{ Html.RenderAction("ConsultarGruposPagosNominaSelect", "CATALOGOS"); }
+                                                            </select>
+                                                        </div>
+                                                        <div class="col-md-6" style="padding-top:14px;">
+                                                            <strong>Tipo de cuenta bancaria</strong>
+                                                            <select class="form-control limpiar_select" id="tipo_cuenta_emp_s" disabled>
+                                                                @{ Html.RenderAction("ConsultarTipoCuentaBancariaNominaSelect", "CATALOGOS"); }
+                                                            </select>
+                                                        </div>
+                                                        <div class="col-md-6" style="padding-top:14px;">
+                                                            <strong>Número de cuenta</strong>
+                                                            <input type="text" id="numero_cuenta_emp_s" class="form-control limpiar_input" disabled />
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-5">
+                                                        <div class="col-md-12" style="padding-top:14px;">
+                                                            <strong>Jefe inmediato: </strong>
+                                                            <select class="form-control limpiar_select" id="jefe_inmediato_emp_s" disabled></select>
+                                                        </div>
+                                                        <div class="col-md-12 text-center" style="padding-top:14px;">
+                                                            <strong>Es jefe</strong>
+                                                            <input id="es_jefe_emp_s" type="checkbox" style="display: block; height: 35px;" disabled class="form-control limpiar_check" />
+                                                        </div>
+
+                                                        <div class="col-md-12" style="padding-top:14px;">
+                                                            <strong>Frecuencia</strong>
+                                                            <select class="form-control limpiar_select" id="frecuencia_emp_s" disabled>
+                                                                @{ Html.RenderAction("ConsultarFrecuenciaPagoNominaSelect", "CATALOGOS"); }
+                                                            </select>
+                                                        </div>
+                                                        <div class="col-md-12" style="padding-top:14px;">
+                                                            <strong>Registro patronal</strong>
+                                                            <select class="form-control limpiar_select" id="registro_patronal_emp_s" disabled>
+                                                                @{ Html.RenderAction("ConsultarRegimenPatronalNominaSelect", "CATALOGOS"); }
+                                                            </select>
+                                                        </div>
+                                                        <div class="col-md-12" style="padding-top:14px;">
+                                                            <strong>Contrato</strong>
+                                                            <select class="form-control limpiar_select" id="contrato_general_emp_s" disabled>
+                                                                @{ Html.RenderAction("ConsultarContratoNominaSelect", "CATALOGOS"); }
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12"><hr /></div>
+
+                                            <div class="col-md-12">
+                                                <div class="col-md-12">
+                                                    <div class="col-md-3" style="padding-top:14px;">
+                                                        <strong>Turno</strong>
+                                                        <select class="form-control limpiar_select" id="turno_emp_s" disabled>
+                                                            <option value="M">Matutino</option>
+                                                            <option value="V">Vespertino</option>
+                                                            <option value="N">Nocturno</option>
+                                                            <option value="X">Mixto</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-3" style="padding-top:14px;">
+                                                        <strong>Turno laboral</strong>
+                                                        <select class="form-control limpiar_select" id="turno_laboral_emp_s" disabled>
+                                                            <option value="0">Oficina</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-3" style="padding-top:14px;">
+                                                        <strong>Jornada (horas)</strong>
+                                                        <input type="text" id="jornada_emp_s" class="form-control limpiar_input solo-numeros-spunto" disabled />
+                                                    </div>
+                                                    <div class="col-md-3" style="padding-top:14px;">
+                                                        <strong>Estatus: </strong>
+                                                        <select class="form-control limpiar_select" id="estatus_emp_s" disabled>
+                                                            <option value="A">Activo</option>
+                                                            <option value="I">Inactivo</option>
+                                                            <option value="B">Baja</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-5">
+                                                    <div class="col-md-12" style="padding-top:14px; display:none;" id="div_ingreso_s">
+                                                        <strong>Fecha de ingreso: </strong>
+                                                        <input type="date" id="fecha_ingreso_emp_s" class="form-control limpiar_datetime" disabled />
+                                                    </div>
+                                                    <div class="col-md-12" style="padding-top:14px; display:none;" id="div_baja_s">
+                                                        <strong>Fecha de baja: </strong>
+                                                        <input type="date" id="fecha_baja_emp_s" class="form-control limpiar_datetime" disabled />
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-12"><hr /></div>
+
+                                            <div class="col-md-12">
+                                                <div class="col-md-12">
+                                                    <strong style="font-size:14px;">Informacion fiscal</strong>
+                                                </div>
+                                                <div class="col-md-5" style="padding-top:14px;">
+                                                    <strong>Régimen: </strong>
+                                                    <select class="form-control limpiar_select" id="regimen_emp_s" disabled>
+                                                        <option value="02">Sueldos (Incluye ingresos señalados en la fracción I del artículo 94 de LISR)</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-3" style="padding-top:14px;">
+                                                    <strong>Contrato: </strong>
+                                                    <select class="form-control limpiar_select" id="contrato_sat_emp_s" disabled>
+                                                        <option value="01">Tiempo indeterminado</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-2" style="padding-top:14px;">
+                                                    <strong>Jornada: </strong>
+                                                    <select class="form-control limpiar_select" id="jornada_sat_emp_s" disabled>
+                                                        <option value="01">Diurno</option>
+                                                        <option value="03">Mixta</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-2 text-center" style="padding-top:14px;">
+                                                    <strong>Sindicalizado</strong>
+                                                    <input id="sindicalizado_emp_s" type="checkbox" style="display: block; height: 35px;" class="form-control limpiar_check" disabled />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div id="tab_salario_s" class="tab-pane">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="col-md-3">
+                                                    <div class="col-md-12"><h3>Salario</h3><hr /></div>
+                                                    <div class="col-md-12" style="padding-top:14px;">
+                                                        <strong>Tipo de salario</strong>
+                                                        <select class="form-control limpiar_select" id="tipo_salario_emp_s" onchange="TipoSalarioIntegral();" disabled>
+                                                            <option value="0">Fijo</option>
+                                                            <option value="1">Variable</option>
+                                                            <option value="2">Mixto</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-12" style="padding-top:14px;">
+                                                        <strong>Porcentaje de integracion (%)</strong>
+                                                        <input type="text" id="porcentaje_integracion_emp_s" readonly class="form-control limpiar_input  solo-numeros" />
+                                                    </div>
+                                                    <div class="col-md-12" style="padding-top:14px;">
+                                                        <strong>Sueldo diario</strong>
+                                                        <input type="text" id="sueldo_diario_emp_s" readonly class="form-control limpiar_input  solo-numeros" onkeyup="CalcularSalarioIntegral(); CalcularSalarioHora();" />
+                                                    </div>
+                                                    <div class="col-md-12" style="padding-top:14px;">
+                                                        <strong>Sueldo por hora</strong>
+                                                        <input type="text" id="sueldo_hora_emp_s" readonly class="form-control limpiar_input solo-numeros" disabled />
+                                                    </div>
+                                                    <div class="col-md-12" style="padding-top:14px;">
+                                                        <strong>Sueldo diario integrado: </strong>
+                                                        <input type="text" id="sueldo_diario_integrado_emp_s" readonly class="form-control limpiar_input solo-numeros" disabled />
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-4">
+                                                    <div class="col-md-12"><h3>Otros</h3><hr /></div>
+                                                    <div class="col-md-12" style="padding-top:14px;">
+                                                        <strong>Zona de salario minimo: </strong>
+                                                        <select class="form-control limpiar_select" id="zona_salario_minimo_emp_s" disabled>
+                                                            <option value="A">A</option>
+                                                            <option value="B">B</option>
+                                                            <option value="C">C</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-12" style="padding-top:14px;">
+                                                        <strong>Tabla de antigüedades</strong>
+                                                        <select class="form-control limpiar_select" id="antigüedades_emp_s" disabled>
+                                                            <option value="143">Vacaciones y aguinaldos/LFT</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-12" style="padding-top:14px;" id="div_diario_establo">
+                                                        <strong>Sueldo diario establo</strong>
+                                                        <input type="text" id="sueldo_diario_real_emp_s" readonly class="form-control limpiar_input  solo-numeros" onkeyup="CalcularSalarioHoraReal();" />
+                                                    </div>
+                                                    <div class="col-md-12" style="padding-top:14px;" id="div_hora_establo">
+                                                        <strong>Sueldo por hora establo</strong>
+                                                        <input type="text" id="sueldo_hora_real_emp_s" readonly class="form-control limpiar_input solo-numeros" disabled />
+                                                    </div>
+                                                </div>
+
+
+                                                <div class="col-md-5 text-center">
+                                                    <div class="col-md-12"><h3>PARÁMETROS</h3><hr /></div>
+                                                    <div class="col-md-6" style="padding-top:14px;">
+                                                        <strong>Director o administrador gral.</strong>
+                                                        <input type="checkbox" id="director_emp_s" style="display: block; height: 35px;" class="form-control limpiar_check" disabled />
+                                                    </div>
+                                                    <div class="col-md-6" style="padding-top:14px;">
+                                                        <strong>Derecho a PTU</strong>
+                                                        <input type="checkbox" id="derecho_ptu_emp_s" style="display: block; height: 35px;" class="form-control limpiar_check" disabled />
+                                                    </div>
+                                                    <div class="col-md-12"></div>
+                                                    <div class="col-md-6" style="padding-top:14px;">
+                                                        <strong>Retener seguro social</strong>
+                                                        <input type="checkbox" id="retener_seguro_emp_s" style="display: block; height: 35px;" class="form-control limpiar_check" disabled />
+                                                    </div>
+                                                    <div class="col-md-6" style="padding-top:14px;">
+                                                        <strong>Aplicar subsidio para el empleo</strong>
+                                                        <input type="checkbox" id="aplicar_subsidio_emp_s" style="display: block; height: 35px;" class="form-control limpiar_check" disabled />
+                                                    </div>
+                                                    <div class="col-md-12"></div>
+                                                    <div class="col-md-6" style="padding-top:14px;">
+                                                        <strong>Calcular ISR anual</strong>
+                                                        <input type="checkbox" id="calcular_isr_emp_s" style="display: block; height: 35px;" class="form-control limpiar_check" disabled />
+                                                    </div>
+                                                    <div class="col-md-6" style="padding-top:14px;">
+                                                        <strong>Deshabilitar impuestos</strong>
+                                                        <input type="checkbox" id="deshabilitar_impuestos_emp_s" style="display: block; height: 35px;" class="form-control limpiar_check" disabled />
+                                                    </div>
+                                                    <div class="col-md-12"></div>
+                                                    <div class="col-md-6" style="padding-top:14px;">
+                                                        <strong>Empleado pensionado</strong>
+                                                        <input type="checkbox" style="display: block; height: 35px;" class="form-control" disabled />
+                                                    </div>
+                                                    <div class="col-md-6" style="padding-top:14px;">
+                                                        <strong>Tipo de pension: </strong>
+                                                        <select class="form-control" id="antigüedades_emp_s" disabled>
+                                                            <option value="NA"></option>
+                                                            <option value="I">Invalidez</option>
+                                                            <option value="C">Cesantía y vejez</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div id="tab_datos_personales_s" class="tab-pane">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="col-md-9">
+                                                    <div class="col-md-12"><h3>Datos Personales</h3><hr /></div>
+                                                    <div class="col-md-3" style="padding-top:14px;">
+                                                        <strong>Sexo: </strong>
+                                                        <select class="form-control limpiar_select" id="sexo_emp_s" disabled>
+                                                            <option value="F">Femenino</option>
+                                                            <option value="M">Masculino</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-3" style="padding-top:14px;">
+                                                        <strong>Estado civil: </strong>
+                                                        <select class="form-control limpiar_select" id="estado_civil_emp_s" disabled>
+                                                            @{ Html.RenderAction("ConsultarEstadoCivilNominaSelect", "CATALOGOS"); }
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-3" style="padding-top:14px;">
+                                                        <strong>Número de hijos: </strong>
+                                                        <input type="text" id="numero_hijos_emp_s" readonly class="form-control limpiar_input solo-numeros-spunto" />
+                                                    </div>
+                                                    <div class="col-md-3" style="padding-top:14px;">
+                                                        <strong>Fecha de nacimiento: </strong>
+                                                        <input class="form-control limpiar_datetime" type="date" id="fecha_nacimiento_emp_s" onchange="GenerarRFC();" disabled />
+                                                    </div>
+                                                    <div class="col-md-12" style="padding-top:14px;">
+                                                        <strong>Lugar de nacimiento</strong>
+                                                        <select class="form-control limpiar_select" id="lugar_nacimiento_emp_s" disabled>
+                                                            @{ Html.RenderAction("ConsultarCiudadNominaSelect", "CATALOGOS"); }
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-12" style="padding-top:14px;">
+                                                        <strong>Nombre del padre: </strong>
+                                                        <input class="form-control limpiar_input" readonly type="text" id="nombre_padre_emp_s" oninput="this.value = this.value.toUpperCase();" />
+                                                    </div>
+                                                    <div class="col-md-12" style="padding-top:14px;">
+                                                        <strong>Nombre de la madre: </strong>
+                                                        <input class="form-control limpiar_input" readonly type="text" id="nombre_madre_emp_s" oninput="this.value = this.value.toUpperCase();" />
+                                                    </div>
+                                                    <div class="col-md-12" style="padding-top:14px;">
+                                                        <strong>Unidad médica: </strong>
+                                                        <input class="form-control limpiar_input" readonly type="text" id="unidad_medica_emp_s" />
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <div class="col-md-12"><h3>REGISTROS</h3><hr /></div>
+
+                                                    <div class="col-md-12" style="padding-top:14px;">
+                                                        <strong>RFC: </strong>
+                                                        <div class="row">
+                                                            <div class="col-md-4">
+                                                                <input class="form-control limpiar_input" id="rfc_emp_1_s" type="text" maxlength="4" disabled oninput="this.value = this.value.toUpperCase();" />
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <input class="form-control limpiar_input" id="rfc_emp_2_s" type="text" maxlength="6" disabled oninput="this.value = this.value.toUpperCase();" />
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <input class="form-control limpiar_input" id="rfc_emp_3_s" readonly type="text" maxlength="3" oninput="this.value = this.value.toUpperCase();" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-12" style="padding-top:14px;">
+                                                        <strong>CURP: </strong>
+                                                        <input class="form-control limpiar_input " readonly id="curp_emp_s" type="text" oninput="this.value = this.value.toUpperCase();" />
+                                                    </div>
+                                                    <div class="col-md-12" style="padding-top:14px;">
+                                                        <strong>Numero de seguro social (NSS): </strong>
+                                                        <input class="form-control limpiar_input " readonly id="seguridad_social_emp_s" type="text" oninput="this.value = this.value.toUpperCase();" />
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+                                            <div class="col-md-12"><br /></div>
+
+
+                                            <div class="col-md-12">
+                                                <div class="col-md-12"><h3>DIRECCIÓN</h3><hr /></div>
+                                                <div class="col-md-12">
+                                                    <strong>Domicilio</strong>
+                                                    <input class="form-control limpiar_input" id="direc_domicilio_emp_s" type="text" disabled />
+                                                </div>
+                                                <div class="col-md-10" style="padding-top:14px;">
+                                                    <strong>Calle</strong>
+                                                    <input class="form-control limpiar_input " readonly id="direc_calle_emp_s" type="text" onkeyup="Domicilio();" />
+                                                </div>
+                                                <div class="col-md-2" style="padding-top:14px;">
+                                                    <strong>No. exterior</strong>
+                                                    <input class="form-control limpiar_input  solo-letras-numeros" readonly id="direc_no_exterior_emp_s" type="text" onkeyup="Domicilio();" />
+                                                </div>
+                                                <div class="col-md-4" style="padding-top:14px;">
+                                                    <strong>Colonia</strong>
+                                                    <input class="form-control limpiar_input " id="direc_colonia_emp_s" readonly type="text" onkeyup="Domicilio();" />
+                                                </div>
+                                                <div class="col-md-4" style="padding-top:14px;">
+                                                    <strong>Población</strong>
+                                                    <input class="form-control limpiar_input" id="direc_poblacion_emp_s" readonly type="text" onkeyup="Domicilio();" />
+                                                </div>
+                                                <div class="col-md-4" style="padding-top:14px;">
+                                                    <strong>Ciudad</strong>
+                                                    <select class="form-control" id="direc_ciudad_emp" disabled>
+                                                        @{ Html.RenderAction("ConsultarCiudadNominaSelect", "CATALOGOS"); }
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-10" style="padding-top:14px;">
+                                                    <strong>Referencia</strong>
+                                                    <input class="form-control limpiar_input" id="direc_referencia_emp_s" readonly type="text" />
+                                                </div>
+                                                <div class="col-md-2" style="padding-top:14px;">
+                                                    <strong>C.P</strong>
+                                                    <input class="form-control limpiar_input  solo-numeros-spunto" readonly id="direc_cp_emp_s" type="text" />
+                                                </div>
+                                                <div class="col-md-3" style="padding-top:14px;">
+                                                    <strong>Telefono 1</strong>
+                                                    <input class="form-control limpiar_input" id="direc_telefono1_emp_s" readonly type="text" />
+                                                </div>
+                                                <div class="col-md-9" style="padding-top:14px;">
+                                                    <strong>Email</strong>
+                                                    <input class="form-control limpiar_input" id="direc_email_emp_s" readonly type="text" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn_beta_danger" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@Scripts.Render("~/bundles_Nomina/js")
+@Scripts.Render("~/bundles_Propiedades/js")
+
+<script>
+    $(window).on("load", function () {
+        ObtenerLunesDomingoActual();
+        DeterminarPorcentajeIntegracionInicial();
+        $('#jornada_emp').val('8');
+        ValidarFormaPago();
+        CaracteresControl();
+    });
+</script>

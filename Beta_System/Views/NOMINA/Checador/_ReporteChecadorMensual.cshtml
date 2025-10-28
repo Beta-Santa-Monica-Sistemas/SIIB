@@ -1,0 +1,95 @@
+﻿@model List<Beta_System.Models.ReporteChecadorNomina>
+@using System.Globalization;
+
+
+@foreach (var item in Model.GroupBy(x => x.id_departamento))
+{
+    <table class="table table-striped table-bordered table-hover small table-sm" id="datatable_reporte_mensual">
+        <thead>
+            @*<tr class="text-center bg-beta">
+                <th colspan="9" class="text-left"><strong>@item.FirstOrDefault().nombre_departamento</strong></th>
+            </tr>*@
+
+            <tr class="text-center bg-dark text-white">
+                <th>Empleado</th>
+                <th>Día</th>
+                <th>Entrada</th>
+                <th>Salida</th>
+                <th>Total hrs</th>
+                @*<th>Prom. hrs diarias</th>*@
+            </tr>
+
+        </thead>
+        <tbody>
+            @foreach (var punch_g in item.OrderBy(x => x.fecha_punch))
+            {
+                int id_empleado = punch_g.id_empleado;
+
+                decimal valor_hora = punch_g.valor_hra;
+
+                int totalMinutes = (int)punch_g.hrs_totales.TotalMinutes;
+                int totalHours = totalMinutes / 60;
+                int minutos_restantes = totalMinutes % 60;
+                //totalHours += (int)punch_g.Sum(x => x.hrs_totales.TotalHours);
+
+                string color_celda = "";
+                string color_texto_celda = "#2e87d7";
+                string identificador_faltas = id_empleado.ToString() + "_" + punch_g.no_dia;
+
+                if (punch_g.id_checador_concepto == 2) { color_celda = "#eb3c3c"; color_texto_celda = "white"; }
+                else if (punch_g.concepto_modificado == true) { color_celda = "#FFC900"; color_texto_celda = "black"; }
+                else { color_celda = ""; color_texto_celda = "#2e87d7"; }
+
+                string hra_entrada = "N/A";
+                string hra_salida = "N/A";
+
+                if (punch_g.fecha_punch_e != DateTime.MinValue) { hra_entrada = punch_g.fecha_punch_e.ToString("hh:mm tt"); }
+
+                if (punch_g.fecha_punch_s != DateTime.MinValue) { hra_salida = punch_g.fecha_punch_s.ToString("hh:mm tt"); }
+
+                <tr class="text-center">
+                    <td style="width: 500px;" class="text-left">@punch_g.nombre_empleado</td>
+
+                    <td>@punch_g.nombre_dia @string.Format(punch_g.fecha_punch.ToShortDateString(), "dd/mm/yyyy")</td>
+
+                    <td style="background-color:@color_celda; color:@color_texto_celda;"><strong>@hra_entrada</strong></td>
+
+                    <td style="background-color:@color_celda; color:@color_texto_celda;"><strong>@hra_salida</strong></td>
+
+                    @* TOTAL DE HORAS *@
+                    <td>
+                        <strong>@totalHours:@minutos_restantes hrs</strong>
+                    </td>
+
+                    @* PROMEDIO DE HORAS X DIA *@
+                    @*<td>
+                        @if (totalMinutes > 0)
+                        {
+                            int totalMinutes_avg = (int)punch_g.hrs_totales.TotalMinutes / 9;
+                            int totalHours_avg = totalMinutes_avg / 60;
+                            int minutos_restantes_avg = totalMinutes_avg % 60;
+
+                            <strong>@totalHours_avg : @minutos_restantes_avg</strong>
+                        }
+                    </td>*@
+
+                    @* HORAS EXTRA *@
+                    @*<td>
+                    @if (hrs_extra > 0)
+                    {
+                        <strong>@hrs_extra hrs</strong>
+                    }
+                </td>*@
+
+                </tr>
+             }
+        </tbody>
+        </table>
+
+
+}
+
+
+
+
+

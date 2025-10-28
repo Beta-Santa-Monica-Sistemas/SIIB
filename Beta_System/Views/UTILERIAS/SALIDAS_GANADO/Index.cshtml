@@ -1,0 +1,49 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+}
+
+<div class="page_title">
+    <div class="counter_section">
+        <h1>Modificación de salidas de ganado</h1>
+    </div>
+</div>
+
+
+<div class="column2 counter_section">
+    <div class="row">
+        <div class="col-md-3">
+            <strong>Establo</strong>
+            <select class="form-control id_establo_select" id="id_establo_utileria"></select>
+        </div>
+        <div class="col-md-3">
+            <strong>Folio de la salida de ganado:</strong>
+            <input type="text" class="form-control" id="folio_utileria"/>
+        </div>
+        <div class="col-md-3">
+            <br />
+            <button class="btn btn_beta_icon" onclick="ConsultarSalidaGanadoEditar();"><i class="fa fa-search"></i></button>
+        </div>
+    </div>
+    <hr />
+    <div id="div_utileria_salida_ganado"></div>
+</div>
+
+@Scripts.Render("~/bundles_SalidasGanado/js")
+@Scripts.Render("~/bundles_Propiedades/js")
+@Scripts.Render("~/bundles_UtileriaSalidaGanado/js")
+
+<script type="text/javascript">
+    $(window).on("load", function () {
+        CaracteresControl();
+        ConsultarEstablosUsuarioSelect(0);
+
+
+        CalcularTotales();
+        ConsultarCondicionesClasificacion();
+    });
+
+</script>
+
+

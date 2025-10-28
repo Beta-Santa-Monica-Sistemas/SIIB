@@ -1,0 +1,135 @@
+﻿<div class="row p-2">
+    <div class="col-md-5">
+        <strong>Proveedor:</strong>
+        <select class="form-control limpiar_cp borders" id="select_proveedor_cp">
+            <option value="0">Selecciona un proveedor</option>
+        </select>
+    </div>
+    <div class="col-md-5">
+        <strong>Articulo/Producto</strong>
+        <select class="form-control limpiar_cp borders" id="select_articulo_cp">
+            <option value="0">Selecciona un artículo</option>
+        </select>
+    </div>
+    <div class="col-md-2">
+        <strong>No. Pozo:</strong><br />
+        <select class="form-control limpiar_cp" id="no_pozo_cp"></select>
+    </div>
+</div>
+
+<div class="row p-2">
+    <div class="col-md-2">
+        <strong>Movimiento</strong><br />
+        <select class="form-control limpiar_cp" id="tmov_cp">
+            @{ Html.RenderAction("ConsultarTiposMovimientoSelect", "CATALOGOS"); };
+        </select>
+    </div>
+    <div class="col-md-4">
+        <strong>Tipo de movimiento</strong>
+        <br />
+        <select class="form-control limpiar_cp" id="cvemov_cp">
+        </select>
+    </div>
+    <div class="col-md-6">
+        <div class="col-md-10">
+            <strong>Línea transportista:</strong>
+            <select class="form-control " id="linea_trasp_cp">@{ Html.RenderAction("ConsultarLineasTrasnportistasSelect", "CATALOGOS"); };</select>
+        </div>
+        <div class="col-md-2 text-center">
+            <strong>Agrupada</strong>
+            <input type="checkbox" class="form-control limpiar_cp p-3" id="agrupada_cp" style="height:30px;" />
+        </div>
+    </div>
+</div>
+
+<div class="row p-2">
+    <div class="col-md-2">
+        <strong>Folio:</strong>
+        <input type="text" class="form-control limpiar_cp solo-letras-numeros" id="folio_cp" />
+    </div>
+    <div class="col-md-3">
+        <strong>Sucursal:</strong>
+        <input type="text" class="form-control limpiar_cp solo-letras-numeros" id="sucursal_cp" oninput="this.value = this.value.toUpperCase();" />
+    </div>
+    <div class="col-md-3">
+        <strong>Destino:</strong>
+        <input type="text" class="form-control limpiar_cp solo-letras-numeros" id="destino_cp" oninput="this.value = this.value.toUpperCase();" />
+    </div>
+    <div class="col-md-4">
+        <strong>Predio cliente:</strong>
+        <input type="text" class="form-control limpiar_cp solo-letras-numeros" id="predio_cliente_cp" oninput="this.value = this.value.toUpperCase();" />
+    </div>
+</div>
+
+<div class="row p-2">
+    <div class="col-md-4">
+        <strong>Conductor:</strong>
+        <input type="text" class="form-control limpiar_cp solo-letras borders" id="conductor_cp" oninput="this.value = this.value.toUpperCase();" />
+    </div>
+    <div class="col-md-2">
+        <strong>Placas:</strong>
+        <input type="text" class="form-control limpiar_cp solo-letras-numeros borders" id="placas_cp" oninput="this.value = this.value.toUpperCase();" />
+    </div>
+    <div class="col-md-2">
+        <strong>Maquilador:</strong>
+        <input type="text" class="form-control limpiar_cp solo-letras" id="maquilador_cp" oninput="this.value = this.value.toUpperCase();" />
+    </div>
+    <div class="col-md-2">
+        <strong>Tabla:</strong>
+        <input type="text" class="form-control limpiar_cp solo-letras-numeros borders" id="tabla_p1_cp" oninput="this.value = this.value.toUpperCase();" />
+    </div>
+    <div class="col-md-2">
+        <strong>Variedad:</strong>
+        <input type="text" class="form-control limpiar_cp solo-letras-numeros" id="variedad_p1_cp" oninput="this.value = this.value.toUpperCase();" />
+    </div>
+
+</div>
+
+<div class="row p-2">
+    <div class="col-md-4">
+        <strong>Nombre del chofer ensilador</strong>
+        <input type="text" class="form-control limpiar_cp solo-letras-numeros" id="ensilador_p1_cp" oninput="this.value = this.value.toUpperCase();" />
+    </div>
+    <div class="col-md-2">
+        <strong>Corte:</strong>
+        <input type="text" class="form-control limpiar_cp solo-numeros" id="corte_p1_cp" />
+    </div>
+    <div class="col-md-2">
+        <strong>Cantidad de pacas:</strong>
+        <input type="text" class="form-control limpiar_cp solo-numeros" id="pacas_p1_cp" />
+    </div>
+    <div class="col-md-2">
+        <strong>Peso origen:</strong>
+        <input type="text" class="form-control limpiar_cp solo-numeros" id="peso_origen_cp" />
+    </div>
+    <div class="col-md-2">
+        <strong>Peso materia seca:</strong>
+        <input type="text" class="form-control limpiar_cp solo-numeros" id="mat_seca_cp" />
+    </div>
+</div>
+
+<div class="row p-2">
+    <div class="col-md-10">
+        <strong>Observaciones</strong>
+        <textarea rows="1" id="obs_cp" class="form-control limpiar_cp solo-letras-numeros" oninput="this.value = this.value.toUpperCase();"></textarea>
+    </div>
+    <div class="col-md-2 p-3 text-center">
+        <button class="btn btn_beta" id="confirmar_ficha_completa" onclick="GuardarFichaCompletaSistemas()">Crear ficha</button>
+    </div>
+    <div class="col-md-12">
+        <button class="btn btn_beta_danger" onclick="LimpiarCamposFicha(1);">Limpiar</button>
+    </div>
+</div>
+
+<script>
+    CaracteresControl();
+    try {
+        $("#select_proveedor_cp").select2({
+            placeholder: 'Selecciona un proveedor',
+        });
+        $("#select_articulo_cp").select2({
+            placeholder: 'Selecciona un artículo'
+        });
+    }
+    catch (ex) { }
+</script>

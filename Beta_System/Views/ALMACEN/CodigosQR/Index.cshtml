@@ -1,0 +1,130 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+}
+
+
+<div class="page_title">
+    <div class="counter_section">
+        <h1>Códigos QR</h1>
+    </div>
+</div>
+
+<div class="column2 counter_section">
+    <div class="row">
+        <div class="col-md-6">
+            <strong>Clave/Nombre del articulo:</strong>
+            <input type="text" class="form-control inputs_ajuste" id="clave_nombre" name="clave_nombre" placeholder="Ingresa la clave o el nombre del articulos" />
+            <input type="text" id="id_articulo_ajuste" class="inputs_ajuste" style="display:none;" />
+            <input type="text" id="cve_articulo_ajuste" class="inputs_ajuste" style="display:none;" />
+            <input type="text" id="nombre_articulo_ajuste" class="inputs_ajuste" style="display:none;" />
+            <input type="text" id="tipo_articulo_ajuste" class="inputs_ajuste" style="display:none;" />
+            <input type="text" id="existencia_articulo_ajuste" class="inputs_ajuste" style="display:none;" />
+        </div>
+        <div class="col-md-2">
+            <br />
+            <input type="radio" name="modo_codigo" value="0" />
+            <label>Codigo QR</label>
+            <br />
+            <input type="radio" name="modo_codigo" value="1" />
+            <label>Codigo Barras</label>
+        </div>
+        <div class="col-md-1">
+            <br />
+            <button class="btn btn_beta_icon" onclick="AgregarArticuloCodigos();"><i class="fa fa-plus"></i></button>
+        </div>
+        <div class="col-md-3 text-right">
+            <button class="btn btn_beta" onclick="GenerarFormatosCodigosArticulos();">Imprimir códigos <i class="fa fa-print"></i></button>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <select id="id_tipo_articulo" class="form-control">
+                @{ Html.RenderAction("ConsultarTiposArticulosSelect", "CATALOGOS");}
+            </select>
+        </div>
+        <div class="col-md-2">
+            <button class="btn btn_beta" onclick="AgregarArticulosTiposCodigos();">Agregar articulos de la familia</button>
+            
+        </div>
+    </div>
+    <hr />
+    <h3 class="text-center">GENERAR CODIGOS</h3>
+    <div class="table-responsive" style="overflow:auto; overflow-x:hidden; height:600px; min-height:600px;">
+        <table class="table table-striped table-bordered">
+            <thead>
+                <tr class="bg-beta text-center">
+                    <th style="display:none;">ID</th>
+                    <th>Seleccionar</th>
+                    <th>Codigo</th>
+                    <th>Articulo</th>
+                    <th>Clasificación</th>
+                    <th>Quitar</th>
+                </tr>
+            </thead>
+            <tbody id="tbody_codigos">
+
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+@Scripts.Render("~/bundles_Inventario/js")
+<script type="text/javascript">
+    $("#clave_nombre").autocomplete({
+        source: function (request, response) {
+            $.ajax({
+                type: "POST",
+                async: false,
+                url: "../ALMACEN/ConsultarArticulosQuickView",
+                data: {
+                    clave_nombre: $("#clave_nombre").val(),
+                    id_tipo_articulos: 0
+                },
+                success: function (data) {
+                    var data2 = $.parseJSON(data);
+                    response($.map(data2, function (item) {
+                        return { label: item.nombre_articulo + " | " + item.clave, value: item.nombre_articulo + " | " + item.clave };
+                    }))
+                },
+                error: function (xhr, status, error) {
+                    alert(error);
+                }
+            });
+        }
+    });
+
+    $('#clave_nombre').keyup(function (event) {
+        if ($("#clave_nombre").val() != '') {
+            var clave_nombre = $("#clave_nombre").val().split('|')[1].trim();
+            ConsultarInformacionArticuloAjuste(clave_nombre, 1);
+        }
+        else {
+            $(".inputs_ajuste").val("");
+        }
+
+        if (event.keyCode === 13 || event.keyCode === 9) {
+            AgregarArticuloCodigos();
+        }
+    });
+
+    $("#ui-id-1").on('click', function (event) {
+        if ($("#clave_nombre").val() != '') {
+            var clave_nombre = $("#clave_nombre").val().split('|')[1].trim();
+            ConsultarInformacionArticuloAjuste(clave_nombre, 1);
+        }
+        else if (event.keyCode === 13 || event.keyCode === 9) {
+            iziToast.warning({
+                title: 'Aviso',
+                message: 'Ingresa el nombre o la clave de articulo para buscar.',
+            });
+        }
+        else {
+            $(".inputs_ajuste").val("");
+        }
+    });
+
+</script>
+

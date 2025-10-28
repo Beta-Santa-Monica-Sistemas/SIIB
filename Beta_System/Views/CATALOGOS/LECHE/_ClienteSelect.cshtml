@@ -1,0 +1,6 @@
+﻿@model IEnumerable<Beta_System.Models.C_envios_leche_clientes>
+
+@foreach (var item in Model)
+{
+    <option value="@item.id_envio_leche_cliente_ms">@item.nombre_comercial</option>
+}

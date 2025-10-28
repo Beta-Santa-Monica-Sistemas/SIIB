@@ -1,0 +1,6 @@
+﻿@model IEnumerable<Beta_System.Models.C_bascula_lineas_transportistas>
+
+@foreach (var item in Model)
+{
+    <option value="@item.id_bascula_linea_transp">@item.nombre_linea</option>
+}

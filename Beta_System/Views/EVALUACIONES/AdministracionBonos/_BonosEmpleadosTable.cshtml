@@ -1,0 +1,53 @@
+﻿@model IEnumerable<Beta_System.Models.BonosEmpleados>
+
+@if (Model.Count() > 0)
+{
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped" id="datatable_bonos_empleados">
+            <thead>
+                <tr class="bg-beta text-center">
+                    <th class="text-left">Empleado</th>
+                    <th>Puesto</th>
+                    <th>Monto del bono</th>
+                    <th>Fecha última actualización</th>
+                    <th>Usuario última actualización</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr class="text-center">
+                        <td class="text-left">@item.Empleados.Nombres @item.Empleados.Apellido_paterno @item.Empleados.Apellido_materno</td>
+                        <td>@item.Empleados.C_nomina_puestos.nombre_puesto</td>
+                        @if (item.Bonos != null)
+                        {
+                            <td>
+                                <input type="text" class="form-control bonos_empleados solo-numeros" value="@item.Bonos.monto_bono.Value.ToString("N2")" id="emp_@item.Empleados.Empleado_id"/>
+                            </td>
+                            <td>@string.Format(item.Bonos.fecha_ultima_actualizacion.Value.ToShortDateString(), "dd/MM/yyyy")</td>
+                            <td>@item.Bonos.C_usuarios_corporativo.C_empleados.nombres @item.Bonos.C_usuarios_corporativo.C_empleados.apellido_paterno</td>
+                        }
+                        else
+                        {
+                            <td>
+                                <input type="number" class="form-control bonos_empleados solo-numeros" placeholder="No asignado"  id="emp_@item.Empleados.Empleado_id"/>
+                            </td>
+                            <td>N/A</td>
+                            <td>Sin registro</td>
+                        }
+
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="text-right">
+        <button class="btn btn_beta" onclick="ActualizarBonosEmpleados();">Actualizar cambios</button>
+    </div>
+}
+
+else
+{
+    <h3 class="text-center text-danger">NO SE ENCONTRARON REGISTROS</h3>
+}
+

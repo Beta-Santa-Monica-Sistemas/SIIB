@@ -1,0 +1,61 @@
+﻿@model List<Beta_System.Models.Tracker.KardexIngredientes>
+
+@if (Model.Count() > 0)
+{
+    decimal saldo = 0;
+    <table class="table table-striped table-bordered small" id="datatable_kardex_detalle">
+        <thead>
+            <tr class="text-center bg-beta">
+                <th>Fecha</th>
+                <th>Hora</th>
+                <th>Tipo</th>
+                <th>Descripción</th>
+
+                <th>Compra</th>
+                <th>Transferencia</th>
+                <th>Ajuste</th>
+                <th>Consumo</th>
+                <th>Saldo</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.OrderBy(x => x.Fecha))
+            {
+                decimal consumo = item.Consumo;
+                decimal compra = item.Compra;
+                decimal trasnfer = item.Transferencia;
+
+                saldo = saldo + compra;
+                saldo = saldo - consumo;
+                saldo = saldo - trasnfer;
+
+                <tr class="text-right">
+                    <td class="text-center">@item.Fecha</td>
+
+                    <td class="text-center">@item.hra_entrada</td>
+
+                    <td class="text-center">@item.tipo</td>
+
+                    <td class="text-left">@item.concepto</td>
+
+                    <td>@compra.ToString("N2")</td>
+
+                    <td>@trasnfer.ToString("N2")</td>
+
+                    <td>0</td>
+
+                    <td>@consumo.ToString("N2")</td>
+
+                    <td>@saldo.ToString("N2")</td>
+
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <h4 class="text-center">No se encontró información</h4>
+}
+
+

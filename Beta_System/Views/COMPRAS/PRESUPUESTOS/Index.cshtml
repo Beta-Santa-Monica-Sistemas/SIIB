@@ -1,0 +1,76 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+    List<int> permisos = Session["PermisosModulo"] as List<int>;
+}
+
+
+<style>
+    .divEditable {
+        padding: 3px;
+    }
+</style>
+
+<div class="page_title">
+    <div class="counter_section">
+        <h1>Registro de presupuesto de compras</h1>
+    </div>
+</div>
+
+
+<div class=" column2 counter_section">
+    <div class="row">
+        <div class="col-md-3">
+            <strong>Año:</strong>
+            <select class="form-control" id="id_anio_presupuesto">
+                @{ Html.RenderAction("ConsultarAniosPresupuestoSelect", "COMPRAS"); }
+            </select>
+        </div>
+        <div class="col-md-3">
+            <strong>Cargo contable:</strong>
+            <select class="form-control" id="id_cargo_contable">
+                @{ Html.RenderAction("ConsultarCargosContables", "CATALOGOS");
+                }
+            </select>
+        </div>
+        <div class="col-md-3 text-left ml-3">
+            <strong>Tipo de vista:</strong>
+            <div class="row ml-3">
+                <input type="radio" name="tipo_vista_presupuestos" value="1" />
+                <strong class="mt-1 ml-2">Registro</strong>
+            </div>
+            <div class="row ml-3">
+                <input type="radio" name="tipo_vista_presupuestos" value="2" />
+                <strong class="mt-1 ml-2">Lectura</strong>
+            </div>
+        </div>
+
+        <div class="col-md-2">
+            <br />
+            @if (permisos.Contains(2013))
+            {<button class="btn btn_beta_icon" onclick="ConsultarPresupuestosCargo();"><i class="fa fa-search"></i></button>}
+        </div>
+    </div>
+
+    <div class="table-responsive" id="div_presupuestos">
+
+    </div>
+    <br />
+    @if (permisos.Contains(2014))
+    {
+        <button class="btn btn_beta" onclick="GuardarPresupuestos();">Guardar presupuestos</button>
+    }
+</div>
+
+@Scripts.Render("~/bundles_Presupuestos/js")
+
+
+<script>
+    $(window).on("load", function () {
+        const todos_option = $('<option>', { value: '0', text: 'Todos' });
+        $("#id_cargo_contable").prepend(todos_option);
+    });
+</script>
+
+

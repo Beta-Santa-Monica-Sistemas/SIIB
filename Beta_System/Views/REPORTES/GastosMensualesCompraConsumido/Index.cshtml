@@ -1,0 +1,136 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+}
+
+<div class="page_title">
+    <div class="counter_section">
+        <div class="row">
+            <div class="col-md-9">
+                <h1>Gastos mensuales - Compras cargo directo y consumo almacen</h1>
+            </div>
+            <div class="col-md-3 text-right">
+                <button class="btn btn_beta" onclick="DescargarExcelConsolidadoComprasDirectasCargoContable();"><i class="fa fa-download"></i> DESCARGAR CONSOLIDADO</button>
+            </div>
+        </div>
+        
+    </div>
+</div>
+
+<div class=" column2 counter_section">
+    <div class="row">
+        <div class="col-md-4">
+            <strong>Cargo contable:</strong>
+            <select class="form-control" id="id_cargo_contable">
+                @{ Html.RenderAction("CargosContablesSelect", "CATALOGOS", new { id_usuario = (int)Session["LoggedId"] }); }
+            </select>
+        </div>
+
+        <div class="col-md-2">
+            <strong>Año</strong>
+            <select class="form-control" id="id_anio">
+                @{ Html.RenderAction("ConsultarAniosPresupuestoSelect", "COMPRAS"); }
+            </select>
+        </div>
+        <div class="col-md-2">
+            <strong>Mes</strong>
+            <select class="form-control" id="id_mes">
+                @{ Html.RenderAction("ConsultarMesesSelet", "COMPRAS"); }
+            </select>
+        </div>
+
+        <div class="col-md-2 text-center">
+            <p class="text-center"><strong>Anual</strong></p>
+            <input type="checkbox" class="form-control" id="anual" style="height:25px;" />
+        </div>
+
+
+        <div class="col-md-2">
+            <br />
+            <button class="btn btn_beta_icon" onclick="ConsultarGastosMensualesCompraConsumo();"><i class="fa fa-search"></i></button>
+        </div>
+    </div>
+    <hr />
+    <div id="div_gastos_mensuales_compra_consumo"></div>
+
+</div>
+
+
+
+<!-- Modal DETALLE CONSUMO DE ALMACEN-->
+<div class="modal fade" id="m_consumo_almacen_detalle" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document" style="width: 95%; min-width: 95%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">CONSUMO ALMACEN</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="div_consumo_almacen_detalle" style="overflow:scroll; overflow-x:hidden; height:550px; min-height:550px;"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn_beta_danger" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal DETALLE COMPRAS DIRECTAS-->
+<div class="modal fade" id="m_compras_directas_detalle" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document" style="width: 95%; min-width: 95%; ">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">COMPRAS DIRECTAS</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="div_compras_directas_detalle" style="overflow:scroll; overflow-x:hidden; height:550px; min-height:550px;"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn_beta_danger" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal CONSOLIDADO DETALLE-->
+<div class="modal fade" id="m_consolidado_detalle" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document" style="width: 95%; min-width: 95%; ">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">CONSOLIDADO</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="div_consolidado_detalle" style="overflow:scroll; overflow-x:hidden; height:550px; min-height:550px;"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn_beta_danger" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+@Scripts.Render("~/bundles_ReportesCompras/js")
+
+<script type="text/javascript">
+    $(window).on("load", function () {
+    });
+</script>
+
+
+

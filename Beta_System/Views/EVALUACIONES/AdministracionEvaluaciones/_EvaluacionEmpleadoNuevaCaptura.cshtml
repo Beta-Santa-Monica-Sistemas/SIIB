@@ -1,0 +1,107 @@
+﻿@model List<Beta_System.Models.C_evaluaciones_conceptos_rubros>
+
+
+@if (Model.Count() > 0)
+{
+    var nombre = ViewBag.nombre;
+    var apellido_p = ViewBag.apellido_p;
+    var apellido_m = ViewBag.apellido_m;
+
+    var id_evaluacion_g = ViewBag.id_evaluacion_g;
+    var id_evaluacion_d_empleado = ViewBag.id_evaluacion_d_empleado;
+    var id_evaluacion_status = ViewBag.id_evaluacion_status;
+
+    string tipo_evaluacion = ViewBag.tipo_evaluacion;
+
+    <div class="row">
+        <div class="col-md-5 text-left">
+            <h2>@tipo_evaluacion</h2>
+        </div>
+        <div class="col-md-7 text-right">
+            <h3 class="porcentaje text-center" style="margin:2px;">@apellido_p @apellido_m @nombre <span id="calificacion_final_empleado"></span></h3>
+        </div>
+    </div>
+
+    <div style="overflow-x:hidden; overflow:auto; height:500px; min-height:500px;" id="div_scroll_evaluaciones">
+        @foreach (var item in Model.GroupBy(x => x.id_evaluacion_rubro))
+        {
+            var id_rubro = item.FirstOrDefault().id_evaluacion_rubro;
+
+            <h3 class="text-left bg-dark text-white p-2" style="margin:0px;">@item.FirstOrDefault().C_evaluaciones_rubros.nombre_rubro <span id="PorcentajeEquivalente_@id_rubro"></span></h3>
+            <div class="table-responsive">
+                <table class="table  table-bordered table-striped">
+                    <thead>
+                        <tr class="text-center bg-beta">
+                            <th style="width: 500px;"><h4 class="text-white">Concepto</h4></th>
+                            <th style="width: 200px;"><h4 class="text-white">Porcentaje máximo</h4></th>
+                            <th style="width: 200px;"><h4 class="text-white">Porcentaje</h4></th>
+                            <th style="width: 200px;"><h4 class="text-white">Calificación</h4></th>
+                            <th><h4 class="text-white">Comentarios</h4></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var concepto in item)
+                        {
+                            var id_concepto = concepto.id_evaluacion_concepto_rubro;
+
+                            <tr class="text-center">
+                                <td style="width: 500px;">@concepto.nombre_concepto</td>
+                                <td style="width: 200px;">
+                                    <strong class="porcentaje">@Convert.ToInt32(concepto.porcentaje)%</strong>
+                                    <label id="porcentaje_maximo_@id_concepto" style="display:none;">@Convert.ToInt32(concepto.porcentaje)</label>
+                                </td>
+
+                                <td style="width: 200px;">
+                                    <strong id="porcentaje_calificacion_@id_concepto" class="porcentaje porcentajes_@id_rubro">0%</strong>
+                                </td>
+                                <td style="width: 200px;">
+                                    <input type="number" class="form-control calificaciones_inputs calificaciones_@id_rubro" max="100"
+                                           id="calificacion_@id_concepto"
+                                           onkeyup="ValidarCalificacionMaxima(@id_concepto ,@Convert.ToInt32(concepto.porcentaje), @id_rubro)"
+                                           onchange="ValidarCalificacionMaxima(@id_concepto ,@Convert.ToInt32(concepto.porcentaje), @id_rubro)" />
+                                </td>
+                                <td>
+                                    <textarea rows="2" class="form-control" id="obs_@id_concepto"></textarea>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                    <tfoot>
+                        <tr class="text-center bg-blue-sky">
+                            <td></td>
+                            <td>
+                                <h4 class="text-white">Calificacion total:</h4>
+                            </td>
+                            <td style="width: 200px;">
+                                <h4 class="text-white calificaciones_finales" id="CalificacionFinal_@id_rubro" name="@Convert.ToInt32(item.FirstOrDefault().C_evaluaciones_rubros.porcentaje)"></h4>
+                            </td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        }
+        <hr />
+        <div class="col-md-6 text-center">
+            <strong class="btn bg-beta">Fortalezas:</strong>
+            <textarea rows="3" class="form-control" id="txt_fortalezas"></textarea>
+        </div>
+        <div class="col-md-6 text-center">
+            <strong class="btn bg-danger text-white">Áreas de oportunidad:</strong>
+            <textarea rows="3" class="form-control" id="txt_areasOportunidad"></textarea>
+        </div>
+        <br />
+    </div>
+    <hr />
+    <div class="text-left">
+        <button class="btn btn_beta" onclick="GuardarEvaluacionEmpleado(@id_evaluacion_d_empleado, @id_evaluacion_g, @id_evaluacion_status);"><i class="fa fa-check"></i> Guardar evaluación</button>
+    </div>
+}
+else
+{
+    <h3 class="text-center text-danger">No se encontraron conceptos para evaluar</h3>
+}
+
+
+

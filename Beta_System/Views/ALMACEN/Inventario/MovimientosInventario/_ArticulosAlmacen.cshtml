@@ -1,0 +1,77 @@
+﻿@model List<Beta_System.Models.CapturaInventarioDiferencias>
+
+<table class="table" id="datatable_articulos_cap_inv" style="width: 100%;">
+    <thead>
+        <tr class="bg-beta text-center">
+            <th>Clave</th>
+            <th>Articulo</th>
+            <th>Unidad</th>
+            <th>Existencia</th>
+            <th>Cantidad a capturar</th>
+            <th>Observaciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr class="text-center">
+                @*<td style="display:none;" class="orden_articulo">@item.Id_articulo</td>*@
+
+                <td class="orden_articulo" id="@item.Id_articulo">@item.Clave</td>
+                <td class="text-left">@item.Nombre_articulo+</td>
+                <td>@item.Unidad_medida</td>
+                <td>
+                    <label id="exist_@item.Id_articulo">@string.Format("{0:0.00}", Convert.ToDecimal(item.Cantidad_sistema))</label>
+                </td>
+                <td>
+                    @*@if (item.C_unidades_medidas.acepta_decimal == 1) { <div onkeypress="return isNumberOrDecimalKey(event,1)" contenteditable="true" class="articulo_cantidad_captura_mov divEditable" id="art_@item.Id_articulo">0</div> }
+                        else { <div  onkeypress="return isNumberOrDecimalKey(event,0)" contenteditable="true" class="articulo_cantidad_captura_mov divEditable" id="art_@item.Id_articulo">0</div>}*@
+                    
+                    @if (item.Acepta_decimales == 1)
+                    {  <input onkeypress="return isNumberOrDecimalKey(event,1)" class=" divEditable articulo_cantidad_captura_mov " id="art_@item.Id_articulo" /> }
+
+                    else
+                    {  <input onkeypress="return isNumberOrDecimalKey(event,0)" class=" divEditable articulo_cantidad_captura_mov orden_recibido" id="art_@item.Id_articulo" />}
+
+                </td>
+                <td>
+                    <input type="text" id="obs_@item.Id_articulo" class="form-control" />
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<script>
+    $(window).on("load", function () {
+        CaracteresControl();
+    });
+
+    function isNumberOrDecimalKey(evt, unidad) {
+        var charCode = (evt.which) ? evt.which : evt.keyCode;
+        //UNIDAD 1 DECIMAL
+        //UNIDAD 0 ENTERO
+        if (unidad == 1) {
+            // Allow only numbers and a single decimal point
+            if (charCode > 31 && (charCode < 48 || charCode > 57) && charCode !== 46) {
+                return false;
+            }
+
+            // Allow only one decimal point
+            var input = evt.target.value;
+            if (input.indexOf('.') !== -1 && charCode === 46) {
+                return false;
+            }
+
+            return true;
+        }
+        else {
+            // Allow only numbers and a single decimal point
+            if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+                return false;
+            }
+
+            return true;
+        }
+    }
+</script>

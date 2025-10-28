@@ -1,0 +1,287 @@
+﻿@model List<Beta_System.Models.C_alimentacion_dietas_d>
+
+@if (Model == null) {<h3 class="text-center text-danger">EL ESTATUS NO PERTENECE AL DE LA DIETA</h3> }
+
+else if (Model.Count() > 0)
+{
+    var dieta_g = Model.FirstOrDefault().C_alimentacion_dietas_g;
+    var valores_dieta = dieta_g.C_alimentacion_dietas_g_valores.Where(x => x.activo == true && x.id_dieta_g_valor_tipo == 2).FirstOrDefault();
+    int id_status = ViewBag.id_status;
+    decimal total_kilos_MS = 0;
+    foreach (var item in Model.Where(x => x.activo == true))
+    {
+        total_kilos_MS += Math.Round(item.kilos_MS.Value, 3, MidpointRounding.AwayFromZero);
+    }
+
+    <div class="row">
+        <div class="col-md-2">
+            <table class="table small text-left">
+                <tr>
+                    <td><strong>Establo</strong></td>
+                    <td>@dieta_g.C_establos.nombre_establo</td>
+                </tr>
+                <tr>
+                    <td><strong>Tipo</strong></td>
+                    <td>@dieta_g.C_alimentacion_dietas_grupos.C_alimentacion_dietas_grupos_tipos.nombre_grupo_tipo</td>
+                </tr>
+                <tr>
+                    <td><strong>Grupo</strong></td>
+                    <td>@dieta_g.C_alimentacion_dietas_grupos.nombre_grupo</td>
+                </tr>
+                <tr>
+                    <td><strong>Dieta</strong></td>
+                    <td>@dieta_g.nombre</td>
+                </tr>
+                <tr>
+                    <td><strong>Descripción</strong></td>
+                    <td>@dieta_g.descripcion</td>
+                </tr>
+                <tr>
+                    <td><strong>Inicio</strong></td>
+                    <td>@string.Format(dieta_g.fecha_inicio.Value.ToShortDateString(), "dd/MM/yyyyy")</td>
+                </tr>
+                <tr>
+                    <td><strong>Fin</strong></td>
+                    <td>@string.Format(dieta_g.fecha_fin.Value.ToShortDateString(), "dd/MM/yyyyy")</td>
+                </tr>
+                <tr>
+                    <td><strong>Estatus</strong></td>
+                    <td><button class="btn btn-sm" style="background-color:@dieta_g.C_alimentacion_dietas_status.color; color:white;">@dieta_g.C_alimentacion_dietas_status.nombre_status</button></td>
+                </tr>
+                @if (id_status == 1)
+                {
+                    <tr>
+                        <td><strong>Editar información</strong></td>
+                        <td class="text-center"><button class="btn btn-sm btn_beta_icon" 
+                                                        onclick="EditarInfoGeneralDieta(@dieta_g.id_dieta_g, '@dieta_g.descripcion', '@dieta_g.nombre', '@dieta_g.fecha_inicio.Value.ToShortDateString()', '@dieta_g.fecha_fin.Value.ToShortDateString()', @dieta_g.id_dieta_status);"><i class="fa fa-edit"></i></button></td>
+                    </tr>
+                }
+            </table>
+            <hr />
+            <div class="col-md-12 text-left">
+                <h3 style="margin:3px;" class="text-center">Comentarios</h3>
+                @foreach (var comentario in dieta_g.C_alimentacion_dietas_g_comentarios.Where(x => x.activo == true))
+                {
+                    <div class="row">
+                        <div class="col-md-6"><i>-@comentario.C_usuarios_corporativo.usuario</i></div>
+                        <div class="col-md-6">@string.Format(comentario.fecha_registro.Value.ToShortDateString(), "dd/MM/yyyy")</div>
+                    </div>
+                    <label>@comentario.comentario</label>
+                    <br />
+                }
+                @if (id_status != 4)
+                {
+                    <strong>Nuevo comentario:</strong>
+                    <textarea class="form-control" rows="10" id="comentario_edit_dieta"></textarea>
+                    <div class="text-center">
+                        <button class="btn btn_beta_warning" onclick="AgregarComentarioDieta(@dieta_g.id_dieta_g, @id_status);">Agregar comentario</button>
+                    </div>
+                }
+            </div>
+        </div>
+        <div class="col-md-8">
+            @if (id_status == 1)
+            {
+                <div class="table-responsive" style="overflow:auto; overflow-x:hidden; height: 650px; min-height: 650px;">
+                    <table class="table table-striped table-bordered small table-hover">
+                        <thead>
+                            <tr class="text-center bg-beta">
+                                <th><strong>Nuevo ingrediente</strong></th>
+                                <th colspan="9" class="text-right"><strong>Agregar ingrediente</strong></th>
+                            </tr>
+                            <tr class="text-center">
+                                <th style="display:none;" id="edit_id_alimento"></th>
+                                <th style="width:400px;" id="m_detalle_dieta_select">
+                                    <select class="form-control" id="edit_nombre_alimento" onchange="ConsultarPrecioAlimento(2); ConsultarUltimoMSAlimento(2);">
+                                        @{ Html.RenderAction("ConsultarArticulosBasculaTiposSelect", "CATALOGOS", new { tipo_ficha = 2 });}
+                                    </select>
+                                </th>
+                                <th>
+                                    <input type="number" class="form-control" id="edit_porc_ms" onkeyup="CalcularKgBH(2);" placeholder="% MS" />
+                                </th>
+                                <th>
+                                    <input type="number" class="form-control" id="edit_kg_ms" onkeyup="CalcularKgBH(2);" placeholder="Kg MS" />
+                                </th>
+                                <th>
+                                    <strong id="edit_kg_bh"></strong>
+                                </th>
+                                <th>
+                                    <strong id="edit_precio"></strong>
+                                </th>
+                                <th>
+                                    <strong id="edit_costo_bh"></strong>
+                                </th>
+                                <th colspan="3" class="text-center">
+                                    <button class="btn btn_beta_icon" onclick="AgregarNewIngredienteDietaEdit()"><i class="fa fa-plus"></i></button>
+                                </th>
+                            </tr>
+
+                            <tr class="bg-beta text-center">
+                                <th style="display:none;">ID</th>
+                                <th style="width:38%">Ingrediente</th>
+                                <th>% MS</th>
+                                <th>Kg MS</th>
+                                <th style="display:none;">Kg Original</th>
+                                <th>Kg BH</th>
+                                <th>Precio</th>
+                                <th>Costo BH</th>
+                                <th>MS Original</th>
+                                <th>Diferencia</th>
+                                <th>Eliminar</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbody_edit_dieta" class="text-center">
+                            @foreach (var item in Model.OrderBy(x => x.C_articulos_catalogo.nombre_articulo))
+                            {
+                                string color = "";
+                                if (item.kilos_MS != item.kilos_MS_base) { color = "#ffeb9c"; }
+
+                                decimal diferencia = (decimal)item.kilos_MS - (decimal)item.kilos_MS_base;
+                                <tr class="alimentos_dieta_edit" id="trAlimentoEdit_@item.id_articulo">
+                                    <td style="display:none;" id="idAlimentoEdit_@item.id_articulo">@item.id_articulo</td>
+                                    <td class="nombreAlimentoEdit text-left" id="nombreAlimentoEdit_@item.id_articulo">@item.C_articulos_catalogo.nombre_articulo</td>
+                                    <td>
+                                        <input class="form-control porcMsEdit input_valid_edit" type="number" value="@Convert.ToInt32(item.porcentaje_MS)" id="porcMsEdit_@item.id_articulo" onkeyup="CalcularKgBHEdit(@item.id_articulo);" onchange="CalcularKgBHEdit(@item.id_articulo);" onfocus="CalcularKgBHEdit(@item.id_articulo);" />
+                                    </td>
+                                    <td>
+                                        <input style="background-color: @color;" class="form-control kgMsEdit input_valid_edit" type="number" value="@item.kilos_MS.Value.ToString("N3")" id="kgMsEdit_@item.id_articulo" onkeyup="CalcularKgBHEdit(@item.id_articulo);" onchange="CalcularKgBHEdit(@item.id_articulo);" />
+                                    </td>
+                                    <td style="display:none;" class="kgMsOriginalEdit" id="kgMsOriginalEdit_@item.id_articulo">@Math.Round(item.kilos_MS.Value, 3, MidpointRounding.AwayFromZero).ToString()</td>
+                                    <td class="kgBhEdit" id="kgBhEdit_@item.id_articulo">@item.kilos_BH.Value.ToString("N3")</td>
+                                    <td class="precioEdit" id="precioEdit_@item.id_articulo">@item.precio.Value.ToString("N2")</td>
+                                    <td class="costoBhEdit" id="costoBhEdit_@item.id_articulo">@item.costo_BH.Value.ToString("N2")</td>
+                                    <td class="msOriginalEdit" id="msOriginalEdit_@item.id_articulo">@item.kilos_MS_base.Value.ToString("N3")</td>
+                                    @if (diferencia == 0) { <td class="diferenciaEdit" id="diferenciaEdit_@item.id_articulo"></td> }
+                                    else { <td class="diferenciaEdit" id="diferenciaEdit_@item.id_articulo">@diferencia.ToString("+#0.000;-#0.000;0.000")</td> }
+                                    <td>
+                                        <button class="btn btn-danger btn-sm" onclick="ElliminarIngredienteEditDieta(@item.id_articulo);"><i class="fa fa-remove"></i></button>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                        <tfoot>
+                            <tr class="text-center bg-beta">
+                                <td colspan="2" class="text-left"><strong>Total</strong></td>
+                                <td><strong id="total_kg_msEdit"></strong></td>
+                                <td><strong id="total_kg_bhEdit"></strong></td>
+                                <td></td>
+                                <td><strong id="total_costo_bhEdit"></strong></td>
+                                <td colspan="4"></td>
+                            </tr>
+                            <tr class="text-center bg-green">
+                                <td colspan="5" class="text-left"><strong>Costo Kg MS</strong></td>
+                                <td><strong id="total_costo_kg_bhEdit"></strong></td>
+                                <td colspan="4"></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                    <i class="fa fa-2x fa-square" aria-hidden="true" style="background-color: #ffeb9c; color:#ffeb9c;"></i><strong class="ml-1">Valor modificado de la dieta que se tomó como base</strong>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 text-center">
+                        <button class="btn btn_beta" onclick="ActualizarDieta(@dieta_g.id_dieta_g, @id_status);">Actualizar dieta</button>
+                    </div>
+                    <div class="col-md-6 text-center">
+                        <button class="btn btn_beta_warning" onclick="ActualizarStatusDieta(@dieta_g.id_dieta_g, 6);">Enviar a revisión</button>
+                    </div>
+                </div>
+
+                <script>
+                    try {
+                        $("#edit_nombre_alimento").select2({
+                            placeholder: 'Selecciona un ingrediente',
+                            dropdownParent: $('#m_detalle_dieta') 
+                        });
+                    }
+                    catch (ex) { }
+                </script>
+            }
+            else
+            {
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered  table-hover">
+                        <thead>
+                            <tr class="bg-beta text-center">
+                                <th style="width:38%;">Ingrediente</th>
+                                <th>% MS</th>
+                                <th>Kg MS</th>
+                                <th>Kg BH</th>
+                                <th>Precio</th>
+                                <th>Costo BH</th>
+                                <th>MS Original</th>
+                                <th>Diferencia</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbody_edit_dieta" class="text-center">
+                            @foreach (var item in Model.OrderBy(x => x.C_articulos_catalogo.nombre_articulo))
+                            {
+                                string color = "";
+                                decimal diferencia = (decimal)item.kilos_MS_base - (decimal)item.kilos_MS;
+                                if (item.kilos_MS != item.kilos_MS_base) { color = "#ffeb9c"; }
+                                <tr>
+                                    <td class="text-left">@item.C_articulos_catalogo.nombre_articulo</td>
+                                    <td>@item.porcentaje_MS.Value.ToString("N2")</td>
+                                    <td style="background-color: @color;">@item.kilos_MS.Value</td>
+                                    <td>@item.kilos_BH.Value.ToString("N3")</td>
+                                    <td>@item.precio.Value.ToString("N2")</td>
+                                    <td>@item.costo_BH.Value.ToString("N2")</td>
+                                    <td>@item.kilos_MS_base.Value.ToString("N3")</td>
+                                    @if (diferencia != 0)
+                                    {
+                                        <td>@diferencia.ToString("+#0.000;-#0.000;0.000")</td>
+                                    }
+                                    else
+                                    {
+                                        <td></td>
+                                    }
+                                </tr>
+                            }
+                            <tr class="text-center bg-beta">
+                                <td colspan="2" class="text-left"><strong>Total</strong></td>
+                                <td><strong>@total_kilos_MS.ToString("N2")</strong></td>
+                                <td><strong>@valores_dieta.total_kilos_BH.Value.ToString("N2")</strong></td>
+                                <td></td>
+                                <td><strong>@valores_dieta.total_costo_BH.Value.ToString("N2")</strong></td>
+                                <td colspan="3"></td>
+                            </tr>
+                            <tr class="text-center bg-green">
+                                <td colspan="4" class="text-left"><strong>Costo Kg MS</strong></td>
+                                <td><strong>@valores_dieta.total_costo_kilos_MS.Value.ToString("N2")</strong></td>
+                                <td colspan="4"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <i class="fa fa-2x fa-square" aria-hidden="true" style="background-color: #ffeb9c; color:#ffeb9c;"></i><strong class="ml-1">Valor modificado de la dieta que se tomó como base</strong>
+                </div><div class="row">
+                    @if (id_status == 2) { 
+                        <div class="col-md-6 text-center">
+                            <button class="btn btn_beta" onclick="ActualizarStatusDieta(@dieta_g.id_dieta_g, 3);">Autorizar dieta</button>
+                        </div>
+                        <div class="col-md-6 text-center">
+                            <button class="btn btn_beta_danger" onclick="ActualizarStatusDieta(@dieta_g.id_dieta_g, 1);">Rechazar</button>
+                        </div>
+                    }
+                    @if (id_status == 3) { 
+                        <div class="col-md-6 text-center">
+                            <button class="btn btn_beta" onclick="ActualizarStatusDieta(@dieta_g.id_dieta_g, 4);">Aplicar</button>
+                        </div>
+                    }
+
+                    @if (id_status == 6)
+                    {
+                        <div class="col-md-6 text-center">
+                            <button class="btn btn_beta_warning" onclick="ActualizarStatusDieta(@dieta_g.id_dieta_g, 2);">Enviar a autorización</button>
+                        </div>
+                    }
+                </div>
+            }
+
+        </div>
+        <div class="col-md-2">
+            @{ Html.RenderAction("ConsultarProyeccionDieta", "ALIMENTACION", new {id_dieta_g = dieta_g.id_dieta_g}); }
+        </div>
+    </div>
+
+}
+
+else { <h3 class="text-danger text-center">NO SE ENCONTRARON DATOS</h3>}

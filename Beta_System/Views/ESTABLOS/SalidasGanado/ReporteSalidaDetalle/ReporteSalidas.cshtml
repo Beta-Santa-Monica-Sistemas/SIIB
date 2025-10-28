@@ -1,0 +1,92 @@
+﻿
+@{
+    ViewBag.Title = "ReporteSalidas";
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+}
+
+
+<div class="row column2 counter_section">
+    <h1>Reporte Salidas de Ganado Detalle</h1>
+
+    <div class="row">
+        <div class="col-md-3">
+            <strong>ESTABLO</strong>
+            <select class="form-control" id="id_establo">
+                <option value="0">TODOS</option>
+                @{ Html.RenderAction("ConsultarEstablosSelect", "SALIDASGANADO"); }
+            </select>
+        </div>
+        <div class="col-md-3">
+            <strong>FECHA INICIO</strong>
+            <input type="date" value="@DateTime.Now.ToShortDateString()" class="form-control" id="fecha_inicio" />
+        </div>
+        <div class="col-md-3">
+            <strong>FECHA FIN</strong>
+            <input type="date" value="@DateTime.Now.ToShortDateString()" class="form-control" id="fecha_fin" />
+        </div>
+        <div class="col-md-3">
+            <br />
+            <button class="btn btn_beta_icon" onclick="ConsultarSalidasEstablo();"><i class="fa fa-search"></i></button>
+        </div>
+    </div>
+    <br />
+    <div class="table-responsive" id="div_tabla_salidas">
+
+    </div>
+</div>
+
+
+
+<script>
+
+
+    function ConsultarSalidasEstablo() {
+        var fecha_inicio = $("#fecha_inicio").val();
+        var fecha_fin = $("#fecha_fin").val();
+        var id_establo = $("#id_establo").val();
+
+        $.ajax({
+            url: "../SALIDASGANADO/ConsultarSalidasEstablo",
+            async: false,
+            type: "POST",
+            data: {
+                id_establo: id_establo,
+                fecha_inicio: fecha_inicio,
+                fecha_fin: fecha_fin
+            },
+            success: function (result) {
+                try {
+                    $("#tabla_salidas").dataTable().fnDestroy();
+                } catch (e) { }
+                $("#div_tabla_salidas").html(result);
+                $('#tabla_salidas').DataTable({
+                    keys: false,
+                    select: true,
+                    ordering: true,
+                    paging: false,
+                    dom: "Bfrtip",
+                    buttons: [{
+                        extend: "copy",
+                        className: "btn-sm",
+                        columns: ':visible'
+                    }, {
+                        extend: "csv",
+                        className: "btn-sm"
+                    }, {
+                        extend: "excel",
+                        className: "btn-sm"
+                    }, {
+                        extend: "pdf",
+                        className: "btn-sm"
+                    }, {
+                        extend: "print",
+                        className: "btn-sm"
+                    }],
+                    responsive: !0
+                });
+
+            }
+        });
+    }
+
+</script>

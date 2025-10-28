@@ -1,0 +1,114 @@
+﻿@model IEnumerable<Beta_System.Models.C_nomina_inasistencias>
+@if (Model != null)
+{
+
+    <div class="" id="heading_header">
+        <div class="w-100 collapsed p-2" style="border: 1px solid black; background-color: black;">
+            <div class="row">
+                <div class="col-md-5 text-center">
+                    <h3 style="color: white;"><strong>EMPLEADO</strong></h3>
+                </div>
+                <div class="col-md-2 text-center">
+                    <h3 style="color: white;"><strong>PUESTO</strong></h3>
+                </div>
+                <div class="col-md-2 text-center">
+                    <h3 style="color: white;"><strong>DEPARTAMENTO</strong></h3>
+                </div>
+                <div class="col-md-2 text-center">
+                    <h3 style="color: white;"><strong>TOTAL DE FALTAS</strong></h3>
+                </div>
+                <div class="col-md-1 text-center">
+                    <h3 style="color: white;">Ver</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+    foreach (var items in Model.GroupBy(x => x.Empleado_id).Select(g => g.First()))
+    {
+        <div class="">
+            <div class="" id="heading_@items.Empleado_id">
+                <div class="w-100 collapsed" style="border: 1px solid black; background-color: rgb(236, 244, 251);">
+                    <div class="row">
+                        <div class="col-md-5 text-center">
+                            <br />
+                            <strong>@items.C_nomina_empleados.Nombres @items.C_nomina_empleados.Apellido_paterno @items.C_nomina_empleados.Apellido_paterno</strong>
+                        </div>
+                        <div class="col-md-2 text-center">
+                            <br />
+                            <strong>@items.C_nomina_empleados.C_nomina_puestos.nombre_puesto</strong>
+                        </div>
+                        <div class="col-md-2 text-center">
+                            <br />
+                            <strong>@items.C_nomina_empleados.C_nomina_departamentos.nombre_departamento</strong>
+                        </div>
+                        <div class="col-md-2 text-center">
+                            <br />
+                            <strong>@Model.Where(x => x.Empleado_id == items.Empleado_id).Count()</strong>
+                        </div>
+                        <div class="col-md-1 text-center">
+                            <button class="btn btn_beta_icon" data-toggle="collapse" data-target="#collapse_@items.Empleado_id" aria-expanded="false" aria-controls="collapse_@items.Empleado_id">
+                                <i class="fa fa-bars"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <script>
+    try {
+        $("#datatable_@items.Empleado_id").dataTable().fnDestroy();
+    } catch (e) { }
+            </script>
+
+            <div id="collapse_@items.Empleado_id" class="collapse" aria-labelledby="heading_@items.Empleado_id" data-parent="#accordionSolicitudes">
+                <div class="" style="border: 1px solid black; background-color: rgb(236, 244, 251);">
+                    <div class="" style="border: 1px solid black; background-color: rgb(236, 244, 251);">
+                        <div class="col-md-12">
+                            <table class="table table-striped table-bordered" id="datatable_@items.Empleado_id">
+                                <thead>
+                                    <tr class="bg-beta text-center">
+                                        <th>Fecha</th>
+                                        <th>Usuario registró</th>
+                                        <th>Observaciónes</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model.Where(x => x.Empleado_id == items.Empleado_id))
+                                    {
+                                        <tr class="text-center">
+                                            <td class="dias_inasistencia_asignados">@String.Format(@item.fecha_inasistencia.Value.ToShortDateString(), "dd/mm/aaaa")</td>
+                                            <td>@item.C_usuarios_corporativo.C_empleados.nombres @item.C_usuarios_corporativo.C_empleados.apellido_paterno @item.C_usuarios_corporativo.C_empleados.apellido_materno</td>
+                                            <td>@item.observaciones</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <script>
+    $('#datatable_@items.Empleado_id').DataTable({
+        keys: false,
+        ordering: false,
+        paging: true,
+        select: true,
+        dom: "Bfrtip",
+        scrollCollapse: false,
+        buttons: [{}],
+        responsive: !0,
+        pagingType: 'simple_numbers'
+    });
+            </script>
+
+
+        </div>
+    }
+}
+else
+{
+    <div class="col-md-12 text-center">
+        <h1 style="color:red">ES NECESARIO ASIGNAR FALTAS AL EMPLEADO</h1>
+        <h2 style="color:red">(El empleado no cuenta con faltas)</h2>
+    </div>
+}

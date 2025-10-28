@@ -1,0 +1,116 @@
+﻿@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200&display=swap');
+
+.d-flex {
+    display: inline !important;
+}
+:root {
+    --dark: #241C1C;
+    --dark-x: #1E2126;
+    --light: #FFFFFF;
+    --label: #F5F4F2;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 300;
+    color: var(--dark);
+}
+
+.bg-dark {
+    background-color: var(--dark) !important;
+}
+
+h1 {
+    font-weight: 600;
+}
+
+.form-control, btn {
+    background-color: var(--label);
+    border: none;
+    border-radius: 15px;
+    min-height: 3.125rem;
+    line-height: initial;
+}
+
+.form-label {
+    font-weight: bold;
+}
+
+.btn {
+    background-color: var(--dark);
+    border-radius: 15px;
+}
+
+#carouselExampleCaptions {
+    margin: 0;
+    min-height: 100%;
+    height: 100%;
+}
+
+.carousel-inner {
+    height: 100%;
+    min-height: 100%;
+}
+
+.carousel-item {
+    height: 100%;
+    min-height: 100%;
+}
+
+    .carousel-item > .carousel-inner {
+        height: 100%;
+        min-height: 100%;
+    }
+
+        .carousel-item > .carousel-inner > img {
+            height: 100%;
+            min-height: 100%;
+        }
+
+.img_logo {
+    z-index: 1000;
+    width: 38vh;
+    height: 13.5vh;
+    margin-right: 2vh;
+    margin-top: 20vh;
+}
+
+.img-1 {
+    background-image: url(../img_layout/beta_03.jpeg);
+   
+    background-size: cover;
+    background-position: center;
+}
+
+.img-2 {
+    background-image: url(../img_layout/siib1.jpg);
+    background-size: cover;
+    background-position: center;
+}
+
+
+@media (min-width:300px) {
+    #carouselExampleCaptions {
+        display: none;
+    }
+}
+@media (min-width: 400px) {
+    #carouselExampleCaptions{
+        display:none;
+    }
+}
+@media (min-width: 1200px) {
+    #carouselExampleCaptions {
+        display: inline;
+    }
+}
+@media (min-width: 900px) {
+    #carouselExampleCaptions {
+        display: inline;
+    }
+}
+@media (min-width: 700px) {
+    #carouselExampleCaptions {
+        display: inline;
+    }
+}

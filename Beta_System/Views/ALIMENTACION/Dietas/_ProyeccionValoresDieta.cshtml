@@ -1,0 +1,68 @@
+﻿@model List<Beta_System.Models.C_alimentacion_dietas_g_valores>
+
+@if (Model == null)
+{
+    <h3 class="text-center text-danger">OCURRIÓ UN PROBLEMA AL CONSULTAR LA INFORMACIÓN</h3>
+}
+else if (Model.Count() > 0)
+{
+    var dieta_g = Model.FirstOrDefault().C_alimentacion_dietas_g;
+    string[] nombres = { "Base","Actual","Nueva","Diferencia" };
+
+    <div style="background-color: #F5F5F5; padding:10px; border-radius: 0.2rem;">
+        @if (dieta_g.id_dieta_g_copia != null)
+        {
+            <label>Dieta original: <strong>@dieta_g.C_alimentacion_dietas_g2.nombre</strong></label>
+            <br />
+        }
+        <label class="small">Descripción: <strong>@dieta_g.descripcion</strong></label>
+
+        <table class="table table-sm table-hover small">
+            <thead>
+                <tr class="bg-green text-center">
+                    <th></th>
+                    <th>Kg BH</th>
+                    <th>Kg MS</th>
+                    <th>Costo BH</th>
+                    <th>Costo Kg MS</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var (item, index) in Model.Select((valor, i) => (valor,i)))
+                {
+                    <tr>
+                        <td>@nombres[index]</td>
+                        <th>@Math.Round(item.total_kilos_BH.Value, 3).ToString("N2")</th>
+                        <th>@Math.Round(item.total_kilos_MS.Value, 3).ToString("N2")</th>
+                        <th>@Math.Round(item.total_costo_BH.Value, 2).ToString("N2")</th>
+                        <th>@Math.Round(item.total_costo_kilos_MS.Value, 2).ToString("N2")</th>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <table class="table table-sm small">
+            <tr>
+                <td>Base</td>
+                <td>Valores de la dieta original que fue tomada para esta</td>
+            </tr>
+            <tr>
+                <td>Actual</td>
+                <td>Precios actualizados de la dieta base</td>
+            </tr>
+            <tr>
+                <td>Nueva</td>
+                <td>Dieta nueva propuesta</td>
+            </tr>
+            <tr>
+                <td>Diferencia</td>
+                <td>Diferencia entre la ración nueva y actual</td>
+            </tr>
+        </table>
+    </div>
+
+}
+else
+{
+    <h3 class="text-center text-danger">NO SE ENCONTRARON DATOS</h3>
+}
+

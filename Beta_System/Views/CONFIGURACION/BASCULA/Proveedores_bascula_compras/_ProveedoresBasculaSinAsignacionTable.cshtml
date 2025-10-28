@@ -1,0 +1,28 @@
+﻿@model List<Beta_System.Models.C_bascula_proveedores>
+
+@if (Model.Count() > 0)
+{
+    <table class="table table-striped table-bordered" id="datatable_proveedores_bascula">
+        <thead>
+            <tr class="bg-beta text-center">
+                <th>Seleccionar</th>
+                <th>Proveedor</th>
+                <th>Descripción</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr class="text-center">
+                    <td>
+                        <input type="radio" name="id_proveedor_bascula_asociacion" value="@item.id_bascula_proveedor" class="form-control" style="height:25px;" />
+                    </td>
+                    <td>@item.clave_prov</td>
+                    <td><strong>@item.nombre_prov</strong></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+

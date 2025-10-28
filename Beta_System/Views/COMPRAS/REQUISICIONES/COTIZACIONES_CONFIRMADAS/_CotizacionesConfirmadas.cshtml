@@ -1,0 +1,133 @@
+﻿@model IEnumerable<Beta_System.Models.C_compras_cotizaciones_requisiciones>
+
+@if (Model == null)
+{
+    <h3></h3>
+}
+else if (Model.Count() > 0)
+{
+    var requi = Model.FirstOrDefault().C_compras_requi_g;
+
+    var firma = ViewBag.firmas;
+    var monto = ViewBag.monto_usuario;
+
+    <div class="modal-header">
+        <h2 class="modal-title" id="m_cotizaciones_confirmadasLabel">@requi.concepto</h2>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        @{ Html.RenderAction("ConsultarInformacionRequisicionHeader", "REQUISICIONES", new { id_requisicion = requi.id_requisicion_articulo_g }); }
+
+        <div class="row">
+            <div class="col-md-8">
+                <h2 class="text-center">Cotizaciones confirmadas</h2>
+                <div class="table-responsive" style="min-height: 350px; height:350px; overflow:scroll; overflow-x:hidden;">
+                    <table class="table table-sm table-condensed small table-bordered table-striped" id="datatable_cotizaciones_confirmadas">
+                        <thead>
+                            <tr class="bg-beta text-center">
+                                <th>Agrupar</th>
+                                <th>Clave articulo</th>
+                                <th>Descripción</th>
+                                <th>Proveedor</th>
+                                <th>Precio unitario</th>
+                                <th>Descuento</th>
+                                <th>Cantidad cotizada</th>
+                                <th>Días de entrega</th>
+                                <th>Fecha de confirmación</th>
+                                <th>Confirmado por</th>
+                                <th>Eliminar confirmación</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.OrderBy(x => x.C_compras_cotizaciones_articulos.C_compras_proveedores.razon_social).OrderBy(x => x.C_compras_cotizaciones_articulos.C_compras_proveedores.razon_social))
+                            {
+                                var cotizacion = item.C_compras_cotizaciones_articulos;
+                                var importe = item.cantidad_surtir * cotizacion.precio_final;
+
+                                <tr class="text-center">
+                                    <td>
+                                        <input type="checkbox" class="form-control check_agrupar" style="height: 30px;" id="cotizacion_@item.id_cotizacion_requisicion" @*onchange="SeleccionarCorreoProveedor(@item.id_cotizacion_requisicion);"*@ />
+                                    </td>
+
+                                    <td>@item.C_articulos_catalogo.clave</td>
+                                    <td>@item.C_articulos_catalogo.nombre_articulo</td>
+
+                                    <td>
+                                        <strong>@cotizacion.C_compras_proveedores.razon_social</strong><br />
+                                        <label id="correo_prov_@item.id_cotizacion_requisicion" style="display:none;">@cotizacion.C_compras_proveedores.contacto_correo_1</label>
+                                    </td>
+
+                                    <td><strong>$@cotizacion.precio_unitario.Value.ToString("N6")</strong>
+                                        <strong style="display:none;" id="importe_@item.id_cotizacion_requisicion">@importe</strong>
+                                        </td>
+                                    <td>@cotizacion.porcentaje_descuento%</td>
+                                    <td>@item.cantidad_surtir</td>
+                                    <td>@item.dias_entrega</td>
+                                    <td>@String.Format(item.fecha_confirmacion.Value.ToShortDateString(), "dd/mm/aaaa")</td>
+                                    <td>
+                                        <strong>@item.C_usuarios_corporativo1.usuario</strong>
+                                        <br />
+                                        <label>@item.C_usuarios_corporativo1.C_empleados.nombres @item.C_usuarios_corporativo1.C_empleados.apellido_paterno</label>
+                                    </td>
+                                    <td>
+                                        <button class="btn btn_beta_danger" onclick="EliminarCotizacionConfirmada(@item.id_cotizacion_requisicion, @item.id_requisicion_articulo_g);"><i class="fa fa-remove" onclick=""></i></button>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <div class="text-right"><strong id="importe_total_solicitud" class="text_beta">Importe total: $0.000000</strong></div>
+                <div class="row" id="div_form_solicitud_compra">
+                    <div class="col-md-3">
+                        <strong>Nombre de la solicitud:</strong>
+                        <input type="text" placeholder="Ingrese un nombre identificador" class="form-control" id="nombre_solicitud" />
+                    </div>
+                    <div class="col-md-3">
+                        <strong>Correo destino del proveedor: </strong>
+                        <input type="email" class="form-control" id="correo_proveedor_solicitud" />
+                    </div>
+                    <div class="col-md-3">
+                        <strong>Ubicación de entrega:</strong>
+                        <select class="form-control" id="ubicacion_entrega_solicitud" onchange="ConsultarLugaresEntregaString();">
+                            <option value="0">Ninguno</option>
+                            @{ Html.RenderAction("ConsultarUbicacionesEntrega", "CATALOGOS"); }
+                        </select>
+                        <div id="div_lugares_recepcion_ubicacion" class="mt-2 text_beta">
+                        </div>
+                    </div>
+                    <div class="md-2">
+                        <br />
+                        <button type="button" class="btn btn_beta" onclick="GeneracionSolicitudCompra(@requi.id_requisicion_articulo_g);">Generar solicitud de compra</button>
+                    </div>
+                </div>
+                <hr />
+            </div>
+            <div class="col-md-4">
+                <h2 class="text-center">Solicitudes de compra por autorizar</h2>
+                <div id="div_solicitudes_compra_generadas" class="table-responsive" style="min-height: 350px; height:350px; overflow:scroll; overflow-x:hidden;">
+                </div>
+            </div>
+        </div>
+        <div class="text-right">
+            <button type="button" class="btn btn_beta_danger" data-dismiss="modal" id="btn_close_form_solicitud_compra">Regresar</button>
+        </div>
+    </div>
+}
+
+else
+{
+    <div class="modal-header">
+        <h2 class="modal-title" id="m_cotizaciones_confirmadasLabel"></h2>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+
+        </div>
+    </div>
+}

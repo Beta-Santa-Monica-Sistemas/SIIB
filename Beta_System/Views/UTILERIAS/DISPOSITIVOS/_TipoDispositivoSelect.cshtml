@@ -1,0 +1,6 @@
+﻿@model IEnumerable<Beta_System.Models.C_dispositivos_tipos>
+
+@foreach (var item in Model)
+{
+    <option value="@item.id_dispositivo_tipo">@item.tipo_dispositivo</option>
+}

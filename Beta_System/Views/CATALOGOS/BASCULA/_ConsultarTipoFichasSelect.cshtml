@@ -1,0 +1,7 @@
+﻿
+@model IEnumerable<Beta_System.Models.C_bascula_fichas_tipos>
+
+@foreach (var item in Model)
+{
+    <option value="@item.id_ficha_tipo">@item.tipo_ficha</option>
+}

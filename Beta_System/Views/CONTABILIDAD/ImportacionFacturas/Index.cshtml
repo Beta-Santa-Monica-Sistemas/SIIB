@@ -1,0 +1,195 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+}
+
+<div class="page_title">
+    <div class="counter_section">
+        <div class="row">
+            <div class="col-md-8">
+                <h1>Importación de facturas</h1>
+            </div>
+            <div class="col-md-4 text-right">
+                <h2 class="text_beta" id="cambio_dia"></h2>
+                <label style="display:none;" id="tipo_cargo"></label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="nav nav-tabs">
+                    <li class="active"> <a data-toggle="tab" href="#importar_facturas_tab" id="consultar_requi">Importar facturas<i class="fa fa-upload fa-2x ml-2"></i></a></li>
+                    <li class="active"> <a data-toggle="tab" href="#historial_importacion_tab">Historial de importaciones<i class="fa fa-book fa-2x ml-2"></i></a></li>
+                    <li class="active"> <a data-toggle="tab" href="#auditoria_valores_tab">Auditoria de valores<i class="fa fa-list fa-2x ml-2"></i></a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<div class="column2 counter_section">
+    <div class="tab-content">
+        <div id="importar_facturas_tab" class="tab-pane fade in active show">
+            <h3 class="text-center"><strong>IMPORTAR FACTURAS</strong></h3>
+            <div class="row">
+                <div class="col-md-3">
+                    <strong>Fecha inicio</strong>
+                    <input type="date" class="form-control" id="fecha_incio_importacion" />
+                </div>
+                <div class="col-md-3">
+                    <strong>Fecha fin</strong>
+                    <input type="date" class="form-control" id="fecha_fin_importacion" />
+                </div>
+                <div class="col-md-3">
+                    <br />
+                    <button class="btn btn_beta_icon" onclick="ConsultarFacturasPendientesImportacion();"><i class="fa fa-search"></i></button>
+                </div>
+            </div>
+            <br />
+            <div id="div_facturas_pendientes_importacion">
+
+            </div>
+        </div>
+
+        <div id="historial_importacion_tab" class="tab-pane">
+            <h3 class="text-center"><strong>HISTORIAL DE IMPORTACIONES</strong></h3>
+            <div class="row">
+                <div class="col-md-3">
+                    <strong>Fecha inicio</strong>
+                    <input type="date" class="form-control" id="fecha_incio_historial" />
+                </div>
+                <div class="col-md-3">
+                    <strong>Fecha fin</strong>
+                    <input type="date" class="form-control" id="fecha_fin_historial" />
+                </div>
+                <div class="col-md-3">
+                    <br />
+                    <button class="btn btn_beta_icon" onclick="ConsultarImportacionHistorial();"><i class="fa fa-search"></i></button>
+                </div>
+            </div>
+            <br />
+            <div id="div_historial_importacion" class="table-responsive">
+
+            </div>
+        </div>
+
+        <div id="auditoria_valores_tab" class="tab-pane">
+            <button class="btn btn_beta" onclick="UnirficarDoctosCOFacturasSIIB();" style="position:absolute; right:3%;"><i class="fa fa-refresh"></i> Sincronizar polizas de contabilidad</button>
+            <h3 class="text-center"><strong>AUDITORIA DE VALORES DE FACTURAS IMPORTADAS</strong></h3>
+            <div class="row">
+                <div class="col-md-2">
+                    <strong>Fecha inicio</strong>
+                    <input type="date" class="form-control" id="fecha_incio_auditoria_valores" />
+                </div>
+                <div class="col-md-2">
+                    <strong>Fecha fin</strong>
+                    <input type="date" class="form-control" id="fecha_fin_auditoria_valores" />
+                </div>
+
+                <div class="col-md-3 text-center">
+                    <strong>Filtrar por:</strong>
+                    <div class="row mt-1">
+                        <div class="col-md-3 text-center">
+                            <input type="checkbox" name="tipo_impuesto" class="form-control" style="height: 25px;" id="check_iva" /><strong>IVA</strong>
+                        </div>
+                        <div class="col-md-3 text-center">
+                            <input type="checkbox" name="tipo_impuesto" class="form-control" style="height: 25px;" id="check_iva_ret" /><strong>IVA RET.</strong>
+                        </div>
+                        <div class="col-md-3">
+                            <input type="checkbox" name="tipo_impuesto" class="form-control" style="height: 25px;" id="check_isr" /><strong>ISR</strong>
+                        </div>
+                        <div class="col-md-3">
+                            <input type="checkbox" name="tipo_impuesto" class="form-control" style="height: 25px;" id="check_ieps" /><strong>IEPS</strong>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <strong>Proveedor</strong>
+                    <select class="form-control" id="id_proveedor_valores">
+                        <option value="0">Todos</option>
+                        @{ Html.RenderAction("ConsultarProveedoresSelect", "CATALOGOS"); }
+                    </select>
+                </div>
+                <div class="col-md-1">
+                    <br />
+                    <button class="btn btn_beta_icon" onclick="ConsultarAuditoriaFacturasValoresImportados();"><i class="fa fa-search"></i></button>
+                </div>
+            </div>
+            <br />
+            <div id="div_auditoria_valores" class="table-responsive" style="min-height:500px; height:500px; overflow: auto;">
+
+            </div>
+        </div>
+
+
+    </div>
+
+</div>
+
+
+
+<!-- MODAL DETALLE IMPORTACION -->
+<div class="modal fade" id="m_detalle_importacion" tabindex="-1" role="dialog" aria-labelledby="m_detalle_importacionTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document" style="min-width:95%; width:95%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="m_detalle_importacionTitle">Detalle de importación</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="div_detalle_importacion">
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn_beta_danger" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@Scripts.Render("~/bundles_ImportacionFacturas/js")
+<script>
+    $(window).on("load", function () {
+        $('input[type="date"]').val(yesterday);
+        $("#fecha_incio_historial").val(today);
+        $("#fecha_fin_historial").val(today);
+        ConsultarCambioMoneda();
+
+        try {
+            $("#id_proveedor_valores").select2({
+                placeholder: 'Selecciona un proveedor'
+            });
+        }
+        catch (ex) {
+
+        }
+    });
+
+
+    function UnirficarDoctosCOFacturasSIIB() {
+        jsShowWindowLoad();
+        $.ajax({
+            url: "../CONTABILIDAD/UnirficarDoctosCOFacturasSIIB",
+            async: true,
+            type: "GET",
+            timeout: 90000,
+            data: {},
+            success: function (result) {
+                jsRemoveWindowLoad();
+                iziToast.success({
+                    title: "SE SINCRONIZARON: " + result + " POLIZAS",
+                    message: '',
+                });
+            }
+        });
+    }
+</script>
+
+
+

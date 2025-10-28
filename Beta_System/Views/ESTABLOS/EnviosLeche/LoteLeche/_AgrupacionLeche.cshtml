@@ -1,0 +1,109 @@
+﻿@model IEnumerable<Beta_System.Models.C_envios_leche_d_fichas>
+
+<div class="row">
+    <div class="col-md-12 p-4">
+        <div class="col-md-12">
+            <div class="col-md-4">
+                <strong>Cliente:</strong>
+                <select class="form-control" id="select_cliente_destino_agrupacion">
+                    <option value="0">TODOS</option>
+                    @{ Html.RenderAction("ConsultarProveedoresTipoBasculaSelect", "CATALOGOS", new { tipo_ficha = 1 }); };
+                </select>
+            </div>
+            <div class="col-md-1 p-3">
+                <button class="btn btn_beta_icon" onclick="ConsultaEnviosLecheAgrupacion(1);"><i class="fa fa-search"></i></button>
+            </div>
+            <div class="col-md-7">
+                <div class="col-md-4 text-center p-3">
+                    <h4 style="margin:0px;" class="text_beta">LITROS TOTALES</h4>
+                    <strong id="litro_total_lote"></strong>
+                </div>
+                <div class="col-md-4 text-center p-3">
+                    <h4 style="margin:0px;" class="text_beta">IMPORTE TOTAL LECHE</h4>
+                    <strong id="importe_total_leche"></strong>
+                </div>
+                <div class="col-md-4 text-center p-3">
+                    <h4 style="margin:0px;" class="text_beta">IMPORTE TOTAL FLETE</h4>
+                    <strong style="font-size:14px" id="importe_total_flete"></strong>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12"><hr /></div>
+
+
+    @if (Model.Count() > 0)
+    {
+        <div class="col-md-12">
+            <table class="table table-striped table-bordered text-center" id="datatable_agrupacion_leche" style="width:100%;">
+                <thead>
+                    <tr class="bg-beta text-center">
+                        <th>
+                            <strong>Seleccione</strong><br />
+                            <input id="check_general_lote" type="checkbox" class="form-control" style="width: 18px; height: 18px;" onclick="AgrupacionGeneral();">
+                        </th>
+                        <th>Establo</th>
+                        <th>Fecha</th>
+                        <th>Producto</th>
+                        <th>Cliente</th>
+                        <th>Destino</th>
+                        <th>Folio</th>
+                        <th>Lts confirmados</th>
+                        <th>Lts bascula</th>
+                        <th>Precio leche</th>
+                        <th>Precio flete</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.GroupBy(x => x.id_envio_leche_g).Distinct())
+                    {
+                        <tr>
+                            <td>
+                                <input type="checkbox" class="form-control check_lote check_@item.FirstOrDefault().C_bascula_fichas.id_envio_leche_cliente_ms"
+                                       id="check_lecha_@item.FirstOrDefault().C_envios_leche_g.C_envios_leche_confirmacion.Where(x=>x.activo == true).FirstOrDefault().id_envio_leche_confirmacion"
+                                       style="width: 25px; height: 25px;"
+                                       onclick="ClienteAgrupacionLote(2,@item.FirstOrDefault().C_envios_leche_g.C_envios_leche_confirmacion.Where(x=>x.activo == true).FirstOrDefault().id_envio_leche_confirmacion)">
+                            </td>
+                            <td>@item.FirstOrDefault().C_envios_leche_g.C_establos.nombre_establo</td>
+                            <td>@String.Format(item.FirstOrDefault().C_envios_leche_g.C_envios_leche_confirmacion.Where(x => x.activo == true).FirstOrDefault().fecha_recepcion.Value.ToShortDateString(), "dd/mm/aaaa")</td>
+                            <td>@item.FirstOrDefault().C_envios_leche_g.C_articulos_catalogo.nombre_articulo</td>
+                            <td>@item.FirstOrDefault().C_envios_leche_g.C_envios_leche_clientes.nombre_comercial</td>
+                            <td>@item.FirstOrDefault().C_envios_leche_g.C_envios_leche_destinos.nombre_destino</td>
+                            <td>@item.FirstOrDefault().C_envios_leche_g.folio</td>
+                            <td id="litros_confirmados_@item.FirstOrDefault().C_envios_leche_g.C_envios_leche_confirmacion.Where(x=>x.activo == true).FirstOrDefault().id_envio_leche_confirmacion">@item.Sum(x => x.litros_confirmacion).Value.ToString("N3")</td>
+                            <td>@item.Sum(x => x.litros_ficha).Value.ToString("N3")</td>
+                            <td>
+                                <label class="precio_leche_@item.FirstOrDefault().C_bascula_fichas.id_envio_leche_cliente_ms" id="precio_leche_ficha_@item.FirstOrDefault().C_envios_leche_g.C_envios_leche_confirmacion.Where(x=>x.activo == true).FirstOrDefault().id_envio_leche_confirmacion">
+                                    @item.FirstOrDefault().C_envios_leche_g.C_envios_leche_destinos.C_envios_leche_precios.FirstOrDefault().precio_leche.Value.ToString("N3")
+                                </label>
+                            </td>
+                            <td>
+                                <div contenteditable="false" class="precio_flete_@item.FirstOrDefault().C_bascula_fichas.id_envio_leche_cliente_ms divEditable" id="precio_flete_ficha_@item.FirstOrDefault().C_envios_leche_g.C_envios_leche_confirmacion.Where(x=>x.activo == true).FirstOrDefault().id_envio_leche_confirmacion" oninput="TablaDecimal(this);" onkeyup="CalcularTotalLtsImporte();"></div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <div class="col-md-12"><hr /></div>
+
+        <div class="col-md-6 p-3 text-left">
+            <button class="btn btn_beta_danger" onclick="CancelacionEnviosLecheAgrupacion();">CANCELAR CONFIRMACION</button>
+        </div>
+        <div class="col-md-6 p-3 text-right">
+            <button class="btn btn_beta" onclick="ConfirmacionLoteEnvioLeche();">CONFIRMAR LOTE</button>
+        </div>
+    }
+
+    else
+    {
+        <div class="col-md-12 text-center">
+            <h2 style="color:red">No se encontro informacion</h2>
+        </div>
+    }
+</div>
+
+<script>
+    CaracteresControl();
+</script>

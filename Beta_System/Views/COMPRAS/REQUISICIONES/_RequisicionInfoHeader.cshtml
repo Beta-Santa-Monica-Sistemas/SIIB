@@ -1,0 +1,110 @@
+﻿@model Beta_System.Models.C_compras_requi_g
+
+@{
+    var registro = "";
+    var reviso_valido = "";
+    var autorizo = "";
+
+    //-----------USUARIO REGISTRA
+    var registro_usuario = Model.C_usuarios_corporativo5;
+    if (registro_usuario != null)
+    {
+        registro = "" + Model.C_usuarios_corporativo5.C_empleados.nombres + " " + Model.C_usuarios_corporativo5.C_empleados.apellido_paterno;
+    }
+
+    //------------USUARIO REVISA/VALIDA
+    var reviso_usuario = Model.C_usuarios_corporativo;
+    if (reviso_usuario != null)
+    {
+        reviso_valido = "" + Model.C_usuarios_corporativo.C_empleados.nombres + " " + Model.C_usuarios_corporativo.C_empleados.apellido_paterno;
+    }
+
+    //------------USUARIO AUTORIZA/VALIDA
+    var validoauto_usuario = Model.C_usuarios_corporativo4;
+    if (validoauto_usuario != null)
+    {
+        autorizo = "" + Model.C_usuarios_corporativo4.C_empleados.nombres + " " + Model.C_usuarios_corporativo4.C_empleados.apellido_paterno;
+    }
+
+
+}
+
+<h2 class="text-center bg-beta">INFORMACIÓN DE LA REQUISICIÓN</h2>
+<div class="row">
+    <div class="col-md-5">
+        <table class="table table-sm table-borderless">
+            <tr>
+                <td><h3>Requisición</h3></td>
+                <td><h3>@Model.id_requisicion_articulo_g</h3></td>
+            </tr>
+            <tr>
+                <td>Folio</td>
+                <td>@Model.C_centros_g.siglas @Model.id_requisicion_articulo_g</td>
+            </tr>
+            <tr>
+                <td>Fecha</td>
+                <td>@String.Format(Model.fecha_registro.Value.ToShortDateString(), "dd/mm/aaaa")</td>
+            </tr>
+            <tr>
+                <td>Concepto</td>
+                <td>@Model.concepto</td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="col-md-4">
+        <h3><strong>Centro: @Model.C_centros_g.siglas - @Model.C_centros_g.nombre_centro</strong></h3>
+
+        <h4 style="margin:5px;">Tipo de requisición: <strong style="color:@Model.C_compras_requisiciones_tipos.color;">@Model.C_compras_requisiciones_tipos.tipo_requisicion</strong></h4>
+        
+        @if (Model.id_empleado_solicita != null)
+        {
+            <strong>Solicitante:</strong>
+            <label>@Model.C_empleados.nombres @Model.C_empleados.apellido_paterno @Model.C_empleados.apellido_materno</label>
+        }
+
+    <div class="text-left">
+        <span><span class="badge p-2" style="background-color:@Model.C_compras_requisiciones_status.color; color:white;">@Model.C_compras_requisiciones_status.nombre_status</span></span>
+        @if (Model.C_compras_requi_g_solicita_autorizacion.Count() > 0 || Model.C_compras_requisiciones_logs.Count > 0)
+        {
+            try
+            {
+                if (Model.C_compras_requisiciones_logs.Where(x => x.id_tipo_log == 3).Count() > 0)
+                {
+                    <h4 class="text-left mt-2" style="margin:0px;">Justificación: <strong class="text-danger">@Model.C_compras_requisiciones_logs.FirstOrDefault().justificacion</strong></h4>
+                    <i><label>- @Model.C_compras_requisiciones_logs.FirstOrDefault().C_usuarios_corporativo.usuario (@string.Format(Model.C_compras_requisiciones_logs.FirstOrDefault().fecha_registro.Value.ToShortDateString(), "dd/mm/aaaa"))</label></i>
+                }
+                else if (Model.C_compras_requi_g_solicita_autorizacion.Count() > 0)
+                {
+                    <h4 class="text-left mt-2" style="margin:0px;">Justificación: <strong class="text-danger">@Model.C_compras_requi_g_solicita_autorizacion.FirstOrDefault().justificacion</strong></h4>
+                    <i><label>- @Model.C_compras_requi_g_solicita_autorizacion.FirstOrDefault().C_usuarios_corporativo.usuario (@string.Format(Model.C_compras_requi_g_solicita_autorizacion.FirstOrDefault().fecha_registro.Value.ToShortDateString(), "dd/mm/aaaa"))</label></i>
+                }
+            }
+            catch (Exception)
+            {
+
+            }
+        }
+    </div>
+
+        <h3 class="text-danger" id="lbl_porcentaje_excedente_requisicion"></h3>
+
+    </div>
+    <div class="col-md-3 text-left" style="font-size:15px">
+        @if (registro_usuario != null)
+        {
+            <strong>Registró requisición</strong><br />
+            <label>@registro</label><br />
+        }
+        @if (reviso_usuario != null)
+        {
+            <strong>Revisó/Validó necesidad</strong> <span>(1ra Firma)</span><br />
+            <label>@reviso_valido</label><br />
+        }
+        @if (validoauto_usuario != null)
+        {
+            <strong>Autorizó necesidad</strong> <span>(2da Firma)</span><br />
+            <label>@autorizo</label><br />
+        }
+    </div>
+</div>

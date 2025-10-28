@@ -1,0 +1,42 @@
+﻿@model IEnumerable<Beta_System.Models.C_establos_caseta_logs_d_visita_taller>
+
+@if (Model.Count() > 0)
+{
+    <table class="table table-striped table-bordered">
+        <thead>
+            <tr>
+                <th>Usuario registró salida</th>
+                <th>Fecha de registro</th>
+                <th>Hora de registro</th>
+                @*<th>Entrada</th>
+                    <th>Salida</th>*@
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.C_usuarios_corporativo</td>
+                    <td>@String.Format(item.fecha_registro.Value.ToShortDateString(), "dd/mm/yyyy")</td>
+                    <td>@String.Format(item.fecha_registro.Value.ToShortTimeString(), "HH:mm")</td>
+                    @*@if (item.entrada_salida == true)
+                        {
+                            <td><i class="fa fa-check" style="color:lightgreen;"></i></td>
+                        }
+                        else
+                        {
+                            <td><i class="fa fa-check" style="color:darkorange;"></i></td>
+                        }*@
+                </tr>
+            }
+        </tbody>
+    </table>
+
+}
+else
+{
+    <h3 class="text-center text-danger"><strong>No se encontró el detalle</strong></h3>
+}
+
+
+

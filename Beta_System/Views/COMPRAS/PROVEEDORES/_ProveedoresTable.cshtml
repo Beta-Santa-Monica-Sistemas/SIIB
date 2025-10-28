@@ -1,0 +1,75 @@
+﻿@model IEnumerable<Beta_System.Models.C_compras_proveedores>
+@{
+    List<int> permisos = Session["PermisosModulo"] as List<int>;
+}
+
+<table class="table table-striped table-bordered" id="datatable_proveedores"  width="100%">
+    <thead>
+        <tr class="bg-beta text-center">
+            <th>Clave</th>
+            <th>Cuenta</th>
+            <th>Nombre comercial</th>
+            <th>Razón social</th>
+            <th>Dirección</th>
+            <th>Teléfono</th>
+            <th>Correo MS</th>
+            <th>Correo SIIB</th>
+            <th>RFC</th>
+            <th>Moneda</th>
+            <th>Días credito</th>
+            <th>Sincronizar</th>
+            @if (permisos.Contains(3014))
+            {
+                <th>Estatus</th>
+                <th>Editar</th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.OrderBy(x => x.nombre_prov))
+        {
+            <tr class="text-center">
+                <td id="@item.id_compras_proveedor">@item.cve</td>
+                <td>@item.cuenta_cxp</td>
+                <td>@item.nombre_prov</td>
+                <td>@item.razon_social</td>
+                <td>@item.direccion_1_prov</td>
+                <td>@item.tel_prov</td>
+                <td>@item.correo_prov</td>
+                <td>@item.contacto_correo_1</td>
+                <td>@item.RFC</td>
+                <td>@item.C_tipos_moneda.clave_fiscal</td>
+                <td>@item.dias_pago</td>
+                <td><button class="btn btn_beta_icon" onclick="SYNC_EMPLEADO(@item.id_proveedor_microsip);"><i class="fa fa-refresh"></i></button></td>
+                @if (permisos.Contains(3014))
+                {
+
+                    if (item.id_proveedor_status == 3)
+                    {
+                        <td style="color:red;">
+                            Bloqueado
+                        </td>
+                    }
+                    else
+                    {
+                        if (item.id_proveedor_status == 1)
+                        {
+                            <td style="color:green;">
+                                Activo
+                            </td>
+                        }
+                        else
+                        {
+                            <td style="color:gray;">
+                                Inactivo
+                            </td>
+                        }
+                    }
+                    <td class="text-center">
+                        <button class="btn btn_beta_icon" onclick="ObtenerInfProveedor(@item.id_compras_proveedor); AccionProveedor(1);"><i class="fa fa-edit"></i></button>
+                    </td>
+                }
+            </tr>
+        }
+    </tbody>
+</table>

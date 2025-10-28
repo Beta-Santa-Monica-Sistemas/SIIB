@@ -1,0 +1,324 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+    int tipo_dashboard = 0;
+    try
+    {
+        tipo_dashboard = (int)Session["TipoDashboard"];
+
+        //int usuarios_conectados = (int)(HttpContext.Current.Application["UsuariosActivos"] ?? 0);
+
+        <style>
+            main {
+                width: auto;
+                background-color: #ffffff;
+                -webkit-box-shadow: 0px 5px 15px 8px #e4e7fb;
+                /* box-shadow: 0px 5px 15px 8px #e4e7fb;*/
+                box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1);
+                display: flex;
+                flex-direction: column;
+                align-items: end;
+                border-radius: 0.5rem;
+            }
+
+            .header {
+                width: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding: 1.5rem 1.5rem;
+            }
+
+            .share {
+                width: 4.5rem;
+                height: 3rem;
+                background-color: #f55e77;
+                border: 0;
+                border-bottom: 0.2rem solid #c0506a;
+                border-radius: 2rem;
+                cursor: pointer;
+            }
+
+            .share:active {
+                border-bottom: 0;
+            }
+
+            .share i {
+                color: #fff;
+                font-size: 2rem;
+            }
+
+            h1 {
+                font-family: "Rubik", sans-serif;
+                font-size: 1.7rem;
+                color: #141a39;
+                text-transform: uppercase;
+                cursor: default;
+            }
+
+            #leaderboard {
+                width: 100%;
+                position: relative;
+            }
+
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                table-layout: fixed;
+                color: #141a39;
+                cursor: default;
+            }
+
+            .tr_dashboard {
+                height: 4.5rem;
+                transition: all 0.2s ease-in-out;
+                border-radius: 0.2rem;
+            }
+
+            .tr_dashboard:not(:first-child):hover {
+                background-color: #fff;
+                transform: scale(1.1);
+                -webkit-box-shadow: 0px 5px 15px 8px #e4e7fb;
+                box-shadow: 0px 5px 15px 8px #e4e7fb;
+            }
+
+            .tr_dashboard:hover {
+                background-color: #fff;
+                transform: scale(1.1);
+                -webkit-box-shadow: 0px 5px 15px 8px #e4e7fb;
+                box-shadow: 0px 5px 15px 8px #e4e7fb;
+            }
+
+            .tr_dashboard:nth-child(odd) {
+                background-color: #f9f9f9;
+            }
+
+            .td_dashboard {
+                height: 5rem;
+                transform: scale(1.1);
+                font-family: "Rubik", sans-serif;
+                font-size: 1.4rem;
+                padding: 1rem 1.5rem;
+                position: relative;
+            }
+
+            .number {
+                width: 4rem;
+                font-size: 2.2rem;
+                font-weight: bold;
+                text-align: left;
+            }
+
+            .name {
+                text-align: left;
+                font-size: 0.8rem;
+            }
+
+            .points {
+                font-weight: bold;
+                font-size: 1.3rem;
+                display: flex;
+                justify-content: flex-end;
+                align-items: center;
+                margin-top: 0.5rem !important;
+            }
+
+                .points:first-child {
+                    width: 10rem;
+                }
+
+            .gold-medal {
+                height: 3rem;
+                margin-left: 1.5rem;
+            }
+
+            .ribbon {
+                width: 105%;
+                height: 6.0rem;
+                top: -0.5rem;
+                background-color: #2e87d7;
+                position: absolute;
+                left: -1rem;
+                -webkit-box-shadow: 0px 15px 11px -6px #7a7a7d;
+                box-shadow: 0px 15px 11px -6px #7a7a7d;
+            }
+
+                .ribbon::before {
+                    content: "";
+                    height: 1.5rem;
+                    width: 1.5rem;
+                    bottom: -0.8rem;
+                    left: 0.35rem;
+                    transform: rotate(45deg);
+                    background-color: #2e87d7;
+                    position: absolute;
+                    z-index: -1;
+                }
+
+                .ribbon::after {
+                    content: "";
+                    height: 1.5rem;
+                    width: 1.5rem;
+                    bottom: -0.8rem;
+                    right: 0.35rem;
+                    transform: rotate(45deg);
+                    background-color: #2e87d7;
+                    position: absolute;
+                    z-index: -1;
+                }
+        </style>
+
+        if (tipo_dashboard == 1)  //--------- COMPRAS
+        {
+            <div class="mt-4">
+                <div class="row">
+                    <div class="col-md-8 text-center">
+                        <main>
+                            <div class="header">
+                                <h1 class="text-center">COMPRAS DIRECTAS</h1>
+                            </div>
+                            <div style="width: 98%; height: 350px;" id="div_grafica_compras_anuales"></div>
+                            <div class="header">
+                                <h1 class="text-center">COMPRAS MENSUALES</h1>
+                            </div>
+                            <div style="width: 98%; height: 350px;" id="div_grafica_compras_mensuales_tipos"></div>
+                        </main>
+                    </div>
+                    <div class="col-md-4 text-center">
+                        <div id="div_grafica_compras_proveedores"></div>
+                    </div>
+                </div>
+            </div>
+        }
+
+
+        else if (tipo_dashboard == 3) //----------SISTEMAS
+        {
+            <div class="mt-4">
+                <div class="row">
+                    <div class="col-md-7 text-center">
+                        <div id="div_log_procesos"></div>
+                        <div id="div_kpis_dev"></div>
+                    </div>
+                    <div class="col-md-5 text-center">
+                        <div class="c-dashboardInfo col-md-12">
+                            <div class="wrap">
+                                <div style="width: 100%; height: 250px;" id="div_grafica_visitantes_semanales"></div>
+                            </div>
+                        </div>
+
+                        <div class="c-dashboardInfo col-md-12">
+                            <div class="wrap">
+                                <div style="width: 100%; height: 250px;" id="div_grafica_correos_enviados"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+        
+        
+        else if (tipo_dashboard == 4)  //------------ ALMACEN
+        {
+            <div class="mt-4">
+                <div class="row">
+                    <div class="col-md-8 text-center">
+                        <div class="c-dashboardInfo col-md-12">
+                            <div class="wrap">
+                                <h4 class="heading heading5 hind-font medium-font-weight c-dashboardInfo__title">RECEPCIONES PENDIENTES</h4>
+                                @*<div id="div_requisiciones_generadas"></div>*@
+                                <div id="div_recepciones_pendientes" class="table-responsive" style="overflow:auto; overflow-x: hidden; height: 400px; "></div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                    <div class="col-md-4 text-center">
+                        <div class="c-dashboardInfo col-md-12">
+                            <div class="wrap">
+                                <h4 class="heading heading5 hind-font medium-font-weight c-dashboardInfo__title">VALES PENDIENTES DE SURTIR</h4>
+                                <div id="div_vales_pendientes"></div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        }
+        else
+        {
+            <style>
+                #content {
+                    padding: 0px;
+                    margin: 0px;
+                }
+
+                body {
+                    overflow-y: hidden;
+                }
+            </style>
+            <img src="~/Content/img_layout/fondo_beta.png" style="background-repeat: no-repeat; overflow-y:hidden; width:100%; height:100%;" />
+        }
+    }
+    catch (Exception)
+    {
+        <style>
+            #content {
+                padding: 0px;
+                margin: 0px;
+            }
+
+            body {
+                overflow-y: hidden;
+            }
+        </style>
+        <img src="~/Content/img_layout/fondo_beta.png"
+             style="background-repeat: no-repeat;overflow-y:hidden;" width="100%" height="100%" />
+        <div class="text-center">
+            <button class="btn btn_beta" onclick="RedirectHome();" style="position:absolute; top:40%;">INICIAR SESIÓM</button>
+        </div>
+    }
+}
+
+
+@Scripts.Render("~/bundles_Dashboard/js")
+
+
+<script type="text/javascript">
+    $(window).on("load", function () {
+        ConsultarDashboardTipo(@tipo_dashboard);
+    });
+
+
+    function ConsultarDashboardTipo(id_tipo) {
+        if (id_tipo == 1) { //------------ COMPRAS
+            ConsultarCotizacionesComprasAnual();
+            ConsultarComprasDirectasMensualesPorAnio();
+            ConsultarTopProveedoresCompras();
+        }
+        else if (id_tipo == 3) {  //------------ SISTEMAS
+            ConsultarLogsProcesos();
+            ConsultarLogSemanalCorreosGrafica();
+            ConsultarLogSemanalGrafica();
+            Consultar_KPIS_Sistemas();
+            setInterval(Consultar_KPIS_Sistemas, 15000);
+            
+        }
+        else if (id_tipo == 4) {
+            ConsultarOrdenesPendientesRecepcion();
+            ConsultarValesPendientesAlmacen();
+            //ConsultarRequisicionesGeneradasUsuario();
+        }
+
+
+    }
+
+
+    function RedirectHome() {
+        window.location.href = '/';
+    }
+</script>
+
+
+
+

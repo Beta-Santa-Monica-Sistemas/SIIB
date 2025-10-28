@@ -1,0 +1,62 @@
+﻿@model IEnumerable<Beta_System.Models.C_almacen_solicitudes_mercancia_d>
+
+@if (Model == null)
+{
+    <h3 class="text-center text-danger">Inicie sesión nuevamente</h3>
+    <script>ValidaSesion();</script>
+}
+else if (Model.Count() > 0)
+{
+    <table class="table table-striped table-bordered small" id="datatable_reporte_solicitud_mercancia">
+        <thead>
+            <tr class="text-center bg-beta">
+                <th>No. vale</th>
+                <th>Almacen</th>
+                <th>Descripción</th>
+                <th>Centro</th>
+                <th>Departamento</th>
+                <th>Equipo</th>
+                <th>Fecha</th>
+                <th>Hora</th>
+                <th>Usuario registra</th>
+                <th>Solicitante</th>
+                <th>Clave</th>
+                <th>Articulo</th>
+                <th>Cantidad</th>
+                <th>Precio</th>
+                <th>Importe</th>
+                <th>Cargo</th>
+                <th>Cuenta</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr class="text-center">
+                    <td>@item.id_solicitud_mercancia_g</td>
+                    <td>@item.C_almacen_solicitudes_mercancia_g.C_almacen_almacenes_g.nombre_almacen.ToUpper()</td>
+                    <td>@item.C_almacen_solicitudes_mercancia_g.cargo_desc.ToUpper()</td>
+                    <td>@item.C_almacen_solicitudes_mercancia_g.C_centros_g.nombre_centro</td>
+                    <td>@item.C_almacen_solicitudes_mercancia_g.C_departamentos_g.nombre_departamento</td>
+                    <td><strong>@item.C_almacen_solicitudes_mercancia_g.C_establos_equipos.clave_equipo</strong></td>
+                    <td>@string.Format(item.C_almacen_solicitudes_mercancia_g.fecha_registro.Value.ToShortDateString(), "dd/MM/yyyy")</td>
+                    <td>@string.Format(item.C_almacen_solicitudes_mercancia_g.fecha_registro.Value.ToShortTimeString(), "HH:MM")</td>
+                    <td>@item.C_almacen_solicitudes_mercancia_g.C_usuarios_corporativo.usuario</td>
+                    <td>@item.C_almacen_solicitudes_mercancia_g.C_nomina_empleados.Nombres @item.C_almacen_solicitudes_mercancia_g.C_nomina_empleados.Apellido_paterno</td>
+                    <td><strong>@item.C_articulos_catalogo.clave</strong></td>
+                    <td class="text-left"><strong>@item.C_articulos_catalogo.nombre_articulo</strong></td>
+                    <td>@item.cantidad_entregada.Value.ToString("N2")</td>
+                    <td>$@item.costo.Value.ToString("N2")</td>
+                    <td>$@item.importe.Value.ToString("N2")</td>
+                    <td>@item.C_cargos_contables_g.nombre_cargo</td>
+                    <td>@item.C_cuentas_contables_g.cuenta @item.C_cuentas_contables_g.nombre_cuenta</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <h3 class="text-center text-danger">NO SE ENCONTRARON REGISTROS</h3>
+}
+

@@ -1,0 +1,112 @@
+﻿@using System.Globalization;
+@model List<DateTime>
+@{
+    var dias = Model;
+    var d1 = dias.First().ToShortDateString();
+    var d2 = dias.Last().ToShortDateString();
+    CultureInfo cultura = new CultureInfo("es-ES");
+
+}
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        background-color: lightGrey;
+    }
+
+    .calendar {
+        width: 7rem;
+        padding: 0.7rem;
+        font-family: Arial, serif;
+        text-align: center;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+
+    .calendar__input {
+        display: none;
+    }
+
+        .calendar__input:checked + .calendar__label {
+            border-color: #90E194;
+            box-shadow: 1px 1px 5px #64C38F;
+        }
+            .calendar__input:checked + .calendar__label .calendar__label__date {
+                background-color: #D3F0D4;
+                
+            }
+            .calendar__input:checked + .calendar__label .calendar__label__day {
+                background-color: #D3F0D4;
+            }
+    .calendar__label {
+        display: block;
+        border: 0.35rem solid #BEBEBE;
+        border-radius: 0.8rem;
+    }
+
+    .calendar__label__month {
+        border-radius: 0.5rem 0.5rem 0 0;
+        border-bottom: 1px dashed #2882D2;
+        padding: 0.4rem;
+        background-color: #2E87D7;
+        color: white;
+    }
+
+    .calendar__label__date {
+        padding: 0.4rem 0 0.2rem;
+        background-color: white;
+        font-size: 1.8rem;
+    }
+
+    .calendar__label__day {
+        border-radius: 0 0 0.5rem 0.5rem;
+        padding-bottom: 0.4rem;
+        background-color: white;
+        font-size: 0.8rem;
+    }
+
+    .mayus {
+        text-transform: uppercase;
+    }
+
+    .container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+    }
+</style>
+
+<div class="col-md-12 text-center">
+    <h2>Faltas entre el @d1 al @d2</h2>
+</div>
+<br />
+<div style="margin:0px;" class="container">
+    @foreach (var item in Model)
+    {
+        var itemId = item.ToShortDateString().Replace("/", "-");
+        <div class="text-center">
+            <div class="calendar">
+                @{
+                    string nombreDelMes = item.ToString("MMMM", cultura);
+                    string nombreDelDia = item.ToString("dddd", cultura);
+                }
+                <input type="checkbox" id="@itemId" class="calendar__input dias_inasistencia" />
+                <label for="@itemId" class="calendar__label">
+                    <div class="calendar__label__month mayus">@nombreDelMes</div>
+                    <div class="calendar__label__date mayus">@item.Day</div>
+                    <div class="calendar__label__day mayus">@nombreDelDia</div>
+                </label>
+            </div>
+        </div>
+    }
+</div>
+<div class="container-fluid w-75 text-center">
+    <strong>Observaciónes</strong>
+    <input type="text" class="form-control" id="inasistencia_obs" />
+</div>
+

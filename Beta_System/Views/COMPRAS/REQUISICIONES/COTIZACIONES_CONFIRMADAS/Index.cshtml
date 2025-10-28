@@ -1,0 +1,63 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+}
+
+<div class="page_title">
+    <div class="counter_section">
+        <h1>Requisiciones de parcialidades</h1>
+    </div>
+</div>
+
+<div class=" column2 counter_section">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="col-md-4">
+                <strong>Centro</strong>
+                <select class="form-control" id="id_centro_search">
+                    <option value="0">Todos</option>
+                    @{ Html.RenderAction("CentrosUsuariosSelect", "CATALOGOS", new { id_usuario = (int)Session["LoggedId"] }); }
+                </select>
+            </div>
+            @*<div class="col-md-3">
+                    <strong>Requisición</strong>
+                    <input type="text" class="form-control" id="folio_requi_search" />
+                </div>*@
+            <div class="col-md-3 text-left">
+                <br />
+                <button class="btn btn_beta_icon" onclick="ConsultarRequisicionesConfirmadas();"><i class="fa fa-search"></i></button>
+            </div>
+        </div>
+    </div>
+    <hr />
+    <div id="div_requis_confirmadas" class="table-responsive"></div>
+</div>
+
+<!-- MODAL COTIZACIONES CONFIRMADAS-->
+<div class="modal fade" id="m_cotizaciones_confirmadas" tabindex="-1" role="dialog" aria-labelledby="m_cotizaciones_confirmadasLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document" style="min-width: 95%;">
+        <div class="modal-content" id="div_cotizaciones_confirmadas">
+
+        </div>
+    </div>
+</div>
+
+<!-- MODAL COTIZACIONES CONFIRMADAS DETALLE -->
+<div class="modal fade" id="m_cotizaciones_confirmadas_detalle" tabindex="-1" role="dialog" aria-labelledby="m_cotizaciones_confirmadas_detalleLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document" style="min-width: 40%;">
+        <div class="modal-content" id="div_cotizaciones_confirmadas_detalle">
+
+        </div>
+    </div>
+</div>
+
+@Scripts.Render("~/bundles_Requisiciones/js")
+@Scripts.Render("~/bundles_Propiedades/js")
+
+<script>
+    $(window).on("load", function () {
+        ConsultarRequisicionesConfirmadas();
+    });
+
+</script>

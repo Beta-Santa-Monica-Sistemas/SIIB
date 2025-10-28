@@ -1,0 +1,46 @@
+﻿@model IEnumerable<Beta_System.Models.C_articulos_precios>
+
+@{
+    List<int> permisos = Session["PermisosModulo"] as List<int>;
+}
+
+@if (Model != null || Model.Count() > 0)
+{
+    <table class="table table-striped table-bordered w-100" id="tabla_articulos_con_precio" width="100%">
+        <thead>
+            <tr class="bg-beta text-center">
+                <th>Clave</th>
+                <th>Artículo</th>
+                <th>Medida</th>
+                <th>Tipo</th>
+                <th>Clasificación</th>
+                <th>Rubro</th>
+                <th>Precio</th>
+                <th>Editar</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr class="text-center">
+                    <td id="@item.id_articulo">@item.C_articulos_catalogo.clave</td>
+                    <td>@item.C_articulos_catalogo.nombre_articulo</td>
+                    <td>@item.C_articulos_catalogo.C_unidades_medidas.unidad_medida</td>
+                    <td>@item.C_articulos_catalogo.C_articulos_tipos.nombre_tipo</td>
+                    <td>@item.C_articulos_catalogo.C_articulos_clasificaciones.nombre_clasificacion</td>
+                    <td>@item.C_articulos_catalogo.C_articulos_tipos_requisicion.tipo_requisicion</td>
+                    <td>@string.Format("${0:0.0000}", item.precio)</td>
+                    <td class="text-center">
+                        <button class="btn btn_beta_icon" onclick="CargarInfoArticuloConPrecio(@Convert.ToDecimal(@item.id_articulo_precio), '@item.C_articulos_catalogo.clave','@item.C_articulos_catalogo.nombre_articulo', '@item.precio')"><i class="fa fa-edit"></i></button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <div class="col-md-12">
+        <h3 style="color:red">No se encontro informacion de los articulos</h3>
+    </div>
+}

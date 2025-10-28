@@ -1,0 +1,52 @@
+﻿@model IEnumerable<Beta_System.Models.C_presupuestos_dias>
+@{
+    DateTime dia_inicial = Convert.ToDateTime(ViewBag.FechaProduccion);
+    int contador = 0;
+}
+
+
+<div class="col-md-3">
+    <div class="col-md-12 text-center" style="padding-top:15px;">
+        <strong>Todos los dias</strong><br />
+        <strong>@Model.FirstOrDefault().dia a @Model.LastOrDefault().dia</strong>
+    </div>
+    <div class="col-md-12">
+        <strong>Produccion</strong>
+        <input type="text" class="form-control solo-numeros" id="produccion_semanal_diario" onkeyup="AsignacionEstimacionDiariaSemanal(1);" />
+    </div>
+    <div class="col-md-12">
+        <strong>Sobrante</strong>
+        <input type="text" class="form-control solo-numeros" id="sobrante_semanal_diario" onkeyup="AsignacionEstimacionDiariaSemanal(2);" />
+    </div>
+    <div class="col-md-12">
+        <strong>Faltante</strong>
+        <input type="text" class="form-control solo-numeros" id="faltante_semanal_diario" onkeyup="AsignacionEstimacionDiariaSemanal(3);" />
+    </div>
+</div>
+@foreach (var item in Model)
+{
+
+    <div class="col-md-3" style="padding-top:15px;">
+        <div class="col-md-12 text-center">
+            <strong class="estimacion_diario_dia" id="estimacion_@item.id_dia_presupuesto">@item.dia</strong><br />
+            <strong class="estimacion_fecha" id="estimacion_fecha_@item.id_dia_presupuesto">@dia_inicial.AddDays(contador).ToShortDateString()</strong>
+        </div>
+        <div class="col-md-12">
+            <strong>Produccion</strong>
+            <input type="text" class="form-control produccion_diario solo-numeros" id="produccion_dia_@contador" />
+        </div>
+        <div class="col-md-12">
+            <strong>Sobrante</strong>
+            <input type="text" class="form-control sobrante_diario solo-numeros" id="sobrante_dia_@contador" />
+        </div>
+        <div class="col-md-12">
+            <strong>Faltante</strong>
+            <input type="text" class="form-control faltante_diario solo-numeros" id="faltante_dia_@contador" />
+        </div>
+    </div>
+    contador++;
+}
+
+<script>
+    CaracteresControl();
+</script>

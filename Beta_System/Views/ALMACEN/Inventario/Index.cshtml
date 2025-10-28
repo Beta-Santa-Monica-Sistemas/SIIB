@@ -1,0 +1,675 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+    List<int> permisos = Session["PermisosModulo"] as List<int>;
+}
+
+<div class="page_title">
+    <div class="counter_section">
+        <h1>Inventario</h1>
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="nav nav-tabs">
+                    @if (permisos.Contains(24))
+                    {
+                        <li>
+                            <a data-toggle="tab" href="#movimiento_tab">
+                                CONSULTAR MOVIMIENTOS
+                                <i class="fa fa-2x fa-edit ml-2"></i>
+                            </a>
+                        </li>
+                    }
+                    @if (permisos.Contains(26))
+                    {
+                        <li class="active">
+                            <a data-toggle="tab" href="#consulta_tab">
+                                CONSULTAR INVENTARIOS<i class="fa fa-2x fa-search ml-2"></i>
+                            </a>
+                        </li>
+                    }
+                    @if (permisos.Contains(25))
+                    {
+                        <li>
+                            <a data-toggle="tab" href="#capturar_tab">
+                                REALIZAR INVENTARIO<i class="fa fa-2x fa-list-alt ml-2"></i>
+                            </a>
+                        </li>
+                    }
+                    @if (permisos.Contains(3017))
+                    {
+                        <li>
+                            <a data-toggle="tab" href="#capturar_inventario_minimo">
+                                MAXIMOS Y MINIMOS DE ARTICULOS<i class="fa fa-2x fa-bar-chart ml-2"></i>
+                            </a>
+                        </li>
+                    }
+                    @if (permisos.Contains(4053))
+                    {
+                        <li>
+                            <a data-toggle="tab" href="#ajustar_inventario_tab">
+                                AJUSTES DE INVENTARIO<i class="fa fa-2x fa-cogs ml-2"></i>
+                            </a>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class=" column2 counter_section">
+    <div class="tab-content">
+        <!--CONSULTAR MOVIMIENTOS-->
+        @if (permisos.Contains(24))
+        {
+            <button class="btn btn_beta" style=" position: fixed; right: -1%; top: 82%; z-index: 100000; color: white; background-color: #464646;" data-toggle="modal" data-target="#m_registrar_movimiento" onclick="ConsultarArticulosAlmacenCapturaMov();">Registrar movimiento</button>
+            <div id="movimiento_tab" class="tab-pane fade  active show">
+                <h3 class="text-center">CONSULTAR MOVIMIENTOS</h3>
+                <div class="row">
+                    <div class="col-md-2">
+                        <strong>Almacenes asignados:</strong>
+                        <select class="form-control id_almacen_select" id="id_almacen_g_movs"></select>
+                    </div>
+                    <div class="col-md-3">
+                        <strong>Tipo de movimiento:</strong>
+                        <select class="form-control" id="id_almacen_g_tmovs">
+                            <option value="0">Todos</option>
+                            @{ Html.RenderAction("ConsultarTipoMovInventarioSelect", "CATALOGOS"); }
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <strong>Fecha inicio:</strong>
+                        <input type="date" class="form-control fecha_inicio_input" id="fecha_inicio_admin" />
+                    </div>
+                    <div class="col-md-2">
+                        <strong>Fecha fin:</strong>
+                        <input type="date" class="form-control" id="fecha_fin_admin" />
+                    </div>
+                    <div class="col-md-3">
+                        <br />
+                        <button class="btn btn_beta_icon" onclick="ConsultarMovimientosInventarioTable();"><i class="fa fa-search"></i></button>
+                    </div>
+                </div>
+                <br />
+                <hr />
+                <div class="table-responsive" id="div_movimientos_inventario"></div>
+            </div>
+        }
+
+
+
+
+        <!--CONSULTAR INVENTARIO-->
+        @if (permisos.Contains(26))
+        {
+            <div id="consulta_tab" class="tab-pane fade">
+                <h3 class="text-center">CONSULTAR INVENTARIOS</h3>
+                <ul class="nav nav-tabs">
+                    <li> <a data-toggle="tab" href="#consultar_inv_cap_tab">INVENTARIOS REALIZADOS<i class="fa fa-2x fa-search ml-2"></i></a></li>
+                    <li> <a data-toggle="tab" href="#consultar_dif_inv_tab">DIFERENCIAS DE INVENTARIOS<i class="fa fa-2x fa-bar-chart ml-2"></i></a></li>
+                    <li class="active"> <a data-toggle="tab" href="#consultar_inventario_fecha">CONSULTAR EXISTENCIAS<i class="fa fa-2x fa-calendar ml-2"></i></a></li>
+                    <li class="active"> <a data-toggle="tab" href="#consultar_inventario_critico">INVENTARIO CRÍTICO<i class="fa fa-2x fa-warning ml-2"></i></a></li>
+                    <li> <a data-toggle="tab" href="#consultar_inv_min_tab">INVENTARIOS MÁXIMOS Y MÍNIMOS<i class="fa fa-2x fa-search ml-2"></i></a></li>
+                </ul>
+                <br />
+                <div class="tab-content">
+                    <!--INVENTARIO REALIZADOS-->
+                    <div id="consultar_inv_cap_tab" class="tab-pane fade in active show">
+                        <h3 class="text-center">INVENTARIOS FISICOS</h3>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <strong>Almacenes asignados:</strong>
+                                <select class="form-control id_almacen_select" id="id_almacen_g_consulta_inv"></select>
+                            </div>
+                            <div class="col-md-3">
+                                <strong>Fecha inicio:</strong>
+                                <input type="date" class="form-control" id="fecha_inicio_inventarios" />
+                            </div>
+                            <div class="col-md-3">
+                                <strong>Fecha fin:</strong>
+                                <input type="date" class="form-control" id="fecha_fin_inventarios" />
+                            </div>
+                            <div class="col-md-3">
+                                <br />
+                                <button class="btn btn_beta_icon" onclick="ConsultarInventariosCapturados();"><i class="fa fa-search"></i></button>
+                            </div>
+                        </div>
+                        <br />
+                        <hr />
+                        <div class="table-responsive" id="div_inventarios_capturados"></div>
+                    </div>
+
+
+                    <!--DIFERENCIAS DE INVENTARIOS-->
+                    <div id="consultar_dif_inv_tab" class="tab-pane fade">
+                        <h3 class="text-center">DIFERENCIAS DE INVENTARIOS</h3>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <strong>Almacenes asignados:</strong>
+                                <select class="form-control id_almacen_select" id="id_almacen_g_dif"></select>
+                            </div>
+                            <div class="col-md-2">
+                                <strong>Mes inicio:</strong>
+                                <input type="month" class="form-control" id="mes_inicio_dif" />
+                            </div>
+                            <div class="col-md-2">
+                                <strong>Mes fin:</strong>
+                                <input type="month" class="form-control" id="mes_fin_dif" />
+                            </div>
+                            <div class="col-md-3">
+                                <strong>Tipo de artículos:</strong>
+                                <select class="form-control id_tipo_articulos_select" id="id_articulos_tipo_dif"></select>
+                            </div>
+                            <div class="col-md-2">
+                                <br />
+                                <button class="btn btn_beta_icon" onclick="ConsultarDiferenciasInventarios();"><i class="fa fa-search"></i></button>
+                            </div>
+                        </div>
+                        <br />
+                        <hr />
+                        <div class="table-responsive" id="div_inventario_diferencias"></div>
+                    </div>
+
+
+                    <!--CONSULTAR EXISTENCIAS-->
+                    <div id="consultar_inventario_fecha" class="tab-pane fade">
+                        <h3 class="text-center">CONSULTAR EXISTENCIAS</h3>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <strong>Almacenes asignados:</strong>
+                                <select class="form-control id_almacen_select" id="id_almacen_g_inv_cons"></select>
+                            </div>
+                            <div class="col-md-3">
+                                <strong>Tipo de artículos:</strong>
+                                <select id="id_tipo_articulos_inventario_cons" class="form-control id_tipo_articulos_select">
+                                    @*@{ Html.RenderAction("ConsultarTiposArticulosSelect", "CATALOGOS"); }*@
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <strong>Fecha de consulta</strong>
+                                <input type="date" class="form-control" id="fecha_inventario_cons" />
+                            </div>
+                            <div class="col-md-3">
+                                <br />
+                                <button class="btn btn_beta_icon" onclick="ConsultarInventarioFecha();"><i class="fa fa-search"></i></button>
+                            </div>
+                        </div>
+                        <hr />
+                        <div class="table-responsive" id="div_inventario_fecha_cons">
+
+                        </div>
+                    </div>
+
+                    <!--CONSULTAR INVENTARIO CRÍTICO-->
+                    <div id="consultar_inventario_critico" class="tab-pane fade">
+                        <h3 class="text-center">INVENTARIO CRÍTICO</h3>
+                        <div class="row">
+                            <div class="col-md-2">
+                                <strong>Almacenes asignados:</strong>
+                                <select class="form-control id_almacen_select" id="id_almacen_g_critico"></select>
+                            </div>
+                            <div class="col-md-3">
+                                <strong>Tipo consumo:</strong>
+                                <br />
+                                <select id="id_t_csm" class="form-control select_multiple" multiple>
+                                    @{ Html.RenderAction("ConsultarTiposConsumoCriticidadSelect", "CATALOGOS"); }
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <strong>Tipo operación:</strong>
+                                <br />
+                                <select id="id_t_ope" class="form-control select_multiple" multiple>
+                                    @{ Html.RenderAction("ConsultarTiposOperacionCriticidadSelect", "CATALOGOS"); }
+                                </select>
+                            </div>
+                            <div class="col-md-2">
+                                <strong>Fecha de consulta</strong>
+                                <input type="date" class="form-control" id="fecha_inventario_critico" />
+                            </div>
+                            <div class="col-md-1">
+                                <br />
+                                <button class="btn btn_beta_icon" onclick="ConsultarInventarioCriticoExistencias();"><i class="fa fa-search"></i></button>
+                            </div>
+                        </div>
+                        <hr />
+                        <div class="table-responsive" id="div_inventario_critico">
+
+                        </div>
+                    </div>
+
+                    <!--INVENTARIO MAXIMO MINIMO-->
+                    <div id="consultar_inv_min_tab" class="tab-pane fade">
+                        <h3 class="text-center">INVENTARIOS MÁXIMOS Y MÍNIMOS</h3>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <strong>Almacenes asignados:</strong>
+                                <select class="form-control id_almacen_select" id="id_almacen_g_consulta_min"></select>
+                            </div>
+                            <div class="col-md-3">
+                                <strong>Tipo de artículos:</strong>
+                                <select id="id_tipo_articulos_inventario_min" class="form-control id_tipo_articulos_select">
+                                    @*@{ Html.RenderAction("ConsultarTiposArticulosSelect", "CATALOGOS"); }*@
+                                </select>
+                            </div>
+                            <div class="col-md-1">
+                                <strong>Filtro:</strong>
+                                <select id="id_filtro" class="form-control">
+                                    <option value="0">Todos</option>
+                                    <option value="1">Alto</option>
+                                    <option value="2">Medio</option>
+                                    <option value="3">Bajo</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <br />
+                                <button class="btn btn_beta_icon" onclick="ConsultarInventarioMinimoMaximo();"><i class="fa fa-search"></i></button>
+                            </div>
+                        </div>
+                        <br />
+                        <hr />
+                        <div class="table-responsive" id="div_inventarios_minimo_maximo"></div>
+                    </div>
+                </div>
+            </div>
+        }
+
+
+
+        <!--CAPTURAR INVENTARIO-->
+        @if (permisos.Contains(25))
+        {
+            <div id="capturar_tab" class="tab-pane fade">
+                <h3 class="text-center">REALIZAR INVENTARIO</h3>
+                <div class="row">
+                    <div class="col-md-3">
+                        <strong>Almacenes asignados:</strong>
+                        <select class="form-control id_almacen_select" id="id_almacen_g_inv_cap" onchange="ConsultarCapturaInventarioDiferencias();"></select>
+                    </div>
+                    <div class="col-md-3">
+                        <strong>Tipo de artículos:</strong>
+                        <select id="id_tipo_inventario_cap_general" class="form-control id_tipo_articulos_select" onchange="ConsultarCapturaInventarioDiferencias();">
+                            @*@{ Html.RenderAction("ConsultarTiposArticulosSelect", "CATALOGOS"); }*@
+                        </select>
+                    </div>
+                    @*<div class="col-md-3">
+                            <button class="btn btn_beta_icon"><i class="fa fa-search"></i></button>
+                        </div>*@
+                </div>
+                <hr />
+                <div id="div_inventario_captura_almacen">
+
+                </div>
+                <br />
+                <hr />
+                <div class="row">
+                    <div class="col-md-6">
+                        <button class="btn btn_beta" onclick="RegistrarCapturaInventario();">Capturar inventario</button>
+                    </div>
+                    <div class="col-md-6">
+                        <strong>Observaciones:</strong>
+                        <textarea class="form-control" rows="2" id="obs_cap_inventario"></textarea>
+                    </div>
+                </div>
+            </div>
+        }
+
+
+
+        <!--CONFIGURAR MAXIMOS Y MINIMOS-->
+        @if (permisos.Contains(3017))
+        {
+            <div id="capturar_inventario_minimo" class="tab-pane fade">
+                <h3 class="text-center">MÁXIMOS Y MÍNIMOS DE ARTÍCULOS</h3>
+                <div class="row">
+                    <div class="col-md-3">
+                        <strong>Almacenes asignados:</strong>
+                        <select class="form-control id_almacen_select" id="id_almacen_g_inv_minimo" onchange="ConsultarInventarioArticulos();"></select>
+                    </div>
+                    <div class="col-md-3">
+                        <strong>Tipo de artículos:</strong>
+                        <select id="id_tipo_inventario_minimo" class="form-control id_tipo_articulos_select" onchange="ConsultarInventarioArticulos();">
+                            @*@{ Html.RenderAction("ConsultarTiposArticulosSelect", "CATALOGOS"); }*@
+                        </select>
+                    </div>
+                </div>
+                <hr />
+                <div class="table-responsive" id="div_inventario_minimo">
+
+                </div>
+                <br />
+            </div>
+        }
+
+
+        <!--AJUSTE DE INVENTARIO-->
+        @if (permisos.Contains(4053))
+        {
+            <div id="ajustar_inventario_tab" class="tab-pane fade">
+                <h3 class="text-center">AJUSTES DE INVENTARIO</h3>
+                <ul class="nav nav-tabs">
+                    <li> <a data-toggle="tab" href="#historial_ajustes_tab">CONSULTAR AJUSTES<i class="fa fa-2x fa-search ml-2"></i></a></li>
+                    <li class="active"> <a data-toggle="tab" href="#realizar_ajuste_tab">REALIZAR AJUSTE<i class="fa fa-2x fa-cog ml-2"></i></a></li>
+                </ul>
+                <br />
+                <div class="tab-content">
+                    <!--CONSULTAR AJUSTES-->
+                    <div id="historial_ajustes_tab" class="tab-pane fade in active show">
+                        <h3 class="text-center">HISTORIAL DE AJUSTES</h3>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <strong>Almacen:</strong>
+                                <select class="form-control id_almacen_select" id="id_almacen_g_ajuste_consulta"></select>
+                            </div>
+                            <div class="col-md-3">
+                                <strong>Fecha inicio</strong>
+                                <input type="date" class="form-control fecha_inicio_input" id="fecha_inicio_ajuste_consulta" />
+                            </div>
+                            <div class="col-md-3">
+                                <strong>Fecha fin</strong>
+                                <input type="date" class="form-control" id="fecha_fin_ajuste_consulta" />
+                            </div>
+                            <div class="col-md-2">
+                                <br />
+                                <button class="btn btn_beta_icon" onclick="ConsultarAjustesInventarioHistorial();"><i class="fa fa-search"></i></button>
+                            </div>
+                        </div>
+                        <hr />
+                        <div id="div_ajuste_consulta"></div>
+                        <div class="container" id="div_impresion_ajuste_consulta" style="display:none;"></div>
+                    </div>
+
+                    <!--REALIZAR AJUSTE-->
+                    <div id="realizar_ajuste_tab" class="tab-pane fade">
+                        <h3 class="text-center">HOJA DE AJUSTE DE ENTRADAS Y SALIDAS</h3>
+                        <div class="row">
+                            <div class="col-md-2">
+                                <strong>Almacenes asignados:</strong>
+                                <select class="form-control id_almacen_select" id="id_almacen_g_ajuste_inventario" onchange="ShowHideEstablo(1);" disabled></select>
+                            </div>
+                            <div id="div_cambiar_establo_ajust" class="col-md-1">
+                                <br />
+                                <button class="btn btn_beta_danger" onclick="ShowHideEstablo(2);">CAMBIAR</button>
+                            </div>
+                            <div class="col-md-6">
+                                <strong>Buscar articulo</strong>
+                                <input type="text" class="form-control inputs_ajuste" id="clave_nombre" name="clave_nombre" placeholder="Ingresa la clave o el nombre del articulos" />
+                                <input type="text" id="id_articulo_ajuste" class="inputs_ajuste" style="display:none;" />
+                                <input type="text" id="cve_articulo_ajuste" class="inputs_ajuste" style="display:none;" />
+                                <input type="text" id="nombre_articulo_ajuste" class="inputs_ajuste" style="display:none;" />
+                                <input type="text" id="tipo_articulo_ajuste" class="inputs_ajuste" style="display:none;" />
+                                <input type="text" id="existencia_articulo_ajuste" class="inputs_ajuste" style="display:none;" />
+                            </div>
+                            <div class="col-md-2">
+                                <strong>Existencia física:</strong>
+                                <input type="text" class="form-control solo-numeros inputs_ajuste" id="existencia_fisica_ajuste" />
+                            </div>
+                            <div class="col-md-1 text-center">
+                                <br />
+                                <button class="btn btn_beta_icon" onclick="AgregarArticuloAjuste();"><i class="fa fa-plus"></i></button>
+                            </div>
+                        </div>
+                        <hr />
+                        <table class="table table-striped table-bordered">
+                            <thead>
+                                <tr class="bg-beta text-center">
+                                    <th>Clave</th>
+                                    <th>Articulo</th>
+                                    <th>Familia</th>
+                                    <th>Existencia sistema</th>
+                                    <th>Existencia física</th>
+                                    <th>Ajuste</th>
+                                    <th>Movimiento</th>
+                                    <th>Quitar</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbody_ajuste_inventario">
+                            </tbody>
+                        </table>
+                        <hr />
+                        <div class="text-center">
+                            <button class="btn btn_beta_warning" onclick="RegistrarAjusteInventario();">Registrar Ajuste de inventario</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+
+<!-- Modal REGISTRAR MOVIMIENTO-->
+<div class="modal fade" id="m_registrar_movimiento" tabindex="-1" role="dialog" aria-labelledby="m_registrar_movimiento" aria-hidden="true">
+    <div class="modal-dialog" role="document" style="min-width: 70%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">REGISTRAR MOVIMIENTO</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-2">
+                        <strong style="display:block">Almacén origen:</strong>
+                        <select style="display:block" class="form-control id_almacen_select" @*onchange="ConsultarArticulosAlmacenCapturaMov()"*@ id="id_almacen_g_cap_mov" onchange="ConsultarArticulosAlmacenCapturaMov();"></select>
+                    </div>
+                    <div class="col-md-2" id="div_destino">
+                        <strong id="almacen_destino_titulo">Almacén destino:</strong>
+                        <select class="form-control" @*onchange="ConsultarArticulosAlmacenCapturaMov()"*@ id="id_almacen_g_cap_mov_destino">
+                            @{ Html.RenderAction("ConsultarAlmacenesSelect", "CATALOGOS"); }
+                        </select>
+                    </div>
+                    <div class="col-md-2" style="display:none" id="div_folio_captura">
+                        <strong id="mensaje_captura">Folio factura:</strong>
+                        <input type="text" class="form-control input_clear_art" id="factura_folio" />
+                    </div>
+                    <div class="col-md-1 text-center" id="div_remision_captura" style="display:none">
+                        <strong>Remision:</strong>
+                        <input type="checkbox" class="form-control text-center" id="remision" style="height:30px;" onclick="CambioMensajeCaptura();" />
+                    </div>
+                    <div class="col-md-4">
+                        <strong>Tipo de artículos:</strong>
+                        <select class="form-control id_tipo_articulos_select" onchange="ConsultarArticulosAlmacenCapturaMov()" id="id_tipo_articulo_cap_mov">
+                            @*@{ Html.RenderAction("ConsultarTiposArticulosSelect", "CATALOGOS"); }*@
+                        </select>
+                    </div>
+                    <div class="col-md-4" id="div_movimiento_captura">
+                        <strong>Tipo de movimiento:</strong>
+                        <select class="form-control" id="id_tipo_mov_cap_mov" @*onchange="MovimientoInventario()"*@>
+                            @*@{ Html.RenderAction("ConsultarTipoMovInventarioSelect", "CATALOGOS"); }*@
+                            <option value="1002" selected>Traspaso de mercancía</option>
+                            @*<option value="1">Compra</option>*@
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <br />
+                    <hr />
+                </div>
+                <div class="table-responsive" id="div_articulos_almacen_captura_mov" style="overflow-y:scroll; height:400px; min-height:400px; overflow-x:hidden;">
+
+                </div>
+                <br />
+                <br />
+                <div class="row text-left">
+                    <div class="col-md-10"><button type="button" class="btn btn_beta" onclick="RegistrarTraspasoInventario();" id="accion_movimiento">Registrar</button></div>
+                    <div class="col-md-2"><button type="button" class="btn btn_beta_danger" data-dismiss="modal">Cancelar</button></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal MOVIMIENTO DETALLE-->
+<div class="modal fade" id="m_detalle_movimiento" tabindex="-1" role="dialog" aria-labelledby="m_detalle_movimiento" aria-hidden="true">
+    <div class="modal-dialog" role="document" style="min-width: 60%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">DETALLE DEL MOVIMIENTO</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="div_movimientos_inventario_detalle">
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn_beta_danger" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal INVENTARIO DETALLE CAPTURADO-->
+<div class="modal fade" id="m_detalle_inventario_cap" tabindex="-1" role="dialog" aria-labelledby="m_detalle_inventario_cap" aria-hidden="true">
+    <div class="modal-dialog" role="document" style="min-width: 90%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">INVENTARIO CAPTURADO</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="div_inventario_capturado_detalle">
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn_beta_danger" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal AJUSTE DE INVENTARIO DETALLE-->
+<div class="modal fade" id="m_ajuste_inventario_consulta" tabindex="-1" role="dialog" aria-labelledby="m_ajuste_inventario_consultalbl" aria-hidden="true">
+    <div class="modal-dialog" role="document" style="min-width: 95%; width: 95%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="m_ajuste_inventario_consultalbl">AJUSTE DE INVENTARIO</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="div_ajuste_inventario_consulta"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn_beta_danger" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@Scripts.Render("~/bundles_Inventario/js")
+@Scripts.Render("~/bundles_Articulos/js")
+@Scripts.Render("~/bundles_Propiedades/js")
+
+<script>
+    $(window).on("load", function () {
+        ConsultarAlmacenesUsuarioSelect(0);
+        CaracteresControl();
+        ConsultarTiposArticulosSelect();
+        $('.fecha_inicio_input').val(last_week);
+
+        //ACEPTA SOLO NUMEROS EL DIV DE CAPTURA DE MOVIMIENTOS
+        $(".divEditable").keypress(function (e) {
+            if (isNaN(String.fromCharCode(e.which))) e.preventDefault();
+        });
+
+        ConsultarInventarioArticulos();
+        const todos_option = $('<option>', { value: '0', text: 'Selecciona un establo' });
+        $("#id_almacen_g_ajuste_inventario").prepend(todos_option);
+
+        $("#mes_inicio_dif").val(last_six_month);
+        $("#mes_fin_dif").val(mes_actual);
+
+    });
+
+    $("#clave_nombre").autocomplete({
+        source: function (request, response) {
+            $.ajax({
+                type: "POST",
+                async: false,
+                url: "../ALMACEN/ConsultarArticulosQuickView",
+                data: {
+                    clave_nombre: $("#clave_nombre").val(),
+                    id_tipo_articulos: 0
+                },
+                success: function (data) {
+                    var data2 = $.parseJSON(data);
+                    response($.map(data2, function (item) {
+                        return { label: item.nombre_articulo + " | " + item.clave, value: item.nombre_articulo + " | " + item.clave };
+                    }))
+                },
+                error: function (xhr, status, error) {
+                    alert(error);
+                }
+            });
+        }
+    });
+
+    $('#clave_nombre').keyup(function () {
+        if ($("#clave_nombre").val() != '') {
+            var clave_nombre = $("#clave_nombre").val().split('|')[1].trim();
+            ConsultarInformacionArticuloAjuste(clave_nombre, 0);
+        }
+        else {
+            $(".inputs_ajuste").val("");
+        }
+    });
+
+    $("#ui-id-1").on('click', function (event) {
+        if ($("#clave_nombre").val() != '') {
+            var clave_nombre = $("#clave_nombre").val().split('|')[1].trim();
+            ConsultarInformacionArticuloAjuste(clave_nombre, 0);
+        }
+        else if (event.keyCode === 13 || event.keyCode === 9) {
+            iziToast.warning({
+                title: 'Aviso',
+                message: 'Ingresa el nombre o la clave de articulo para buscar.',
+            });
+        }
+        else {
+            $(".inputs_ajuste").val("");
+        }
+    });
+
+</script>
+
+
+@if (permisos.Contains(25))
+{
+    <script>
+        //----------CAPTURA DE INVENTARIO
+        ConsultarCapturaInventarioDiferencias();
+    </script>
+}
+
+
+@if (permisos.Contains(24))
+{
+    <script>
+        //----------CAPTURA DE MOVIMIENTOS
+        ConsultarArticulosAlmacenCapturaMov();
+        ConsultarMovimientosInventarioTable();
+    </script>
+}
+
+
+@if (permisos.Contains(26))
+{
+    <script>
+        //----------CONSULTAR INVENTARIOS
+        ConsultarInventariosCapturados();
+
+    </script>
+}
+

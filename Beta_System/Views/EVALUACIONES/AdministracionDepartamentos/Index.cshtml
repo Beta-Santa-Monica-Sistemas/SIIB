@@ -1,0 +1,186 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+    List<int> permisos = Session["PermisosModulo"] as List<int>;
+}
+
+<div class="page_title">
+    <div class="counter_section">
+        <div class="row">
+            <div class="col-md-10">
+                <h1>Administración de departamentos</h1>
+            </div>
+            <div class="col-md-2">
+                <button class="btn btn_beta" onclick="AddEditDepartamento(1,0,'');">Nuevo departamento</button>
+            </div>
+        </div>
+
+        @*<div class="row">
+                <div class="col-md-12">
+                    <ul class="nav nav-tabs">
+                        @if (permisos.Contains(4036))
+                        {
+                            <li class="active">
+                                <a data-toggle="tab" href="#tab_departamentos">
+                                    <strong style="padding-left:6px;">Departamentos</strong><i class="fa fa-building fa-2x ml-2"></i>
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>*@
+    </div>
+</div>
+
+<div class="row column2 counter_section">
+    <hr />
+    <div class="table-responsive">
+        <div id="div_departamentos"></div>
+    </div>
+    @*<div class="tab-content">
+            <div id="tab_departamentos" class="tab-pane fade show">
+
+            </div>
+
+            <div id="tab_departamentos_empleados" class="tab-pane">
+                <h3 class="text-center">DEPARTAMENTOS/EMPLEADOS</h3>
+                <div id="div_departamentos_empleados"></div>
+
+            </div>
+
+            <div id="tab_departamentos_usuarios" class="tab-pane">
+                <h3 class="text-center">DEPARTAMENTOS/USUARIOS</h3>
+                <div id="div_departamentos_usuarios"></div>
+            </div>
+
+        </div>*@
+</div>
+
+
+<!-- Modal DEPARTAMENTOS-->
+<div class="modal fade" id="m_departamentos" tabindex="-1" role="dialog" aria-labelledby="m_departamentosLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="m_departamentosLabel">DEPARTAMENTOS</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <input type="text" class="form-control" id="nombre_departamento" />
+                <hr />
+                <button class="btn btn_beta" id="btn_add_edit_departamento">Guardar</button>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn_beta_danger" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal DEPARTAMENTOS -> EMPLEADOS  -->
+<div class="modal fade" id="m_departamentos_empleados" tabindex="-1" role="dialog" aria-labelledby="m_departamentos_empleadosLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document" style="width: 90%; min-width:90%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="m_departamentos_empleadosLabel">DEPARTAMENTOS -> EMPLEADOS</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+
+                    <div class="col-md-5">
+                        <h3 class="text-center">Empleados</h3>
+                        <div class="table-responsive" style="height:500px; min-height:500px;overflow:scroll;overflow-x:hidden;">
+                            <div id="div_empleados_sin_depto"></div>
+                        </div>
+                    </div>
+                    <div class="col-md-2 text-center">
+                        <br />
+                        <br />
+                        <br />
+                        <br />
+                        <br />
+                        <br />
+                        <br />
+                        <h4>ASOCIAR DEPARTAMENTO</h4>
+                        <button class="btn btn_beta" id="btn_ligar_departamentos_empleados"><i class="fa fa-3x fa-arrow-right"></i></button>
+                    </div>
+                    <div class="col-md-5">
+                        <h3 class="text-center" id="nombre_departamento_empleados"></h3>
+                        <div class="table-responsive" style="height:500px; min-height:500px;overflow:scroll;overflow-x:hidden;">
+                            <div id="div_departamentos_empleados"></div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn_beta_danger" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal DEPARTAMENTOS -> USUARIOS  -->
+<div class="modal fade" id="m_departamentos_usuarios" tabindex="-1" role="dialog" aria-labelledby="m_departamentos_usuariosLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document" style="width: 90%; min-width:90%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="m_departamentos_usuariosLabel">DEPARTAMENTOS -> USUARIOS</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+
+                    <div class="col-md-5">
+                        <h3 class="text-center">Usuarios</h3>
+                        <div class="table-responsive" style="height:500px; min-height:500px;overflow:scroll;overflow-x:hidden;">
+                            <div id="div_usuarios"></div>
+                        </div>
+                    </div>
+                    <div class="col-md-2 text-center">
+                        <br />
+                        <br />
+                        <br />
+                        <br />
+                        <br />
+                        <br />
+                        <br />
+                        <h4>ASOCIAR DEPARTAMENTO</h4>
+                        <button class="btn btn_beta" id="btn_ligar_departamentos_usuarios"><i class="fa fa-3x fa-arrow-right"></i></button>
+                    </div>
+                    <div class="col-md-5">
+                        <h3 class="text-center" id="nombre_departamento_usuarios"></h3>
+                        <div class="table-responsive">
+                            <div id="div_departamentos_usuarios"></div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn_beta_danger" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@Scripts.Render("~/bundles_Evaluaciones/js")
+@Scripts.Render("~/bundles_Propiedades/js")
+
+<script>
+    $(window).on("load", function () {
+        ConsultarDepartamentosEvaluacionTable();
+        ConsultarEmpleadosSinDepartamento();
+        ConsultarUsuariosCheckTable();
+    });
+</script>

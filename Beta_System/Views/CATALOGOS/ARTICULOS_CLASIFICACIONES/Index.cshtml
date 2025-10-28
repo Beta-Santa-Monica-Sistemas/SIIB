@@ -1,0 +1,242 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+}
+
+<div class="page_title">
+    <div class="counter_section">
+        <h1>Administrador de Clasificaciones</h1>
+
+    </div>
+</div>
+
+<div class="row column2 counter_section">
+    <div class="tab-content">
+
+        <div>
+            <div class="text-right">
+                <!-- Button trigger modal -->
+                <button type="button" class="btn btn_beta" data-toggle="modal" data-target="#exampleModal">
+                    Agregar nueva clasificacion   <i class="fa fa-plus-circle ml-1" aria-hidden="true"></i>
+                </button>
+            </div>
+
+            <!---TABLITA-->
+            <div id="Tabla" class="table-responsive" style="width:100%;">
+            </div>
+
+
+
+
+
+        </div>
+    </div>
+
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Nueva clasificacion</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <div class="modal-body">
+                    <h6 class="m-1">Nombre de la clasificacion</h6>
+
+                    <input id="NomClasificacion" class="form-control" placeholder="Ingresa el nombre de la clasificacion" />
+                </div>
+
+                <div class="modal-footer">
+                    <button id="actualizarBtn" type="button" class="btn btn-success" style="display:none;">Actualizar</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                    <button id="GuardarBtn" type="button" class="btn btn-primary" onclick="GuardarClasificacion()" )">Guardar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> <!---->
+
+<script>
+
+    function OnOff(ModoJS, ParametroIdOnOffJS) {
+
+        $.ajax({
+            type: "POST",
+            async: true,
+            url: "../CLASIFICACIONES/OnOffActivo",
+            data: {
+                ModoBK: ModoJS,
+                ParametroIdOnOffBK: ParametroIdOnOffJS
+            },
+            success: function (response) {
+
+                alert("Estado: " + ModoJS);
+                MostrarClasificaciones();
+
+            },
+            error: function (xhr, status, error) {
+                console.error(error);
+                jsRemoveWindowLoad();
+            }
+        });
+
+    }
+
+    function ActualizarClasificacion(ParametroItemIdJS) {
+
+        var ParametroNomJS = $("#NomClasificacion").val();
+
+        if (ParametroNomJS == "") {
+            alert("Esta vacio");
+        } else {
+
+            $.ajax({
+                type: "POST",
+                async: true,
+                url: "../CLASIFICACIONES/ActualizarClasificacion",
+                data: {
+                    ParametroNomBK: ParametroNomJS,
+                    ParametroItemIdBK: ParametroItemIdJS
+                },
+                success: function (response) {
+                    if (response == "True") {
+                        alert("Se actualizo tu registro");
+                        $("#exampleModal").modal("hide");
+                        MostrarClasificaciones();
+                    } else {
+                        alert("No se actualizo tu registro")
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error(error);
+                    jsRemoveWindowLoad();
+                }
+            });
+
+        }
+
+
+    }
+
+    function ConsultarNombreClasificacion(ParametroItemIdJS) {
+        $.ajax({
+            type: "POST",
+            async: true,
+            url: "../CLASIFICACIONES/ConsultarNombreClasificacion",
+            data: {
+                ParametroItemIdBK: ParametroItemIdJS
+            },
+            success: function (response) {
+                if (response != "???????") {
+                    $("#exampleModal").modal("show");
+                    $("#actualizarBtn").css("display", "block"),
+                        $("#GuardarBtn").css("display", "none");
+                    $("#NomClasificacion").val(response);
+                    $("#actualizarBtn").attr("onclick", "ActualizarClasificacion(" + ParametroItemIdJS + ")");
+                } else {
+                    alert("No existe :(");
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error(error);
+                jsRemoveWindowLoad();
+            }
+        });
+
+    }
+
+
+
+    function GuardarClasificacion() {
+        var ParametroJS = $("#NomClasificacion").val();
+        if (ParametroJS == "") {
+            alert("Esta vacio");
+        } else {
+
+
+            $.ajax({
+                type: "POST",
+                async: true,
+                url: "../CLASIFICACIONES/GuardarClasificaciones",
+                data: {
+                    ParametroBK: ParametroJS
+                },
+                success: function (response) {
+                    if (response == "True") {
+                        alert("Se guardo su registro correctamente");
+                        $("#exampleModal").modal("hide");
+                        MostrarClasificaciones();
+                    } else {
+                        alert("No se guardo su registro");
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error(error);
+                    jsRemoveWindowLoad();
+                }
+            });
+
+        }
+
+    }
+
+
+    $(window).on("load", function () {
+        MostrarClasificaciones();
+    });
+
+    function MostrarClasificaciones() {
+        jsShowWindowLoad();
+        $.ajax({
+            type: "POST",
+            async: true,
+            url: "../CLASIFICACIONES/MostrarClasificaciones",
+            data: {
+                //Parametros (nohay)
+            },
+            success: function (response) {
+                jsRemoveWindowLoad();
+                try {
+                    $("#TablaParcial").dataTable().fnDestroy();
+                } catch (e) { }
+                $("#Tabla").html(response);
+                $('#TablaParcial').DataTable({
+                    keys: false,
+                    ordering: true,
+                    paging: false,
+                    select: true,
+                    dom: "Bfrtip",
+                    buttons: [{
+                        extend: "copy",
+                        className: "btn-sm",
+                        columns: ':visible'
+                    }, {
+                        extend: "csv",
+                        className: "btn-sm"
+                    }, {
+                        extend: "excel",
+                        className: "btn-sm"
+                    }, {
+                        extend: "pdf",
+                        className: "btn-sm"
+                    }, {
+                        extend: "print",
+                        className: "btn-sm"
+                    }],
+                    responsive: !0
+                });
+
+            },
+            error: function (xhr, status, error) {
+                console.error(error);
+                jsRemoveWindowLoad();
+            }
+        });
+    }
+</script>

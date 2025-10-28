@@ -1,0 +1,28 @@
+﻿@model IEnumerable<Beta_System.Models.C_nomina_inasistencias>
+
+<table class="table table-striped table-bordered" id="tabla_inasistencia_empleado_general" data-toggle="table" data-search="true">
+    <thead>
+        <tr class="bg-beta text-center">
+            <th>Empleado</th>
+            <th>Departamento</th>
+            <th>Puesto</th>
+            <th>Faltas</th>
+            <th>Mostrar</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var group in Model.GroupBy(x => x.Empleado_id).OrderBy(g => g.First().C_nomina_empleados.Nombre_completo))
+        {
+            var firstItem = group.First();
+            <tr class="text-center">
+                <td>@firstItem.C_nomina_empleados.Nombre_completo</td>
+                <td>@firstItem.C_nomina_empleados.C_nomina_departamentos.nombre_departamento</td>
+                <td>@firstItem.C_nomina_empleados.C_nomina_puestos.nombre_puesto</td>
+                <td>@group.Count()</td>
+                <td class="text-center">
+                    <button class="btn btn_beta_icon" onclick="MostrarDetalleInasistencias(@firstItem.Empleado_id);"><i class="fa fa-bars"></i></button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

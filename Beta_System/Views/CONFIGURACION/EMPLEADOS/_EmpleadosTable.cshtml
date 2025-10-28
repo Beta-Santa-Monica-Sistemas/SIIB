@@ -1,0 +1,68 @@
+﻿@model IEnumerable<Beta_System.Models.C_empleados>
+
+@{
+    List<int> permisos = Session["PermisosModulo"] as List<int>;
+}
+
+<table class="table table-bordered table-striped" id="table_empleados">
+    <thead>
+        <tr class="bg-beta text-center">
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Contacto</th>
+            <th>Usuarios</th>
+            <th>Estatus</th>
+            <th>Editar</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.OrderBy(x => x.nombres))
+        {
+            <tr>
+                <td>@item.id_empleado</td>
+                <td>@item.nombres @item.apellido_paterno @item.apellido_materno</td>
+                <td>
+                    <strong>Correo: </strong><p>@item.correo</p>
+                    <strong>Telefono: </strong><p>@item.telefono_celular</p>
+                </td>
+
+                <td class="text-center">
+                    @if (permisos.Contains(12))
+                    {
+                        <div class="row">
+                            <div class="col-md-8 text-left">
+                                @if (item.C_usuarios_corporativo != null)
+                                {
+                                    foreach (var usuario in item.C_usuarios_corporativo)
+                                    {
+                                        <strong>-@usuario.usuario</strong>
+                                        <br />
+                                        <p> (@usuario.C_usuarios_roles.nombre_rol)</p>
+                                    }
+                                }
+                            </div>
+                            <div class="col-md-2">
+                                <button class="btn btn_beta" onclick="ConsultarUsuariosEmpleado(@item.id_empleado); AddEditUsuario(2);"><i class="fa fa-user"></i></button>
+                            </div>
+                        </div>
+                    }
+                </td>
+                <td class="text-center">
+                    @if (item.id_estado_activo == true)
+                    {
+                        <strong style="color: #2e87d7;">ACTIVO</strong>
+                    }
+                    else
+                    {
+                        <strong style="color:grey;">INACTIVO</strong>
+                    }
+                </td>
+                <td class="text-center">
+                    @if (permisos.Contains(9))
+                    {<button class="btn btn_beta_icon" onclick="EditarEmpleado(@item.id_empleado); AddEditEmpleado(1);"><i class="fa fa-edit"></i></button>}
+
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

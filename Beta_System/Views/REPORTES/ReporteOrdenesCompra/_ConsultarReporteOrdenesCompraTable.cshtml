@@ -1,0 +1,32 @@
+﻿@using System.Data
+@model System.Data.DataTable
+@{
+    if (Model != null && Model.Rows.Count > 0)
+    {
+        <table class="table table-sm table-condensed small table-bordered table-striped table-hover" id="datatable_reporte_ordenes_compra">
+            <thead>
+                <tr class="bg-beta text-center">
+                    @foreach (DataColumn col in Model.Columns)
+                    {
+                        <th>@col.ColumnName</th>
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (DataRow row in Model.Rows)
+                {
+                    <tr class="text-center">
+                        @foreach (DataColumn col in Model.Columns)
+                        {
+                            <td class="text-center" name="@row[0]">@row[col.ColumnName]</td>
+                        }
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <h3 class="text-center text-danger">NO SE ENCONTRÓ INFROMACIÓN</h3>
+    }
+}

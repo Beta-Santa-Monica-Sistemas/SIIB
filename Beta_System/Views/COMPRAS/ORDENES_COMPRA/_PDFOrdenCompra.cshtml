@@ -1,0 +1,298 @@
+﻿@model Beta_System.Models.C_compras_ordenes_g
+
+<style>
+    .sin_margen {
+        margin: 0px;
+    }
+
+    .letra_grande {
+        font-size: 20px;
+    }
+
+    .table td {
+        padding: 2px;
+        border-top: none;
+    }
+
+    li {
+        margin: 3px;
+    }
+</style>
+
+@if (Model != null)
+{
+    var proveedor = Model.C_compras_proveedores;
+    double sub_total = 0;
+    string moneda_orden = "";
+    string tiempo_entrega = "";
+    try
+    {
+        tiempo_entrega = Model.C_compras_cotizaciones_confirmadas_g.C_compras_cotizaciones_confirmadas_d.Select(x => x.C_compras_cotizaciones_requisiciones.dias_entrega).Max().ToString() + " dias";
+    }
+    catch (Exception)
+    {
+
+    }
+
+
+    <div class="row">
+        <div class="col-md-6">
+            <img src="~/Content/img_layout/logo_beta_new.png" width="250" />
+        </div>
+        <div class="col-md-3 text-center">
+            <br /><br />
+            <h2>ORDEN DE COMPRA</h2>
+        </div>
+        <div class="col-md-3">
+            <strong class="letra_grande">Fecha y Hora de Impresión @String.Format(DateTime.Now.ToString(), "dd/mm/yyyy hh:mm")</strong>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <strong class="letra_grande">Facturar a:</strong>
+            <br />
+            <label class="letra_grande sin_margen">@ViewBag.nombre_empresa</label>
+            <br />
+            <label class="letra_grande sin_margen">@ViewBag.direccion_1</label>
+            <br />
+            <label class="letra_grande sin_margen">@ViewBag.direccion_2</label>
+            <br />
+            <label class="letra_grande sin_margen">TEL. @ViewBag.telefono</label>
+            <br />
+            <label class="letra_grande sin_margen">RFC: @ViewBag.rfc</label>
+            <br />
+            <label class="letra_grande sin_margen" style="border-bottom: 1px solid #000;">Para recepción de facturas a pago ingresar:</label>
+            <br />
+            <label class="letra_grande sin_margen" style="border-bottom: 1px solid #000;">https://portaldeproveedores.beta.com.mx/</label>
+        </div>
+        <div class="col-md-6">
+            <table class="table">
+                <tr>
+                    <td><label class="letra_grande sin_margen">Fecha</label></td>
+                    <td><label class="letra_grande sin_margen">@String.Format(Model.fecha_registro.Value.ToShortDateString(), "dd/mm/yyyy")</label></td>
+                </tr>
+                <tr>
+                    <td><label class="letra_grande sin_margen">Orden</label></td>
+                    <td><label class="letra_grande sin_margen">@Model.id_compras_orden_g</label></td>
+                </tr>
+                <tr>
+                    <td><label class="letra_grande sin_margen">Centro</label></td>
+                    <td><label class="letra_grande sin_margen">@Model.C_centros_g.siglas</label></td>
+                </tr>
+                <tr>
+                    <td><label class="letra_grande sin_margen">Requisición</label></td>
+                    <td><label class="letra_grande sin_margen">@Model.C_compras_cotizaciones_confirmadas_g.C_compras_requi_g.id_requisicion_articulo_g</label></td>
+                </tr>
+                <tr>
+                    <td><label class="letra_grande sin_margen">Comprador</label></td>
+                    <td><label class="letra_grande sin_margen">@Model.C_compras_cotizaciones_confirmadas_g.C_usuarios_corporativo.C_empleados.nombres @Model.C_compras_cotizaciones_confirmadas_g.C_usuarios_corporativo.C_empleados.apellido_paterno</label></td>
+                </tr>
+                <tr>
+                    <td><label class="letra_grande sin_margen">Tiempo entrega</label></td>
+                    <td><label class="letra_grande sin_margen">@tiempo_entrega</label></td>
+                </tr>
+            </table>
+        </div>
+
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-6">
+            <strong class="letra_grande">Enviar a:</strong>
+            <br />
+            <label class="letra_grande sin_margen">@Model.C_compras_ordenes_ubicaciones_entrega.nombre_ubicacion</label>
+        </div>
+        <div class="col-md-6">
+            <strong class="letra_grande">Datos del proveedor</strong>
+            <table class="table">
+                <tr>
+                    <td><label class="letra_grande sin_margen">Razón social</label></td>
+                    <td><label class="letra_grande sin_margen">@proveedor.razon_social</label></td>
+                </tr>
+                <tr>
+                    <td><label class="letra_grande sin_margen">Dirección</label></td>
+                    <td><label class="letra_grande sin_margen">@proveedor.direccion_1_prov</label></td>
+                </tr>
+                <tr>
+                    <td><label class="letra_grande sin_margen">Teléfono</label></td>
+                    <td><label class="letra_grande sin_margen">@proveedor.tel_prov</label></td>
+                </tr>
+                <tr>
+                    <td><label class="letra_grande sin_margen">Condiciones de pago</label></td>
+                    <td><label class="letra_grande sin_margen">@proveedor.dias_pago DIAS</label></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <br />
+    <div class="col-md-12">
+        <table class="table">
+            <thead>
+                <tr class="text-center">
+                    <th>Artículo</th>
+                    <th>Descripción</th>
+                    <th>Unidad</th>
+                    <th>Precio</th>
+                    <th>Cantidad</th>
+                    <th>Importe $</th>
+                    <th>Moneda</th>
+                    @*<th>No. Cuenta</th>*@
+                    <th>Cuenta</th>
+                    <th>Observaciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.C_compras_ordenes_d.Where(x => x.activo == true).GroupBy(x => x.id_articulo))
+                {
+                    <tr class="text-center">
+                        <td class="text-left">@item.FirstOrDefault().C_articulos_catalogo.clave</td>
+                        <td><h5 class="text-center"><strong>@item.FirstOrDefault().C_articulos_catalogo.nombre_articulo</strong></h5></td>
+                        <td>@item.FirstOrDefault().C_unidades_medidas.unidad_medida</td>
+                        <td>$@item.FirstOrDefault().precio_unitario.Value.ToString("N2")</td>
+                        <td>@string.Format("{0:0.00}", item.Sum(x => x.cantidad_compra))</td>
+                        <td>$@item.Select(x => x.precio_unitario * x.cantidad_compra).Sum(x => x.Value).ToString("N2")</td>
+                        <td>@item.FirstOrDefault().C_tipos_moneda.clave_fiscal</td>
+                        <td>@item.FirstOrDefault().C_cuentas_contables_g.cuenta</td>
+                        <td>
+                            @try
+                            {
+                                <label>@item.FirstOrDefault().C_compras_ordenes_g.C_compras_requi_g.C_compras_requi_d.Where(X => X.id_articulo == item.FirstOrDefault().C_articulos_catalogo.id_articulo).FirstOrDefault().observacion</label>
+                            }
+                            catch (Exception)
+                            {
+
+                            }
+                        </td>
+                        @*<td>@item.FirstOrDefault().C_cuentas_contables_g.nombre_cuenta</td>*@
+                    </tr>
+
+                    foreach (var cuenta in item)
+                    {
+                        double importe = Convert.ToDouble(cuenta.precio_unitario) * Convert.ToDouble(cuenta.cantidad_compra);
+                        double cantidad = Convert.ToDouble(cuenta.cantidad_compra);
+                        if (item.Select(x => x.id_cuenta_contable).Distinct().Count() == 1 && item.Select(x => x.precio_unitario).Distinct().Count() == 1)
+                        {
+                            <tr class="text-left">
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        }
+                        else if (item.Select(x => x.id_cuenta_contable).Distinct().Count() == 1 && item.Select(x => x.precio_unitario).Distinct().Count() > 1)
+                        {
+                            <tr class="text-left">
+                                <td>@cuenta.C_cuentas_contables_g.cuenta</td>
+                                <td>@cuenta.C_cuentas_contables_g.nombre_cuenta - @cuenta.C_cargos_contables_g.nombre_cargo</td>
+                                <td></td>
+                                <td class="text-center">@cuenta.precio_unitario.Value.ToString("N2")</td>
+                                <td class="text-center">@cuenta.cantidad_compra.Value.ToString("N2")</td>
+                                <td class="text-center">$@importe.ToString("N2")</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        }
+                        else
+                        {
+                            <tr class="text-left">
+                                <td>@cuenta.C_cuentas_contables_g.cuenta</td>
+                                <td>@cuenta.C_cuentas_contables_g.nombre_cuenta - @cuenta.C_cargos_contables_g.nombre_cargo</td>
+                                <td></td>
+                                <td></td>
+                                <td class="text-center">@cantidad.ToString("N2")</td>
+                                <td class="text-center">$@importe.ToString("N2")</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        }
+
+
+                        moneda_orden = cuenta.C_tipos_moneda.clave_fiscal;
+                        sub_total += importe;
+                    }
+
+                }
+            </tbody>
+        </table>
+        <br />
+        <br />
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <table class="table">
+                <tr>
+                    <td><strong class="letra_grande">Cant. en letra</strong></td>
+                    <td><label class="letra_grande sin_margen">(@{ Html.RenderAction("ConvertirNumeroALetras", "COMPRAS", new { numero = sub_total, clave_fiscal = moneda_orden }); })</label></td>
+                </tr>
+                <tr>
+                    <td><strong class="letra_grande">Comentario</strong></td>
+                    <td><label class="letra_grande sin_margen">@Model.C_compras_requi_g.concepto</label></td>
+                </tr>
+            </table>
+        </div>
+        <div class="col-md-5 text-right">
+            <strong class="letra_grande">Subtotal $</strong><strong class="letra_grande ml-1">@sub_total.ToString("N2")     @moneda_orden</strong>
+        </div>
+    </div>
+    <br />
+    <br />
+    <div class="row">
+        <div class="col-md-7">
+            <div class="text-center">
+                <strong class="letra_grande">Resumen de Cargos</strong>
+            </div>
+            <br />
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Importe</th>
+                        <th>Cuenta - Cargo</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.C_compras_ordenes_d.Where(x => x.activo == true).GroupBy(x => x.id_cuenta_contable))
+                    {
+                        decimal total_cuenta = 0;
+                        foreach (var cuenta in item)
+                        {
+                            total_cuenta += (decimal)cuenta.cantidad_compra * (decimal)cuenta.precio_unitario;
+                        }
+                        <tr>
+                            <td>$@total_cuenta.ToString("N2")</td>
+                            <td>@item.FirstOrDefault().C_cuentas_contables_g.cuenta @item.FirstOrDefault().C_cargos_contables_g.nombre_cargo</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div class="col-md-5">
+            <div class="text-center">
+                <strong class="letra_grande">Autorización</strong>
+                <br />
+                <strong class="letra_grande" style="font-size: 10px;"></strong>
+                <ul class="text-left">
+                    <li class="letra_grande">*La factura indica el número de orden de compra</li>
+                    <li class="letra_grande">*El subtotal de la factura debe conicidir con la orden de compra</li>
+                    <li class="letra_grande">*Documentación necesaria al momento de entrega: factura original, 2 copias de factura y orden de compra</li>
+                    <li class="letra_grande">*Si no tiene acceso al portal o desconoce, solicite su acceso</li>
+                    <li class="letra_grande">*Entrega oficina: Lunes a viernes de 8:30 am a 2:00 pm y de 3:00 pm a 5:30 pm, sábados de 9:00 am a 1:00 pm</li>
+                    <li class="letra_grande">*Entrega establos: revisar horario</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+}
+else
+{
+    <div class="text-center">
+        <h2 class="text-danger">ORDEN DE COMPRA NO ENCONTRADA</h2>
+    </div>
+}

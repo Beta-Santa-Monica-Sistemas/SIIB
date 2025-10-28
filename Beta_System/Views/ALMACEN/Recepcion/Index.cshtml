@@ -1,0 +1,92 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+}
+
+<div class="page_title">
+    <div class="counter_section">
+        <h1>Recepción de mercancia</h1>
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="nav nav-tabs">
+                    <li class="active"> <a data-toggle="tab" href="#recepcion_tab" id="consultar_requi">RECEPCIÓN<i class="fa fa-search fa-2x ml-2"></i></a></li>
+                    <li class="active"> <a data-toggle="tab" href="#recepcion_pendiente_tab">ARTÍCULOS PENDIENTES DE RECEPCION<i class="fa fa-search fa-2x ml-2"></i></a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="column2 counter_section">
+    <div class="tab-content">
+        <div id="recepcion_tab" class="tab-pane fade in active show">
+            <h3 class="text-center">Orden por recepcionar</h3>
+            <div class="row">
+                <div class="col-md-3">
+                    <strong>Almacén:</strong>
+                    <select id="id_almacen_recepcion" class="form-control">
+                        @*<option value="0">TODOS</option>*@
+                        @{ Html.RenderAction("ConsultarAlmacenesUsuarioSelect", "CATALOGOS", new { id_usuario = (int)Session["LoggedId"] }); }
+                    </select>
+                </div>
+                <div class="col-md-9" style="padding-top:14px">
+                    <button class="btn btn_beta_icon" onclick="ConsultarOrdenPorEntregar();"><i class="fa fa-search"></i></button>
+                </div>
+                <div class="col-md-12">
+                    <hr />
+                </div>
+                <div class="table-responsive" id="div_ordenes_recepcion"></div>
+            </div>
+        </div>
+
+        <div id="recepcion_pendiente_tab" class="tab-pane">
+            <h3 class="text-center">Ordenes pendientes por recepcionar</h3>
+            <div class="row">
+                <div class="col-md-3">
+                    <strong>Almacen:</strong>
+                    <select id="id_almacen_recepcion_pendiente" class="form-control" onchange="">
+                        @{ Html.RenderAction("ConsultarAlmacenesUsuarioSelect", "CATALOGOS", new { id_usuario = (int)Session["LoggedId"] }); }
+                    </select>
+                </div>
+                <div class="col-md-7" style="padding-top:14px">
+                    <button class="btn btn_beta_icon" onclick="ConsultarOrdenRecepcionPendiente();"><i class="fa fa-search"></i></button>
+                </div>
+                <div class="col-md-12">
+                    <hr />
+                </div>
+                <div class="table-responsive" id="div_ordenes_recepcion_pendiente"></div>
+            </div>
+        </div>
+    </div>
+    <hr />
+</div>
+
+<!-- MODAL RECEPCION-->
+<div class="modal fade" id="m_detalle_recepcion" tabindex="-1" role="dialog" aria-labelledby="m_detalle_recepcion" aria-hidden="true">
+    <div class="modal-dialog" role="document" style="min-width:90%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="m_detalle_recepcion_lbl">Recepcion de mercancia</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="div_detalle_recepcion"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn_beta_danger" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@Scripts.Render("~/bundles_Inventario/js")
+@Scripts.Render("~/bundles_Propiedades/js")
+
+<script>
+    $(window).on("load", function () {
+        CaracteresControl();
+    });
+</script>

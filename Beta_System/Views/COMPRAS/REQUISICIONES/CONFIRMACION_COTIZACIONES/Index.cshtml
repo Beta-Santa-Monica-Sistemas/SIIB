@@ -1,0 +1,49 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+}
+
+
+<div class="page_title">
+    <div class="counter_section">
+        <h1>Confirmación de cotizaciones de compra</h1>
+    </div>
+</div>
+
+<div class=" column2 counter_section">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="col-md-4">
+                <strong>Clasificación:</strong>
+                <select class="form-control " id="id_clasificaciones_search">
+                    <option value="0" selected>TODAS</option>
+                    @{ Html.RenderAction("ConsultarClasificacionSelect", "ARTICULOS"); };
+                </select>
+            </div>
+            <div class="col-md-3 text-left">
+                <br />
+                <button class="btn btn_beta_icon" onclick="ConsultarArticulosCotizadosPendientesConfirmacion();"><i class="fa fa-search"></i></button>
+            </div>
+        </div>
+    </div>
+    <hr />
+    <br />
+    <div id="div_articulos_cotizados_pendientes"> </div>
+    <br />
+    <div id="div_cotizaciones_articulos"></div>
+</div>
+
+@Scripts.Render("~/bundles_Requisiciones/js")
+@Scripts.Render("~/bundles_Propiedades/js")
+
+<script>
+    $(window).on("load", function () {
+        ConsultarArticulosCotizadosPendientesConfirmacion();
+    });
+
+    document.getElementsByClassName('checks_disabled').onclick = function () {
+        alert('Checkbox click prevented!');
+        return false;
+    };
+</script>

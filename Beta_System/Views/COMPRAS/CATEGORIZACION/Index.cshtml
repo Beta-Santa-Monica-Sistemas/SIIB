@@ -1,0 +1,105 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+    List<int> permisos = Session["PermisosModulo"] as List<int>;
+}
+
+<style>
+    .table-responsive {
+        max-height: 560px;
+    }
+
+        .table-responsive tr th {
+            font-size: 14px;
+        }
+
+        .table-responsive tr td {
+            font-size: 12px;
+        }
+</style>
+
+<div class="page_title">
+    <div class="counter_section">
+        <h1>Asignación de ubicación de artículos en el almacén</h1>
+        <div class="row">
+            <div class="col-md-4">
+                <strong>Almacén:</strong>
+                <select class="form-control" onchange="ConsultarUbicacionesAlmacen();" id="id_almacen">
+                    @{ Html.RenderAction("ConsultarAlmacenesUsuarioSelect", "CATALOGOS", new { id_usuario = (int)Session["LoggedId"] });}
+                </select>
+            </div>
+            <div class="col-md-4">
+                <strong>Tipo:</strong>
+                <select class="form-control" onchange="ConsultarArticulosNoAlmacenable();" id="id_articulo_tipo">
+                    <option value="0">NINGUNO</option>
+                    @{ Html.RenderAction("ConsultarTiposArticulosSelect", "CATALOGOS"); };
+                </select>
+                <br />
+            </div>
+            <div class="col-md-4">
+                <strong>Ubicación:</strong>
+                <select class="form-control" onchange="ConsultarArticulosUbicaionAlmacen();" id="id_ubicacion"></select>
+            </div>
+
+        </div>
+        <div class="row" id="tablas_control">
+            <div class="col-md-5 text-center">
+                <div class="col-md-12">
+                    <h2><strong>Articulos pendientes por asignar ubicacion</strong></h2>
+                </div>
+                <div class="col-md-12">
+                    <div class="table-responsive">
+                        <div id="div_tabla_articulo_pendientes"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-1 text-center mt-5">
+                <br />
+                <br />
+                <br />
+                <br />
+                <div class="col-md-12 text-center">
+                    <strong>ASIGNAR UBICACIÓN</strong>
+                    <button class="btn btn_beta_icon" onclick="AsignarArticulosAlmacen();">
+                        <i class="fa fa-4x fa-arrow-right" aria-hidden="true"></i>
+                    </button>
+                </div>
+                <br />
+                <br />
+                <div class="col-md-12 text-center mt-5">
+                    <strong>ELIMINAR ASIGNACIÓN</strong>
+                    <button class="btn btn_beta_icon" onclick="RemoverArticulosAlmacen();">
+                        <i class="fa fa-4x fa-arrow-left" aria-hidden="true"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="col-md-12 text-center">
+                    <h2><strong>Articulos asignados</strong></h2>
+                </div>
+                <div class="col-md-12">
+                    <div class="table-responsive">
+                        <div id="div_tabla_articulo_almacen"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@Scripts.Render("~/bundles_SolicitudesMercancia/js")
+@Scripts.Render("~/bundles_Inventario/js")
+@Scripts.Render("~/bundles_Articulos/js")
+
+<script>
+    $(window).on("load", function () {
+        ConsultarUbicacionesAlmacen();
+        ConsultarArticulosUbicaionAlmacen();
+        ConsultarArticulosNoAlmacenable();
+
+        $("#id_ubicacion").select2({
+            placeholder: 'Selecciona un artículo'
+        });
+    });
+</script>

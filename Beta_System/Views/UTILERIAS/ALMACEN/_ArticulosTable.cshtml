@@ -1,0 +1,49 @@
+﻿@model IEnumerable<Beta_System.Models.C_articulos_catalogo>
+
+<table class="table table-striped table-bordered w-100" id="tabla_articulos" width="100%">
+    <thead>
+        <tr class="bg-beta text-center">
+            <th>ID</th>
+            <th>Clave</th>
+            <th>Artículo</th>
+            <th>Tipo</th>
+            <th>Almacenable</th>
+            <th>Activo</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr class="text-center">
+                <td>@item.id_articulo</td>
+                <td>@item.clave</td>
+                <td>@item.nombre_articulo</td>
+                <td>@item.C_articulos_tipos.nombre_tipo</td>
+                <td class="text-center">
+                    @if (item.almacenable == true)
+                    {
+                        <i class="fa fa-3x fa-toggle-on" onclick="OnOffAlmacenableUtileria('@item.id_articulo',false);" style="color:lightgreen;"></i>
+                    }
+                    else
+                    {
+
+                        <i class="fa fa-3x fa-toggle-on" onclick="OnOffAlmacenableUtileria('@item.id_articulo',true);" style="color:gray;"></i>
+                    }
+
+                </td>
+                <td class="text-center">
+                    @if (item.activo == true)
+                    {
+                        <i class="fa fa-3x fa-toggle-on" onclick="OnOffArticuloUtileria('@item.id_articulo',false);" style="color:lightgreen;"></i>
+                    }
+                    else
+                    {
+
+                        <i class="fa fa-3x fa-toggle-on" onclick="OnOffArticuloUtileria('@item.id_articulo',true);" style="color:gray;"></i>
+                    }
+
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

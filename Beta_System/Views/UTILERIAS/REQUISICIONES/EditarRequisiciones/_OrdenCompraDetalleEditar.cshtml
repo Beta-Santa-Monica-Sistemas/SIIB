@@ -1,0 +1,107 @@
+﻿@model IEnumerable<Beta_System.Models.C_compras_ordenes_d>
+
+@if (Model.Count() > 0)
+{
+    double subtotal = 0;
+    <div class="table-responsive" style="height:400px; min-height:400px; overflow-y:auto;">
+        <table class="table table-sm table-condensed small table-bordered table-striped">
+            <thead>
+                <tr class="bg-beta text-center">
+                    <th>Entregado</th>
+                    <th>Artículo</th>
+                    <th>Descripción</th>
+                    <th>Cantidad entregada</th>
+                    <th>Cantidad compra</th>
+                    <th>Precio</th>
+                    <th>Importe</th>
+                    <th>Moneda</th>
+                    <th>Cargo</th>
+                    <th>Cuenta</th>
+                    <th>Cargos/Cuentas</th>
+                    <th>Eliminar</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var art in Model)
+                {
+                    double importe = 0;
+                    if (art.activo == true) { importe = Convert.ToDouble(art.precio_unitario) * Convert.ToDouble(art.cantidad_compra); }
+                    <tr class="text-center">
+                        <td>
+                            @if (art.entregado == true)
+                            {<i class="fa fa-2x fa-check" style="color: #46E63E;"></i> }
+                            else
+                            { <i class="fa fa-2x fa-remove" style="color: #eb3c3c;"></i>}
+                        </td>
+                        <td>
+                            @if (art.activo == true)
+                            {
+                                <label style="display:none;" class="id_articulos_compra" id="ocdetalle_@art.id_compras_orden_d">@art.id_articulo</label>
+                                <strong>@art.C_articulos_catalogo.clave</strong>
+                            }
+                            else
+                            {
+                                <label>@art.C_articulos_catalogo.clave</label>
+                            }
+                        </td>
+                        <td class="text-left">@art.nombre_articulo</td>
+
+                        <td><strong>@art.cantidad_entregada</strong></td>
+
+                        <td>
+                            @if (art.activo == true)
+                            {<input class="form-control cantidades_compra" value="@art.cantidad_compra" onkeyup="CalcularImporteDetalleOC('@art.id_compras_orden_d');" id="art_oc_cant_@art.id_compras_orden_d" />}
+                            else
+                            { <label>@art.cantidad_compra</label>}
+                        </td>
+                        <td>
+                            @if (art.activo == true)
+                            {<input class="form-control precios_compra" value="@art.precio_unitario" onkeyup="CalcularImporteDetalleOC('@art.id_compras_orden_d');" id="art_oc_prec_@art.id_compras_orden_d" />}
+                            else
+                            { <label>@art.precio_unitario.Value.ToString("N9")</label>}
+                        </td>
+                        <td>
+                            @if (art.activo == true)
+                            {<strong id="art_oc_importe_@art.id_compras_orden_d" class="importes_oc">@importe.ToString("N9")</strong> }
+                        else
+                        { <strong> @importe.ToString("0.00")</strong>}
+                        </td>
+                        <td>
+                            <strong>@art.C_tipos_moneda.clave_fiscal</strong>
+                        </td>
+                        <td>
+                            <strong>@art.C_cargos_contables_g.nombre_cargo</strong>
+                        </td>
+                        <td>
+                            <strong>@art.C_cuentas_contables_g.nombre_cuenta @art.C_cuentas_contables_g.cuenta</strong>
+                        </td>
+                        <td>
+                            @if (art.activo == true)
+                            {
+                                <button class="btn btn_beta_warning_icon" onclick="EditarCargoCuentaArticuloOrdenUtileria(@art.id_compras_orden_d, @art.id_cargo_contable, @art.id_cuenta_contable, '@art.nombre_articulo', @art.id_compras_orden_g);"><i class="fa fa-edit"></i></button>
+                            }
+                        </td>
+                        <td>
+                            @if (art.activo == false)
+                            {<i onclick="OnOffArticuloOrdenCompraUtileria(@art.id_compras_orden_g, @art.id_compras_orden_d, true);" class="fa fa-3x fa-toggle-on" style="color:gray;"></i> }
+                            else
+                            { <i onclick="OnOffArticuloOrdenCompraUtileria(@art.id_compras_orden_g, @art.id_compras_orden_d, false);" class="fa fa-3x fa-toggle-on" style="color:#46E63E;"></i>}
+                        </td>
+                        
+                    </tr>
+                    subtotal += importe;
+                }
+            </tbody>
+        </table>
+    </div>
+    <hr />
+    <strong id="art_oc_subtotal">Subtotal: $@subtotal.ToString("0.00")</strong>
+}
+
+<script>
+    $("#id_proveedor_editar_oc").val('@Model.FirstOrDefault().C_compras_ordenes_g.id_proveedor|@Model.FirstOrDefault().C_compras_ordenes_g.C_compras_proveedores.razon_social');
+
+    $("#ubicacion_entrega_editar_oc").find('option[value=' + @Model.FirstOrDefault().C_compras_ordenes_g.id_compras_ubicacion_entrega + ']').prop('selected', 'selected');;
+</script>
+
+

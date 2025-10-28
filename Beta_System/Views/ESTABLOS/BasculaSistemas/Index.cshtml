@@ -1,0 +1,686 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+    List<int> permisos = Session["PermisosModulo"] as List<int>;
+}
+<!-- Include jsPDF -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+<!-- Include html2pdf -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.js"></script>
+
+<div class="page_title">
+    <div class="counter_section">
+        <h1>Bascula Sistemas Sab</h1>
+
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="nav nav-tabs">
+                    <li class="active"> <a data-toggle="tab" href="#primera_pesada">PRIMERA PESADA <i class="fa fa-2x fa-plus-circle ml-2"></i></a> </li>
+                    <li> <a data-toggle="tab" href="#segunda_pesada">SEGUNDA PESADA <i class="fa fa-2x fa-calculator ml-2"></i></a> </li>
+                    <li> <a data-toggle="tab" href="#editar_ficha">EDITAR FICHA <i class="fa fa-2x fa-edit ml-2"></i></a> </li>
+                    <li><a data-toggle="tab" href="#consultar_fichas">REPORTE DE FICHAS<i class="fa fa-2x fa-folder-open ml-2"></i></a></li>
+                    <li onclick="MostrarReimp();"><a data-toggle="tab" href="#">REIMPRESION<i class="fa fa-2x fa-paperclip ml-2"></i></a></li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="row column2 counter_section">
+    <div class="tab-content">
+        <div id="primera_pesada" class="tab-pane fade in active show">
+            <h2>Genera tu ficha</h2>
+            <div class="row">
+                <div class="col-md-1" style="padding-top:15px">
+                    <button class="btn btn_beta" onclick="ConsultarFichaSab();">Nueva</button>
+                </div>
+                <div class="col-md-2">
+                    <strong>Nueva ficha:</strong>
+                    <input type="text" class="form-control" id="id_ficha_g" readonly />
+                </div>
+                <div class="col-md-2">
+                    <strong>Establo:</strong>
+                    <br />
+                    <select class="form-control" id="id_establo" onchange="ConsultarFichaSab(); ConsultarPozosEstabloSab(); ConsultarProveedorEstabloSab();">@{ Html.RenderAction("ConsultarEstablosUsuarios", "BASCULASAB", new { id_usuario = (int)Session["LoggedId"] }); };</select>
+                </div>
+                <div class="col-md-2">
+                    <strong for="fecha_pesada_1">Fecha primera pesada:</strong>
+                    <input type="datetime-local" id="fecha_pesada_1" name="fecha_pesada_1" class="form-control" min="2020-04-09T00:00" max="2030-12-31T23:59">
+                </div>
+                <div class="col-md-2">
+                    <strong>Almacen:</strong>
+                    <br />
+                    <select class="form-control" id="no_pozo"></select>
+                </div>
+                <div class="col-md-2">
+                    <strong>Peso:</strong>
+                    <input type="text" class="form-control input_clear solo-numeros" id="peso_bascula" />
+                </div>
+
+            </div>
+            <br />
+            <br />
+
+            <div class="row">
+                <div class="col-md-3">
+                    <strong>Proveedor:</strong>
+                    <br />
+                    <select class="form-control" id="select_proveedor" onchange="selectProveedor();">
+                        <option value="0">Seleccione un proveedor</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <strong>Articulo/Producto</strong><br />
+                    <select class="form-control" id="select_articulo" onchange="selectArticulo();">
+                        <option value="0">Seleccione un articulo</option>
+
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <strong>Movimiento</strong><br />
+                    <select class="form-control" id="tmov">
+                        @{ Html.RenderAction("ConsultarTiposMovimientoSelect", "CATALOGOS"); };
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <strong>Tipo de movimiento</strong>
+                    <br />
+                    <select class="form-control" id="cvemov">
+                        @{ Html.RenderAction("ConsultarClavesMovimientosSelect", "CATALOGOS"); };
+                    </select>
+                </div>
+
+            </div>
+            <br />
+            <div class="row">
+
+                <div class="col-md-3">
+                    <strong>Sucursal:</strong>
+                    <input type="text" class="form-control input_clear solo-letras-numeros" id="sucursal" />
+                </div>
+                <div class="col-md-5">
+                    <strong>Destino:</strong>
+                    <input type="text" class="form-control input_clear solo-letras-numeros" id="destino" />
+                </div>
+                <div class="col-md-3">
+                    <strong>Línea transportista:</strong>
+                    <select class="form-control" id="linea_trasp">
+                        @{ Html.RenderAction("ObtenerLineaTransportista", "BASCULASAB"); }
+                    </select>
+                </div>
+            </div>
+
+            <br />
+            <div class="row">
+                <div class="col-md-1">
+                    <strong>Folio:</strong>
+                    <input type="text" class="form-control input_clear solo-letras-numeros" id="folio" />
+                </div>
+                <div class="col-md-2">
+                    <strong>Conductor:</strong>
+                    <input type="text" class="form-control input_clear solo-letras borders" id="conductor" />
+                </div>
+                <div class="col-md-2">
+                    <strong>Placas:</strong>
+                    <input type="text" class="form-control input_clear solo-letras-numeros borders" id="placas" />
+                </div>
+                <div class="col-md-2">
+                    <strong>Maquilador:</strong>
+                    <input type="text" class="form-control input_clear solo-letras" id="maquilador" />
+                </div>
+                <div class="col-md-2">
+                    <strong>Predio cliente:</strong>
+                    <input type="text" class="form-control input_clear solo-letras-numeros" id="predio_cliente" />
+                </div>
+                <div class="col-md-2 text-center">
+                    <strong>Agrupada</strong>
+                    <div class="row">
+                        <input type="checkbox" class="form-control" id="agrupada" style="height:30px; padding-top:15px" />
+                    </div>
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-md-2">
+                    <strong>Tabla:</strong>
+                    <input type="text" class="form-control input_clear solo-letras-numeros borders" id="tabla_p1" />
+                </div>
+                <div class="col-md-2">
+                    <strong>Variedad:</strong>
+                    <input type="text" class="form-control input_clear solo-letras-numeros" id="variedad_p1" />
+                </div>
+                <div class="col-md-2">
+                    <strong>Corte:</strong>
+                    <input type="text" class="form-control input_clear solo-numeros" id="corte_p1" />
+                </div>
+                <div class="col-md-2">
+                    <strong>Cantidad de pacas:</strong>
+                    <input type="text" class="form-control input_clear solo-numeros" id="pacas_p1" />
+                </div>
+                <div class="col-md-3">
+                    <strong>Nombre del chofer ensilador</strong>
+                    <div class="row">
+                        <input type="text" class="form-control input_clear solo-letras-numeros" id="ensilador_p1" />
+                    </div>
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-md-6">
+                    <strong>Observaciones</strong>
+                    <br />
+                    <textarea rows="1" id="obs" class="form-control input_clear solo-letras-numeros"></textarea>
+                </div>
+                <div class="col-md-2">
+                    <strong>Peso origen:</strong>
+                    <input type="text" class="form-control input_clear solo-numeros" id="peso_origen" />
+                </div>
+                <div class="col-md-2">
+                    <strong>Peso materia seca:</strong>
+                    <input type="text" class="form-control input_clear solo-numeros" id="mat_seca" />
+                </div>
+                <div class="col-md-2">
+                    <br />
+                    <button class="btn btn_beta" onclick="GuardarFichaSab();">Crear ficha</button>
+                </div>
+                <div class="col-md-12">
+                    <hr />
+                    <br />
+                    <button class="btn btn_beta" onclick="LimpiarCampos();">Limpiar</button>
+                </div>
+            </div>
+
+            @* IMPRESION DE FICHA BASCULA *@
+            <div class="row">
+                <div class="col-md-1"></div>
+                <div class="col-md-10">
+                    <div id="div_pdf_primera" style="display:none;"></div>
+                </div>
+                <div class="col-md-1"></div>
+            </div>
+        </div>
+        <div id="segunda_pesada" class="tab-pane fade in">
+            <h2>Segunda pesada</h2>
+            <div class="row">
+                <div class="col-md-12">
+                    <br />
+                    <button class="btn btn_beta" onclick="FichaPendiente();">Fichas pendientes</button>
+                </div>
+
+                <div id="div_pdf_directo"></div>
+
+                <div class="col-md-12">
+                    <hr />
+                </div>
+                <div class="col-md-2">
+                    <strong>Busca tu ficha:</strong>
+                    <input type="text" class="form-control inputs_clear" id="id_ficha_g_seg" />
+                </div>
+                <div class="col-md-1" style="padding-top:15px">
+                    <button class="btn btn_beta" onclick="ConsultarInfoFichaSab()">Buscar</button>
+                </div>
+                <div class="col-md-2">
+                    <strong>Establo:</strong>
+                    <br />
+                    <select class="form-control" onchange="ConsultarPozosEstabloSab();" id="id_establo_seg">@{ Html.RenderAction("ConsultarEstablosUsuarios", "BASCULA", new { id_usuario = (int)Session["LoggedId"] }); };</select>
+                </div>
+                <div class="col-md-2">
+                    <strong>Almacen:</strong>
+                    <br />
+                    <input type="text" class="form-control inputs_clear" id="no_pozo_seg" readonly />
+                </div>
+
+                <div class="col-md-2">
+                    <strong>Peso:</strong>
+                    <input type="text" class="form-control inputs_clear solo-numeros" id="peso_bascula_2" onkeyup="CalcularPesoTotal();" />
+                </div>
+                <div class="col-md-2">
+                    <strong for="fecha_pesada_2">Fecha segunda pesada:</strong>
+                    <input type="datetime-local" id="fecha_pesada_2" name="fecha_pesada_2" class="form-control" min="2020-04-09T00:00" max="2030-12-31T23:59">
+                </div>
+            </div>
+            <br />
+            <br />
+
+            <div class="row">
+                <div class="col-md-3">
+                    <strong>Proveedor:</strong>
+                    <br />
+                    <input type="text" class="form-control inputs_clear" id="proveedor_seg" readonly />
+                </div>
+                <div class="col-md-3">
+                    <strong>Articulo/Producto</strong><br />
+                    <input type="text" class="form-control inputs_clear" id="articulo_seg" readonly />
+                </div>
+                <div class="col-md-1">
+                    <strong>Movimiento</strong><br />
+                    <input type="text" class="form-control inputs_clear" id="tmov_seg" readonly />
+                </div>
+                <div class="col-md-3">
+                    <strong>Tipo de movimiento</strong>
+                    <br />
+                    <input type="text" class="form-control inputs_clear" id="cvemov_seg" readonly />
+                </div>
+            </div>
+            <br />
+            <div class="row">
+
+                <div class="col-md-3">
+                    <strong>Sucursal:</strong>
+                    <input type="text" class="form-control inputs_clear" id="sucursal_seg" readonly />
+                </div>
+                <div class="col-md-4">
+                    <strong>Destino:</strong>
+                    <input type="text" class="form-control inputs_clear" id="destino_seg" readonly />
+                </div>
+                <div class="col-md-3">
+                    <strong>Línea transportista:</strong>
+                    <input type="text" class="form-control inputs_clear" id="linea_seg" readonly />
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-md-1">
+                    <strong>Folio:</strong>
+                    <input type="text" class="form-control inputs_clear" id="folio_seg" readonly />
+                </div>
+                <div class="col-md-2">
+                    <strong>Conductor:</strong>
+                    <input type="text" class="form-control inputs_clear" id="conductor_seg" readonly />
+                </div>
+                <div class="col-md-2">
+                    <strong>Placas:</strong>
+                    <input type="text" class="form-control inputs_clear" id="placas_seg" readonly />
+                </div>
+                <div class="col-md-2">
+                    <strong>Maquilador:</strong>
+                    <input type="text" class="form-control inputs_clear" id="maquilador_seg" readonly />
+                </div>
+                <div class="col-md-2">
+                    <strong>Predio cliente:</strong>
+                    <input type="text" class="form-control inputs_clear" id="predio_cliente_seg" readonly />
+                </div>
+                <div class="col-md-1 text-center">
+                    <strong>Agrupada</strong>
+                    <div class="row">
+                        <input type="checkbox" class="form-control" id="agrupada_seg" style="height:30px;" disabled />
+                    </div>
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-md-2">
+                    <strong>Tabla:</strong>
+                    <input type="text" class="form-control inputs_clear solo-letras-numeros" id="tabla_p2" readonly />
+                </div>
+                <div class="col-md-2">
+                    <strong>Variedad:</strong>
+                    <input type="text" class="form-control inputs_clear solo-letras-numeros" id="variedad_p2" readonly />
+                </div>
+                <div class="col-md-2">
+                    <strong>Corte:</strong>
+                    <input type="text" class="form-control inputs_clear solo-numeros" id="corte_p2" readonly />
+                </div>
+                <div class="col-md-2">
+                    <strong>Cantidad de pacas:</strong>
+                    <input type="text" class="form-control inputs_clear solo-numeros" id="pacas_p2" readonly />
+                </div>
+                <div class="col-md-3">
+                    <strong>Nombre del chofer ensilador</strong>
+                    <div class="row">
+                        <input type="text" class="form-control inputs_clear solo-letras-numeros" id="ensilador_p2" readonly />
+                    </div>
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-md-6">
+                    <strong>Observaciones</strong>
+                    <br />
+                    <textarea rows="2" class="form-control inputs_clear" id="obs_seg" readonly></textarea>
+                </div>
+                <div class="col-md-2">
+                    <strong>Peso origen:</strong>
+                    <input type="text" class="form-control inputs_clear" id="peso_origen_seg" readonly />
+                </div>
+                <div class="col-md-2">
+                    <strong>Peso materia seca:</strong>
+                    <input type="text" class="form-control inputs_clear" id="mat_seca_seg" readonly />
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-md-2">
+                    <strong>Peso 1:</strong>
+                    <input type="text" class="form-control inputs_clear" id="peso_bascula_seg" readonly />
+                </div>
+                <div class="col-md-2">
+                    <strong>Peso T:</strong>
+                    <input type="text" class="form-control inputs_clear" id="peso_bascula_t" readonly />
+                </div>
+
+                <div class="col-md-7 text-right">
+                    <br />
+                    <button class="btn btn_beta" onclick="GuardarSegundaPesadaSab();">Segunda pesada</button>
+                </div>
+            </div>
+        </div>
+        <div id="editar_ficha" class="tab-pane fade in">
+            <h2>Editar ficha</h2>
+            <div class="row">
+                <div class="col-md-2">
+                    <strong>Busca tu ficha:</strong>
+                    <input type="text" class="form-control inputs_clear" id="id_ficha_g_edit" />
+                </div>
+                <div class="col-md-1" style="padding-top:15px">
+                    <button class="btn btn_beta" onclick="ConsultarInfoFichaSabEditar()">Buscar</button>
+                </div>
+                <div class="col-md-2">
+                    <strong>Establo:</strong>
+                    <br />
+                    <select class="form-control" id="id_establo_edit" onchange="ConsultarFichaSab(); ConsultarPozosEstabloSabEdit(); ConsultarProveedorEstabloSab();">@{ Html.RenderAction("ConsultarEstablosUsuarios", "BASCULASAB", new { id_usuario = (int)Session["LoggedId"] }); };</select>
+                </div>
+                <div class="col-md-2 text-center" style="padding-top:15px">
+                    <button class="btn btn_beta_danger" onclick="CerrarFichaSab()">Cerrar ficha</button>
+                </div>
+            </div>
+            <br />
+            <br />
+            <div class="row">
+                <div class="col-md-2">
+                    <strong for="fecha_pesada_1_edit">Fecha primera pesada:</strong>
+                    <input type="datetime-local" id="fecha_pesada_1_edit" name="fecha_pesada_1_edit" class="form-control" min="2020-04-09T00:00" max="2030-12-31T23:59">
+                </div>
+                <div class="col-md-2">
+                    <strong for="fecha_pesada_2_edit">Fecha segunda pesada:</strong>
+                    <input type="datetime-local" id="fecha_pesada_2_edit" name="fecha_pesada_2_edit" class="form-control" min="2020-04-09T00:00" max="2030-12-31T23:59">
+                </div>
+                <div class="col-md-2">
+                    <strong>Almacen:</strong>
+                    <br />
+                    <select class="form-control" id="no_pozo_edit"></select>
+                </div>
+                <div class="col-md-2">
+                    <strong>Peso 1:</strong>
+                    <input type="text" class="form-control input_clear_edit solo-numeros" id="peso_bascula_1_edit" />
+                </div>
+                <div class="col-md-2">
+                    <strong>Peso 2:</strong>
+                    <input type="text" class="form-control input_clear_edit solo-numeros" id="peso_bascula_2_edit" onkeyup="CalcularPesoTotalEditar();" />
+                </div>
+                <div class="col-md-2">
+                    <strong>Peso T:</strong>
+                    <input type="text" class="form-control input_clear_edit" id="peso_bascula_3_edit" readonly />
+                </div>
+            </div>
+            <br />
+            <br />
+            <div class="row">
+                <div class="col-md-3">
+                    <strong>Proveedor:</strong>
+                    <br />
+                    <select class="form-control" id="select_proveedor_edit" onchange="selectProveedor();">
+                        <option value="0">Seleccione un proveedor</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <strong>Articulo/Producto</strong><br />
+                    <select class="form-control" id="select_articulo_edit" onchange="selectArticulo();">
+                        <option value="0">Seleccione un articulo</option>
+
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <strong>Movimiento</strong><br />
+                    <select class="form-control" id="tmov_edit">
+                        @{ Html.RenderAction("ConsultarTiposMovimientoSelect", "CATALOGOS"); };
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <strong>Tipo de movimiento</strong>
+                    <br />
+                    <select class="form-control" id="cvemov_edit">
+                        @{ Html.RenderAction("ConsultarClavesMovimientosSelect", "CATALOGOS"); };
+                    </select>
+                </div>
+
+            </div>
+            <br />
+            <div class="row">
+
+                <div class="col-md-3">
+                    <strong>Sucursal:</strong>
+                    <input type="text" class="form-control input_clear_edit solo-letras-numeros" id="sucursal_edit" />
+                </div>
+                <div class="col-md-5">
+                    <strong>Destino:</strong>
+                    <input type="text" class="form-control input_clear_edit solo-letras-numeros" id="destino_edit" />
+                </div>
+                <div class="col-md-3">
+                    <strong>Línea transportista:</strong>
+                    <select class="form-control" id="linea_trasp_edit">
+                        @{ Html.RenderAction("ObtenerLineaTransportista", "BASCULASAB"); }
+                    </select>
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-md-1">
+                    <strong>Folio:</strong>
+                    <input type="text" class="form-control input_clear_edit solo-letras-numeros" id="folio_edit" />
+                </div>
+                <div class="col-md-2">
+                    <strong>Conductor:</strong>
+                    <input type="text" class="form-control input_clear_edit solo-letras borders_edit" id="conductor_edit" />
+                </div>
+                <div class="col-md-2">
+                    <strong>Placas:</strong>
+                    <input type="text" class="form-control input_clear_edit solo-letras-numeros borders_edit" id="placas_edit" />
+                </div>
+                <div class="col-md-2">
+                    <strong>Maquilador:</strong>
+                    <input type="text" class="form-control input_clear_edit solo-letras" id="maquilador_edit" />
+                </div>
+                <div class="col-md-2">
+                    <strong>Predio cliente:</strong>
+                    <input type="text" class="form-control input_clear_edit solo-letras-numeros" id="predio_cliente_edit" />
+                </div>
+                <div class="col-md-2 text-center">
+                    <strong>Agrupada</strong>
+                    <div class="row">
+                        <input type="checkbox" class="form-control" id="agrupada_edit" style="height:30px; padding-top:15px" />
+                    </div>
+                </div>
+            </div>
+            <br />
+
+            <div class="row">
+                <div class="col-md-2">
+                    <strong>Tabla:</strong>
+                    <input type="text" class="form-control input_clear_edit solo-letras-numeros" id="tabla_edit" />
+                </div>
+                <div class="col-md-2">
+                    <strong>Variedad:</strong>
+                    <input type="text" class="form-control input_clear_edit solo-letras-numeros" id="variedad_edit" />
+                </div>
+                <div class="col-md-2">
+                    <strong>Corte:</strong>
+                    <input type="text" class="form-control input_clear_edit solo-numeros" id="corte_edit" />
+                </div>
+                <div class="col-md-2">
+                    <strong>Cantidad de pacas:</strong>
+                    <input type="text" class="form-control input_clear_edit solo-numeros" id="pacas_edit" />
+                </div>
+                <div class="col-md-3">
+                    <strong>Nombre del chofer ensilador</strong>
+                    <div class="row">
+                        <input type="text" class="form-control input_clear_edit solo-letras-numeros" id="ensilador_edit" />
+                    </div>
+                </div>
+            </div>
+
+            <br />
+            <div class="row">
+                <div class="col-md-6">
+                    <strong>Observaciones</strong>
+                    <br />
+                    <textarea rows="1" id="obs_edit" class="form-control input_clear_edit solo-letras-numeros"></textarea>
+                </div>
+                <div class="col-md-2">
+                    <strong>Peso origen:</strong>
+                    <input type="text" class="form-control input_clear_edit solo-numeros" id="peso_origen_edit" />
+                </div>
+                <div class="col-md-2">
+                    <strong>Peso materia seca:</strong>
+                    <input type="text" class="form-control input_clear_edit solo-numeros" id="mat_seca_edit" />
+                </div>
+                <div class="col-md-2">
+                    <br />
+                    <button class="btn btn_beta" onclick="GuardarEdicionFichaSab();">Confirmar edicion</button>
+                </div>
+                <div class="col-md-12">
+                    <hr />
+                    <br />
+                    <button class="btn btn_beta" onclick="LimpiarCamposEditar();">Limpiar</button>
+                </div>
+            </div>
+
+            @* IMPRESION DE FICHA BASCULA *@
+            <div class="row">
+                <div class="col-md-1"></div>
+                <div class="col-md-10">
+                    <div id="div_pdf_primera" style="display:none;"></div>
+                </div>
+                <div class="col-md-1"></div>
+            </div>
+        </div>
+        <div id="consultar_fichas" class="tab-pane fade in">
+            <div class="row">
+                <div class="col-md-3">
+                    <strong>Establo:</strong>
+                    <br />
+                    <select class="form-control" id="id_establo_reporte">
+                        @*<option value="0">TODOS</option>*@
+                        @{ Html.RenderAction("ConsultarEstablosUsuarios", "BASCULA", new { id_usuario = (int)Session["LoggedId"] }); };
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <strong>Fecha inicio</strong>
+                    <br />
+                    <input type="date" value="" class="form-control" id="fecha_i" />
+                </div>
+                <div class="col-md-2">
+                    <strong>Fecha fin</strong>
+                    <br />
+                    <input type="date" value="" class="form-control" id="fecha_f" />
+                </div>
+                <div class="col-md-3 text-center">
+                    <br />
+                    <button class="btn btn_beta_icon" onclick="ConsultarFichasReporteSAB();"><i class="fa fa-search"></i></button>
+                </div>
+            </div>
+            <div class="table-responsive">
+                <br />
+                <div id="div_fichas_reporte"></div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="modal fade" id="m_reimpresion" tabindex="1" role="dialog" aria-labelledby="m_reimpresion" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h2 class="modal-title" id="m_reimpresion_lbl">Reimpresion de fichas</h2>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <div class="rowº">
+                    <div class="col-md-12">
+                        <strong>Numero de ficha:</strong>
+                        <br />
+                        <input class="form-control" type="text" name="reimprecion_ficha" id="reimp_ficha" />
+                        <br />
+                        <strong>Establo:</strong>
+                        <select class="form-control" id="id_establo_re">@{ Html.RenderAction("ConsultarEstablosUsuarios", "BASCULASAB", new { id_usuario = (int)Session["LoggedId"] }); };</select>
+                        <hr />
+                        <button class="btn btn_beta btn-block" onclick="ReImpresionFichaDirecto();"><i class="fa fa-print"></i> REIMPRIMIR</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn_beta_danger" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="m_pendientes" tabindex="1" role="dialog" aria-labelledby="m_pendientes" aria-hidden="true">
+    <div class="modal-dialog" role="document" style="min-width:90%;">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h2 class="modal-title" id="m_pendientes_lbl">Fichas pendientes</h2>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <div class="table-responsive">
+                    <div id="div_ficha_pendiente"></div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn_beta_danger" data-dismiss="modal">Cerrar</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@Scripts.Render("~/bundles_BasculaSistemas/js")
+@Scripts.Render("~/bundles_Propiedades/js")
+
+<script>
+    $(window).on("load", function () {
+        ConsultarArticuloSab();
+        ConsultarArticuloSabEdit();
+        ConsultarPozosEstabloSab();
+        ConsultarPozosEstabloSabEdit()
+        CaracteresControl();
+        ConsultarProveedorEstabloSab();
+        ConsultarProveedorEstabloSabEdit();
+        ConsultarFichaSab();
+
+        $("#id_ficha_g_seg").on("keydown", function (event) {
+            if (event.which === 13 || event.which === 9) {
+                ConsultarInfoFichaSab();
+            }
+        });
+    });
+
+    try {
+        $("#select_proveedor").select2({
+            placeholder: 'Selecciona un proveedor',
+        });
+        $("#select_articulo").select2({
+            placeholder: 'Selecciona un artículo'
+        });
+        $("#select_proveedor_edit").select2({
+            placeholder: 'Selecciona un proveedor',
+        });
+        $("#select_articulo_edit").select2({
+            placeholder: 'Selecciona un artículo'
+        });
+    }
+    catch (ex) { }
+</script>

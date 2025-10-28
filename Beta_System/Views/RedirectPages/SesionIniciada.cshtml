@@ -1,0 +1,86 @@
+﻿@using Beta_System.Models
+@model Beta_System.Models.C_usuarios_corporativo
+
+<html lang="en">
+<head>
+    <!--ICONO DE LA PAGINA-->
+    <link rel="icon" type="image/png" href="~/Content/img_layout/Logo_beta_icono.png" />
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>SIIB | Sistema Integral de Información BETA</title>
+    <!-- bootstrap css -->
+    <link rel="stylesheet" href="~/Content/css/bootstrap.min.css" />
+    <!-- responsive css -->
+    <link rel="stylesheet" href="~/Content/css/responsive.css" />
+    <!-- color css -->
+    <link rel="stylesheet" href="~/Content/css/color_2.css" />
+    <!-- custom css -->
+    <link rel="stylesheet" href="~/Content/css/custom.css" />
+    <!-- calendar file css -->
+    <link rel="stylesheet" href="~/Content/css/semantic.min.css" />
+
+    <link rel="stylesheet" href="~/Content/css/bootstrap-multiselect.css" />
+    <link rel="stylesheet" href="~/Content/css/animate.css" />
+
+
+    <link href="/Content/production/css/custom.css" rel="stylesheet">
+    <script src="/Content/production/js/jquery.min.js"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+</head>
+
+
+<body style="background:white;">
+    <div class="col-md-12 mt-5">
+        <div class="container" style="padding-top:0px;">
+            <center>
+                <h2>Ya existe una sesion iniciada con el usuario @Session["Nombre_usuario"]</h2>
+            </center>
+            <div class="separator">
+                <center>
+                    <img style="width:500px;" src="~/Content/img_layout/logo_beta_new.png" />
+                    <br />
+                    <br />
+                    <br />
+                    <button type="submit" class="btn btn btn_beta" onclick="CerrarSesion();">Cerrar esta sesion <i class="fa fa-sign-out"></i> </button>
+                </center>
+            </div>
+        </div>
+
+    </div>
+    <div class="col-md-5">
+    </div>
+</body>
+
+</html>
+<script>
+    $(window).on("load", function () {
+
+    });
+
+    function CerrarSesion() {
+        $.ajax({
+            url: "../USUARIOLOGIN/CerrarSesion",
+            async: true,
+            type: "POST",
+            success: function (result) {
+                window.location.href = "../";
+            }
+
+        });
+    }
+
+    function AbrirNavegador() {
+        var base_url = window.location.origin;
+        var redirectWindow = window.open('http://google.com');
+        redirectWindow.location;
+        window.open("http://www.google.com/", "Google", "width=500,height=500");
+
+    }
+
+</script>

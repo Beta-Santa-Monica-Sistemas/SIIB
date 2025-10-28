@@ -1,0 +1,21 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/PublicLayout.cshtml";
+}
+
+<div id="div_pdf_orden_compra" class="container">
+
+</div>
+
+
+
+
+@Scripts.Render("~/bundles_FormatoOrdenCompra/js")
+
+<script>
+    $(window).on("load", function () {
+        GenerarOrdenCompraPDF(@ViewBag.id_orden_g, '@ViewBag.token_orden');
+        $("#div_pdf_orden_compra").css("display", "block");
+    });
+</script>

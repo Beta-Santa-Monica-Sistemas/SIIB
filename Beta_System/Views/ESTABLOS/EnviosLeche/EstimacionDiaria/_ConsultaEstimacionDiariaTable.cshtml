@@ -1,0 +1,51 @@
+﻿@model IEnumerable<Beta_System.Models.C_envios_leche_programacion_diaria_d>
+@if (Model.Count() > 0)
+{
+    <div class="row">
+        <div class="col-md-12">
+            <table class="table table-striped table-bordered text-center" id="datatable_consulta_estimacion_diaria" style="width:100%;">
+                <thead>
+                    <tr class="bg-beta text-center">
+                        <th>Establo</th>
+                        <th>Semana</th>
+                        <th>Inicio de semana</th>
+                        <th>Termino de semana</th>
+                        <th>Total produccion</th>
+                        <th>Total sobrante</th>
+                        <th>Total faltante</th>
+                        <th>Total semanal</th>
+                        <th>Mostrar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.GroupBy(x => x.id_programacion_diaria_g).Distinct())
+                    {
+                        <tr>
+                            @foreach (var items in item.Select(x => x.id_programacion_diaria_g).Distinct())
+                            {
+                                var total = @Model.Where(x => x.id_programacion_diaria_g == items).Sum(x => x.produccion) + @Model.Where(x => x.id_programacion_diaria_g == items).Sum(x => x.sobrante) - @Model.Where(x => x.id_programacion_diaria_g == items).Sum(x => x.faltante);
+                                <td>@Model.Where(x => x.id_programacion_diaria_g == items).FirstOrDefault().C_envios_leche_programacion_diaria_g.C_establos.nombre_establo</td>
+                                <td>@Model.Where(x => x.id_programacion_diaria_g == items).FirstOrDefault().C_envios_leche_programacion_diaria_g.no_semana</td>
+                                <td>@String.Format(Model.Where(x => x.id_programacion_diaria_g == items).FirstOrDefault().fecha_dia.ToShortDateString(), "dd/mm/aaaa")</td>
+                                <td>@String.Format(item.Where(x => x.id_programacion_diaria_g == items).LastOrDefault().fecha_dia.ToShortDateString(), "dd/mm/aaaa")</td>
+                                <td>@Model.Where(x => x.id_programacion_diaria_g == items).Sum(x => x.produccion).Value.ToString("N3")</td>
+                                <td>@Model.Where(x => x.id_programacion_diaria_g == items).Sum(x => x.sobrante).Value.ToString("N3")</td>
+                                <td>@Model.Where(x => x.id_programacion_diaria_g == items).Sum(x => x.faltante).Value.ToString("N3")</td>
+                                <td>@total.Value.ToString("N3")</td>
+                                <td class="text-center">
+                                    <button class="btn btn_beta_icon" onclick="MostrarInformacionEstimacionDiaria(@item.FirstOrDefault().C_envios_leche_programacion_diaria_g.id_establo,@item.FirstOrDefault().id_programacion_diaria_g,@item.FirstOrDefault().C_envios_leche_programacion_diaria_g.C_presupuestos_anios.anio, @item.FirstOrDefault().C_envios_leche_programacion_diaria_g.no_semana,@item.FirstOrDefault().C_envios_leche_programacion_diaria_g.id_anio_presupuesto,@item.GroupBy(x => x.fecha_dia.Month).OrderByDescending(g => g.Count()).Select(g => g.Key).FirstOrDefault());"><i class="fa fa-eye"></i></button>
+                                </td>
+                            }
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}
+else
+{
+    <div class="col-md-12 text-center">
+        <h2 style="color:red">No se encontro informacion</h2>
+    </div>
+}

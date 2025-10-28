@@ -1,0 +1,6 @@
+﻿@model Beta_System.Models.ConexionSab.Articulos_Sab
+
+@foreach (var item in Model.ID_Articulo.Zip(Model.No_articulo, (id, noPozo) => new { ID_Articulo = id, No_articulo = noPozo }))
+{
+    <option value="@item.ID_Articulo">@item.ID_Articulo - @item.No_articulo</option>
+}

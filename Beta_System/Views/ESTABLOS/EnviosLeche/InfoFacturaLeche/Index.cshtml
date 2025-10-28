@@ -1,0 +1,79 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+    List<int> permisos = Session["PermisosModulo"] as List<int>;
+}
+
+
+<div class="page_title">
+    <div class="counter_section">
+        <h1>Información de facturación</h1>
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="nav nav-tabs">
+                    <li class="active"> <a data-toggle="tab" href="#historico_factura">H.Factura <i class="fa fa-2x fa-book ml-2"></i></a> </li>
+                    <li> <a data-toggle="tab" href="#"></a> </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="row column2 counter_section">
+    <div class="tab-content">
+        <div id="historico_factura" class="tab-pane fade in active show">
+            <h2>Historico de facturación</h2>
+            <div class="row">
+                <div class="col-md-3">
+                    <strong>Factura</strong>
+                    <input class="form-control" id="factura_historico" />
+                </div>
+                <div class="col-md-1 p-3">
+                    <button class="btn btn_beta_icon" onclick="HistoricoFacturaLeche();"><i id="icon_leche_2" class="fa fa-search"></i></button>
+                </div>
+
+                <div class="col-md-12"><hr /></div>
+
+                <div id="div_tabla_historico_factura" class="table-responsive"></div>
+            </div>
+        </div>
+        <div id="" class="tab-pane fade in">
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="m_pendientes" tabindex="1" role="dialog" aria-labelledby="m_pendientes" aria-hidden="true">
+    <div class="modal-dialog" role="document" style="min-width:90%;">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h2 class="modal-title" id="m_pendientes_lbl">Fichas pendientes</h2>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <div class="table-responsive">
+                    <div id="div_ficha_pendiente"></div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn_beta_danger" data-dismiss="modal">Cerrar</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@Scripts.Render("~/bundles_EnviosLeche/js")
+@Scripts.Render("~/bundles_Propiedades/js")
+
+<script>
+    $(window).on("load", function () {
+        CaracteresControl();
+    });
+</script>

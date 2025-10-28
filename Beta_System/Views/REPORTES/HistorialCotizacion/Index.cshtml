@@ -1,0 +1,424 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+}
+
+<style>
+    .ui-menu {
+        z-index: 1550;
+    }
+
+    #m_articulos_requisicion {
+        z-index: 1500;
+    }
+
+    #m_add_cotizacion {
+        z-index: 1510;
+    }
+
+    #m_lupa_proveedor {
+        z-index: 1580;
+    }
+</style>
+
+<div class="page_title">
+    <div class="counter_section">
+        <h1>Historial de cotizaciones</h1>
+        <div class="row" id="tablas_control">
+            <div class="col-md-3">
+                <strong>Clave/Nombre del articulo:</strong>
+                <input type="text" class="form-control" name="clave_buscar" id="clave_buscar" />
+            </div>
+
+            <div style="display: flex; justify-content: center; align-items: center;">
+                <div style="padding-top: 16px;">
+                    <i class="fa fa-2x fa-search text_beta" onclick="LupaArticulo(2);"></i>
+                </div>
+            </div>
+
+            <div class="col-md-2 text-right" style="padding-top:10px">
+                <button class="btn btn_beta" onclick="ConsultarHistorialCotizacionesGeneralTable(); ConsultaHistorialCotizacionTable();"><i class="fa fa-search"></i> Consultar cotizaciones</button>
+            </div>
+            <div class="col-md-6 text-center">
+                <h3 class="p-2 mt-3" style="background-color: #2e87d7; color:white; border-radius:0.4rem; display:none;" id="nombre_articulo_cotizaciones"></h3>
+            </div>
+            <div class="col-md-12"><hr /></div>
+
+            <div class="col-md-12" id="div_tabla_cotizaciones_general"></div>
+            <hr />
+            <div class="col-md-12" id="div_tabla_articulo_transito"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!--Modal LUPA Proveedor-->
+<div class="modal fade" id="m_lupa_proveedor" tabindex="-1" role="dialog" aria-labelledby="m_lupa_proveedor" aria-hidden="true">
+    <div class="modal-dialog" role="document" style="min-width:75%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="m_lupa_proveedor_lbl">Lista de proveedores</h2>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="div_lupa_proveedor"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Modal LUPA Articulos-->
+<div class="modal fade" id="m_lupa_articulos" tabindex="-1" role="dialog" aria-labelledby="m_lupa_articulos" aria-hidden="true">
+    <div class="modal-dialog" role="document" style="min-width:50%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="m_lupa_articulos_lbl">Lista de articulos</h2>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="col-md-4">
+                    <strong>Clasificación</strong>
+                    <select class="form-control " id="id_clasificaciones_art" onchange="LupaArticuloParametro(0);">
+                        <option value="-1">NINGUNA</option>
+                        <option value="0">TODAS</option>
+                        @{ Html.RenderAction("ConsultarClasificacionSelect", "ARTICULOS"); };
+                    </select>
+                </div>
+                <div id="div_lupa_articulos"></div>
+            </div>
+
+            <div class="col-md-12">
+                <label id="mensaje_prueba"></label>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn_beta_danger" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal Editar vigencia-->
+<div class="modal fade" id="m_editar_vigencia" tabindex="-1" role="dialog" aria-labelledby="m_editar_vigencia_lbl" aria-hidden="true">
+    <div class="modal-dialog" role="document" style="width: 40%; min-width:40%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="m_editar_vigencia_lbl">Extender vigencia</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row container">
+                    <div class="col-md-12 text-center">
+                        <h3 id="lbl_id_cotizacion"></h3>
+                        <input type="number" id="id_cotizacion_editar" style="display:none;" />
+                        <strong>NUEVA VIGENCIA</strong>
+                        <br />
+                        <input type="date" class="form-control" id="fecha_vigencia_edit" />
+                        <hr />
+                        <button class="btn btn_beta" onclick="ActualizarVigenciaCotizacion();"><i class="fa fa-refresh"></i> Actualizar vigencia</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal Registrar cotización-->
+<div class="modal fade" id="m_add_cotizacion" tabindex="-1" role="dialog" aria-labelledby="m_add_cotizacion_lbl" aria-hidden="true">
+    <div class="modal-dialog" role="document" style="width: 85%; min-width:85%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="m_add_cotizacion_lbl">Registrar cotización</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12" style="font-size:18px;">
+                        <div class="col-md-6">
+                            <h4 style="margin:3px;">Artículo: </h4>
+                            <h3 style="margin:3px;" class="text_beta" id="nombre_articulo_add_coti"></h3>
+                            <label id="id_articulo_add_coti" style="display: none;"></label>
+                        </div>
+                        <div class="col-md-3 text-right">
+                            <h4 style="margin:3px;">Cantidad:</h4>
+                            <h3 style="margin:3px;" class="text_beta">1.00</h3>
+                        </div>
+                        <div class="col-md-3 text-right">
+                            <h4 style="margin:3px;">Unidad de medida:</h4>
+                            <h3 style="margin:3px;" class="text_beta" id="unidad_medida_add_coti"></h3>
+                            <label id="id_unidad_medida_add_coti" style="display:none;"></label>
+                        </div>
+                    </div>
+                    <div class="col-md-12 text-center">
+                        <hr />
+                        <div class="col-md-2">
+                            <strong class="text-left">Clave</strong>
+                            <input class="form-control" id="clave_proveedor" type="text" name="clave_proveedor" placeholder="Ingresa una clave" onkeydown="AccionesProveedor(1); Limpiador();" />
+                            <br />
+                        </div>
+                        <div class="col-md-9">
+                            <strong class="text-left">Proveedor</strong>
+                            <input class="form-control" id="id_proveedor" type="text" name="id_proveedor" placeholder="Ingresa un proveedor" onkeydown="AccionesProveedor(2); Limpiador();" />
+                            <br />
+                        </div>
+
+                        <div style="display: flex; justify-content: center; align-items: center;">
+                            <div style="padding-top: 26px;">
+                                <i class="fa fa-2x fa-search text_beta" onclick="LupaProveedores(2);"></i>
+                            </div>
+                        </div>
+
+
+                        <label id="mensaje_proveedor"></label>
+                    </div>
+
+                    <div id="div_info_prov" style="display:none;">
+                        <h3 class="text_beta">Datos de contacto</h3>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="col-md-12">
+                                    <strong>Nombre comercial</strong>
+                                    <br />
+                                    <label id="nombre_comercial"></label>
+                                </div>
+                                <div class="col-md-12">
+                                    <strong>Razón social</strong>
+                                    <br />
+                                    <label id="razon_social"></label>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="col-md-12">
+                                    <strong>Dirección</strong>
+                                    <br />
+                                    <label id="direccion"></label>
+                                </div>
+                                <div class="col-md-12">
+                                    <strong>Nombre del contacto</strong>
+                                    <br />
+                                    <label id="nombre_contacto"></label>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        <strong>Teléfono de oficina</strong>
+                                        <br />
+                                        <label id="telef_oficina"></label>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <strong>Teléfono celular</strong>
+                                        <br />
+                                        <label id="telef_celular"></label>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-8 text-left">
+                                        <strong>Correo electrónico</strong>
+                                        <br />
+                                        <label id="correo"></label>
+                                    </div>
+                                    <div class="col-md-4 text-left">
+                                        <strong>Moneda</strong>
+                                        <br />
+                                        <label id="clave_fiscal_moneda"></label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label id="proveedor" style="display:none"></label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12">
+                        <h3 class="text_beta">Datos del articulo</h3>
+                        <div class="col-md-2">
+                            <strong>Precio unitario</strong>
+                            <input class="form-control solo-numeros" id="precio_unitario" type="text" onkeyup="CalcularPrecio(); Limpiador();" />
+                            <label id="mensaje_precio"></label>
+                        </div>
+                        <div class="col-md-3">
+                            <strong>Marca</strong>
+                            <select class="form-control " id="marca">@{ Html.RenderAction("MostrarMarcasSelect", "CATALOGOS"); };</select>
+                        </div>
+                        <div class="col-md-2">
+                            <strong>Presentación</strong>
+                            <input class="form-control solo-letras" id="presentacion" type="text" />
+                        </div>
+                        <div class="col-md-4">
+                            <strong>Fecha de vigencia</strong>
+                            <input type="date" class="form-control" id="fecha_vigencia" onchange="Limpiador();" />
+                            <label id="mensaje_fecha"></label>
+                        </div>
+                    </div>
+
+
+                    <div class="col-md-12">
+                        <h3 class="text_beta">Condiciones</h3>
+                        <div class="col-md-2">
+                            <strong>Crédito</strong>
+                            <input class="form-control solo-numeros-spunto" id="credito" type="text" disabled />
+                        </div>
+                        <div class="col-md-2">
+                            <strong>Descuento (%)</strong>
+                            <input class="form-control solo-numeros" id="descuento" type="text" onkeyup="CalcularPrecio(); Limitador();" />
+                        </div>
+                        <div class="col-md-3">
+                            <strong>Tiempo de entrega (días)</strong>
+                            <input class="form-control solo-numeros-spunto" id="tiempo_entrega" type="text" onkeyup="Limpiador();" />
+                            <label id="mensaje_entrega"></label>
+                        </div>
+                        <div class="col-md-3">
+                            <strong>Precio unitario (sin IVA)</strong>
+                            <input class="form-control solo-numeros" id="precio_unitario_iva" type="text" readonly /><br />
+                        </div>
+                        <div class="col-md-2">
+                            <strong>Moneda</strong>
+                            <select class="form-control " id="tipo_moneda" disabled>@{ Html.RenderAction("ConsultarTipoMoneda", "CATALOGOS"); };</select>
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="col-md-12 text-center">
+                        <div class="col-md-4">
+                            <button class="btn btn_beta_danger" data-dismiss="modal"><i class="fa fa-arrow-left"></i> Regresar</button>
+                        </div>
+                        <div class="col-md-4">
+                            <button class="btn btn_beta" onclick="" style="display:none"><i class="fa fa-remove"></i> Eliminar</button>
+                        </div>
+                        <div class="col-md-4">
+                            <button class="btn btn_beta" id="btn_guardar_cotizacion" onclick="RegistrarCotizacionProveedor();"><i class="fa fa-plus"></i> Guardar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@Scripts.Render("~/bundles_Articulos/js")
+
+@Scripts.Render("~/bundles_Requisiciones/js")
+@Scripts.Render("~/bundles_Proveedores/js")
+@Scripts.Render("~/bundles_Propiedades/js")
+
+<script>
+    $(window).on("load", function () {
+
+    });
+
+
+
+    $("#clave_buscar").autocomplete({
+        source: function (request, response) {
+            $.ajax({
+                type: "POST",
+                async: false,
+                url: "../ALMACEN/ConsultarArticulosQuickView",
+                data: {
+                    clave_nombre: $("#clave_buscar").val(),
+                    id_tipo_articulos: 0
+                },
+                success: function (data) {
+                    var data2 = $.parseJSON(data);
+                    response($.map(data2, function (item) {
+                        //$("#id_articulo_quick_view").val(item.id_articulo);
+                        return { label: item.nombre_articulo + " | " + item.clave, value: item.clave };
+                    }))
+                },
+                error: function (xhr, status, error) {
+                    alert(error);
+                }
+            });
+        }
+    });
+
+    $('#clave_buscar').on('keydown', function (event) {
+        if ($("#clave_buscar").val() != '') {
+            //var clave_buscar = $("#clave_buscar7").val().split('|')[1].trim();
+            if (event.keyCode === 13 || event.keyCode === 9) {
+                ConsultarHistorialCotizacionesGeneralTable();
+                ConsultaHistorialCotizacionTable();
+            }
+        }
+        else if (event.keyCode === 13 || event.keyCode === 9) {
+            iziToast.warning({
+                title: 'Aviso',
+                message: 'Ingresa el nombre o la clave de articulo para buscar.',
+            });
+        }
+    });
+
+    $("#ui-id-1").on('click', function (event) {
+        ConsultarHistorialCotizacionesGeneralTable();
+        ConsultaHistorialCotizacionTable();
+    });
+
+
+
+
+    $("#ui-id-1").on('click', function (event) {
+        ConsultarClaveProveedor();
+    });
+
+    CaracteresControl();
+    $("#id_proveedor").autocomplete({
+        source: function (request, response) {
+            $.ajax({
+                type: "POST",
+                async: false,
+                url: "../PROVEEDORES/ConsultarProveedoresArray",
+                data: {
+                    search: $("#id_proveedor").val()
+                },
+                success: function (data) {
+                    var data2 = $.parseJSON(data);
+                    response($.map(data2, function (item) {
+                        return { label: item.razon_social + " | " + item.clave_fiscal, value: item.razon_social };
+                    }));
+                    //id_compras_proveedor
+
+                    $("#id_proveedor").on('change', function (event) {
+                        ConsultarClaveProveedor();
+                    });
+                },
+                error: function (xhr, status, error) {
+                    alert(error);
+                }
+            });
+        }
+    });
+
+    $('#id_proveedor').keydown(function (e) {
+        if ($("#id_proveedor").val() != '') {
+            if (e.keyCode === 13 || e.keyCode === 9) {
+                ConsultarClaveProveedor()
+            }
+        }
+
+    });
+    $('#clave_proveedor').keydown(function (e) {
+        if ($("#clave_proveedor").val() != '') {
+            if (e.keyCode === 13 || e.keyCode === 9) {
+                ConsultarInformacionProveedorNomb();
+            }
+        }
+
+    });
+
+</script>

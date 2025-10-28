@@ -1,0 +1,850 @@
+﻿@model Beta_System.Models.C_compras_requi_g
+<style>
+    .hh-grayBox {
+        /*background-color: #F8F8F8;*/
+        margin-bottom: 20px;
+        padding: 35px;
+        margin-top: 20px;
+    }
+
+    .pt45 {
+        padding-top: 45px;
+    }
+
+    .order-tracking {
+        text-align: center;
+        width: 14%;
+        position: relative;
+        display: block;
+    }
+
+        .order-tracking .is-complete {
+            display: block;
+            position: relative;
+            border-radius: 50%;
+            height: 30px;
+            width: 30px;
+            border: 0px solid #AFAFAF;
+            background-color: #f7be16;
+            margin: 0 auto;
+            transition: background 0.25s linear;
+            -webkit-transition: background 0.25s linear;
+            z-index: 2;
+        }
+
+            .order-tracking .is-complete:after {
+                display: block;
+                position: absolute;
+                content: '';
+                height: 14px;
+                width: 7px;
+                top: -2px;
+                bottom: 0;
+                left: 5px;
+                margin: auto 0;
+                border: 0px solid #AFAFAF;
+                border-width: 0px 2px 2px 0;
+                transform: rotate(45deg);
+                opacity: 0;
+            }
+
+        .order-tracking.completed .is-complete {
+            border-color: #27aa80;
+            border-width: 0px;
+            background-color: #27aa80;
+        }
+
+            .order-tracking.completed .is-complete:after {
+                border-color: #fff;
+                border-width: 0px 3px 3px 0;
+                width: 7px;
+                left: 11px;
+                opacity: 1;
+            }
+
+        .order-tracking p {
+            color: #A4A4A4;
+            font-size: 16px;
+            margin-top: 8px;
+            margin-bottom: 0;
+            line-height: 20px;
+        }
+
+            .order-tracking p span {
+                font-size: 14px;
+            }
+
+        .order-tracking.completed p {
+            color: #000;
+        }
+
+        .order-tracking::before {
+            content: '';
+            display: block;
+            height: 3px;
+            width: calc(100% - 40px);
+            background-color: #f7be16;
+            top: 13px;
+            position: absolute;
+            left: calc(-50% + 20px);
+            z-index: 0;
+        }
+
+        .order-tracking:first-child:before {
+            display: none;
+        }
+
+        .order-tracking.completed:before {
+            background-color: #27aa80;
+        }
+</style>
+
+@{
+    string estatus_requi = "ACTIVA";
+    string color_status = "#46E63E";
+    List<int> permisos = Session["PermisosModulo"] as List<int>;
+}
+
+@if (Model != null)
+{
+    <input id="id_tipo_requisicion_utileria" value="@Model.id_requisicion_tipo" style="display: none;" />
+
+    if (Model.activo == false) { estatus_requi = "CANCELADA"; color_status = "#eb3c3c"; }
+
+    <div>
+        <div class="row">
+            <div class="col-md-6">
+                <strong>Cargo contable</strong>
+                <select class="form-control input_validos" id="select_cargo" onchange="ConsultarCuentasContablesCargosSelect();">
+                    <option value="select_cargo">SELECCIONAR CARGO CONTABLE</option>
+                    @{ Html.RenderAction("ConsultarCargosContables", "CATALOGOS"); };
+                </select>
+            </div>
+            <div class="col-md-4">
+                <strong>Cuenta contable </strong>
+                <select class="form-control input_validos" id="select_cuenta" onchange="ConsultarCuentasContableSelect(); EnfocarComponente();">
+                    <option value="selecte_cuenta">SELECCIONAR CUENTA</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <strong>Cuenta: </strong>
+                <br />
+                <strong id="cuentas"></strong>
+            </div>
+        </div>
+        <br />
+        <div class="row">
+            <div class="col-md-1">
+                <strong>Clave art.</strong>
+                <br />
+                <input type="text" class="form-control input_detalle input_validos solo-numeros-spunto" id="id_articulos" name="id_articulos" onclick="">
+
+            </div>
+            <div class="col-md-6">
+                <strong>Artículo</strong>
+                <br />
+                <input type="text" class="form-control input_detalle input_validos" id="id_articulo" placeholder="Ingresa un artículo" name="id_articulo" onclick="">
+            </div>
+
+            <div style="display: flex; justify-content: center; align-items: center;">
+                <div style="padding-top: 16px;">
+                    <i class="fa fa-2x fa-search text_beta" onclick="LupaArticulo(1);"></i>
+                </div>
+            </div>
+
+            <div class="col-md-2 text-center">
+                <strong>Unidad de medida</strong>
+                <br />
+                <strong id="unidad_medida"></strong>
+                <input type="text" readonly id="id_unidad_medida" style="display:none;" />
+            </div>
+            <div class="col-md-1">
+                <strong>Cantidad</strong>
+                <input type="text" class="form-control input_detalle input_valid input_validos solo-numeros" id="cantidad" />
+            </div>
+            <div class="col-md-1" id="div_precio_orden_compra">
+                <strong>Precio</strong>
+                <input type="text" class="form-control solo-numeros" id="precio" value="$0.00" readonly />
+            </div>
+        </div>
+        <br />
+        <div class="row">
+            <div class="col-md-10">
+                <strong>Observaciones</strong>
+                <input type="text" class="form-control input_detalle" id="observacion" />
+            </div>
+            <div class="col-md-2 text-right">
+                <br />
+                <button class="btn btn_beta" onclick="ConsultarInformacionArticuloID(1); RegistrarArticuloDetalleUtileria(@Model.id_requisicion_articulo_g); ">Agregar articulo</button>
+            </div>
+        </div>
+
+        <hr />
+        <h3>Detalle de Requisición</h3>
+        <div class="table-responsive">
+            <table class="table table-striped table-bordered text-center" id="articulos_table_solicitud">
+                <thead>
+                    <tr class="text-center bg-beta">
+                        <th>Articulo</th>
+                        <th>Descripción</th>
+                        <th>Cantidad</th>
+                        <th>Medida</th>
+                        <th>Precio</th>
+                        <th style="display:none;">id_unidad_medida</th>
+                        <th>Observaciones</th>
+                        <th style="display:none;">id_centro_g</th>
+                        <th>Cargo Contable</th>
+                        <th style="display:none;">id_cargo_contable</th>
+                        <th style="display:none;">id_cuenta_contable_g</th>
+                        <th>Editar</th>
+                    </tr>
+                </thead>
+                <thead id="thead_requi_articulos">
+
+                </thead>
+            </table>
+        </div>
+    </div>
+
+    foreach (var item in Model.C_compras_requi_d)
+    {
+        if (item.C_compras_requi_g.id_requisicion_tipo == 2) //SERVICIO
+        {
+            <script>
+                AgregarArticuloDetalleUtileria(@item.id_requisicion_articulo_d, count_tabla,  @item.id_articulo, '@item.C_articulos_catalogo.nombre_articulo', @item.cantidad, @item.precio, '@item.C_unidades_medidas.unidad_medida', @item.id_unidad_medida,
+                '@item.observacion', @item.id_centro_g, '@item.C_cargos_contables_g.nombre_cargo', @item.C_cargos_contables_g.id_cargo_contable_g,
+                @item.id_cuenta_contable_g, false, '@item.C_compras_requi_g.id_requisicion_tipo', '',0, 1, '@item.C_cuentas_contables_g.nombre_cuenta', '@item.C_articulos_catalogo.clave', '@item.C_cuentas_contables_g.cuenta');
+                count_tabla++;
+            </script>
+        }
+        else  //COMPRA / INVERSION
+        {
+            <script>
+                AgregarArticuloDetalleUtileria(@item.id_requisicion_articulo_d, count_tabla,  @item.id_articulo, '@item.C_articulos_catalogo.nombre_articulo', @item.cantidad, @item.precio, '@item.C_unidades_medidas.unidad_medida', @item.id_unidad_medida,
+                '@item.observacion', @item.id_centro_g, '@item.C_cargos_contables_g.nombre_cargo', @item.C_cargos_contables_g.id_cargo_contable_g,
+                @item.id_cuenta_contable_g, false, '@item.C_compras_requi_g.id_requisicion_tipo', '', 0, 1, '@item.C_cuentas_contables_g.nombre_cuenta', '@item.C_articulos_catalogo.clave', '@item.C_cuentas_contables_g.cuenta');
+                count_tabla++;
+            </script>
+
+        }
+    }
+
+    if (Model.C_compras_cotizaciones_requisiciones != null)
+    {
+        <hr />
+        <h3>Cotizaciones confirmadas</h3>
+        <table class="table table-striped table-bordered table-sm">
+            <thead>
+                <tr class="bg-beta text-center">
+                    <th>Articulo</th>
+                    <th>Descripción</th>
+                    <th>Proveedor</th>
+                    <th>No. de cotización</th>
+                    <th>Usuario cotizó</th>
+                    <th>Dias de entrega</th>
+                    <th>Fecha registro</th>
+                    <th>Fecha confirmación</th>
+                    <th>Cantidad confirmada</th>
+                    <th>Firmada/Autorizada</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var coti in Model.C_compras_cotizaciones_requisiciones.Where(x => x.activo == true && x.fecha_confirmacion != null).OrderBy(x => x.fecha_registro))
+                {
+                    <tr class="text-center">
+                        <td>@coti.C_articulos_catalogo.clave</td>
+                        <td>@coti.C_articulos_catalogo.nombre_articulo</td>
+                        <td>@coti.C_compras_cotizaciones_articulos.C_compras_proveedores.razon_social</td>
+                        <td>@coti.C_compras_cotizaciones_articulos.id_compra_articulo_cotizacion</td>
+                        <td><strong>@coti.C_usuarios_corporativo.C_empleados.nombres @coti.C_usuarios_corporativo.C_empleados.apellido_paterno</strong></td>
+                        <td>@coti.dias_entrega</td>
+                        <td>@string.Format(coti.fecha_registro.Value.ToString(), "dd/mm/yyyy hh:mm:")</td>
+                        <td>
+                            @if (coti.fecha_confirmacion != null)
+                            {<label>@string.Format(coti.fecha_confirmacion.Value.ToString(), "dd/mm/yyyy hh:mm")</label>}
+                        </td>
+                        <td>@coti.cantidad_surtir</td>
+                        <td>
+                            @if (coti.orden_generada == null)
+                            {<strong><i class="fa fa-clock-o" style="color:#2e87d7;"></i> PENDIENTE</strong> }
+                            else
+                            { <strong><i class="fa fa-check" style="color:#46E63E;"></i> AUTORIZADA</strong>}
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+
+    if (Model.C_compras_cotizaciones_confirmadas_g != null)
+    {
+        if (Model.C_compras_cotizaciones_confirmadas_g.Where(x => x.activo == true).Count() > 0)
+        {
+            <hr />
+            <h3>Parcialidades</h3>
+            foreach (var parcial in Model.C_compras_cotizaciones_confirmadas_g.Where(x => x.activo == true))
+            {
+                <div class="">
+                    <div class="" id="heading_@parcial.id_cotizacion_confirmada_g">
+                        <div class="w-100 collapsed" style="border: 1px solid black; background-color: rgb(236, 244, 251);">
+                            <div class="row">
+                                <div class="col-md-3 text-center">
+                                    <br />
+                                    <strong>@parcial.nombre_suborden</strong><br />
+                                    <label>(Entregar en: @parcial.C_compras_ordenes_ubicaciones_entrega.nombre_ubicacion)</label>
+                                </div>
+                                <div class="col-md-4 text-center">
+                                    <label style="margin:0px;">Proveedor:</label>
+                                    <br />
+                                    <strong>@parcial.C_compras_cotizaciones_confirmadas_d.FirstOrDefault().C_compras_cotizaciones_requisiciones.C_compras_cotizaciones_articulos.C_compras_proveedores.razon_social</strong>
+                                    <br />
+                                    @*<strong>Correo capturado:</strong>
+                                    <br />*@
+                                    <label>(@parcial.correo_proveedor_suborden)</label>
+                                </div>
+                                <div class="col-md-1 text-center">
+                                    <button style="background-color: @parcial.C_compras_cotizaciones_confirmadas_status.color; color:white;" class="btn btn_beta mt-2">
+                                        @parcial.C_compras_cotizaciones_confirmadas_status.nombre_status
+                                    </button>
+                                </div>
+                                <div class="col-md-2 text-center">
+                                    <br />
+                                    <strong>Registró: @parcial.C_usuarios_corporativo.usuario</strong><br />
+                                    <label>@parcial.C_usuarios_corporativo.C_empleados.nombres @parcial.C_usuarios_corporativo.C_empleados.apellido_paterno</label>
+                                </div>
+                                <div class="col-md-2 row">
+                                    <div class="col-md-6 text-center"><button class="btn btn_beta_icon" data-toggle="collapse" data-target="#collapse_@parcial.id_cotizacion_confirmada_g" aria-expanded="false" aria-controls="collapse_@parcial.id_cotizacion_confirmada_g"><i class="fa fa-bars"></i></button></div>
+                                    @if (parcial.id_status_cotizacion_confirmada == 1 && parcial.solicita_autorizacion == false)
+                                    {
+                                        <div class="col-md-6 text-center">
+                                            <button class="btn btn_beta_danger_icon" onclick="EliminarSolicitudCompra(@parcial.id_cotizacion_confirmada_g, '@parcial.nombre_suborden', @parcial.id_requisicion_articulo_g)"><i class="fa fa-remove"></i></button>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="collapse_@parcial.id_cotizacion_confirmada_g" class="collapse" aria-labelledby="heading_@parcial.id_cotizacion_confirmada_g" data-parent="#accordionSolicitudes">
+                        <div class="" style="border: 2px solid black; background-color: rgb(236, 244, 251);">
+                            <table class="table table-striped table-bordered text-center table-hover table-sm">
+                                <thead>
+                                    <tr class="bg-beta">
+                                        <th>Artículo</th>
+                                        <th>Precio unitario</th>
+                                        <th>Descuento</th>
+                                        <th>Precio final</th>
+                                        <th>Cantidad cotizada</th>
+                                        <th>Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var cotizacion in parcial.C_compras_cotizaciones_confirmadas_d.Where(x => x.C_compras_cotizaciones_requisiciones.confirmada == true && x.C_compras_cotizaciones_requisiciones.agrupada == true && x.activo == true).GroupBy(x => x.C_compras_cotizaciones_requisiciones.id_compra_articulo_cotizacion))
+                                    {
+                                        var coti_requi = cotizacion.FirstOrDefault().C_compras_cotizaciones_requisiciones.C_compras_cotizaciones_articulos;
+                                        var cantidad_surtir = cotizacion.Sum(x => x.C_compras_cotizaciones_requisiciones.cantidad_surtir);
+                                        var precio_final = coti_requi.precio_final;
+                                        var total_coti = cantidad_surtir * precio_final;
+                                        <tr>
+                                            @*<td>@coti_requi.C_compras_proveedores.razon_social (@coti_requi.C_compras_proveedores.C_tipos_moneda.clave_fiscal)</td>*@
+                                            <td class="text-left">@coti_requi.C_articulos_catalogo.nombre_articulo</td>
+                                            <td>@string.Format("{0:C}", coti_requi.precio_unitario)</td>
+                                            <td>@coti_requi.porcentaje_descuento %</td>
+                                            <td>@string.Format("{0:C}", coti_requi.precio_final)</td>
+                                            <td>@string.Format("{0:0.00}", cantidad_surtir.Value.ToString("#,##0.00"))</td>
+                                            <td>@string.Format("{0:C}", total_coti)</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+    }
+
+    if (Model.C_compras_ordenes_g != null)
+    {
+        if (Model.C_compras_ordenes_g.Count() > 0)
+        {
+            <hr />
+            <div class="row">
+                <div class="col-md-10 text-left"><h3>Ordenes de compra</h3></div>
+                @if (Model.C_compras_ordenes_g.Where(x => x.activo == true && x.entregado == false).Count() > 1)
+                {
+                    <div class="col-md-2 text-right">
+                        <button class="btn btn_beta_success" onclick="ConsultarOrdenMoverArticulos(@Model.id_requisicion_articulo_g)" title="Mover artículos entre ordenes"><i class="fa fa-exchange"></i> Mover artículos de orden</button>
+                    </div>
+                }
+            </div>
+            foreach (var oc in Model.C_compras_ordenes_g)
+            {
+            <div style="border: 2px solid black; background-color: rgb(236, 244, 251);">
+                <div class="" id="heading_oc_@oc.id_compras_orden_g">
+                    <div class="w-100 collapsed">
+                        <div class="row">
+                            <div class="col-md-2">
+                                <div class="row">
+                                    <div class="col-md-6 text-center">
+                                        <br />
+                                        <strong>#@oc.id_compras_orden_g</strong>
+                                        <br />
+                                        <strong>@string.Format(oc.fecha_registro.Value.ToShortDateString(), "dd/MM/yyyy")</strong>
+                                    </div>
+                                    <div class="col-md-6 text-center p-3">
+                                        @if (oc.id_status_orden != 2008 && oc.activo == true)
+                                        {
+                                            <button class="btn btn_beta_info_icon" title="Descargar orden de compra" onclick="DescargarOrdenCompraProveedor(@oc.id_compras_orden_g, '@oc.token_orden');"><i class="fa fa-download"></i></button>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3 text-center mt-3">
+                                <label style="margin:0px;">Proveedor: </label>
+                                <br />
+                                <strong>@oc.C_compras_proveedores.razon_social</strong>
+                                <br />
+                                <label>(@oc.C_compras_cotizaciones_confirmadas_g.correo_proveedor_suborden)</label>
+                            </div>
+                            <div class="col-md-1 text-center p-3">
+                                <button class="btn btn_beta" style="background-color: @oc.C_compras_ordenes_status.color; color: white">@oc.C_compras_ordenes_status.nombre_status</button>
+                            </div>
+                            <div class="col-md-2 text-center">
+                                <br />
+                                <strong>Autorizó: @oc.C_usuarios_corporativo.usuario</strong>
+                                <br />
+                                <label>@oc.C_usuarios_corporativo.C_empleados.nombres @oc.C_usuarios_corporativo.C_empleados.apellido_paterno</label>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="col-md-2 text-center p-3">
+                                    <button class="btn btn_beta_icon" data-toggle="collapse" data-target="#collapse_oc_@oc.id_compras_orden_g" title="Ver" aria-expanded="false" aria-controls="collapse_oc_@oc.id_compras_orden_g"><i class="fa fa-bars"></i></button>
+                                </div>
+                                @if (oc.alta_proveedor == false && oc.activo == true && oc.entregado == true@*&& oc.id_tipo_orden == 2*@ && oc.C_inventario_almacen_mov_g.Count() == 0)
+                                {
+                                <div class="col-md-2 text-center p-3">
+                                    <button class="btn btn_beta_warning_icon" onclick="CancelarRecepcionOrdenCompraUtileria(@oc.id_compras_orden_g)" title="Cancelar recepción"><i class="fa fa-remove"></i></button>
+                                </div>
+                                }
+                                @if (oc.alta_proveedor == false && oc.activo == true && oc.entregado == false && oc.C_compras_ordenes_d.Where(x => x.activo == true).Select(z => z.cantidad_entregada).Sum() == 0)
+                                {
+                                    <div class="col-md-2 text-center p-3">
+                                        <button class="btn btn_beta_success_icon" onclick="ConsultarOrdenDividir(@oc.id_compras_orden_g)" title="Dividir orden"><i class="fa fa-share-alt"></i></button>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="col-md-2 text-center">
+                                        <strong class="text-danger">Elimine recepciones para dividir</strong>
+                                    </div>
+                                }
+
+                                @if (oc.id_status_orden == 1)  //GENERADA
+                                {
+                                    <div class="col-md-2 text-center p-3">
+                                        <button class="btn btn_beta_icon" onclick="EditarOrdenCompraUtileria(@oc.id_compras_orden_g);" title="Editar orden de compra"><i class="fa fa-edit"></i></button>
+                                    </div>
+                                    <div class="col-md-2 text-center p-3">
+                                        <button class="btn btn_beta_danger_icon" onclick="CancelarOrdenCompra(@oc.id_compras_orden_g);" title="Cancelar orden de compra"><i class="fa fa-remove"></i></button>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="collapse_oc_@oc.id_compras_orden_g" class="collapse" aria-labelledby="heading_oc_@oc.id_compras_orden_g" data-parent="#accordionSolicitudes">
+                    <table class="table table-striped table-bordered table-hover table-sm" id="datatable_orden_compra_detalle">
+                        <thead>
+                            <tr class="bg-beta text-center">
+                                <th>Entregado</th>
+                                <th>Articulo</th>
+                                <th>Descripción</th>
+                                <th>Cantidad</th>
+                                <th>Unidad</th>
+                                <th>Precio</th>
+                                <th>Importe</th>
+                                <th>Moneda</th>
+                                <th>Cargo</th>
+                                <th>Cuenta</th>
+                                <th>Cambiar</th>
+                                <th>Estatus</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @*@foreach (var item in oc.C_compras_ordenes_d.Where(x => x.activo == true))*@
+                            @foreach (var item in oc.C_compras_ordenes_d)
+                            {
+                                decimal importe = (decimal)item.precio_unitario * (decimal)item.cantidad_compra;
+                                <tr class="text-center">
+                                    <td>
+                                        @if (item.entregado == true)
+                                        {<i class="fa fa-check" style="color: #46E63E;"></i> }
+                                        else
+                                        { <i class="fa fa-remove" style="color: #eb3c3c;"></i>}
+                                    </td>
+
+                                    <td>@item.C_articulos_catalogo.clave</td>
+                                    <td>@item.C_articulos_catalogo.nombre_articulo</td>
+                                    <td>@string.Format("{0:0.00}", item.cantidad_compra)</td>
+                                    <td>@item.C_unidades_medidas.unidad_medida</td>
+                                    <td>@string.Format("{0:C}", item.precio_unitario)</td>
+                                    <td>@string.Format("{0:C}", importe)</td>
+                                    <td>@item.C_tipos_moneda.clave_fiscal</td>
+                                    <td>@item.C_cargos_contables_g.nombre_cargo</td>
+                                    <td>@item.C_cuentas_contables_g.cuenta - @item.C_cuentas_contables_g.nombre_cuenta</td>
+                                    <td>
+                                        @if (item.cantidad_entregada == 0 && item.activo == true)
+                                        {<button class="btn btn btn_beta_lineal" onclick="ConsultarCambiarArticuloOrdenCompra(@item.id_articulo, @item.id_compras_orden_d, '@item.C_articulos_catalogo.nombre_articulo');"><i class="fa fa-exchange"></i></button>}
+                                    </td>
+                                    <td>
+                                        @if (item.activo == true)
+                                        {<i class="fa fa-toggle-on" style="color: lawngreen;"></i> }
+                                        else
+                                        { <i class="fa fa-toggle-off" style="color: gray;"></i>}
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                    <div class="col-12 col-md-12 hh-grayBox">
+                        <div class="row justify-content-center">
+                            <div class="order-tracking completed">
+                                <span class="is-complete"></span>
+                                <p>Registro<br><span>@String.Format(oc.fecha_registro.ToString(), "dd/mm/yyyy hh:mm")</span></p>
+                            </div>
+
+
+                            @if (oc.entregado == true)
+                            {
+                                <div class="order-tracking completed">
+                                    <span class="is-complete"></span>
+                                    <p>Entregado<br><span></span></p>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="order-tracking">
+                                    <span class="is-complete"></span>
+                                    <p>Entregado<br><span></span></p>
+                                </div>
+                            }
+
+
+                            @if (oc.C_compras_facturas_proveedores.Where(x => x.activo == true).Count() == 0)
+                            {
+                                <div class="order-tracking">
+                                    <span class="is-complete"></span>
+                                    <p>Registrada en portal de proveedores<br><span></span></p>
+                                </div>
+                                <div class="order-tracking">
+                                    <span class="is-complete"></span>
+                                    <p>Importada a Microsip<br><span></span></p>
+                                </div>
+                            }
+                            else
+                            {
+                                var importacion = oc.C_compras_facturas_proveedores.FirstOrDefault();
+                                <div class="order-tracking completed">
+                                    <span class="is-complete"></span>
+                                    <p>Registrada en portal de proveedores<br><span>@String.Format(importacion.fecha_registro.ToString(), "dd/mm/yyyy hh:mm")</span></p>
+                                </div>
+                                if (importacion.aplicado == true)
+                                {
+                                    if (oc.C_compras_facturas_proveedores.FirstOrDefault().C_contabilidad_importacion_facturas_d != null)
+                                    {
+                                        <div class="order-tracking completed">
+                                            <span class="is-complete"></span>
+                                            <p>Importada a Microsip<br><span>@String.Format(oc.C_compras_facturas_proveedores.FirstOrDefault().C_contabilidad_importacion_facturas_d.FirstOrDefault().C_contabilidad_importacion_facturas_g.fecha_registro.ToString(), "dd/mm/yyyy hh:mm")</span></p>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="order-tracking">
+                                            <span class="is-complete"></span>
+                                            <p>Importada a Microsip<br><span></span></p>
+                                        </div>
+                                    }
+                                }
+                                else
+                                {
+                                    <div class="order-tracking">
+                                        <span class="is-complete"></span>
+                                        <p>Importada a Microsip<br><span></span></p>
+                                    </div>
+                                }
+                            }
+
+                        </div>
+                    </div>
+                </div>
+                
+                @if (oc.C_inventario_almacen_mov_g.Count() == 0)
+                {
+                    foreach (var recepcion in oc.C_inventario_almacen_mov_g)
+                    {
+                        <div class="" id="heading_recepcion_@recepcion.id_inventario_almacen_mov_g">
+                            <div class="w-100 collapsed">
+                                <div class="row">
+                                    <div class="col-md-2 text-center">
+                                        <br />
+                                        <strong>Almacén @recepcion.C_almacen_almacenes_g.nombre_almacen</strong>
+                                        <br />
+                                        <label>@recepcion.descripcion_mov</label>
+                                    </div>
+                                    <div class="col-md-3 text-center pt-3">
+                                        <label>Fecha recepción:</label>
+                                        <br />
+                                        <strong>@string.Format(recepcion.fecha_registro.ToString(), "dd/mm/yyyy HH:MM")</strong>
+                                    </div>
+                                    <div class="col-md-1 text-center p-3">
+                                        <button class="btn btn_beta" style="background-color:@recepcion.C_inventario_mov_status.color;color: white;">@recepcion.C_inventario_mov_status.nombre_status</button>
+                                    </div>
+                                    <div class="col-md-2 text-center pt-4">
+                                        <h4 class="mt-2">VER RECEPCIÓN</h4>
+                                        <strong>Fact./Rem. @recepcion.folio_remi_fact</strong>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="col-md-2 text-center p-3">
+                                            <button class="btn btn_beta_icon" data-toggle="collapse" data-target="#collapse_@recepcion.id_inventario_almacen_mov_g" aria-expanded="false" aria-controls="collapse_@recepcion.id_inventario_almacen_mov_g"><i class="fa fa-bars"></i></button>
+                                        </div>
+                                        <div class="col-md-3 text-center p-3">
+                                            @if (recepcion.id_inventario_mov_status == 2 && oc.activo == true && oc.id_status_orden != 2008 && permisos.Contains(4068))
+                                            {
+                                                <button class="btn btn_beta_danger_icon" onclick="EliminarRecepcionAlmacenOrdenCompra(@oc.id_compras_orden_g, @recepcion.id_inventario_almacen_mov_g);" title="Eliminar recepción"><i class="fa fa-remove"></i></button>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="collapse_@recepcion.id_inventario_almacen_mov_g" class="collapse btn_detalle_requi_aut" aria-labelledby="heading_recepcion_@recepcion.id_inventario_almacen_mov_g" @*data-parent="#accordionSolicitudes"*@>
+                            <table class="table table-striped table-bordered">
+                                <thead>
+                                    <tr class="bg-beta">
+                                        @*<th>Folio</th>*@
+                                        <th>Fecha</th>
+                                        <th>Usuario recepciona</th>
+                                        <th>Clave</th>
+                                        <th>Articulo</th>
+                                        <th>Cantidad</th>
+                                        <th>Estatus</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var det in recepcion.C_inventario_almacen_mov_d_recepciones_logs.OrderBy(x => x.fecha_recepcion))
+                                    {
+                                        <tr>
+                                            @*<td>@det.folio_remision_factura</td>*@
+                                            <td>@det.fecha_recepcion.Value.ToShortDateString()</td>
+                                            <td>@det.C_usuarios_corporativo.usuario</td>
+                                            <td>@det.C_articulos_catalogo.clave</td>
+                                            <td>@det.C_articulos_catalogo.nombre_articulo</td>
+                                            <td>@det.cantidad_recepcion.Value.ToString("N2")</td>
+                                            <td><button class="btn btn-sm" style="color: white; background-color: @det.C_inventario_almacen_mov_d.C_inventario_mov_status.color">@det.C_inventario_almacen_mov_d.C_inventario_mov_status.nombre_status</button></td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                        }
+                }
+                else
+                {
+                    foreach (var recepcion in oc.C_inventario_almacen_mov_g)
+                    {
+                        <div class="" id="heading_recepcion_@recepcion.id_inventario_almacen_mov_g">
+                            <div class="w-100 collapsed">
+                                <div class="row">
+                                    <div class="col-md-2 text-center">
+                                        <br />
+                                        <strong>Almacén @recepcion.C_almacen_almacenes_g.nombre_almacen</strong>
+                                        <br />
+                                        <label>@recepcion.descripcion_mov</label>
+                                    </div>
+                                    <div class="col-md-3 text-center pt-3">
+                                        <label>Fecha recepción:</label>
+                                        <br />
+                                        <strong>@string.Format(recepcion.fecha_registro.ToString(), "dd/mm/yyyy HH:MM")</strong>
+                                    </div>
+                                    <div class="col-md-1 text-center p-3">
+                                        <button class="btn btn_beta" style="background-color:@recepcion.C_inventario_mov_status.color;color: white;">@recepcion.C_inventario_mov_status.nombre_status</button>
+                                    </div>
+                                    <div class="col-md-2 text-center pt-4">
+                                        <h4 class="mt-2">VER RECEPCIÓN</h4>
+                                        <strong>Fact./Rem. @recepcion.folio_remi_fact</strong>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="col-md-2 text-center p-3">
+                                            <button class="btn btn_beta_icon" data-toggle="collapse" data-target="#collapse_@recepcion.id_inventario_almacen_mov_g" aria-expanded="false" aria-controls="collapse_@recepcion.id_inventario_almacen_mov_g"><i class="fa fa-bars"></i></button>
+                                        </div>
+                                        <div class="col-md-3 text-center p-3">
+                                            @if (recepcion.id_inventario_mov_status == 2 && oc.activo == true && oc.id_status_orden != 2008 && permisos.Contains(4068))
+                                            {
+                                                <button class="btn btn_beta_danger_icon" onclick="EliminarRecepcionAlmacenOrdenCompra(@oc.id_compras_orden_g, @recepcion.id_inventario_almacen_mov_g);" title="Eliminar recepción"><i class="fa fa-remove"></i></button>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="collapse_@recepcion.id_inventario_almacen_mov_g" class="collapse btn_detalle_requi_aut" aria-labelledby="heading_recepcion_@recepcion.id_inventario_almacen_mov_g" @*data-parent="#accordionSolicitudes"*@>
+                            <table class="table table-striped table-bordered">
+                                <thead>
+                                    <tr class="bg-beta">
+                                        @*<th>Folio</th>*@
+                                        <th>Fecha</th>
+                                        <th>Usuario recepciona</th>
+                                        <th>Clave</th>
+                                        <th>Articulo</th>
+                                        <th>Cantidad</th>
+                                        <th>Estatus</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var det in recepcion.C_inventario_almacen_mov_d_recepciones_logs.OrderBy(x => x.fecha_recepcion))
+                                    {
+                                        <tr>
+                                            @*<td>@det.folio_remision_factura</td>*@
+                                            <td>@det.fecha_recepcion.Value.ToShortDateString()</td>
+                                            <td>@det.C_usuarios_corporativo.usuario</td>
+                                            <td>@det.C_articulos_catalogo.clave</td>
+                                            <td>@det.C_articulos_catalogo.nombre_articulo</td>
+                                            <td>@det.cantidad_recepcion.Value.ToString("N2")</td>
+                                            <td><button class="btn btn-sm" style="color: white; background-color: @det.C_inventario_almacen_mov_d.C_inventario_mov_status.color">@det.C_inventario_almacen_mov_d.C_inventario_mov_status.nombre_status</button></td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                }
+            </div>
+            <br />
+            }
+        }
+
+    }
+
+
+
+
+}
+
+
+<div class="row">
+    <div class="col-md-12">
+        <h3>Tracking</h3>
+    </div>
+    <div class="col-md-12">
+        @{ Html.RenderAction("ConsultarTrackingRequisicion", "REQUISICIONES", new { id_requisicion_g = Model.id_requisicion_articulo_g }); }
+    </div>
+</div>
+
+
+
+<script>
+    $("#btn_update_header_requi").attr("onclick","ActualizarHeaderRequisicion("+ @Convert.ToInt32(Model.id_requisicion_articulo_g) +")");
+    $("#txt_tipo_requi_editar").text('@Model.C_compras_requisiciones_tipos.tipo_requisicion');
+    $("#id_tipo_requisicion").val(@Convert.ToInt32(Model.id_requisicion_tipo));
+    $("#id_centro_g_editar").val(@Convert.ToInt32(Model.id_centro_g));
+    $("#txt_concepto_requi_editar").val('@Model.concepto');
+    $("#txt_fecha_registro_edit").text('@string.Format(Model.fecha_registro.Value.ToShortDateString(), "dd/mm/yyyy HH:mm")');
+    $("#txt_usuario_registro_edit").text('@Model.C_usuarios_corporativo5.C_empleados.nombres @Model.C_usuarios_corporativo5.C_empleados.apellido_paterno');
+
+    $("#txt_estatus_edit").text('@estatus_requi');
+    $("#txt_estatus_edit").css('color','@color_status');
+
+    //$("#select_centro_edit").find('option[value=' + @Model.id_centro_g + ']').prop('selected', 'selected');
+    $("#select_centro_edit").text('@Model.C_centros_g.siglas - @Model.C_centros_g.nombre_centro');
+    $("#select_prioridad_edit").find('option[value=' + @Model.id_prioridad + ']').prop('selected', 'selected');
+
+    $("#id_proveedor_editar_oc");
+
+    $("#id_articulo").autocomplete({
+        source: function (request, response) {
+            var id_tipo_requi = $("#id_tipo_requisicion").val();
+            if (id_tipo_requi == 2) {
+                id_tipo_requi[0] = 2;
+            }
+            else {
+                id_tipo_requi[0] = 1;
+            }
+            $.ajax({
+                type: "POST",
+                async: false,
+                url: "../ARTICULOS/ConsultarArticulosArray",
+                data: {
+                    search: $("#id_articulo").val(),
+                    id_tipo: id_tipo_requi,
+                    almacenable: 0
+                },
+                success: function (data) {
+                    var data2 = $.parseJSON(data);
+                    response($.map(data2, function (item) {
+                        //item.id_articulo
+                        //$("#id_articulos").val(item.id_articulo);
+                        ConsultarInformacionArticuloNomb(1);
+                        ConsultarCotizacionesArticuloProveedor();
+                        BuscarPrecioArticulo();
+                        return { label: item.nombre_articulo, value: item.nombre_articulo };
+                    }))
+                },
+                error: function (xhr, status, error) {
+                    alert(error);
+                }
+            });
+        }
+    });
+    $('#id_articulo').on('keydown', function (event) {
+        if (event.keyCode === 13 || event.keyCode === 9) {
+            ConsultarInformacionArticuloNomb(1);
+            ConsultarCotizacionesArticuloProveedor();
+            BuscarPrecioArticulo();
+        }
+        if ($('#id_articulo').lenght > 5) {
+
+        }
+        if ($('#id_articulo').val() == '') {
+            $("#unidad_medida").text('');
+            $("#id_unidad_medida").val('');
+            $("#id_articulos").val('');
+            $("#precio").val('0.00');
+        }
+    });
+    $('#id_articulos').on('keydown', function (event) {
+        if ($("#id_articulos").val() != '') {
+            var articulo_id = parseFloat($("#id_articulos").val());
+            if (event.keyCode === 13 || event.keyCode === 9) {
+                if (!isNaN(articulo_id) && articulo_id > 0) {
+                    ConsultarInformacionArticuloID(1);
+                    ConsultarCotizacionesArticuloProveedor();
+                    BuscarPrecioArticulo();
+                }
+                else {
+                    iziToast.warning({
+                        title: '¡Aviso!',
+                        message: 'La clave no es válida',
+                    });
+                }
+            }
+        }
+        else {
+            $("#id_articulos").css("border-color", "red");
+        }
+        if ($('#id_articulos').val() == '') {
+            $("#unidad_medida").text('');
+            $("#id_unidad_medida").val('');
+            $("#id_articulo").val('');
+            $("#precio").val('0.00');
+        }
+    });
+    $("#ui-id-1").on('click', function (event) {
+        //ConsultarInformacionArticuloID();
+        ConsultarInformacionArticuloNomb(1);
+        ConsultarCotizacionesArticuloProveedor();
+        BuscarPrecioArticulo();
+    });
+</script>
+
+
+
+

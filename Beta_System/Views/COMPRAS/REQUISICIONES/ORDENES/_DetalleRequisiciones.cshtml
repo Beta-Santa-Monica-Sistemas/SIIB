@@ -1,0 +1,111 @@
+﻿@model IEnumerable<Beta_System.Models.C_compras_requi_g>
+
+@{
+    var requi = Model.FirstOrDefault();
+
+    var firma = ViewBag.firmas;
+    var monto = ViewBag.monto_usuario;
+
+    decimal importe_total = 0;
+
+    var registro = "";
+    var reviso = "";
+    var validoauto = "";
+    var registro_usuario = requi.C_usuarios_corporativo5;
+    if (registro_usuario != null)
+    {
+        registro = "" + requi.C_usuarios_corporativo5.C_empleados.nombres + " " + requi.C_usuarios_corporativo5.C_empleados.apellido_paterno;
+    }
+    var reviso_usuario = requi.C_usuarios_corporativo;
+    if (reviso_usuario != null)
+    {
+        reviso = "" + requi.C_usuarios_corporativo.C_empleados.nombres + " " + requi.C_usuarios_corporativo.C_empleados.apellido_paterno;
+    }
+    var validoauto_usuario = requi.C_usuarios_corporativo2;
+    if (validoauto_usuario != null)
+    {
+        validoauto = "" + requi.C_usuarios_corporativo2.C_empleados.nombres + " " + requi.C_usuarios_corporativo2.C_empleados.apellido_paterno;
+    }
+}
+
+
+
+<div class="row">
+    <div class="col-md-2">
+        <h3><strong>Requisición</strong></h3>
+        <label>Folio</label><br />
+        <label>Fecha</label><br />
+        <label>Concepto</label><br />
+    </div>
+    <div class="col-md-2">
+        <h3><strong>@requi.folio</strong></h3>
+        <label>@requi.id_requisicion_articulo_g</label><br />
+        <label>@String.Format(requi.fecha_registro.Value.ToShortDateString(), "dd/mm/aaaa")</label><br />
+        <label>@requi.concepto</label><br />
+    </div>
+    <div class="col-md-3" style="font-size:15px">
+        @if (registro_usuario != null)
+        {
+            <strong>Registro necesidad</strong><br />
+            <label>@registro</label><br />
+        }
+        @if (reviso_usuario != null)
+        {
+            <strong>Reviso necesidad</strong><br />
+            <label>@reviso</label><br />
+        }
+        @if (validoauto_usuario != null)
+        {
+            <strong>Valido/Autorizo necesidad</strong><br />
+            <label>@validoauto</label><br />
+        }
+    </div>
+</div>
+
+
+
+<div class="col-md-12">
+    <div class="col-md-10"></div>
+    <div class="col-md-2 text-center" style="font-size: 18px; background-color: #2E87D7; color: white;">
+        <strong>Monto de autorización</strong><br />
+        <strong>$@monto.ToString("#,##0.00") MXN</strong>
+    </div>
+</div>
+
+
+<table class="table table-striped table-bordered" id="datatable_agrupamiento_orden" style="width:100%;">
+    <thead>
+        <tr class="bg-beta text-center">
+            <th>Articulo</th>
+            <th>Cantidad</th>
+            <th>Precio unitario</th>
+            <th>Importe</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            var requisiciones_coti = @item.C_compras_cotizaciones_requisiciones.GroupBy(x => x.id_articulo).Distinct();
+            
+            <tr>
+                <td>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+
+<div class="col-md-3">
+    <button class="btn btn_beta_icon" onclick="">Autorizar<i class="fa fa-search"></i></button>
+</div>
+<div class="col-md-3">
+    <button class="btn btn_beta_icon" onclick="">Enviar correo<i class="fa fa-search"></i></button>
+</div>
+<div class="col-md-3">
+    <button class="btn btn_beta_icon" onclick="">Regresar<i class="fa fa-search"></i></button>
+</div>
+<div class="col-md-3">
+    <button class="btn btn_beta_icon" onclick="">Cancelar<i class="fa fa-search"></i></button>
+</div>

@@ -1,0 +1,112 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+    List<int> permisos = Session["PermisosModulo"] as List<int>;
+}
+
+
+<div class="page_title">
+    <div class="counter_section">
+        <h1>Firmas por area</h1>
+    </div>
+</div>
+
+<div class="row column2 counter_section">
+    <div class="tab-content">
+        <div id="consultar_firmas_area" class="tab-pane fade in active show">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="col-md-2">
+                        <strong id="id_monto">Monto de autorización</strong>
+                        @if (permisos.Contains(3016))
+                        {
+                            <input class="form-control solo-numeros" id="monto_usuario_1" type="text" onkeyup="ValidarMontoAut();" />
+                        }
+                        else
+                        {
+                            <input class="form-control solo-numeros" id="monto_usuario_2" type="text" disabled />
+                        }
+                    </div>
+
+                    <div class="col-md-1" style="padding-top:12px">
+                        <button id="monto_confirmacion" class="btn_beta_icon" style="display:none" onclick="AccionMontoRealiza();"><i class="fa fa-plus"></i></button>
+                    </div>
+
+                    <div class="col-md-5"></div>
+
+                    <div class="col-md-4">
+                        <strong>Usuario/Empleado:</strong>
+                        <select class="form-control" id="id_usuario_cargo" onchange="ConsultarCargo(); ConsultarMontoUsuario();">
+                            @{ Html.RenderAction("ConsultarUsuariosCorporativoSelect", "USUARIOS");}
+                        </select>
+                    </div>
+                </div>
+                <br />
+
+                <div class="col-md-12"><br /></div>
+                <div class="table-responsive" id="div_cargo_usuario">
+
+                </div>
+            </div>
+            <br />
+            @if (permisos.Contains(3015))
+            {
+                <div class="col-md-4 text-lg-center">
+                    <button class="btn btn_beta" onclick="AsignarTodoFirmasUsuario();">Asignar todas las firmas</button>
+                </div>
+            }
+            @if (permisos.Contains(3015))
+            {
+                <div class="row">
+                    <div class="col-md-4 text-center">
+                        <button class="btn btn_beta" onclick="AsignarFirmasUsuario();">Asignar permisos</button>
+                    </div>
+                    <div class="col-md-4 text-lg-center">
+                        <button class="btn btn_beta_danger" onclick="RemoverFirmasUsuario();">Remover todos los permisos</button>
+                    </div>
+
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<!-- MODAL USUARIO FIRMAS-->
+<div class="modal fade" id="m_firma_usuario" tabindex="-1" role="dialog" aria-labelledby="m_firma_usuario" aria-hidden="true">
+    <div class="modal-dialog" role="document" style="min-width:90%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <!--TITULO-->
+                <h5 class="modal-title" id="m_firma_usuario_lbl"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@Scripts.Render("~/bundles_Firmas/js")
+@Scripts.Render("~/bundles_Propiedades/js")
+
+<script type="text/javascript">
+    $(window).on("load", function () {
+        ConsultarCargo();
+        ConsultarMontoUsuario();
+        CaracteresControl();
+    });
+    try {
+        $("#id_usuario_cargo").select2({
+            placeholder: 'Selecciona un usuario',
+            //dropdownParent: $("#tabulador")
+        });
+    }
+    catch (ex) { }
+</script>

@@ -1,0 +1,44 @@
+﻿@model IEnumerable<Beta_System.Models.C_contabilidad_importacion_facturas_g>
+
+<table class="table table-striped table-bordered" id="datatable_historial_importacion">
+    <thead>
+        <tr class="bg-beta text-center">
+            <th>Importada</th>
+            <th>No. de importación</th>
+            <th>Nombre</th>
+            <th>Fecha de operación</th>
+            <th>Usuario que importó</th>
+            <th>Facturas seleccionadas</th>
+            <th>Facturas aceptadas</th>
+            <th>Facturas rechazadas</th>
+            <th>Detalle</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr class="text-center">
+                <td>
+                    @if (item.facturas_importadas == item.C_contabilidad_importacion_facturas_d.Where(x => x.id_status == 2).Count()) { <i class="fa fa-3x fa-circle" style="color: #eb3c3c"></i> }
+                    else if(item.facturas_importadas == item.C_contabilidad_importacion_facturas_d.Where(x => x.id_status == 1).Count()) {  <i class="fa fa-3x fa-circle" style="color: #46E63E"></i> }
+                    else{<i class="fa fa-3x fa-circle" style="color: darkorange"></i> }
+                </td>
+
+                <td>#@item.id_contabilidad_importacion_g</td>
+                <td>@item.nombre_importacion</td>
+                <td>@String.Format(item.fecha_registro.ToString(), "dd/mm/yyyy hh:mm")</td>
+                <td>@item.C_usuarios_corporativo.usuario</td>
+
+                <td ><h3 >@item.facturas_importadas</h3></td>
+
+                <td><h3 >@item.C_contabilidad_importacion_facturas_d.Where(x => x.id_status == 1).Count()</h3></td>
+
+                <td ><h3 >@item.C_contabilidad_importacion_facturas_d.Where(x => x.id_status == 2).Count()</h3></td>
+
+                <td>
+                    <button class="btn btn_beta_icon" onclick="ConsultarImportacionDetalle(@item.id_contabilidad_importacion_g);"><i class="fa fa-bars"></i></button>
+                </td>
+            </tr>
+        }
+    </tbody>
+

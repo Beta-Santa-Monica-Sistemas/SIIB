@@ -1,0 +1,24 @@
+﻿@model IEnumerable<Beta_System.Models.C_usuarios_corporativo>
+
+
+@foreach (var item in Model.OrderBy(x=>x.C_empleados.nombres))
+{
+    var empleado = item.C_empleados;
+    <option value="@item.id_usuario_corporativo">@item.usuario - @empleado.nombres @empleado.apellido_paterno @empleado.apellido_materno</option>
+}
+
+
+<script>
+    try {
+        $(".id_usuario_select").select2({
+            placeholder: 'Selecciona un usuario',
+            //dropdownParent: $("#tabulador")
+        });
+    }
+    catch (ex) {
+
+    }
+
+</script>
+
+

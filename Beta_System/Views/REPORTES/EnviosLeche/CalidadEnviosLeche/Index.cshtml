@@ -1,0 +1,116 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+}
+
+<div class="page_title">
+    <div class="counter_section">
+        <h1>Reporte de Calidad de Envios de Leche</h1>
+    </div>
+</div>
+
+
+<div class="column2 counter_section">
+    <div class="row">
+        <div class="col-md-10">
+            <div class="col-md-12">
+                <div class="col-md-4">
+                    <strong>Fecha inicio</strong>
+                    <input type="date" class="form-control fechas_inicio" id="fecha_inicio_reporte" />
+                </div>
+                <div class="col-md-4">
+                    <strong>Fecha fin</strong>
+                    <input type="date" class="form-control" id="fecha_fin_reporte" />
+                </div>
+                <div class="col-md-4">
+                    <strong>Establo</strong>
+                    <select class="form-control id_establo_select" id="id_establo_reporte"></select>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="col-md-11">
+                    <div class="col-md-6">
+                        <strong>Cliente</strong>
+                        <select class="form-control select_autocomplete" id="id_cliente_reporte" onchange="ConsultarDestinosClienteLecheSelect();">
+                            <option value="0" selected>Todos</option>
+                            @{ Html.RenderAction("ConsultarProveedoresTipoBasculaSelect", "CATALOGOS", new { tipo_ficha = 1 });}
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <strong>Destino</strong>
+                        <select class="form-control" id="id_destino_reporte">
+                            <option value="0" selected>Todos</option>
+                            @{ Html.RenderAction("ConsultarDestinosClienteLecheSelect", "CATALOGOS", new { id_cliente = 0 });}
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-1 p-3">
+                    <button class="btn btn_beta_icon" onclick="ConsultarCalidadEnviosLeche();"><i class="fa fa-search"></i></button>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="col-md-12 text-right p-3">
+                <button class="btn btn_beta" onclick="DescargarCalidadEnviosLecheExcel();"><i class="fa fa-download"></i> Descargar EXCEL</button>
+            </div>
+            <div class="col-md-12 text-right p-3">
+                <button class="btn btn_beta" onclick="DescargarCalidadEnviosLechePDF();"><i class="fa fa-download"></i> Descargar PDF</button>
+            </div>
+        </div>
+    </div>
+    <hr />
+    <div id="div_reporte"></div>
+    @*<div id="div_reporte_movimientos_proveedor_pdf" style="display:none;" class="container"></div>*@
+</div>
+
+
+
+
+@Scripts.Render("~/bundles_ReportesEnviosLeche/js")
+
+
+<script>
+    const todos_option = $('<option>', { value: '0', text: 'Todos' });
+    $(window).on("load", function () {
+        ConsultarEstablosUsuarioSelect(0);
+        $('input[type="date"]').val(today);
+        $('.fechas_inicio').val(last_2_months);
+
+        $(".id_establo_select").prepend(todos_option);
+        $('.id_establo_select').val('0');
+
+
+        try {
+            $(".select_autocomplete").select2({
+                placeholder: 'Selecciona una opción'
+            });
+        }
+        catch (ex) { }
+    });
+
+    function ConsultarDestinosClienteLecheSelect() {
+        var id_cliente = $("#id_cliente_reporte").val();
+        $.ajax({
+            type: "POST",
+            async: true,
+            url: "../CATALOGOS/ConsultarDestinosClienteLecheSelect",
+            data: { id_cliente: id_cliente },
+            success: function (response) {
+                $("#id_destino_reporte").html(response);
+                if (response == "") {
+                    $("#id_destino_reporte").html("");
+                }
+                else {
+                    $("#id_destino_reporte").prepend(todos_option);
+                    $('#id_destino_reporte').val('0');
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error(error);
+                jsRemoveWindowLoad();
+            }
+        });
+    }
+
+</script>

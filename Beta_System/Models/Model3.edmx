@@ -1,0 +1,431 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="comprasModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2005" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="articulo">
+          <Key>
+            <PropertyRef Name="art" />
+          </Key>
+          <Property Name="art" Type="char" MaxLength="5" Nullable="false" />
+          <Property Name="des1_art" Type="char" MaxLength="60" />
+          <Property Name="des2_art" Type="char" MaxLength="60" />
+          <Property Name="uni_art" Type="char" MaxLength="5" />
+          <Property Name="packsize" Type="numeric" Precision="4" Scale="0" />
+          <Property Name="cvecla" Type="char" MaxLength="3" />
+          <Property Name="cvescl" Type="char" MaxLength="3" />
+          <Property Name="linea" Type="char" MaxLength="3" />
+          <Property Name="rstatus" Type="char" MaxLength="1" />
+          <Property Name="rtime" Type="datetime" />
+          <Property Name="NoCotiza" Type="numeric" Precision="1" Scale="0" Nullable="false" />
+          <Property Name="Activo" Type="numeric" Precision="1" Scale="0" />
+          <Property Name="Almacenable" Type="bit" />
+        </EntityType>
+        <EntityType Name="orden_de">
+          <Key>
+            <PropertyRef Name="orden" />
+            <PropertyRef Name="art" />
+            <PropertyRef Name="area" />
+            <PropertyRef Name="cuenta" />
+          </Key>
+          <Property Name="orden" Type="char" MaxLength="8" Nullable="false" />
+          <Property Name="art" Type="char" MaxLength="5" Nullable="false" />
+          <Property Name="cantidad" Type="numeric" Precision="13" Scale="4" />
+          <Property Name="precio" Type="numeric" Precision="18" Scale="9" />
+          <Property Name="t_mon" Type="char" MaxLength="4" />
+          <Property Name="cantidad_s" Type="numeric" Precision="13" Scale="4" />
+          <Property Name="observa" Type="char" MaxLength="30" />
+          <Property Name="area" Type="char" MaxLength="6" Nullable="false" />
+          <Property Name="cuenta" Type="char" MaxLength="15" Nullable="false" />
+          <Property Name="des1_art" Type="char" MaxLength="60" />
+          <Property Name="des2_art" Type="char" MaxLength="60" />
+          <Property Name="uni_art" Type="char" MaxLength="5" />
+          <Property Name="marca" Type="char" MaxLength="20" />
+          <Property Name="rstatus" Type="char" MaxLength="1" />
+          <Property Name="rtime" Type="datetime" />
+          <Property Name="FechaEnt" Type="datetime" />
+          <Property Name="CantEnt" Type="numeric" Precision="13" Scale="4" />
+          <Property Name="FechaSal" Type="datetime" />
+          <Property Name="CantSal" Type="numeric" Precision="13" Scale="4" />
+        </EntityType>
+        <EntityType Name="orden_ge">
+          <Key>
+            <PropertyRef Name="orden" />
+          </Key>
+          <Property Name="fecha" Type="datetime" />
+          <Property Name="centro" Type="char" MaxLength="6" />
+          <Property Name="beta" Type="char" MaxLength="2" />
+          <Property Name="orden" Type="char" MaxLength="8" Nullable="false" />
+          <Property Name="requi" Type="char" MaxLength="5" />
+          <Property Name="id_centro" Type="char" MaxLength="3" />
+          <Property Name="cargo" Type="char" MaxLength="60" />
+          <Property Name="prov" Type="char" MaxLength="4" />
+          <Property Name="no_autor" Type="char" MaxLength="6" />
+          <Property Name="impresa" Type="bit" />
+          <Property Name="fecha_imp" Type="datetime" />
+          <Property Name="hora_imp" Type="char" MaxLength="10" />
+          <Property Name="cta_imp" Type="int" />
+          <Property Name="servicio" Type="numeric" Precision="1" Scale="0" />
+          <Property Name="rstatus" Type="char" MaxLength="1" />
+          <Property Name="rtime" Type="datetime" />
+          <Property Name="user_reg" Type="varchar" MaxLength="40" />
+          <Property Name="Recibido" Type="bit" />
+          <Property Name="Surtido" Type="bit" />
+          <Property Name="UbicaEntrega" Type="numeric" Precision="4" Scale="0" />
+        </EntityType>
+        <EntityType Name="precios">
+          <Key>
+            <PropertyRef Name="prov" />
+            <PropertyRef Name="art" />
+          </Key>
+          <Property Name="prov" Type="char" MaxLength="4" Nullable="false" />
+          <Property Name="art" Type="char" MaxLength="5" Nullable="false" />
+          <Property Name="parte_prov" Type="char" MaxLength="20" />
+          <Property Name="p_lista" Type="numeric" Precision="12" Scale="5" />
+          <Property Name="p_1" Type="numeric" Precision="12" Scale="5" />
+          <Property Name="p_2" Type="numeric" Precision="12" Scale="5" />
+          <Property Name="p_3" Type="numeric" Precision="12" Scale="5" />
+          <Property Name="t_mon" Type="char" MaxLength="4" />
+          <Property Name="desc1" Type="numeric" Precision="5" Scale="2" />
+          <Property Name="desc2" Type="numeric" Precision="5" Scale="2" />
+          <Property Name="desc3" Type="numeric" Precision="5" Scale="2" />
+          <Property Name="c_pago1" Type="numeric" Precision="2" Scale="0" />
+          <Property Name="c_pago2" Type="numeric" Precision="2" Scale="0" />
+          <Property Name="rstatus" Type="char" MaxLength="1" />
+          <Property Name="rtime" Type="datetime" />
+        </EntityType>
+        <EntityType Name="proveedo">
+          <Key>
+            <PropertyRef Name="prov" />
+          </Key>
+          <Property Name="prov" Type="char" MaxLength="4" Nullable="false" />
+          <Property Name="des_prov" Type="char" MaxLength="60" />
+          <Property Name="dir1_prov" Type="char" MaxLength="250" />
+          <Property Name="dir2_prov" Type="char" MaxLength="60" />
+          <Property Name="tel_prov" Type="char" MaxLength="60" />
+          <Property Name="con1_prov" Type="char" MaxLength="40" />
+          <Property Name="con2_prov" Type="char" MaxLength="40" />
+          <Property Name="pago_prov" Type="numeric" Precision="2" Scale="0" />
+          <Property Name="rstatus" Type="char" MaxLength="1" />
+          <Property Name="rtime" Type="datetime" />
+          <Property Name="autorizado" Type="bit" />
+          <Property Name="cel_con1" Type="varchar" MaxLength="40" />
+          <Property Name="mail_con1" Type="varchar" MaxLength="40" />
+          <Property Name="nombre_prov" Type="char" MaxLength="60" />
+          <Property Name="id_microsip" Type="numeric" Precision="18" Scale="0" />
+          <Property Name="rfc" Type="varchar" MaxLength="15" />
+          <Property Name="id_microsip_usd" Type="numeric" Precision="18" Scale="0" />
+          <Property Name="CateProvId" Type="numeric" Precision="18" Scale="0" />
+          <Property Name="Actividad_Giro" Type="varchar" MaxLength="80" />
+          <Property Name="CtaBanco" Type="varchar" MaxLength="20" />
+          <Property Name="GirosProvId" Type="numeric" Precision="10" Scale="0" />
+          <Property Name="BancosId" Type="numeric" Precision="10" Scale="0" />
+          <Property Name="Activo" Type="bit" />
+          <Property Name="Mail_con2" Type="varchar" MaxLength="40" />
+          <Property Name="Estatus" Type="numeric" Precision="4" Scale="0" />
+          <Property Name="TipoMoneda" Type="char" MaxLength="3" />
+          <Property Name="CtaBanco2" Type="varchar" MaxLength="20" />
+          <Property Name="BancosId2" Type="numeric" Precision="10" Scale="0" />
+          <Property Name="TipoMoneda2" Type="char" MaxLength="3" />
+        </EntityType>
+        <EntityContainer Name="comprasModelStoreContainer">
+          <EntitySet Name="articulo" EntityType="Self.articulo" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="orden_de" EntityType="Self.orden_de" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="orden_ge" EntityType="Self.orden_ge" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="precios" EntityType="Self.precios" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="proveedo" EntityType="Self.proveedo" Schema="dbo" store:Type="Tables" />
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="comprasModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="articulo">
+          <Key>
+            <PropertyRef Name="art" />
+          </Key>
+          <Property Name="art" Type="String" MaxLength="5" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="des1_art" Type="String" MaxLength="60" FixedLength="true" Unicode="false" />
+          <Property Name="des2_art" Type="String" MaxLength="60" FixedLength="true" Unicode="false" />
+          <Property Name="uni_art" Type="String" MaxLength="5" FixedLength="true" Unicode="false" />
+          <Property Name="packsize" Type="Decimal" Precision="4" Scale="0" />
+          <Property Name="cvecla" Type="String" MaxLength="3" FixedLength="true" Unicode="false" />
+          <Property Name="cvescl" Type="String" MaxLength="3" FixedLength="true" Unicode="false" />
+          <Property Name="linea" Type="String" MaxLength="3" FixedLength="true" Unicode="false" />
+          <Property Name="rstatus" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+          <Property Name="rtime" Type="DateTime" Precision="3" />
+          <Property Name="NoCotiza" Type="Decimal" Precision="1" Scale="0" Nullable="false" />
+          <Property Name="Activo" Type="Decimal" Precision="1" Scale="0" />
+          <Property Name="Almacenable" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="precios">
+          <Key>
+            <PropertyRef Name="prov" />
+            <PropertyRef Name="art" />
+          </Key>
+          <Property Name="prov" Type="String" MaxLength="4" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="art" Type="String" MaxLength="5" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="parte_prov" Type="String" MaxLength="20" FixedLength="true" Unicode="false" />
+          <Property Name="p_lista" Type="Decimal" Precision="12" Scale="5" />
+          <Property Name="p_1" Type="Decimal" Precision="12" Scale="5" />
+          <Property Name="p_2" Type="Decimal" Precision="12" Scale="5" />
+          <Property Name="p_3" Type="Decimal" Precision="12" Scale="5" />
+          <Property Name="t_mon" Type="String" MaxLength="4" FixedLength="true" Unicode="false" />
+          <Property Name="desc1" Type="Decimal" Precision="5" Scale="2" />
+          <Property Name="desc2" Type="Decimal" Precision="5" Scale="2" />
+          <Property Name="desc3" Type="Decimal" Precision="5" Scale="2" />
+          <Property Name="c_pago1" Type="Decimal" Precision="2" Scale="0" />
+          <Property Name="c_pago2" Type="Decimal" Precision="2" Scale="0" />
+          <Property Name="rstatus" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+          <Property Name="rtime" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityContainer Name="comprasEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="articulo" EntityType="Self.articulo" />
+          <EntitySet Name="precios" EntityType="Self.precios" />
+          <EntitySet Name="orden_de" EntityType="comprasModel.orden_de" />
+          <EntitySet Name="orden_ge" EntityType="comprasModel.orden_ge" />
+          <EntitySet Name="proveedo_sab" EntityType="comprasModel.proveedo_sab" />
+        </EntityContainer>
+        <EntityType Name="orden_de">
+          <Key>
+            <PropertyRef Name="orden" />
+            <PropertyRef Name="art" />
+            <PropertyRef Name="area" />
+            <PropertyRef Name="cuenta" />
+          </Key>
+          <Property Name="orden" Type="String" Nullable="false" MaxLength="8" FixedLength="true" Unicode="false" />
+          <Property Name="art" Type="String" Nullable="false" MaxLength="5" FixedLength="true" Unicode="false" />
+          <Property Name="cantidad" Type="Decimal" Precision="13" Scale="4" />
+          <Property Name="precio" Type="Decimal" Precision="18" Scale="9" />
+          <Property Name="t_mon" Type="String" MaxLength="4" FixedLength="true" Unicode="false" />
+          <Property Name="cantidad_s" Type="Decimal" Precision="13" Scale="4" />
+          <Property Name="observa" Type="String" MaxLength="30" FixedLength="true" Unicode="false" />
+          <Property Name="area" Type="String" Nullable="false" MaxLength="6" FixedLength="true" Unicode="false" />
+          <Property Name="cuenta" Type="String" Nullable="false" MaxLength="15" FixedLength="true" Unicode="false" />
+          <Property Name="des1_art" Type="String" MaxLength="60" FixedLength="true" Unicode="false" />
+          <Property Name="des2_art" Type="String" MaxLength="60" FixedLength="true" Unicode="false" />
+          <Property Name="uni_art" Type="String" MaxLength="5" FixedLength="true" Unicode="false" />
+          <Property Name="marca" Type="String" MaxLength="20" FixedLength="true" Unicode="false" />
+          <Property Name="rstatus" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+          <Property Name="rtime" Type="DateTime" Precision="3" />
+          <Property Name="FechaEnt" Type="DateTime" Precision="3" />
+          <Property Name="CantEnt" Type="Decimal" Precision="13" Scale="4" />
+          <Property Name="FechaSal" Type="DateTime" Precision="3" />
+          <Property Name="CantSal" Type="Decimal" Precision="13" Scale="4" />
+        </EntityType>
+        <EntityType Name="orden_ge">
+          <Key>
+            <PropertyRef Name="orden" />
+          </Key>
+          <Property Name="fecha" Type="DateTime" Precision="3" />
+          <Property Name="centro" Type="String" MaxLength="6" FixedLength="true" Unicode="false" />
+          <Property Name="beta" Type="String" MaxLength="2" FixedLength="true" Unicode="false" />
+          <Property Name="orden" Type="String" Nullable="false" MaxLength="8" FixedLength="true" Unicode="false" />
+          <Property Name="requi" Type="String" MaxLength="5" FixedLength="true" Unicode="false" />
+          <Property Name="id_centro" Type="String" MaxLength="3" FixedLength="true" Unicode="false" />
+          <Property Name="cargo" Type="String" MaxLength="60" FixedLength="true" Unicode="false" />
+          <Property Name="prov" Type="String" MaxLength="4" FixedLength="true" Unicode="false" />
+          <Property Name="no_autor" Type="String" MaxLength="6" FixedLength="true" Unicode="false" />
+          <Property Name="impresa" Type="Boolean" />
+          <Property Name="fecha_imp" Type="DateTime" Precision="3" />
+          <Property Name="hora_imp" Type="String" MaxLength="10" FixedLength="true" Unicode="false" />
+          <Property Name="cta_imp" Type="Int32" />
+          <Property Name="servicio" Type="Decimal" Precision="1" Scale="0" />
+          <Property Name="rstatus" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+          <Property Name="rtime" Type="DateTime" Precision="3" />
+          <Property Name="user_reg" Type="String" MaxLength="40" FixedLength="false" Unicode="false" />
+          <Property Name="Recibido" Type="Boolean" />
+          <Property Name="Surtido" Type="Boolean" />
+          <Property Name="UbicaEntrega" Type="Decimal" Precision="4" Scale="0" />
+        </EntityType>
+        <EntityType Name="proveedo_sab">
+          <Key>
+            <PropertyRef Name="prov" />
+          </Key>
+          <Property Name="prov" Type="String" Nullable="false" MaxLength="4" FixedLength="true" Unicode="false" />
+          <Property Name="des_prov" Type="String" MaxLength="60" FixedLength="true" Unicode="false" />
+          <Property Name="dir1_prov" Type="String" MaxLength="250" FixedLength="true" Unicode="false" />
+          <Property Name="dir2_prov" Type="String" MaxLength="60" FixedLength="true" Unicode="false" />
+          <Property Name="tel_prov" Type="String" MaxLength="60" FixedLength="true" Unicode="false" />
+          <Property Name="con1_prov" Type="String" MaxLength="40" FixedLength="true" Unicode="false" />
+          <Property Name="con2_prov" Type="String" MaxLength="40" FixedLength="true" Unicode="false" />
+          <Property Name="pago_prov" Type="Decimal" Precision="2" Scale="0" />
+          <Property Name="rstatus" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+          <Property Name="rtime" Type="DateTime" Precision="3" />
+          <Property Name="autorizado" Type="Boolean" />
+          <Property Name="cel_con1" Type="String" MaxLength="40" FixedLength="false" Unicode="false" />
+          <Property Name="mail_con1" Type="String" MaxLength="40" FixedLength="false" Unicode="false" />
+          <Property Name="nombre_prov" Type="String" MaxLength="60" FixedLength="true" Unicode="false" />
+          <Property Name="id_microsip" Type="Decimal" Precision="18" Scale="0" />
+          <Property Name="rfc" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="id_microsip_usd" Type="Decimal" Precision="18" Scale="0" />
+          <Property Name="CateProvId" Type="Decimal" Precision="18" Scale="0" />
+          <Property Name="Actividad_Giro" Type="String" MaxLength="80" FixedLength="false" Unicode="false" />
+          <Property Name="CtaBanco" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="GirosProvId" Type="Decimal" Precision="10" Scale="0" />
+          <Property Name="BancosId" Type="Decimal" Precision="10" Scale="0" />
+          <Property Name="Activo" Type="Boolean" />
+          <Property Name="Mail_con2" Type="String" MaxLength="40" FixedLength="false" Unicode="false" />
+          <Property Name="Estatus" Type="Decimal" Precision="4" Scale="0" />
+          <Property Name="TipoMoneda" Type="String" MaxLength="3" FixedLength="true" Unicode="false" />
+          <Property Name="CtaBanco2" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="BancosId2" Type="Decimal" Precision="10" Scale="0" />
+          <Property Name="TipoMoneda2" Type="String" MaxLength="3" FixedLength="true" Unicode="false" />
+        </EntityType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="comprasModelStoreContainer" CdmEntityContainer="comprasEntities">
+          <EntitySetMapping Name="articulo">
+            <EntityTypeMapping TypeName="comprasModel.articulo">
+              <MappingFragment StoreEntitySet="articulo">
+                <ScalarProperty Name="art" ColumnName="art" />
+                <ScalarProperty Name="des1_art" ColumnName="des1_art" />
+                <ScalarProperty Name="des2_art" ColumnName="des2_art" />
+                <ScalarProperty Name="uni_art" ColumnName="uni_art" />
+                <ScalarProperty Name="packsize" ColumnName="packsize" />
+                <ScalarProperty Name="cvecla" ColumnName="cvecla" />
+                <ScalarProperty Name="cvescl" ColumnName="cvescl" />
+                <ScalarProperty Name="linea" ColumnName="linea" />
+                <ScalarProperty Name="rstatus" ColumnName="rstatus" />
+                <ScalarProperty Name="rtime" ColumnName="rtime" />
+                <ScalarProperty Name="NoCotiza" ColumnName="NoCotiza" />
+                <ScalarProperty Name="Activo" ColumnName="Activo" />
+                <ScalarProperty Name="Almacenable" ColumnName="Almacenable" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="precios">
+            <EntityTypeMapping TypeName="comprasModel.precios">
+              <MappingFragment StoreEntitySet="precios">
+                <ScalarProperty Name="prov" ColumnName="prov" />
+                <ScalarProperty Name="art" ColumnName="art" />
+                <ScalarProperty Name="parte_prov" ColumnName="parte_prov" />
+                <ScalarProperty Name="p_lista" ColumnName="p_lista" />
+                <ScalarProperty Name="p_1" ColumnName="p_1" />
+                <ScalarProperty Name="p_2" ColumnName="p_2" />
+                <ScalarProperty Name="p_3" ColumnName="p_3" />
+                <ScalarProperty Name="t_mon" ColumnName="t_mon" />
+                <ScalarProperty Name="desc1" ColumnName="desc1" />
+                <ScalarProperty Name="desc2" ColumnName="desc2" />
+                <ScalarProperty Name="desc3" ColumnName="desc3" />
+                <ScalarProperty Name="c_pago1" ColumnName="c_pago1" />
+                <ScalarProperty Name="c_pago2" ColumnName="c_pago2" />
+                <ScalarProperty Name="rstatus" ColumnName="rstatus" />
+                <ScalarProperty Name="rtime" ColumnName="rtime" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="orden_de">
+            <EntityTypeMapping TypeName="comprasModel.orden_de">
+              <MappingFragment StoreEntitySet="orden_de">
+                <ScalarProperty Name="CantSal" ColumnName="CantSal" />
+                <ScalarProperty Name="FechaSal" ColumnName="FechaSal" />
+                <ScalarProperty Name="CantEnt" ColumnName="CantEnt" />
+                <ScalarProperty Name="FechaEnt" ColumnName="FechaEnt" />
+                <ScalarProperty Name="rtime" ColumnName="rtime" />
+                <ScalarProperty Name="rstatus" ColumnName="rstatus" />
+                <ScalarProperty Name="marca" ColumnName="marca" />
+                <ScalarProperty Name="uni_art" ColumnName="uni_art" />
+                <ScalarProperty Name="des2_art" ColumnName="des2_art" />
+                <ScalarProperty Name="des1_art" ColumnName="des1_art" />
+                <ScalarProperty Name="cuenta" ColumnName="cuenta" />
+                <ScalarProperty Name="area" ColumnName="area" />
+                <ScalarProperty Name="observa" ColumnName="observa" />
+                <ScalarProperty Name="cantidad_s" ColumnName="cantidad_s" />
+                <ScalarProperty Name="t_mon" ColumnName="t_mon" />
+                <ScalarProperty Name="precio" ColumnName="precio" />
+                <ScalarProperty Name="cantidad" ColumnName="cantidad" />
+                <ScalarProperty Name="art" ColumnName="art" />
+                <ScalarProperty Name="orden" ColumnName="orden" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="orden_ge">
+            <EntityTypeMapping TypeName="comprasModel.orden_ge">
+              <MappingFragment StoreEntitySet="orden_ge">
+                <ScalarProperty Name="UbicaEntrega" ColumnName="UbicaEntrega" />
+                <ScalarProperty Name="Surtido" ColumnName="Surtido" />
+                <ScalarProperty Name="Recibido" ColumnName="Recibido" />
+                <ScalarProperty Name="user_reg" ColumnName="user_reg" />
+                <ScalarProperty Name="rtime" ColumnName="rtime" />
+                <ScalarProperty Name="rstatus" ColumnName="rstatus" />
+                <ScalarProperty Name="servicio" ColumnName="servicio" />
+                <ScalarProperty Name="cta_imp" ColumnName="cta_imp" />
+                <ScalarProperty Name="hora_imp" ColumnName="hora_imp" />
+                <ScalarProperty Name="fecha_imp" ColumnName="fecha_imp" />
+                <ScalarProperty Name="impresa" ColumnName="impresa" />
+                <ScalarProperty Name="no_autor" ColumnName="no_autor" />
+                <ScalarProperty Name="prov" ColumnName="prov" />
+                <ScalarProperty Name="cargo" ColumnName="cargo" />
+                <ScalarProperty Name="id_centro" ColumnName="id_centro" />
+                <ScalarProperty Name="requi" ColumnName="requi" />
+                <ScalarProperty Name="orden" ColumnName="orden" />
+                <ScalarProperty Name="beta" ColumnName="beta" />
+                <ScalarProperty Name="centro" ColumnName="centro" />
+                <ScalarProperty Name="fecha" ColumnName="fecha" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="proveedo_sab">
+            <EntityTypeMapping TypeName="comprasModel.proveedo_sab">
+              <MappingFragment StoreEntitySet="proveedo">
+                <ScalarProperty Name="TipoMoneda2" ColumnName="TipoMoneda2" />
+                <ScalarProperty Name="BancosId2" ColumnName="BancosId2" />
+                <ScalarProperty Name="CtaBanco2" ColumnName="CtaBanco2" />
+                <ScalarProperty Name="TipoMoneda" ColumnName="TipoMoneda" />
+                <ScalarProperty Name="Estatus" ColumnName="Estatus" />
+                <ScalarProperty Name="Mail_con2" ColumnName="Mail_con2" />
+                <ScalarProperty Name="Activo" ColumnName="Activo" />
+                <ScalarProperty Name="BancosId" ColumnName="BancosId" />
+                <ScalarProperty Name="GirosProvId" ColumnName="GirosProvId" />
+                <ScalarProperty Name="CtaBanco" ColumnName="CtaBanco" />
+                <ScalarProperty Name="Actividad_Giro" ColumnName="Actividad_Giro" />
+                <ScalarProperty Name="CateProvId" ColumnName="CateProvId" />
+                <ScalarProperty Name="id_microsip_usd" ColumnName="id_microsip_usd" />
+                <ScalarProperty Name="rfc" ColumnName="rfc" />
+                <ScalarProperty Name="id_microsip" ColumnName="id_microsip" />
+                <ScalarProperty Name="nombre_prov" ColumnName="nombre_prov" />
+                <ScalarProperty Name="mail_con1" ColumnName="mail_con1" />
+                <ScalarProperty Name="cel_con1" ColumnName="cel_con1" />
+                <ScalarProperty Name="autorizado" ColumnName="autorizado" />
+                <ScalarProperty Name="rtime" ColumnName="rtime" />
+                <ScalarProperty Name="rstatus" ColumnName="rstatus" />
+                <ScalarProperty Name="pago_prov" ColumnName="pago_prov" />
+                <ScalarProperty Name="con2_prov" ColumnName="con2_prov" />
+                <ScalarProperty Name="con1_prov" ColumnName="con1_prov" />
+                <ScalarProperty Name="tel_prov" ColumnName="tel_prov" />
+                <ScalarProperty Name="dir2_prov" ColumnName="dir2_prov" />
+                <ScalarProperty Name="dir1_prov" ColumnName="dir1_prov" />
+                <ScalarProperty Name="des_prov" ColumnName="des_prov" />
+                <ScalarProperty Name="prov" ColumnName="prov" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Ninguno" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

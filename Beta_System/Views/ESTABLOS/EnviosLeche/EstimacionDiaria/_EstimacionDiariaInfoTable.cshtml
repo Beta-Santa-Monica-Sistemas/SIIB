@@ -1,0 +1,69 @@
+﻿@model IEnumerable<Beta_System.Models.C_presupuestos_dias>
+
+@{
+    int dia_incremento = 0;
+    DateTime dia_inicial = Convert.ToDateTime(ViewBag.FechaProduccion);
+    var estimacion = ViewBag.EstimacionEstabloDias as List<Beta_System.Models.C_envios_leche_programacion_diaria_d>;
+}
+
+<table class="table table-striped table-bordered text-center" id="datatable_estimacion_diaria">
+    <thead>
+        <tr class="bg-beta text-center">
+            <th><h5 class="text-center text-white">Total Diario</h5></th>
+            @foreach (var dia in Model)
+            {
+                <th>
+                    <strong class="estimacion_diario_dia" id="estimacion_@dia.id_dia_presupuesto">@dia.dia</strong>
+                    <br />
+                    <strong class="estimacion_fecha" id="estimacion_fecha_@dia.id_dia_presupuesto">@dia_inicial.AddDays(dia_incremento).ToShortDateString()</strong>
+                    @{ dia_incremento++;}
+                </th>
+            }
+            <th><h5 class="text-center text-white">Total Semanal</h5></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <th>
+                <div><strong>Produccion</strong></div>
+                <br />
+                <div><strong>Sobrante</strong></div>
+                <br />
+                <div><strong>Faltante</strong></div>
+            </th>
+            @foreach (var dias in Model)
+            {
+                <td>
+                    <div contenteditable="true" class="produccion_diario divEditable" oninput="TablaEntero(this);" id="produccion_dia_@dias.id_dia_presupuesto" onkeyup="CalcularTotalEstimacionSemanal(1); CalcularTotalEstimacionDiaria(@dias.id_dia_presupuesto);">@Convert.ToInt32(estimacion.Where(x => x.id_dia_presupuesto == dias.id_dia_presupuesto).FirstOrDefault().produccion)</div>
+                    <br />
+                    <div contenteditable="true" class="sobrante_diario divEditable" oninput="TablaEntero(this);" id="sobrante_dia_@dias.id_dia_presupuesto" onkeyup="CalcularTotalEstimacionSemanal(2); CalcularTotalEstimacionDiaria(@dias.id_dia_presupuesto);">@Convert.ToInt32(estimacion.Where(x => x.id_dia_presupuesto == dias.id_dia_presupuesto).FirstOrDefault().sobrante)</div>
+                    <br />
+                    <div contenteditable="true" class="faltante_diario divEditable" oninput="TablaEntero(this);" id="faltante_dia_@dias.id_dia_presupuesto" onkeyup="CalcularTotalEstimacionSemanal(3); CalcularTotalEstimacionDiaria(@dias.id_dia_presupuesto);">@Convert.ToInt32(estimacion.Where(x => x.id_dia_presupuesto == dias.id_dia_presupuesto).FirstOrDefault().faltante)</div>
+                </td>
+            }
+            <td>
+                <div><strong id="produccion_diario_total">0</strong></div>
+                <div><hr /></div>
+                <div><strong id="sobrante_diario_total">0</strong></div>
+                <div><hr /></div>
+                <div><strong id="faltante_diario_total">0</strong></div>
+            </td>
+        </tr>
+    </tbody>
+    <tfoot>
+        <tr class="text-center">
+            <td>Total:</td>
+            @foreach (var dias in Model)
+            {
+                <td>
+                    <strong id="produccion_dia_total_@dias.id_dia_presupuesto"></strong>
+                </td>
+            }
+            <td></td>
+        </tr>
+    </tfoot>
+</table>
+
+<script>
+    CaracteresControl();
+</script>

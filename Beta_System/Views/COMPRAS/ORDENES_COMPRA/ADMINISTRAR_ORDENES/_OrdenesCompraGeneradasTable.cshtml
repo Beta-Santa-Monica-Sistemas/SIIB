@@ -1,0 +1,97 @@
+﻿@model IEnumerable<Beta_System.Models.C_compras_ordenes_g>
+
+@{
+    double valor_dolar = Convert.ToDouble(ViewBag.valor_dolar);
+}
+
+
+<table class="table table-sm table-condensed small table-bordered table-striped" id="datatable_ordenes_compra_general">
+    <thead>
+        <tr class="bg-beta text-center">
+            <th>Tipo orden</th>
+            <th>Orden</th>
+            <th>Recepcionada</th>
+            <th>Fecha</th>
+            <th>Centro</th>
+            <th>Requisicion</th>
+            <th>Concepto</th>
+            <th style="width:40%;">Proveedor</th>
+            <th>Importe</th>
+            <th>Tipo cambio pago</th>
+            <th>Autorizador</th>
+            <th>Comprador</th>
+            <th>Ver</th>
+            <th>Imprimir</th>
+            <th>Reenviar</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            double importe = (double)item.C_compras_ordenes_d.Where(x => x.activo == true /*&& x.id_tipo_moneda == 1*/).Select(x => x.precio_unitario * x.cantidad_compra).Sum();
+
+
+            //importe += valor_dolar * (double)item.C_compras_ordenes_d.Where(x => x.activo == true && x.id_tipo_moneda == 39118).Select(x => x.precio_unitario * x.cantidad_compra).Sum();
+
+
+            //foreach (var detalle in item.C_compras_ordenes_d.Where(x => x.activo == true))
+            //{
+            //    importe += Convert.ToDouble(detalle.cantidad_compra) * Convert.ToDouble((decimal)detalle.precio_unitario);
+            //}
+
+            <tr class="text-center">
+                <td><strong style="color:@item.C_compras_requisiciones_tipos.color">@item.C_compras_requisiciones_tipos.tipo_requisicion</strong></td>
+                <td>@item.id_compras_orden_g</td>
+                <td>
+                    @if (item.entregado == true)
+                    {<i class="fa fa-2x fa-check" style="color: #46E63E; "></i> }
+                    else
+                    { <i class="fa fa-2x fa-clock-o" style="color: #eb3c3c;"></i>}
+                </td>
+                <td>@String.Format(item.fecha_registro.Value.ToShortDateString(), "dd/mm/yyyy") </td>
+                <td>@item.C_centros_g.siglas</td>
+                <td>@item.C_compras_requi_g.id_requisicion_articulo_g</td>
+                <td>@item.C_compras_requi_g.concepto</td>
+                @*<td>@item.C_compras_cotizaciones_confirmadas_g.nombre_suborden</td>*@
+                <td>@item.C_compras_proveedores.razon_social</td>
+                <td>
+                    <label>$@importe.ToString("N2")</label>
+                    @if (@item.C_compras_ordenes_d.FirstOrDefault().id_tipo_moneda != 1)
+                    {
+                        <strong>($@valor_dolar.ToString("N2") @item.C_compras_ordenes_d.FirstOrDefault().C_tipos_moneda.clave_fiscal)</strong>
+                    }
+
+                </td>
+                <td>
+                    @try
+                    {
+                        var valid_cambio = item.C_compras_facturas_proveedores.Where(x => x.activo == true && x.aplicado == true).FirstOrDefault();
+                        if (valid_cambio != null)
+                        {
+                            var valid_importacion = valid_cambio.C_contabilidad_importacion_facturas_d.Where(x => x.activo == true).FirstOrDefault();
+                            if (valid_importacion != null)
+                            {
+                                <strong>@valid_importacion.tipo_cambio</strong>
+                            }
+                        }
+                    }
+                    catch (Exception)
+                    {
+
+                    }
+                </td>
+                <td>@item.C_usuarios_corporativo.C_empleados.nombres @item.C_usuarios_corporativo.C_empleados.apellido_paterno</td>
+                <td>@item.C_compras_cotizaciones_confirmadas_g.C_usuarios_corporativo.C_empleados.nombres @item.C_compras_cotizaciones_confirmadas_g.C_usuarios_corporativo.C_empleados.apellido_paterno</td>
+                <td>
+                    <button class="btn btn_beta_icon" onclick="ConsultarOrdenCompraDetalle(@item.id_compras_orden_g);"><i class="fa fa-bars"></i></button>
+                </td>
+                <td>
+                    <button class="btn btn_beta_icon" onclick="DescargarOrdenCompraProveedor(@item.id_compras_orden_g, '@item.token_orden');"><i class="fa fa-print"></i></button>
+                </td>
+                <td>
+                    <button class="btn btn_beta_icon" onclick="MostrarFormularioReenviarOrdenCompra(@item.id_compras_orden_g, '@item.token_orden', '@item.C_compras_cotizaciones_confirmadas_g.correo_proveedor_suborden', '@item.C_compras_cotizaciones_confirmadas_g.C_compras_requi_g.C_centros_g.siglas @item.id_requisicion_articulo_g');"><i class="fa fa-envelope-o"></i></button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

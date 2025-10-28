@@ -1,0 +1,780 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="99acf89472ab4f71b3b69d757f573639" Name="Diagram1" ZoomLevel="46">
+        <EntityTypeShape EntityType="BETA_CORPModel.C_bascula_choferes" Width="2.875" PointX="1.375" PointY="3.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_bascula_codigos_movimientos" Width="1.5" PointX="3" PointY="34.5" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_bascula_lineas_transportistas" Width="1.5" PointX="3" PointY="37.625" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_bascula_no_pozos" Width="1.5" PointX="3" PointY="12.875" IsExpanded="false" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_bascula_tipos_movimientos" Width="1.5" PointX="0.75" PointY="34.75" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_establos" Width="1.5" PointX="0.75" PointY="5.25" IsExpanded="false" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_modulos" Width="1.5" PointX="8.25" PointY="2.5" IsExpanded="false" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_modulos_sub_permisos" Width="1.5" PointX="10.125" PointY="14.875" IsExpanded="false" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_parametros_configuracion" Width="2.25" PointX="4.75" PointY="3.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_salida_ganado_clasificaciones_ganado" Width="2.25" PointX="0.5" PointY="0.5" IsExpanded="false" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_salida_ganado_condiciones_ganado" Width="2.125" PointX="2.5" PointY="1.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_salida_ganado_establos" Width="1.5" PointX="12.75" PointY="3" IsExpanded="false" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_unidades_medidas" Width="1.5" PointX="0.75" PointY="28.625" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_usuarios_corporativo" Width="1.5" PointX="3" PointY="18.125" IsExpanded="false" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_usuarios_roles" Width="1.5" PointX="0.75" PointY="20.625" IsExpanded="false" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_usuarios_tipo" Width="1.5" PointX="1.5" PointY="25.25" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_bascula_codigos_movimientos_C_bascula_tipos_movimientos" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_bascula_no_pozos_establos" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_modulos_sub_permisos_C_usuarios_roles" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_salida_ganado_condiciones_ganado_C_salida_ganado_clasificaciones_ganado" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_usuarios_corporativo_C_usuarios_roles" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_usuarios_roles_C_usuarios_tipo" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_empleados" Width="1.5" PointX="7.875" PointY="6.75" IsExpanded="false" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_usuarios_corporativo_C_empleados" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_bascula_establos_codigos_puertos" Width="1.5" PointX="3" PointY="7.25" IsExpanded="false" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_bascula_establos_codigos_puertos_C_establos" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_usuarios_establos" Width="1.5" PointX="8.25" PointY="12.5" IsExpanded="false" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_usuarios_establos_C_establos" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_usuarios_establos_C_usuarios_corporativo" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_modulos_sub_permisos_usuarios" Width="1.5" PointX="3" PointY="44.75" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_modulos_sub_permisos_usuarios_asignados" Width="1.5" PointX="5.25" PointY="16.75" IsExpanded="false" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_modulos_sub_persmisos_usuarios_asignados_C_modulos_sub_permisos_usuarios" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_modulos_sub_persmisos_usuarios_asignados_C_usuarios_corporativo" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_almacen_almacenes_g" Width="2.25" PointX="12.5" PointY="11.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_articulos_clasificaciones" Width="1.5" PointX="12.625" PointY="27.875" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_articulos_lineas" Width="1.5" PointX="12.625" PointY="30.375" IsExpanded="false" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_articulos_tipos" Width="1.5" PointX="12.625" PointY="25.125" IsExpanded="false" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_cargos_contables_g" Width="1.5" PointX="14.875" PointY="22.375" IsExpanded="false" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_centros_g" Width="1.5" PointX="9.625" PointY="7.875" IsExpanded="false" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_departamentos_g" Width="1.5" PointX="12.625" PointY="18.625" IsExpanded="false" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_establos_equipos" Width="1.5" PointX="12.625" PointY="21.375" IsExpanded="false" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_centros_g_C_empleados" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_cuentas_contables_g" Width="1.5" PointX="17.125" PointY="22.125" IsExpanded="false" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_cuentas_contables_g_C_cargos_contables_g" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_almacen_solicitudes_status" Width="1.5" PointX="12.625" PointY="0.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_almacen_solicitudes_mercancia_g" Width="1.5" PointX="14.875" PointY="10.875" IsExpanded="false" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_almacen_solicitudes_mercancia_g_C_almacen_almacenes_g" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_almacen_solicitudes_mercancia_g_C_almacen_solicitudes_status" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_almacen_solicitudes_mercancia_g_C_centros_g" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_almacen_solicitudes_mercancia_g_C_departamentos_g" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_almacen_solicitudes_mercancia_g_C_empleados" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_almacen_solicitudes_mercancia_g_C_establos_equipos" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_almacen_solicitudes_mercancia_g_C_usuarios_corporativo" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_almacen_solicitudes_mercancia_g_C_usuarios_corporativo1" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_almacen_solicitudes_mercancia_g_C_usuarios_corporativo2" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_almacen_almacenes_usuarios" Width="1.5" PointX="14.875" PointY="18.75" IsExpanded="false" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_almacen_almacenes_usuarios_C_almacen_almacenes_g" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_almacen_almacenes_usuarios_C_usuarios_corporativo" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_inventario_almacen_captura_d" Width="1.5" PointX="24.125" PointY="23.25" IsExpanded="false" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_inventario_almacen_captura_g" Width="1.5" PointX="20.875" PointY="11.25" IsExpanded="false" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_inventario_mov_status" Width="1.5" PointX="15.625" PointY="33.375" IsExpanded="false" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_inventario_mov_tipos" Width="1.5" PointX="15.625" PointY="36.25" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_inventario_status" Width="1.5" PointX="18.625" PointY="10.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_inventario_tipos" Width="1.5" PointX="18.625" PointY="31.375" IsExpanded="false" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_inventario_captura_g_C_almacen_almacenes_g" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_inventario_almacen_captura_g_C_articulos_tipos" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_inventario_almacen_captura_d_C_inventario_almacen_captura_g" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_inventario_captura_g_C_inventario_status" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_inventario_captura_g_C_inventario_tipos" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_inventario_captura_g_C_usuarios_corporativo" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_articulos_logs" Width="1.5" PointX="5.375" PointY="12.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_compras_requisiciones_status" Width="2.25" PointX="19.625" PointY="3.875" IsExpanded="false" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_presupuestos_anios" Width="3.25" PointX="18.375" PointY="37.375" IsExpanded="false" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_presupuestos_cuentas_meses_anios" Width="1.5" PointX="22.375" PointY="27.625" IsExpanded="false" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_prioridades_g" Width="1.5" PointX="19.625" PointY="0.75" IsExpanded="false" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_presupuestos_cuentas_meses_anios_C_cuentas_contables_g" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_presupuestos_areas_meses_anios_C_presupuestos_anios" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_usuarios_centros" Width="1.5" PointX="17.875" PointY="14.875" IsExpanded="false" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_usuarios_centros_C_centros_g" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_usuarios_centros_C_usuarios_corporativo" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_compras_bancos" Width="1.5" PointX="26.375" PointY="3.875" IsExpanded="false" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_compras_proveedores_giros" Width="2.75" PointX="25.125" PointY="0.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_compras_proveedores_status" Width="1.5" PointX="26.375" PointY="7.25" IsExpanded="false" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_compras_proveedores_bloqueos" Width="1.5" PointX="30.875" PointY="11.5" IsExpanded="false" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_compras_proveedores_bloqueos_C_usuarios_corporativo" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_firmas_cargo_permisos" Width="1.5" PointX="14.875" PointY="39.5" IsExpanded="false" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_firmas_usuarios" Width="1.5" PointX="17.125" PointY="18.25" IsExpanded="false" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_firmas_usuarios_montos" Width="1.5" PointX="5.25" PointY="29.25" IsExpanded="false" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_firmas_usuarios_C_cargos_contables_g" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_firmas_usuarios_C_firmas_cargo_permisos" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_firmas_usuarios_C_usuarios_corporativo" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_firmas_usuarios_montos_C_usuarios_corporativo" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_tipos_moneda" Width="1.5" PointX="15.375" PointY="3.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_almacen_solicitudes_cambios_articulos" Width="1.5" PointX="21.625" PointY="19.5" IsExpanded="false" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_almacen_solicitudes_cambios_articulos_C_almacen_solicitudes_mercancia_g" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_almacen_solicitudes_cambios_articulos_C_usuarios_corporativo" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_articulos_tipos_requisicion" Width="1.5" PointX="12.625" PointY="33.75" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_compras_cotizaciones_confirmadas_status" Width="2" PointX="24.875" PointY="10.875" IsExpanded="false" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_compras_requisiciones_tipos" Width="1.75" PointX="7.375" PointY="15.875" IsExpanded="false" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_compras_ordenes_status" Width="2.125" PointX="21.25" PointY="41.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_compras_requisiciones_links_autorizacion" Width="1.5" PointX="27.125" PointY="10" IsExpanded="false" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_compras_requisiciones_logs_tipos" Width="1.5" PointX="6" PointY="33.25" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_compras_requisiciones_links_autorizacion_C_usuarios_corporativo" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_usuarios_masters" Width="1.5" PointX="8.25" PointY="21.125" IsExpanded="false" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_usuarios_masters_acciones" Width="1.5" PointX="6" PointY="36.375" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_usuarios_masters_C_usuarios_corporativo" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_usuarios_masters_C_usuarios_masters_acciones" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_inventario_almacen_mov_d" Width="1.5" PointX="27.125" PointY="24.5" IsExpanded="false" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_cuentas_contables_g_C_almacen_almacenes_g" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_inventario_almacen_mov_d_C_almacen_almacenes_g" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_cuentas_contables_g_C_cuentas_contables_g" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_inventario_almacen_mov_d_C_inventario_mov_status" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_compras_ordenes_ubicaciones_entrega" Width="1.5" PointX="26.375" PointY="30.125" IsExpanded="false" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_compras_requi_g" Width="1.5" PointX="22.625" PointY="0.75" IsExpanded="false" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_compras_requi_g_C_centros_g" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_compras_requi_g_C_compras_requisiciones_status" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_compras_requi_g_C_compras_requisiciones_tipos" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_compras_requi_g_C_empleados" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_compras_requi_g_C_prioridades_g" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_compras_requi_g_C_usuarios_corporativo" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_compras_requi_g_C_usuarios_corporativo1" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_compras_requi_g_C_usuarios_corporativo2" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_compras_requi_g_C_usuarios_corporativo3" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_compras_requi_g_C_usuarios_corporativo4" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_compras_requi_g_C_usuarios_corporativo5" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_compras_requisiciones_links_autorizacion_C_compras_requi_g" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_contabilidad_importacion_status" Width="1.5" PointX="33.125" PointY="24.375" IsExpanded="false" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_inventario_almacen_mov_g" Width="1.5" PointX="33.125" PointY="27.5" IsExpanded="false" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_inventario_almacen_mov_g_C_almacen_almacenes_g" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_inventario_almacen_mov_g_C_almacen_almacenes_g1" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_inventario_almacen_mov_g_C_almacen_solicitudes_mercancia_g" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_inventario_almacen_mov_d_C_inventario_almacen_mov_g" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_inventario_almacen_mov_g_C_inventario_mov_status" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_inventario_almacen_mov_g_C_inventario_mov_tipos" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_inventario_almacen_mov_g_C_usuarios_corporativo" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_contabilidad_importacion_facturas_g" Width="1.5" PointX="33.125" PointY="3.625" IsExpanded="false" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_contabilidad_importacion_facturas_g_C_usuarios_corporativo" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_almacen_almacenes_centros" Width="1.5" PointX="20.5" PointY="12.5" IsExpanded="false" />
+        <AssociationConnector Association="BETA_CORPModel.FK_ALMACEN" />
+        <AssociationConnector Association="BETA_CORPModel.FK_CENTROS" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_salida_ganado_tipos_salidas" Width="1.5" PointX="12.875" PointY="43.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_envios_leche_productos" Width="2.25" PointX="8" PointY="42.25" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_articulos_marcas" Width="1.5" PointX="26.375" PointY="19.875" IsExpanded="false" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_usuarios_cargos_contables" Width="1.5" PointX="20.125" PointY="27.625" IsExpanded="false" />
+        <AssociationConnector Association="BETA_CORPModel.FK_CARGOCONTABLE" />
+        <AssociationConnector Association="BETA_CORPModel.FK_USUARIOS" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_contabilidad_solicitudes_pago_d" Width="1.5" PointX="10.5" PointY="36.625" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_contabilidad_solicitudes_pago_g" Width="1.5" PointX="8.25" PointY="35.875" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_contabilidad_solicitudes_pago_status" Width="1.5" PointX="6" PointY="45" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_contabilidad_solicitudes_pago_d_C_contabilidad_solicitudes_pago_g" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_contabilidad_solicitudes_pago__g_C_contabilidad_solicitudes_pago_status" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_contabilidad_solicitudes_pago__g_C_usuarios_corporativo" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_contabilidad_solicitudes_pago__g_C_usuarios_corporativo1" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_contabilidad_solicitudes_pago__g_C_usuarios_corporativo2" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_inventario_almacen_establo_maximo_minimo" Width="1.5" PointX="40.875" PointY="20.125" IsExpanded="false" />
+        <AssociationConnector Association="BETA_CORPModel.FK_almacen_g" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_presupuestos_almacenes_cuentas_meses_anios" Width="1.5" PointX="26.125" PointY="16.125" IsExpanded="false" />
+        <AssociationConnector Association="BETA_CORPModel.Fk_alma" />
+        <AssociationConnector Association="BETA_CORPModel.Fk_cuenta" />
+        <AssociationConnector Association="BETA_CORPModel.Fk_anios" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_envios_leche_tipos_tanques" Width="1.5" PointX="10.25" PointY="44.375" IsExpanded="false" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_establos_areas" Width="1.5" PointX="3" PointY="51.375" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_establos_caseta_logs_d_visita_bascula" Width="1.5" PointX="10.25" PointY="45" IsExpanded="false" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_establos_caseta_logs_d_visita_general" Width="1.5" PointX="14.5" PointY="42.875" IsExpanded="false" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_establos_caseta_tipos_entradas" Width="1.5" PointX="10.625" PointY="43.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_establos_caseta_tipos_entradas_areas" Width="1.5" PointX="5.25" PointY="51.25" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_establos_predios" Width="1.5" PointX="3" PointY="54.375" />
+        <AssociationConnector Association="BETA_CORPModel.FK_Table_1_C_envios_leche_tipos_tanques" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_establos_casetas_areas_C_establos" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_establos_predios_C_establos" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_establos_caseta_tipos_entradas_areas_C_establos_areas" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_establos_caseta_tipos_entradas_areas_C_establos_caseta_tipos_entradas" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_establos_caseta_logs_g" Width="1.5" PointX="24.25" PointY="38.25" IsExpanded="false" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_establos_caseta_logs_g_C_establos" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_establos_caseta_logs_d_visita_general_C_establos_caseta_logs_g" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_establos_caseta_logs_g_C_establos_caseta_tipos_entradas" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_establos_caseta_logs_g_C_establos_caseta_tipos_entradas_areas" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_establos_caseta_logs_g_C_usuarios_corporativo" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_establos_caseta_logs_g_C_usuarios_corporativo1" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_compras_proveedores_portal_solicitudes_status" Width="1.5" PointX="5.25" PointY="62.5" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_compras_proveedores_portal_tokens" Width="1.5" PointX="5.25" PointY="6.75" IsExpanded="false" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_compras_proveedores_portal_tokens_C_usuarios_corporativo" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_almacen_envio_correos_log" Width="1.5" PointX="17.375" PointY="0.625" IsExpanded="false" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_parametros_correos_almacen" Width="1.5" PointX="13.25" PointY="38.375" IsExpanded="false" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_almacen_envio_correos_log_C_almacen_almacenes_g" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_almacen_envio_correos_log_C_parametros_correos_almacen" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_empresas" Width="1.5" PointX="33.375" PointY="8" IsExpanded="false" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_establos_caseta_logs_d_visita_taller" Width="1.5" PointX="35.5" PointY="32.875" IsExpanded="false" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_establos_caseta_vales_tipos_salidas" Width="1.5" PointX="16.25" PointY="44.75" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_establos_caseta_logs_d_visita_taller_C_establos_caseta_logs_g" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_establos_caseta_logs_d_visita_taller_C_usuarios_corporativo" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_direcciones_ciudades" Width="1.5" PointX="30.875" PointY="42" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_direcciones_estados" Width="1.5" PointX="28.625" PointY="42" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_direcciones_paises" Width="1.5" PointX="26.375" PointY="42.375" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_nomina_bancos" Width="1.5" PointX="7.375" PointY="3.75" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_nomina_contrato" Width="1.5" PointX="30.875" PointY="46" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_nomina_cuenta_bancaria" Width="1.5" PointX="28.625" PointY="35.625" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_nomina_departamentos" Width="3.25" PointX="38" PointY="50.375" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_nomina_estado_civil" Width="2.375" PointX="30.875" PointY="30.5" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_nomina_forma_pago" Width="1.5" PointX="30.875" PointY="48.625" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_nomina_frecuencias_pagos" Width="1.5" PointX="30.875" PointY="57.375" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_nomina_grupos_pagos" Width="1.5" PointX="30.875" PointY="35.875" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_nomina_regimen_patronal" Width="1.5" PointX="30.875" PointY="53.625" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_nomina_tipo_cuenta_bancaria" Width="2" PointX="30.875" PointY="33.125" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_nomina_tipo_isn" Width="1.5" PointX="28.625" PointY="54.25" />
+        <AssociationConnector Association="BETA_CORPModel.FK_ESTADO" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_direcciones_estados_C_direcciones_paises" />
+        <AssociationConnector Association="BETA_CORPModel.FK_CUENTA_BANCARIA" />
+        <AssociationConnector Association="BETA_CORPModel.FK_ISN" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_nomina_empleados_checador" Width="2.375" PointX="35.375" PointY="34.375" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_nomina_empleados_checador_C_usuarios_corporativo" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_nomina_incidencias_tipos" Width="1.5" PointX="34" PointY="55.5" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_nomina_status" Width="1.5" PointX="23.125" PointY="33.875" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_almacen_ubicaciones_articulos" Width="1.5" PointX="15.5" PointY="12.875" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_almacen_ubicaciones_articulos_C_almacen_almacenes_g" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_inventario_almacenes_articulos" Width="1.5" PointX="37.875" PointY="17" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_almacen_almacenes_articulos_C_almacen_almacenes_g" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_inventario_almacenes_articulos_C_almacen_ubicaciones_articulos" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_nomina_parametros_porcentajes_integracion" Width="1.5" PointX="0.75" PointY="8.75" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_usuarios_areas_nomina" Width="1.5" PointX="37.125" PointY="37.625" />
+        <AssociationConnector Association="BETA_CORPModel.Fk_areas" />
+        <AssociationConnector Association="BETA_CORPModel.Fk_usuario" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_nomina_inasistencias" Width="1.5" PointX="38.25" PointY="33" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_nomina_inasistencias_C_usuarios_corporativo" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_establos_caseta_vales_salida" Width="1.5" PointX="25.5" PointY="31.25" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_establos_caseta_vales_salida_C_establos" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_establos_caseta_logs_d_visita_taller_C_establos_caseta_vales_salida" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_establos_caseta_vales_salida_C_establos_caseta_tipos_entradas_areas" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_establos_caseta_vales_salida_C_usuarios_corporativo" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_estavlos_caseta_vales_salida_C_establos_caseta_vales_tipos_salidas" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_nomina_beta_d_areas" Width="1.5" PointX="42" PointY="36.75" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_nomina_beta_d_areas_empleados" Width="1.5" PointX="44.25" PointY="37.125" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_nomina_beta_d_areas_empleados_conceptos" Width="1.5" PointX="46.5" PointY="30.875" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_nomina_beta_d_areas_C_nomina_departamentos" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_nomina_beta_d_areas_empleados_C_nomina_beta_d_areas" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_nomina_beta_d_areas_empleados_conceptos_C_nomina_beta_d_areas_empleados" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_almacen_almacenes_ubicaciones_entrega" Width="1.5" PointX="28.625" PointY="19.75" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_almacen_almacenes_ubicaciones_entrega_C_almacen_almacenes_g" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_almacen_almacenes_ubicaciones_entrega_C_compras_ordenes_ubicaciones_entrega" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_almacen_almacenes_ubicaciones_entrega_C_usuarios_corporativo" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_nomina_beta_g" Width="1.5" PointX="35.375" PointY="26" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_nomina_beta_g_C_establos" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_nomina_beta_d_areas_C_nomina_beta_g" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_nomina_beta_d_areas_empleados_C_nomina_beta_g" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_nomina_beta_d_areas_empleados_conceptos_C_nomina_beta_g" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_nomina_beta_g_C_nomina_status" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_nomina_beta_g_C_presupuestos_anios" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_nomina_beta_g_C_usuarios_corporativo" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_nomina_beta_g_C_usuarios_corporativo1" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_usuarios_proveedores" Width="1.5" PointX="30.875" PointY="7.375" />
+        <AssociationConnector Association="BETA_CORPModel.rol" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_almacen_solicitudes_mercancia_d" Width="1.5" PointX="40.875" PointY="21.75" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_almacen_solicitudes_cambios_articulos_C_almacen_solicitudes_mercancia_d" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_almacen_solicitudes_mercancia_d_C_almacen_solicitudes_mercancia_g" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_almacen_solicitudes_mercancia_d_C_cargos_contables_g" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_almacen_solicitudes_mercancia_d_C_cuentas_contables_g" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_almacen_solicitudes_mercancia_d_C_unidades_medidas" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_compras_requi_d" Width="1.5" PointX="37.875" PointY="10.625" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_compras_requi_d_C_cargos_contables_g" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_compras_requi_d_C_centros_g" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_compras_requi_d_C_compras_requi_g" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_compras_requi_d_C_cuentas_contables_g" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_compras_requi_d_C_unidades_medidas" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_presupuestos_meses" Width="1.5" PointX="3.375" PointY="8.875" />
+        <AssociationConnector Association="BETA_CORPModel.Fk_mes" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_presupuestos_areas_meses_anios_C_presupuestos_meses" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_compras_requi_g_solicita_autorizacion" Width="1.5" PointX="27.875" PointY="11.375" />
+        <AssociationConnector Association="BETA_CORPModel.Fk_requi_g" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_compras_requi_g_solicita_autorizacion_C_usuarios_corporativo" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_articulos_precios" Width="1.5" PointX="37.875" PointY="23.5" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_alimentacion_productores_origenes" Width="1.5" PointX="3" PointY="22.375" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_alimentacion_productores" Width="1.5" PointX="20.5" PointY="15.5" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_alimentacion_productores_C_alimentacion_productores_origenes" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_alimentacion_productores_C_almacen_almacenes_g" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_alimentacion_productores_C_usuarios_corporativo" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_almacen_solicitudes_mercancia_g_C_alimentacion_productores" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_nomina_empleados_solicitudes_status" Width="1.5" PointX="44.75" PointY="42.125" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_nomina_empleados_solicitudes" Width="1.5" PointX="49" PointY="32.125" />
+        <AssociationConnector Association="BETA_CORPModel.Fk_s_ciudad" />
+        <AssociationConnector Association="BETA_CORPModel.Fk_s_ciudad_naci" />
+        <AssociationConnector Association="BETA_CORPModel.Fk_s_contrato" />
+        <AssociationConnector Association="BETA_CORPModel.Fk_s_departamento" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_nomina_empleados_solicitudes_C_usuarios_corporativo" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_nomina_empleados_solicitudes_C_usuarios_corporativo1" />
+        <AssociationConnector Association="BETA_CORPModel.Fk_s_emp_estatus" />
+        <AssociationConnector Association="BETA_CORPModel.Fk_s_estado_civil" />
+        <AssociationConnector Association="BETA_CORPModel.Fk_s_fec_pago" />
+        <AssociationConnector Association="BETA_CORPModel.Fk_s_forma_pago" />
+        <AssociationConnector Association="BETA_CORPModel.Fk_s_grupo_pago" />
+        <AssociationConnector Association="BETA_CORPModel.Fk_s_reg_patronal" />
+        <AssociationConnector Association="BETA_CORPModel.Fk_s_tipo_cuenta" />
+        <AssociationConnector Association="BETA_CORPModel.Fk_s_usuario_corp" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_nomina_incidencias" Width="1.5" PointX="42" PointY="29.875" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_nomina_incidencias_C_nomina_departamentos" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_nomina_incidencias_C_nomina_departamentos1" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_nomina_incidencias_C_nomina_incidencias_tipos" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_nomina_incidencias_C_nomina_regimen_patronal2" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_nomina_incidencias_C_nomina_regimen_patronal3" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_nomina_incidencias_C_usuarios_corporativo" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_nomina_empleados" Width="1.5" PointX="42" PointY="40.875" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_nomina_puestos" Width="1.5" PointX="39.75" PointY="45.875" />
+        <AssociationConnector Association="BETA_CORPModel.FK_CIUDAD" />
+        <AssociationConnector Association="BETA_CORPModel.FK_NACIMIENTO_CIUDAD" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_nomina_beta_d_areas_empleados_C_nomina_empleados" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_nomina_beta_d_areas_empleados_C_nomina_puestos" />
+        <AssociationConnector Association="BETA_CORPModel.FK_CONTRATO" />
+        <AssociationConnector Association="BETA_CORPModel.FK_DEPARTAMENTO" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_nomina_empleados_checador_C_nomina_empleados" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_nomina_inasistencias_C_nomina_empleados" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_nomina_incidencias_C_nomina_empleados1" />
+        <AssociationConnector Association="BETA_CORPModel.FK_ESTADO_CIVIL" />
+        <AssociationConnector Association="BETA_CORPModel.FK_FORMA_PAGO" />
+        <AssociationConnector Association="BETA_CORPModel.FK_FREC_PAGO" />
+        <AssociationConnector Association="BETA_CORPModel.FK_GRUPO_PAGO" />
+        <AssociationConnector Association="BETA_CORPModel.FK_PUESTO" />
+        <AssociationConnector Association="BETA_CORPModel.FK_REGIMEN_PATONAL" />
+        <AssociationConnector Association="BETA_CORPModel.FK_TIPO_CUENTA_BANCO" />
+        <AssociationConnector Association="BETA_CORPModel.FK_s_puesto" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_nomina_incidencias_C_nomina_puestos" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_nomina_incidencias_C_nomina_puestos1" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_compras_inversiones_programadas" Width="1.5" PointX="28.875" PointY="2.625" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_compras_inversiones_programadas_C_compras_requi_g" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_compras_inversiones_programadas_C_usuarios_corporativo" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_compras_inversiones_programadas_C_usuarios_corporativo1" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_envios_leche_tipos_envio" Width="1.5" PointX="5.375" PointY="8.75" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_presupuestos_dias" Width="1.5" PointX="23.375" PointY="7.5" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_envios_leche_programacion_diaria_d" Width="1.5" PointX="25.625" PointY="12.375" />
+        <AssociationConnector Association="BETA_CORPModel.fk_envios_leche_programacion_diaria_d_dia" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_envios_leche_programacion_semanal_cliente_d_dias" Width="1.5" PointX="48.125" PointY="17.375" />
+        <AssociationConnector Association="BETA_CORPModel.fk_programacion_semanal_cliente_d_dia" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_envios_leche_lote_d" Width="1.5" PointX="43.125" PointY="25" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_envios_leche_destinos" Width="1.5" PointX="0.75" PointY="37.875" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_envios_leche_lote_logs" Width="1.5" PointX="43.875" PointY="11.25" />
+        <AssociationConnector Association="BETA_CORPModel.fk_usuario_lote_logs" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_compras_facturas_proveedores" Width="1.5" PointX="33.125" PointY="16.25" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_contabilidad_importacion_facturas_d" Width="1.5" PointX="35.375" PointY="12" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_contabilidad_importacion_facturas_d_C_compras_facturas_proveedores" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_contabilidad_importacion_facturas_d_C_contabilidad_importacion_facturas_g" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_contabilidad_importacion_facturas_d_C_contabilidad_importacion_status" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_contabilidad_importacion_facturas_d_C_cuentas_contables_g" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_contabilidad_importacion_facturas_d_C_tipos_moneda" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_articulos_catalogo" Width="1.5" PointX="28.625" PointY="27.75" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_articulos_catalogo_bascula" Width="1.5" PointX="30.875" PointY="26" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_bascula_fichas_tipos" Width="1.5" PointX="28.625" PointY="63.5" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_envios_leche_cliente_destinos" Width="1.5" PointX="48.125" PointY="24" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_almacen_solicitudes_cambios_articulos_C_articulos_catalogo" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_almacen_solicitudes_cambios_articulos_C_articulos_catalogo1" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_almacen_solicitudes_mercancia_d_C_articulos_catalogo" />
+        <AssociationConnector Association="BETA_CORPModel.FK_articulo" />
+        <AssociationConnector Association="BETA_CORPModel.fk_articulo_bascula_catalogo" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_almacen_almacenes_articulos_C_articulos_catalogo" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_articulos_catalogo_C_articulos_clasificaciones" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_articulos_catalogo_C_articulos_lineas" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_articulos_catalogo_C_articulos_tipos" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_articulos_catalogo_C_articulos_tipos_requisicion" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_articulos_catalogo_C_unidades_medidas" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_articulos_precios_C_articulos_catalogo" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_compras_requi_d_C_articulos_catalogo" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_inventario_almacen_captura_d_C_articulos_catalogo" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_inventario_almacen_mov_d_C_articulos_catalogo" />
+        <AssociationConnector Association="BETA_CORPModel.FK_Marca" />
+        <AssociationConnector Association="BETA_CORPModel.fk_tipo_articulo_bascula" />
+        <AssociationConnector Association="BETA_CORPModel.fk_usuario_tipo_catalogo" />
+        <AssociationConnector Association="BETA_CORPModel.fk_destino" />
+        <AssociationConnector Association="BETA_CORPModel.fk_usuario_cliente_destino" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_empresas_patrones" Width="1.5" PointX="35.625" PointY="7.125" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_empresas" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_envios_leche_clientes" Width="1.5" PointX="17.625" PointY="5.25" />
+        <AssociationConnector Association="BETA_CORPModel.fk_cliente" />
+        <AssociationConnector Association="BETA_CORPModel.fk_moneda" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_alimentacion_forrajes_facturas_d" Width="1.5" PointX="48.375" PointY="6.625" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_alimentacion_forrajes_facturas_g" Width="1.5" PointX="35.875" PointY="1.625" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_alimentacion_forrajes_facturas_d_C_alimentacion_forrajes_facturas_g" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_alimentacion_forrajes_facturas_d_C_tipos_moneda" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_alimentacion_forrajes_facturas_g_C_tipos_moneda" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_alimentacion_forrajes_facturas_g_C_usuarios_corporativo" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_envios_leche_programacion_semanal_cliente_d" Width="1.5" PointX="45.875" PointY="21.125" />
+        <AssociationConnector Association="BETA_CORPModel.fk_cliente_envio_leche" />
+        <AssociationConnector Association="BETA_CORPModel.fk_envios_leche_semanal_cliente_g_destino" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_envios_leche_programacion_semanal_cliente_d_C_envios_leche_programacion_semanal_cliente_g" />
+        <AssociationConnector Association="BETA_CORPModel.fk_envios_leche_semanal_cliente_g_establo" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_envios_leche_lote_g" Width="1.5" PointX="10.25" PointY="16.5" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_envios_leche_lote_status" Width="1.5" PointX="8" PointY="17.375" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_envios_leche_status" Width="1.5" PointX="31.625" PointY="61" />
+        <AssociationConnector Association="BETA_CORPModel.fk_lote_g" />
+        <AssociationConnector Association="BETA_CORPModel.fk_lote_g_logs" />
+        <AssociationConnector Association="BETA_CORPModel.fk_lote_statuss" />
+        <AssociationConnector Association="BETA_CORPModel.fk_usuario_lote" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_bascula_establos_fichas_tipos" Width="1.5" PointX="36.875" PointY="41.5" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_bascula_establos_fichas_tipos_C_bascula_fichas_tipos" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_bascula_establos_fichas_tipos_C_establos" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_alimentacion_articulos_precios" Width="1.5" PointX="45.875" PointY="25.375" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_alimentacion_articulos_precios_C_articulos_catalogo" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_alimentacion_articulos_precios_C_usuarios_corporativo" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_alimentacion_articulos_precios_C_usuarios_corporativo1" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_bascula_establos_codigos_movimientos" Width="1.5" PointX="33.875" PointY="49.25" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_bascula_establos_codigos_movimientos_C_bascula_codigos_movimientos" />
+        <AssociationConnector Association="BETA_CORPModel.fk_id_ficha_tipo" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_envios_leche_precios" Width="1.5" PointX="8.25" PointY="27.625" />
+        <AssociationConnector Association="BETA_CORPModel.fk_destino_leche" />
+        <AssociationConnector Association="BETA_CORPModel.fk_precio_usuario_registra" />
+        <AssociationConnector Association="BETA_CORPModel.fk_precio_usuario_ultima_actualizacion" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_envios_leche_programacion_diaria_g" Width="1.5" PointX="23.375" PointY="14.875" />
+        <AssociationConnector Association="BETA_CORPModel.fk_envios_leche_programacion_diaria_g" />
+        <AssociationConnector Association="BETA_CORPModel.fk_envios_leche_programacion_diaria_anio" />
+        <AssociationConnector Association="BETA_CORPModel.fk_envios_leche_programacion_diaria_establo" />
+        <AssociationConnector Association="BETA_CORPModel.fk_envios_leche_programacion_diaria_usuario" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_envios_leche_programacion_semanal_g" Width="1.5" PointX="37.625" PointY="26.5" />
+        <AssociationConnector Association="BETA_CORPModel.fk_envios_leche_programacion_semanal_diaria" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_envios_leche_programacion_semanal_cliente_g_C_envios_leche_programacion_semanal" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_envios_leche_programacion_semanal_cliente_d_C_envios_leche_programacion_semanal" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_envios_leche_programacion_semanal_C_presupuestos_anios" />
+        <AssociationConnector Association="BETA_CORPModel.fk_envios_leche_programacion_semanal_usuario_corporativo" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_alimentacion_programa_d" Width="1.5" PointX="30.875" PointY="21.875" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_alimentacion_programa_g" Width="1.5" PointX="5.25" PointY="18.375" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_alimentacion_programa_d_C_alimentacion_programa_g" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_alimentacion_programa_d_C_articulos_catalogo" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_alimentacion_programa_g_C_establos" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_alimentacion_programa_g_C_usuarios_corporativo" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_envios_leche_confirmacion" Width="1.5" PointX="39.125" PointY="41.125" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_envios_leche_g" Width="1.5" PointX="33.875" PointY="37.875" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_envios_leche_g_C_envios_leche_productos" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_envios_leche_g_C_bascula_lineas_transportistas" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_envios_leche_g_C_bascula_proveedores" />
+        <AssociationConnector Association="BETA_CORPModel.fk_envio_leche" />
+        <AssociationConnector Association="BETA_CORPModel.fk_lote_d_confirma" />
+        <AssociationConnector Association="BETA_CORPModel.fk_status_confirmacion" />
+        <AssociationConnector Association="BETA_CORPModel.fk_usuario_corporativo" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_envios_leche_g_C_envios_leche_destinos" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_envios_leche_g_C_envios_leche_tipos_tanques" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_envios_leche_g_C_establos" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_envios_leche_g_C_usuarios_corporativo" />
+        <AssociationConnector Association="BETA_CORPModel.Fk_status_envio_leche" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_bascula_fichas" Width="1.5" PointX="44.875" PointY="45.25" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_alimentacion_forrajes_facturas_d_C_bascula_fichas" />
+        <AssociationConnector Association="BETA_CORPModel.fk_articulo_bascula" />
+        <AssociationConnector Association="BETA_CORPModel.fk_codigo_movimiento" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_bascula_fichas_C_bascula_fichas_tipos" />
+        <AssociationConnector Association="BETA_CORPModel.fk_cliente_leche" />
+        <AssociationConnector Association="BETA_CORPModel.fk_establo" />
+        <AssociationConnector Association="BETA_CORPModel.fk_linea_transportista" />
+        <AssociationConnector Association="BETA_CORPModel.fk_pozo" />
+        <AssociationConnector Association="BETA_CORPModel.fk_tipo_movimiento" />
+        <AssociationConnector Association="BETA_CORPModel.fk_usuario_pesada" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_alimentacion_dietas_g_comentarios" Width="1.5" PointX="12.5" PointY="19.375" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_alimentacion_dietas_status" Width="1.5" PointX="7" PointY="64.75" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_evaluaciones_conceptos_rubros" Width="1.5" PointX="22.375" PointY="49.625" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_evaluaciones_departamentos" Width="1.5" PointX="45" PointY="62.5" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_evaluaciones_departamentos_empleados" Width="1.5" PointX="47.25" PointY="57.5" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_evaluaciones_departamentos_rubros" Width="1.5" PointX="50.25" PointY="57.125" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_evaluaciones_departamentos_usuarios" Width="1.5" PointX="51.25" PointY="45.375" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_evaluaciones_empleados_bonos" Width="1.5" PointX="51.25" PointY="36.625" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_evaluaciones_g" Width="1.5" PointX="22.375" PointY="35.125" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_evaluaciones_rubros" Width="1.5" PointX="20.125" PointY="49.625" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_evaluaciones_status" Width="1.5" PointX="22.375" PointY="30.875" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_alimentacion_dietas_g_comentarios_C_usuarios_corporativo" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_evaluaciones_conceptos_rubros_C_evaluaciones_rubros" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_evaluaciones_departamentos_empleados_C_evaluaciones_departamentos" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_evaluaciones_departamentos_rubros_C_evaluaciones_departamentos" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_evaluaciones_departamentos_usuarios_C_evaluaciones_departamentos" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_evaluaciones_departamentos_empleados_C_nomina_empleados" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_evaluaciones_departamentos_rubros_C_evaluaciones_rubros" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_evaluaciones_departamentos_usuarios_C_usuarios_corporativo" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_evaluaciones_empleados_bonos_C_nomina_empleados" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_evaluaciones_empleados_bonos_C_usuarios_corporativo" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_evaluaciones_empleados_bonos_C_usuarios_corporativo1" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_evaluaciones_g_C_presupuestos_anios" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_evaluaciones_g_C_usuarios_corporativo" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_contabilidad_ordenes_pago_d" Width="1.5" PointX="7.5" PointY="55.625" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_contabilidad_ordenes_pago_g" Width="1.5" PointX="5.25" PointY="22.75" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_contabilidad_ordenes_pago_d_C_contabilidad_ordenes_pago_g" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_contabilidad_ordenes_pago_g_C_usuarios_corporativo" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_evaluaciones_d_empleados" Width="1.5" PointX="51.25" PointY="40.625" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_evaluaciones_d_empleados_C_evaluaciones_departamentos" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_evaluaciones_d_empleados_C_evaluaciones_g" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_evaluaciones_d_empleados_C_evaluaciones_status" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_evaluaciones_d_empleados_C_nomina_empleados" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_evaluaciones_d_empleados_C_usuarios_corporativo" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_evaluaciones_d_conceptos" Width="1.5" PointX="53.5" PointY="33" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_evaluaciones_d_conceptos_C_evaluaciones_conceptos_rubros" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_evaluaciones_d_conceptos_C_evaluaciones_d_empleados" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_evaluaciones_d_conceptos_C_evaluaciones_g" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_evaluaciones_d_conceptos_C_evaluaciones_status" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_evaluaciones_d_conceptos_C_usuarios_corporativo" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_inventario_almacen_ajustes_g" Width="1.5" PointX="19.5" PointY="20.875" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_inventario_almacen_ajustes_g_C_almacen_almacenes_g" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_inventario_almacen_ajustes_g_C_usuarios_corporativo" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_envios_leche_cumplimiento_mensual" Width="1.5" PointX="38.375" PointY="5.875" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_envios_leche_cumplimiento_semanal" Width="1.5" PointX="40.625" PointY="4.375" />
+        <AssociationConnector Association="BETA_CORPModel.fk_cumplimiento_cliente" />
+        <AssociationConnector Association="BETA_CORPModel.fk_cumplimiento_anio" />
+        <AssociationConnector Association="BETA_CORPModel.fk_cumplimiento_mensual" />
+        <AssociationConnector Association="BETA_CORPModel.fk_cumplimiento_mes" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_envios_leche_cumplimiento_semanal_comentario" Width="1.5" PointX="44.875" PointY="7.125" />
+        <AssociationConnector Association="BETA_CORPModel.fk_cumplimiento_semanal" />
+        <AssociationConnector Association="BETA_CORPModel.fk_cumplimiento_usuario" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_compras_requisiciones_logs" Width="1.5" PointX="24.875" PointY="25.375" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_compras_requisiciones_logs_C_compras_requi_g1" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_compras_requisiciones_logs_C_compras_requi_g" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_compras_requisiciones_logs_C_usuarios_corporativo" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_compras_ordenes_d" Width="1.5" PointX="53.125" PointY="17.5" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_compras_ordenes_g" Width="1.5" PointX="50.875" PointY="17.125" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_compras_ordenes_d_C_articulos_catalogo" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_compras_ordenes_d_C_cargos_contables_g" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_compras_ordenes_g_C_centros_g" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_compras_facturas_proveedores_C_compras_ordenes_g" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_compras_ordenes_d_C_compras_ordenes_g" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_compras_ordenes_d_C_cuentas_contables_g" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_compras_ordenes_d_C_tipos_moneda" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_compras_ordenes_d_C_unidades_medidas" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_compras_ordenes_g_C_compras_ordenes_status" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_compras_ordenes_g_C_compras_ordenes_ubicaciones_entrega" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_compras_ordenes_g_C_compras_requi_g" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_compras_ordenes_g_C_compras_requisiciones_tipos" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_compras_ordenes_g_C_usuarios_corporativo" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_compras_ordenes_g_C_usuarios_corporativo1" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_inventario_almacen_mov_g_C_compras_ordenes_g" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_inventario_almacen_ajustes_d" Width="1.5" PointX="40.875" PointY="15.875" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_inventario_almacen_ajustes_d_C_articulos_catalogo" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_inventario_almacen_ajustes_d_C_inventario_almacen_ajustes_g" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_inventario_almacen_ajustes_d_C_inventario_almacen_mov_d" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_almacen_solicitudes_mercancia_d_logs" Width="1.5" PointX="43.125" PointY="17.5" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_almacen_solicitudes_mercancia_d_logs_C_almacen_solicitudes_mercancia_d" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_almacen_solicitudes_mercancia_d_logs_C_almacen_solicitudes_mercancia_g" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_almacen_solicitudes_mercancia_d_logs_C_usuarios_corporativo" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_almacen_solicitudes_mercancia_g_C_nomina_empleados" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_envios_leche_programacion_semanal_cliente_d_dias_horas" Width="1.5" PointX="50.375" PointY="27.375" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_envios_leche_programacion_semanal_cliente_d_dias_horas_C_bascula_lineas_transportistas" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_envios_leche_programacion_semanal_cliente_d_dias_horas_C_envios_leche_programacion_semanal_cliente_d_dias" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_envios_leche_programacion_semanal_cliente_d_dias_horas_C_envios_leche_tipos_tanques" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_envios_leche_programacion_semanal_cliente_d_dias_horas_C_usuarios_corporativo" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_envios_leche_d_fichas" Width="1.5" PointX="52.125" PointY="48.875" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_envios_leche_d_fichas_C_bascula_fichas" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_envios_leche_d_fichas_C_envios_leche_g" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_alimentacion_dietas_grupos" Width="1.5" PointX="40.625" PointY="0.875" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_alimentacion_dietas_grupos_tipos" Width="1.5" PointX="38.375" PointY="1.125" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_alimentacion_dietas_grupos_C_alimentacion_dietas_grupos_tipos" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_alimentacion_dietas_g_valores" Width="1.5" PointX="20.875" PointY="43.625" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_evaluaciones_d_calificaciones" Width="1.5" PointX="53.5" PointY="28.625" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_evaluaciones_d_calificaciones_C_evaluaciones_d_empleados" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_evaluaciones_d_calificaciones_C_evaluaciones_g" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_evaluaciones_d_calificaciones_C_usuarios_corporativo" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_alimentacion_dietas_g_valores_tipos" Width="1.5" PointX="9.375" PointY="3.875" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_alimentacion_dietas_g_valores_C_alimentacion_dietas_g_valores_tipos" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_nomina_checador_conceptos" Width="1.5" PointX="42" PointY="8.375" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_nomina_checador_prenomina" Width="1.5" PointX="44.25" PointY="31.875" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_nomina_checador_prenomina_C_nomina_checador_conceptos" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_nomina_checador_prenomina_C_nomina_checador_conceptos1" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_nomina_checador_prenomina_C_nomina_empleados" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_nomina_checador_prenomina_C_usuarios_corporativo" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_nomina_checador_hrs_extras_estimulos" Width="1.5" PointX="51.25" PointY="31.625" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_nomina_checador_hrs_extras_estimulos_C_nomina_empleados" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_nomina_checador_hrs_extras_estimulos_C_usuarios_corporativo" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_nomina_conceptos" Width="1.5" PointX="12.375" PointY="5" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_nomina_beta_d_areas_empleados_conceptos_C_nomina_conceptos" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_rh_formacion_academica_d" Width="1.5" PointX="50.875" PointY="12" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_rh_formacion_academica_g" Width="1.5" PointX="48.625" PointY="12.625" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_rh_formacion_escolaridades" Width="1.5" PointX="46.375" PointY="12.875" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_rh_formacion_estudio" Width="1.5" PointX="48.625" PointY="21.375" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_rh_formacion_status" Width="1.5" PointX="48.625" PointY="50.875" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_rh_formacion_universidades" Width="1.5" PointX="48.625" PointY="2.375" />
+        <AssociationConnector Association="BETA_CORPModel.Fk_formacion" />
+        <AssociationConnector Association="BETA_CORPModel.fk_formacion_d_g" />
+        <AssociationConnector Association="BETA_CORPModel.fk_formacion_estudio" />
+        <AssociationConnector Association="BETA_CORPModel.fk_formacion_status" />
+        <AssociationConnector Association="BETA_CORPModel.fk_formacion_uni" />
+        <AssociationConnector Association="BETA_CORPModel.fk_formacion_escolaridad" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_alimentacion_dietas_d" Width="1.5" PointX="36.875" PointY="44.625" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_alimentacion_dietas_d_C_articulos_catalogo" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_salida_ganado_causas_muerte" Width="1.5" PointX="25.625" PointY="45.875" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_salida_ganado_causas_muerte_tipos" Width="1.5" PointX="23.375" PointY="46" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_salida_ganado_causas_muerte_C_salida_ganado_causas_muerte_tipos" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_dashboard_tipos" Width="1.5" PointX="6" PointY="30.375" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_dashboard_usuarios" Width="1.5" PointX="8.25" PointY="22.25" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_dashboard_usuarios_C_dashboard_tipos" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_dashboard_usuarios_C_usuarios_corporativo" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_logs_procesos" Width="1.5" PointX="10.625" PointY="46.875" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_logs_procesos_tipos" Width="1.5" PointX="8.375" PointY="47" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_logs_sesiones_diarias" Width="1.5" PointX="7.375" PointY="9.75" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_logs_sesiones_usuarios" Width="1.5" PointX="9.375" PointY="9.75" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_logs_procesos_C_logs_procesos_tipos" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_logs_correos_enviados" Width="1.5" PointX="12.375" PointY="13.75" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_alimentacion_tracker_articulos_ingredientes" Width="1.5" PointX="40.875" PointY="11.375" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_alimentacion_tracker_articulos_ingredientes_C_articulos_catalogo" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_alimentacion_tracker_articulos_ingredientes_C_establos" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_alimentacion_tracker_articulos_ingredientes_C_usuarios_corporativo" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_alimentacion_dietas_g" Width="1.5" PointX="53.875" PointY="38.75" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_alimentacion_dietas_d_C_alimentacion_dietas_g" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_alimentacion_dietas_g_C_alimentacion_dietas_g" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_alimentacion_dietas_g_C_alimentacion_dietas_grupos" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_alimentacion_dietas_g_C_alimentacion_dietas_status" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_alimentacion_dietas_g_C_establos" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_alimentacion_dietas_g_C_usuarios_corporativo" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_alimentacion_dietas_g_comentarios_C_alimentacion_dietas_g" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_alimentacion_dietas_g_valores_C_alimentacion_dietas_g" />
+        <AssociationConnector Association="BETA_CORPModel.FK_Table_1_id_usuario_autoriza" />
+        <AssociationConnector Association="BETA_CORPModel.FK_Table_1_id_usuario_registra" />
+        <AssociationConnector Association="BETA_CORPModel.FK_Table_1_id_usuario_valida" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_compras_proveedores_portal_solicitudes" Width="1.5" PointX="55.125" PointY="46.5" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_compras_proveedores_portal_solicitudes_C_compras_proveedores_portal_solicitudes_status" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_compras_proveedores_portal_solicitudes_C_compras_proveedores_portal_tokens" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_compras_proveedores_portal_solicitudes_C_direcciones_ciudades" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_compras_proveedores_portal_solicitudes_C_direcciones_estados" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_compras_proveedores_portal_solicitudes_C_direcciones_paises" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_establos_bastones" Width="1.5" PointX="0.75" PointY="14.75" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_salida_ganado_medicos" Width="1.5" PointX="26" PointY="49.75" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_compras_cotizaciones_articulos" Width="1.5" PointX="42.875" PointY="9.25" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_compras_cotizaciones_confirmadas_d" Width="1.5" PointX="55.375" PointY="21" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_compras_cotizaciones_confirmadas_g" Width="1.5" PointX="48.625" PointY="69.75" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_compras_cotizaciones_requisiciones" Width="1.5" PointX="53.125" PointY="19.125" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_compras_proveedores" Width="1.5" PointX="31.625" PointY="0.75" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_inventario_almacen_devoluciones_d" Width="1.5" PointX="45.375" PointY="24.25" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_inventario_almacen_devoluciones_g" Width="1.5" PointX="21.125" PointY="15.75" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_salida_ganado_tipos_salidas_clasificaciones" Width="1.5" PointX="15.125" PointY="32" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_alimentacion_forrajes_facturas_g_C_compras_proveedores" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_inventario_almacen_devoluciones_C_almacen_almacenes_g" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_inventario_almacen_devoluciones_d_C_almacen_solicitudes_mercancia_d" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_inventario_almacen_devoluciones_d_C_almacen_solicitudes_mercancia_d_logs" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_inventario_almacen_devoluciones_C_almacen_solicitudes_mercancia_g" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_compras_cotizaciones_articulos_C_articulos_catalogo" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_compras_cotizaciones_requisiciones_C_articulos_catalogo" />
+        <AssociationConnector Association="BETA_CORPModel.fk_proveedor" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_compras_cotizaciones_articulos_C_compras_proveedores" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_compras_cotizaciones_articulos_C_tipos_moneda" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_compras_cotizaciones_articulos_C_unidades_medidas" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_compras_cotizaciones_articulos_C_usuarios_corporativo" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_compras_cotizaciones_requisiciones_C_compras_cotizaciones_articulos" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_compras_cotizaciones_confirmadas_d_C_compras_cotizaciones_confirmadas_g" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_compras_cotizaciones_confirmadas_d_C_compras_cotizaciones_requisiciones" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_compras_cotizaciones_confirmadas_g_C_compras_cotizaciones_confirmadas_status" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_compras_cotizaciones_confirmadas_g_C_compras_ordenes_ubicaciones_entrega" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_compras_cotizaciones_confirmadas_g_C_compras_requi_g" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_compras_cotizaciones_confirmadas_g_C_usuarios_corporativo" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_compras_ordenes_g_C_compras_cotizaciones_confirmadas_g" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_compras_cotizaciones_requisiciones_C_compras_cotizaciones_requisiciones" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_compras_cotizaciones_requisiciones_C_compras_requi_d" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_compras_cotizaciones_requisiciones_C_compras_requi_g" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_compras_cotizaciones_requisiciones_C_usuarios_corporativo" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_compras_cotizaciones_requisiciones_C_usuarios_corporativo1" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_compras_facturas_proveedores_C_compras_proveedores" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_compras_ordenes_g_C_compras_proveedores" />
+        <AssociationConnector Association="BETA_CORPModel.compras_proveedor" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_compras_proveedores_bloqueos_C_compras_proveedores" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_compras_proveedores_C_compras_proveedores_giros" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_compras_proveedores_C_compras_proveedores_status" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_compras_proveedores_C_tipos_moneda" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_compras_proveedores_portal_solicitudes_C_compras_proveedores" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_inventario_almacen_devoluciones_d_C_inventario_almacen_devoluciones_g" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_inventario_almacen_devoluciones_C_usuarios_corporativo" />
+        <AssociationConnector Association="BETA_CORPModel.clasificaciones_ganado" />
+        <AssociationConnector Association="BETA_CORPModel.tipos_salidas" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_salida_ganado_salas" Width="1.5" PointX="3" PointY="14.5" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_salida_ganado_salas_C_establos" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_sistemas_equipos_caracteristicas" Width="1.5" PointX="18.25" PointY="33.375" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_sistemas_equipos_clasificaciones" Width="1.5" PointX="13" PointY="45.375" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_sistemas_equipos_d" Width="1.5" PointX="20.5" PointY="6" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_sistemas_equipos_g" Width="1.5" PointX="15.25" PointY="5.125" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_sistemas_equipos_mov_tipos" Width="1.5" PointX="19.375" PointY="24.75" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_sistemas_equipos_movs" Width="1.5" PointX="17.5" PointY="39.5" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_sistemas_equipos_d_C_sistemas_equipos_caracteristicas" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_sistemas_equipos_g_C_sistemas_equipos_clasificaciones" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_sistemas_equipos_d_C_sistemas_equipos_g" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_sistemas_equipos_g_C_usuarios_corporativo" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_sistemas_equipos_g_C_usuarios_corporativo1" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_sistemas_equipos_movs_C_sistemas_equipos_g" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_salida_ganado_d" Width="1.5" PointX="26" PointY="53.375" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_salida_ganado_g" Width="1.5" PointX="14.875" PointY="24.375" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_salida_ganado_logs_d" Width="1.5" PointX="28.25" PointY="45.375" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_salida_ganado_logs_g" Width="1.5" PointX="17.125" PointY="23.375" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_salida_ganado_logs_g_C_establos" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_salida_ganado_d_C_salida_ganado_causas_muerte" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_salida_ganado_logs_d_C_salida_ganado_causas_muerte" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_salida_ganado_d_C_salida_ganado_g" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_salida_ganado_d_C_salida_ganado_medicos" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_salida_ganado_logs_d_C_salida_ganado_d" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_salida_ganado_g_C_salida_ganado_establos" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_salida_ganado_g_C_salida_ganado_tipos_salidas" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_salida_ganado_g_C_usuarios_corporativo" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_salida_ganado_logs_d_C_salida_ganado_g" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_salida_ganado_logs_g_C_salida_ganado_g" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_salida_ganado_logs_d_C_salida_ganado_logs_d" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_salida_ganado_logs_d_C_salida_ganado_medicos" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_salida_ganado_logs_g_C_salida_ganado_tipos_salidas" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_salida_ganado_logs_g_C_usuarios_corporativo" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_salida_ganado_logs_g_C_usuarios_corporativo1" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_sistemas_equipos_areas" Width="1.5" PointX="22.375" PointY="2.75" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_almacen_criticidad_articulos" Width="1.5" PointX="30.875" PointY="18.875" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_almacen_criticidad_tipos_consumos" Width="1.5" PointX="28.625" PointY="58.625" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_almacen_criticidad_tipos_operacion" Width="1.5" PointX="28.625" PointY="0.75" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_almacen_criticidad_articulos_C_almacen_almacenes_g" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_almacen_criticidad_articulos_C_almacen_criticidad_tipos_consumos" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_almacen_criticidad_articulos_C_almacen_criticidad_tipos_operacion" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_almacen_criticidad_articulos_C_articulos_catalogo" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_inventario_almacen_mov_d_recepciones_logs" Width="1.5" PointX="35.375" PointY="21.75" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_inventario_almacen_mov_d_recepciones_logs_C_articulos_catalogo" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_inventario_almacen_mov_d_recepciones_logs_C_inventario_almacen_mov_d" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_inventario_almacen_mov_d_recepciones_logs_C_inventario_almacen_mov_g" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_inventario_almacen_mov_d_recepciones_logs_C_usuarios_corporativo" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_dispositivos_autorizados" Width="1.5" PointX="18.625" PointY="42.875" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_dispositivos_comandos_catalogo" Width="1.5" PointX="10.375" PointY="52.25" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_dispositivos_comandos_ejecutados" Width="1.5" PointX="14.875" PointY="58.25" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_dispositivos_comandos_globales" Width="1.5" PointX="12.625" PointY="54.625" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_dispositivos_latidos" Width="1.5" PointX="5.375" PointY="0.75" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_dispositivos_logs" Width="1.5" PointX="21.375" PointY="24.75" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_dispositivos_modulos" Width="1.5" PointX="13.375" PointY="51.25" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_dispositivos_modulos_items" Width="1.5" PointX="15.625" PointY="51.125" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_dispositivos_tipos" Width="1.5" PointX="10.375" PointY="55.25" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_dispositivos_tipos_modulo" Width="1.5" PointX="15.625" PointY="55.25" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_dispositivos_autorizados_C_dispositivos_tipos" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_dispositivos_autorizados_C_establos" />
+        <AssociationConnector Association="BETA_CORPModel.FK_comando" />
+        <AssociationConnector Association="BETA_CORPModel.FK_cmd_global" />
+        <AssociationConnector Association="BETA_CORPModel.fk_tipo_dispo" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_dispositivos_modulos_items_C_dispositivos_modulos" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_dispositivos_tipos_modulo_C_dispositivos_modulos" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_dispositivos_tipos_modulo_C_dispositivos_tipos" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_soporte_categorias" Width="1.5" PointX="16.25" PointY="48.25" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_soporte_tickets_d" Width="1.5" PointX="18.5" PointY="52.75" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_soporte_tickets_g" Width="1.5" PointX="8.25" PointY="31.625" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_soporte_tipos" Width="1.5" PointX="16.25" PointY="61.875" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_soporte_tickets_d_C_soporte_categorias" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_soporte_tipos_C_soporte_categorias" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_soporte_tickets_d_C_soporte_tickets_g" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_soporte_tickets_d_C_soporte_tipos" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_soporte_tickets_d_C_usuarios_corporativo" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_soporte_tickets_g_C_usuarios_corporativo" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_soporte_estado" Width="1.5" PointX="31.375" PointY="12.875" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_soporte_logs" Width="1.5" PointX="5.25" PointY="55.125" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_soporte_prioridad" Width="1.5" PointX="6" PointY="39.375" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_soporte_tickets_d_C_soporte_estado" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_soporte_tickets_g_C_soporte_estado" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_soporte_logs_C_usuarios_corporativo" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_soporte_tickets_g_C_soporte_prioridad" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_usuarios_cuentas_contables" Width="1.5" PointX="26.375" PointY="21.25" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_usuarios_cuentas_contables_C_cuentas_contables_g" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_usuarios_cuentas_contables_C_usuarios_corporativo" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_compras_ordenes_recepciones_d" Width="1.5" PointX="58.375" PointY="18.75" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_compras_ordenes_recepciones_d_C_compras_ordenes_d" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_compras_ordenes_precarga_g" Width="1.5" PointX="61.375" PointY="18.5" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_compras_ordenes_precarga_g_C_compras_ordenes_g" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_compras_ordenes_precarga_g_C_usuarios_corporativo" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_compras_ordenes_precarga_g_C_usuarios_corporativo1" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_compras_ordenes_precarga_d" Width="1.5" PointX="63.625" PointY="18.5" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_compras_ordenes_precarga_d_C_compras_ordenes_d" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_compras_ordenes_precarga_d_C_compras_ordenes_precarga_g" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_compras_ordenes_precarga_d_C_compras_ordenes_recepciones_d" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_modulos_sub" Width="1.5" PointX="10.5" PointY="59.5" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_modulos_sub_C_modulos" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_modulos_sub_C_modulos_sub1" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_modulos_sub_permisos_C_modulos_sub" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_modulos_sub_permisos_usuarios_C_modulos_sub" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_compras_ordenes_recepciones_g" Width="1.5" PointX="56.125" PointY="17" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_compras_ordenes_recepciones_g_C_compras_ordenes_g" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_compras_ordenes_precarga_g_C_compras_ordenes_recepciones_g" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_compras_ordenes_precarga_g_C_nomina_empleados" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_compras_ordenes_recepciones_d_C_compras_ordenes_recepciones_g" />
+        <AssociationConnector Association="BETA_CORPModel.FK_C_compras_ordenes_recepciones_g_C_usuarios_corporativo" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_envios_leche_calidad" Width="1.5" PointX="8.25" PointY="0.75" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_envios_leche_calidad_silos" Width="1.5" PointX="10.5" PointY="2.75" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_envios_leche_d_calidad" Width="1.5" PointX="54.375" PointY="62" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_envios_leche_silos" Width="1.5" PointX="8.25" PointY="74.25" />
+        <EntityTypeShape EntityType="BETA_CORPModel.C_envios_leche_silos_establo" Width="1.5" PointX="3" PointY="3.375" />
+        <AssociationConnector Association="BETA_CORPModel.fk_calidad_lab_calidad" />
+        <AssociationConnector Association="BETA_CORPModel.fk_calidad_leche_establo" />
+        <AssociationConnector Association="BETA_CORPModel.fk_calidad_leche_usuario" />
+        <AssociationConnector Association="BETA_CORPModel.fk_calidad_lab_silo" />
+        <AssociationConnector Association="BETA_CORPModel.fk_ficha_leche_d" />
+        <AssociationConnector Association="BETA_CORPModel.fk_silo" />
+        <AssociationConnector Association="BETA_CORPModel.fk_establo_cal_leche" />
+        </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

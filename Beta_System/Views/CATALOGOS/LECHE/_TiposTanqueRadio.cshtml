@@ -1,0 +1,11 @@
+﻿@model IEnumerable<Beta_System.Models.C_envios_leche_tipos_tanques>
+
+@foreach (var item in Model)
+{
+    <div class="row">
+        <h3 style="margin: 3px;"><strong class="w-50 mt-2">- @item.tipo_tanque</strong></h3>
+        <input class="ml-2" type="radio" name="radio_tipo_tanque" value="@item.id_tipo_tanque_pipa" style="height:30px; min-height:30px;width:30px;" onclick="ConsultarFormularioBascula(@item.numero_pipas);" />
+        <br />
+    </div>
+}
+

@@ -1,0 +1,289 @@
+﻿@model IEnumerable<Beta_System.Models.C_compras_ordenes_g>
+
+<style>
+    .hh-grayBox {
+        background-color: #F8F8F8;
+        margin-bottom: 20px;
+        padding: 35px;
+        margin-top: 20px;
+    }
+
+    .pt45 {
+        padding-top: 45px;
+    }
+
+    .order-tracking {
+        text-align: center;
+        width: 14%;
+        position: relative;
+        display: block;
+    }
+
+        .order-tracking .is-complete {
+            display: block;
+            position: relative;
+            border-radius: 50%;
+            height: 30px;
+            width: 30px;
+            border: 0px solid #AFAFAF;
+            background-color: #f7be16;
+            margin: 0 auto;
+            transition: background 0.25s linear;
+            -webkit-transition: background 0.25s linear;
+            z-index: 2;
+        }
+
+            .order-tracking .is-complete:after {
+                display: block;
+                position: absolute;
+                content: '';
+                height: 14px;
+                width: 7px;
+                top: -2px;
+                bottom: 0;
+                left: 5px;
+                margin: auto 0;
+                border: 0px solid #AFAFAF;
+                border-width: 0px 2px 2px 0;
+                transform: rotate(45deg);
+                opacity: 0;
+            }
+
+        .order-tracking.completed .is-complete {
+            border-color: #27aa80;
+            border-width: 0px;
+            background-color: #27aa80;
+        }
+
+            .order-tracking.completed .is-complete:after {
+                border-color: #fff;
+                border-width: 0px 3px 3px 0;
+                width: 7px;
+                left: 11px;
+                opacity: 1;
+            }
+
+        .order-tracking p {
+            color: #A4A4A4;
+            font-size: 16px;
+            margin-top: 8px;
+            margin-bottom: 0;
+            line-height: 20px;
+        }
+
+            .order-tracking p span {
+                font-size: 14px;
+            }
+
+        .order-tracking.completed p {
+            color: #000;
+        }
+
+        .order-tracking::before {
+            content: '';
+            display: block;
+            height: 3px;
+            width: calc(100% - 40px);
+            background-color: #f7be16;
+            top: 13px;
+            position: absolute;
+            left: calc(-50% + 20px);
+            z-index: 0;
+        }
+
+        .order-tracking:first-child:before {
+            display: none;
+        }
+
+        .order-tracking.completed:before {
+            background-color: #27aa80;
+        }
+</style>
+
+
+@if (Model.Count() > 0)
+{
+    <h2 class="text-center bg-beta">TRACKING ORDENES </h2>
+    <div class="row">
+        <div class="col-12 col-md-12 hh-BackgroundBox">
+            @foreach (var orden in Model)
+            {
+                <div class="pt-4 pb-4" style="border: 2px solid #2e87d7; ">
+                    <div class="p-2">
+                        <h3 style="margin:3px;" class="text-left"><strong>Orden #@orden.id_compras_orden_g - @orden.C_compras_proveedores.razon_social (@orden.C_compras_proveedores.C_tipos_moneda.clave_fiscal)</strong></h3>
+                        @if (orden.C_compras_facturas_proveedores.Where(x => x.activo == true).Count() > 0)
+                        {
+                            <div class="" id="heading_@orden.id_compras_orden_g">
+                                <div class="w-100 collapsed" style="border: 1px solid black; background-color: rgb(236, 244, 251);">
+                                    <div class="row">
+                                        <div class="col-md-8"></div>
+                                        <div class="col-md-3 p-3">
+                                            <h4 class="text-left">VER FACTURA</h4>
+                                        </div>
+                                        <div class="col-md-1">
+                                            <button class="btn btn_beta_icon" data-toggle="collapse" data-target="#collapse_@orden.id_compras_orden_g" aria-expanded="false" aria-controls="collapse_@orden.id_compras_orden_g"><i class="fa fa-bars"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="collapse_@orden.id_compras_orden_g" class="collapse btn_detalle_requi_aut" aria-labelledby="heading_@orden.id_compras_orden_g" data-parent="#accordionSolicitudes">
+                                <div class="table-responsive" style="border: 2px solid black; background-color: rgb(236, 244, 251);">
+                                    <table class="table table-bordered table-striped text-center">
+                                        <thead>
+                                            <tr class="bg-beta">
+                                                <th>Factura</th>
+                                                <th>Fecha de registro</th>
+                                                <th>Subtotal</th>
+                                                <th>IVA</th>
+                                                <th>IVA retenido</th>
+                                                <th>ISR</th>
+                                                <th>Total</th>
+                                                <th>Moneda</th>
+                                                <th>Importada</th>
+                                                <th>Archivos</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var factura in orden.C_compras_facturas_proveedores.Where(x => x.activo == true))
+                                            {
+                                                <tr>
+                                                    <td>@factura.folio_factura</td>
+                                                    <td>@string.Format(factura.fecha_registro.Value.ToShortDateString(), "dd/MM/yyyyy")</td>
+                                                    <td>$@factura.subtotal.Value.ToString("N2")</td>
+                                                    <td>$@factura.iva_monto.Value.ToString("N2")</td>
+                                                    <td>$@factura.iva_retenido_monto.Value.ToString("N2")</td>
+                                                    <td>$@factura.isr_monto.Value.ToString("N2")</td>
+                                                    <td>$@factura.total.Value.ToString("N2")</td>
+                                                    <td>@factura.moneda</td>
+                                                    <td>
+                                                        @if (factura.aplicado == true)
+                                                        {<i class="fa fa-3x fa-check" style="color: #46E63E; "></i> }
+                                                        else
+                                                        { <i class="fa fa-3x fa-clock-o" style="color: #eb3c3c;"></i>}
+                                                    </td>
+                                                    <td>
+                                                        <div class="row">
+                                                            <div class="col-md-6 text-center">
+                                                                <button class="btn btn_beta" onclick="MostrarOrdenCompraPDFProveedor(@factura.id_compras_orden_g);">Ver PDF</button>
+                                                            </div>
+                                                            <div class="col-md-4 text-center">
+                                                                <button class="btn btn_beta" onclick="MostrarOrdenCompraXMLProveedor(@factura.id_compras_orden_g);">Abrir XML</button>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <br />
+                        }
+
+                        <div class="row">
+                            @foreach (var art in orden.C_compras_ordenes_d.Where(x => x.activo == true))
+                            {
+                                <div class="col-md-3">
+                                    <label><strong>-@art.C_articulos_catalogo.clave</strong> @art.C_articulos_catalogo.nombre_articulo <strong>(@art.cantidad_compra.Value.ToString("N2") @art.C_unidades_medidas.unidad_medida) - $@art.precio_unitario.Value.ToString("N2") @art.C_tipos_moneda.clave_fiscal</strong></label>
+                                </div>
+                            }
+                        </div>
+                        <div class="row justify-content-between">
+                            @if (orden.entregado == true)
+                            {
+                                <div class="order-tracking completed col-md-3">
+                                    <span class="is-complete"></span>
+                                    <p>Recepcionado<br></p>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="order-tracking col-md-3">
+                                    <span class="is-complete"></span>
+                                    <p>Recepcionado<br></p>
+                                </div>
+                            }
+
+
+                            @if (orden.alta_proveedor == true)
+                            {
+                                <div class="order-tracking completed col-md-3">
+                                    <span class="is-complete"></span>
+                                    <p>Factura en portal<br></p>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="order-tracking col-md-3">
+                                    <span class="is-complete"></span>
+                                    <p>Factura en portal<br></p>
+                                </div>
+                            }
+
+
+                            @if (orden.C_compras_facturas_proveedores.Where(x => x.activo == true).Count() > 0)
+                            {
+                                foreach (var factura in orden.C_compras_facturas_proveedores)
+                                {
+                                    if (factura.activo == true && factura.aplicado == true)
+                                    {
+                                        <div class="order-tracking completed col-md-3">
+                                            <span class="is-complete"></span>
+                                            <p>Importó contabilidad<br></p><span>@string.Format(orden.C_compras_facturas_proveedores.FirstOrDefault().fecha_registro.Value.ToLongDateString(), "dd/MM/yyyy")</span>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="order-tracking col-md-3">
+                                            <span class="is-complete"></span>
+                                            <p>Importó contabilidad<br></p><span></span>
+                                        </div>
+                                    }
+
+
+                                    if (factura.C_contabilidad_importacion_facturas_d.Where(x => x.activo == true).Count() > 0)
+                                    {
+                                        <div class="order-tracking completed col-md-3">
+                                            <span class="is-complete"></span>
+                                            <p>Importada Microsip<br></p>
+                                            <span>Factura: @factura.folio_factura</span>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="order-tracking col-md-3">
+                                            <span class="is-complete"></span>
+                                            <p>Importada Microsip<br></p><span></span>
+                                        </div>
+                                    }
+
+                                }
+                            }
+                            else
+                            {
+                                <div class="order-tracking col-md-3">
+                                    <span class="is-complete"></span>
+                                    <p>Importó contabilidad<br><span></span></p>
+                                </div>
+
+                                <div class="order-tracking col-md-3">
+                                    <span class="is-complete"></span>
+                                    <p>Importada Microsip<br><span></span></p>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+
+
+
+        </div>
+    </div>
+
+}
+else
+{
+    <h2 class="text-danger">No se encontraron ordenes de compra</h2>
+}
+

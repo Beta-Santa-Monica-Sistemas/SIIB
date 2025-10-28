@@ -1,0 +1,47 @@
+﻿@model List<Beta_System.Models.C_nomina_beta_d_areas_empleados>
+
+@if (Model.Count() > 0)
+{
+    <div class="row">
+        <div class="col-md-1 text-center">
+            <strong>Todos</strong>
+            <br />
+            <input type="checkbox" class="form-control" style="height: 25px; min-height: 25px;" onclick="CheckUncheckConceptosMasivos();" id="check_uncheck_conceptos_masivos" checked />
+        </div>
+    </div>
+
+    <table class="table table-bordered table-striped" id="datatable_empleados_masivos">
+        <thead>
+            <tr class="text-center bg-beta">
+                <th>Seleccionar</th>
+                <th>Clave</th>
+                <th>Nombre</th>
+                <th>Área</th>
+                <th>Puesto</th>
+                <th>Dias laborados</th>
+                <th>Salario diario</th>
+                <th>Importe nómina</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.OrderBy(x => x.C_nomina_empleados.Nombres))
+            {
+                <tr class="text-center">
+                    <td><input type="checkbox" value="@item.id_nomina_d_area_empleado" class="form-control check_nomina_d_area_empleado_masivo" name="check_nomina_d_area_empleado_masivo" style="height: 25px; min-height: 25px; width: 25px; min-width: 25px;" checked /></td>
+                    <td>@item.C_nomina_empleados.Numero</td>
+                    <td class="text-left">@item.C_nomina_empleados.Nombres @item.C_nomina_empleados.Apellido_paterno @item.C_nomina_empleados.Apellido_materno</td>
+                    <td>@item.C_nomina_empleados.C_nomina_departamentos.nombre_departamento</td>
+                    <td>@item.C_nomina_empleados.C_nomina_puestos.nombre_puesto</td>
+                    <td>@item.dias_laborados</td>
+                    <td>$@item.salario_diario.Value.ToString("N2")</td>
+                    <td>$@item.importe_final.Value.ToString("N2")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <br />
+}
+else
+{
+    <h3 class="text-danger">NO SE ENCONTRARON REGISTROS</h3>
+}

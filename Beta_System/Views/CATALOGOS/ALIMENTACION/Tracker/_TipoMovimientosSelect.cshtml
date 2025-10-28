@@ -1,0 +1,8 @@
+﻿@model List<Beta_System.Models.C_tracker_movimientos_tipos>
+
+
+@foreach (var item in Model)
+{
+    <option value="@item.id_movimiento_tipo">@item.nombre_tipo</option>
+}
+

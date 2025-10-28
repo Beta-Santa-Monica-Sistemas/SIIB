@@ -1,0 +1,61 @@
+﻿@model IEnumerable<Beta_System.Models.DeviceStatus>
+
+<div style="overflow-x: auto; max-width: 100%;">
+    <table class="table table-striped table-bordered" id="dispositivos_activos_table" style="width:100%; table-layout: fixed;">
+        <thead>
+            <tr class="bg-beta text-center">
+                <th style="width:15%; white-space: nowrap;">ID Global</th>
+                <th style="width:15%; white-space: nowrap;">Comando</th>
+                <th style="width:15%; white-space: nowrap;">Tipo</th>
+                <th style="width:15%; white-space: nowrap;">Establo</th>
+                <th style="width:10%; white-space: nowrap;">Último latido</th>
+                <th style="width:10%; white-space: nowrap;">Min último latido</th>
+                <th style="width:5%; white-space: nowrap;">Estado</th>
+                <th style="width:5%; white-space: nowrap;">Bloqueo</th>
+                <th style="width:5%; white-space: nowrap;">Estatus</th>
+                <th style="width:5%; white-space: nowrap;">Reiniciar</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                var filaClase = item.Online ? "table-success" : "table-danger";
+                var estadoClase = item.Online ? "badge bg-success" : "badge bg-danger";
+                <tr class="@filaClase">
+                    <td>@item.NombreDispositivo</td>
+                    <td class="text-center">@item.Mac</td>
+                    <td>@item.Tipo</td>
+                    <td>@item.Establo</td>
+                    <td class="text-center">@(item.UltimoLatido?.ToLocalTime().ToString("yyyy-MM-dd HH:mm:ss") ?? "-")</td>
+                    <td class="text-center">@(item.MinDesdeUltimo?.ToString() ?? "-")</td>
+                    <td class="text-center"><div class="@estadoClase" style="font-size:14px">@(item.Online ? "ONLINE" : "OFFLINE")</div></td>
+                    <td class="text-center">
+                        @if (item.Bloqueo == true)
+                        {
+                            <i class="fa fa-3x fa-toggle-on" style="color:#2e87d7;" onclick="OnOffBloqueoDispositivo(@item.idAutorizado, false);"></i>
+                        }
+                        else
+                        {
+                            <i class="fa fa-3x fa-toggle-on" style="color:gray;" onclick="OnOffBloqueoDispositivo(@item.idAutorizado, true);"></i>
+                        }
+                    </td>
+                    <td class="text-center">
+                        @if (item.Activo == true)
+                        {
+                            <i class="fa fa-3x fa-toggle-on" style="color:#2e87d7;" onclick="OnOffEstatusDispositivo(@item.idAutorizado, false);"></i>
+                        }
+                        else
+                        {
+                            <i class="fa fa-3x fa-toggle-on" style="color:gray;" onclick="OnOffEstatusDispositivo(@item.idAutorizado, true);"></i>
+                        }
+                    </td>
+                    <td>
+                        <div class="col-md-2 p-3">
+                            <button class="btn btn_beta_icon" onclick="FalloDispositivo(@item.idAutorizado);"><i class="fa fa-remove"></i></button>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

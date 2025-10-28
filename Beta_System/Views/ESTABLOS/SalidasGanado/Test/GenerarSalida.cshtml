@@ -1,0 +1,642 @@
+﻿@{
+    ViewBag.Title = "GenerarSalida";
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+    List<int> permisos = Session["PermisosModulo"] as List<int>;
+}
+
+<style>
+    @@media (max-width: 1024px) {
+        /* 1. Hacemos el cuadro de diálogo más alto, ancho y centramos su contenido */
+        .iziToast.custom-question {
+            min-width: 85% !important;
+            padding: 30px 15px !important; /* Más padding para más altura */
+            text-align: center !important; /* Centra el texto por defecto */
+        }
+            /* 2. FORZAMOS EL SALTO DE LÍNEA y aumentamos tamaño del texto */
+            .iziToast.custom-question .iziToast-title {
+                display: block !important; /* <-- HACE QUE OCUPE SU PROPIA LÍNEA */
+                font-size: 2rem !important; /* Título mucho más grande */
+                margin-bottom: 15px !important;
+            }
+
+            .iziToast.custom-question .iziToast-message {
+                display: block !important; /* <-- HACE QUE OCUPE SU PROPIA LÍNEA */
+                font-size: 1.5rem !important; /* Mensaje más grande */
+                line-height: 1.5 !important;
+            }
+            /* 3. CENTRAMOS LOS BOTONES */
+            .iziToast.custom-question .iziToast-buttons {
+                display: flex !important;
+                justify-content: center !important; /* <-- CENTRA LOS BOTONES HORIZONTALMENTE */
+                width: 100% !important; /* Asegura que el contenedor ocupe todo el espacio */
+                margin-top: 30px !important;
+            }
+                /* 4. Hacemos los botones más grandes */
+                .iziToast.custom-question .iziToast-buttons button {
+                    font-size: 1.2rem !important;
+                    padding: 20px 30px !important;
+                    min-height: 70px !important;
+                    margin: 0 15px !important; /* Más separación entre botones */
+                    border-radius: 10px !important;
+                }
+    }
+</style>
+
+<div class="page_title">
+    <div class="counter_section">
+        <h1>Salidas de Ganado</h1>
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="nav nav-tabs">
+                    @if (permisos.Contains(4061))
+                    {
+                        <li> <a data-toggle="tab" href="#carga_arete">CARGA DE ARETES<i class="fa fa-2x fa-camera ml-2"></i></a> </li>
+                    }
+
+                    @if (permisos.Contains(13))
+                    {
+                        <li class="active"> <a data-toggle="tab" href="#generar_salida">GENERAR SALIDA <i class="fa fa-2x fa-check ml-2"></i></a> </li>
+                    }
+                    @if (permisos.Contains(14))
+                    {
+                        <li> <a data-toggle="tab" href="#reporte_detalle">REPORTE - DETALLE DE SALIDAS<i class="fa fa-2x fa-file-text ml-2"></i></a></li>
+                    }
+                    @if (permisos.Contains(4064))
+                    {
+                        <li> <a data-toggle="tab" href="#edicion_carga">EDICION DE CARGA<i class="fa fa-2x fa-edit ml-2"></i></a></li>
+                    }
+                    @if (permisos.Contains(4065))
+                    {
+                        <li> <a data-toggle="tab" href="#bitacora">BITACORA<i class="fa fa-2x fa-file-text ml-2"></i></a></li>
+                    }
+                    <li> <a data-toggle="tab" href="#reporte_indicadores">INDICADORES<i class="fa fa-2x fa-pie-chart ml-2"></i></a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="column2 counter_section">
+    <div class="tab-content">
+
+        <div id="carga_arete" class="tab-pane fade in">
+            <h3 class="text-center">Carga de aretes</h3>
+            <div class="row">
+                <!-- CAMARA Y ESCANER -->
+                <div class="col-md-4 text-center">
+                    <!-- Cámara 1 -->
+                    <div class="col-md-12">
+                        <button class="btn btn_beta" style="width:100%" onclick="HabilitarCamaraFull(1);" id="btn_camara_1">Activar primera cámara</button>
+                    </div>
+                    <div class="col-md-12">
+                        <canvas id="canvas_1" width="350" height="250" style="display:none;"></canvas>
+                        <input type="hidden" id="imagen_base64_1" name="imagen_base64_1" />
+                        <img id="foto_1" src="#" alt="" style="display:none; margin-top: 10px; width: 350px; height: 250px; object-fit: cover; border-radius: 5px;" />
+                    </div>
+                    <!-- Cámara 2 -->
+                    <div class="col-md-12">
+                        <button class="btn btn_beta" style="width:100%" onclick="HabilitarCamaraFull(2);" id="btn_camara_2">Activar segunda cámara</button>
+                    </div>
+                    <div class="col-md-12">
+                        <canvas id="canvas_2" width="350" height="250" style="display:none;"></canvas>
+                        <input type="hidden" id="imagen_base64_2" name="imagen_base64_2" />
+                        <img id="foto_2" src="#" alt="" style="display:none; margin-top: 10px; width: 350px; height: 250px; object-fit: cover; border-radius: 5px;" />
+                    </div>
+                </div>
+                <!--   -->
+                <div class="col-md-8 p-1">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <strong>Establo</strong>
+                            <select class="form-control id_establo_select" id="id_establo_carga" onchange="GenerarFolioEstablo(); SelectSalaEstablo();">
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <strong>Folio</strong>
+                            <input type="text" class="form-control" id="folio_g" readonly />
+                        </div>
+                        <div class="col-md-12">
+                            <hr />
+                        </div>
+                        <div class="col-md-1 text-right p-3">
+                            <button class="btn btn_beta" style="width:100%" onclick="GenerarFolioEstablo();"><i class="fa fa-refresh"></i>  Nuevo folio</button>
+                        </div>
+                        <div class="col-md-6 text-center">
+                            <strong style="font-size:25px;">CANTIDAD PRECARGADA: </strong> <strong id="lbl_precarga_cantidad" style="font-size:25px;">0</strong>
+                        </div>
+                        <div class="col-md-4">
+                            <strong>Tipo de salida</strong>
+                            <select class="form-control" id="tipo_salida" onchange="TiposSalidasClasificacionesSelect();">
+                                @{ Html.RenderAction("TiposSalidasSelect", "PRUEBAS"); }
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <strong>Ganado</strong>
+                            <select class="form-control" id="ganado_g" onchange="ConsultarCondicionesClasificacion();">
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <strong>Condición</strong>
+                            <select class="form-control input_valid" id="condicion_g"></select>
+                        </div>
+
+                        <div class="col-md-12"><br /></div>
+                        <div class="col-md-12">
+                            <button class="btn btn_beta" style="width:100%" onclick="CambioAreteInput()" id="btn_cambio_arete_input">Habilitar arete</button>
+                        </div>
+                        <div class="col-md-12"><br /></div>
+                        <div class="col-md-6">
+                            <strong>Arete</strong>
+                            <input type="text" class="form-control input_detalle input_clean solo-letras-numeros" id="arete" readonly />
+                        </div>
+                        <div class="col-md-6">
+                            <strong>Siniiga</strong>
+                            <input type="text" class="form-control input_detalle input_clean solo-letras-numeros" id="siniiga" readonly />
+                        </div>
+                        <div class="col-md-12"><br /></div>
+                        <div class="col-md-12">
+                            <button class="btn btn_beta" style="width:100%" onclick="ConsultarInformacionArete()" id="btn_consultar_arete">Consultar arete</button>
+                        </div>
+                        <div class="col-md-12"><br /></div>
+
+                        <div class="col-md-2">
+                            <strong>Edad</strong>
+                            <input type="text" class="form-control input_detalle input_clean solo-letras-numeros" id="edad" readonly />
+                        </div>
+                        <div class="col-md-2">
+                            <strong>Sala</strong>
+                            <select type="text" class="form-control" id="sala" />
+                        </div>
+                        <div class="col-md-2" style="display:none;">
+                            <strong style="display:none;">P. Unitario</strong>
+                            <input type="number" class="form-control input_detalle input_clean" id="p_unitario" style="display:none;" />
+                        </div>
+                        <div class="col-md-3">
+                            <strong>Estado</strong>
+                            <input type="text" class="form-control input_detalle input_clean solo-letras-numeros" id="arete_estado" readonly />
+                        </div>
+                        <div class="col-md-5">
+                            <strong>Estado ginecologico</strong>
+                            <input type="text" class="form-control input_detalle input_clean solo-letras-numeros" id="arete_ginecologico" readonly />
+                        </div>
+                        <div class="col-md-6">
+                            <strong>Medico</strong>
+                            <select class="form-control" id="id_medico_select">
+                                @{ Html.RenderAction("ConsultarMedicosSelect", "CATALOGOS"); }
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <strong>Observaciones</strong>
+                            <input type="text" class="form-control input_detalle input_clean solo-letras-numeros" id="causa" />
+                        </div>
+                        <div class="col-md-6">
+                            <strong>Tipo de salida</strong>
+                            <select class="form-control" id="id_tipo_causa_muerte" onchange="SelectCausaMuerte();">
+                                @{ Html.RenderAction("SelectTiposCausaMuerte", "SALIDASGANADO"); }
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <strong>Causa de salida</strong>
+                            <select class="form-control input_valid" id="id_causa_muerte"></select>
+                        </div>
+                    </div>
+                    <div class="col-md-12"><br /></div>
+                    <div class="col-md-12 text-right">
+                        <button class="btn btn_beta" style="width:100%" onclick="CargarDGanadoTabla();">Agregar ganado</button>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <hr />
+                    <div class="table-responsive">
+                        <table class="table table-striped table-bordered">
+                            <thead>
+                                <tr class="bg-beta">
+                                    <th># Arete</th>
+                                    <th>Siniiga</th>
+                                    <th>Clasificación</th>
+                                    <th>Tipo de salida</th>
+                                    <th>Causa de la salida</th>
+                                    <th>Condición</th>
+                                    <th>Observaciones</th>
+                                    <th>Sala</th>
+                                    <th>Edad</th>
+                                    <th>Medico</th>
+                                    <th>Estado</th>
+                                    <th>Estado ginecologico</th>
+                                    <th>Foto</th>
+                                    <th>Eliminar</th>
+                                </tr>
+                            </thead>
+                            <thead id="thead_ganado_medicos">
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="col-md-12"><br /><br /></div>
+                <div class="col-md-12 text-right">
+                    <button class="btn btn_beta" style="width:100%" onclick="ConfirmarGGanadoTabla();">Confirmar</button>
+                </div>
+
+                <!-- Modo cámara fullscreen -->
+                <div id="modoCamaraFull" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:black; z-index:9999; justify-content:center; align-items:center; flex-direction:column;">
+                    <video id="video_full" autoplay style="max-width:100%; max-height:80vh; border: 2px solid white;"></video>
+                    <button id="btn_tomar_foto" style="margin-top:20px; font-size:20px; padding:10px 20px;" class="btn btn_beta">Tomar foto</button>
+                </div>
+            </div>
+        </div>
+
+        @if (permisos.Contains(13))
+        {
+            <div id="generar_salida" class="tab-pane fade in active show">
+                <h3 class="text-center">Generar salida de ganado</h3>
+                <div class="col-md-12">
+                    <br>
+                    <button class="btn btn_beta" onclick="ConsultarGanadoPendiente();">Ganado Pendiente</button>
+                </div>
+                <div class="col-md-12" style="display:none">
+                    <label id="id_existe_ficha">0</label>
+                </div>
+                <div class="col-md-12">
+                    <hr />
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="row" style="border-right: 1px solid rgb(46, 135, 215)">
+                            <div class="col-md-6">
+                                <strong>Establo</strong>
+                                <select class="form-control id_establo_select" id="id_establo" onchange="GenerarFolioEstablo();"></select>
+                            </div>
+                            <div class="col-md-6 tipo_salida">
+                                <strong>Ficha</strong>
+                                <input type="text" class="form-control input_clean solo-numeros-spunto" id="ficha_g" />
+                            </div>
+                            <div class="col-md-4">
+                                <strong>Folio</strong>
+                                <input type="text" class="form-control solo-numeros-spunto" id="folio_busqueda" />
+                            </div>
+                            <div class="col-md-4">
+                                <strong>Fecha</strong>
+                                <input type="text" class="form-control" value="@DateTime.Now.ToShortDateString()" readonly />
+                            </div>
+                            <div class="col-md-4">
+                                <strong>Hora</strong>
+                                <input type="text" class="form-control" value="@DateTime.Now.ToShortTimeString()" readonly />
+                            </div>
+
+                            <div class="col-md-4">
+                                <strong>Peso 1</strong>
+                                <input type="text" class="form-control input_clean input_ficha" readonly id="peso_1_g" />
+                            </div>
+                            <div class="col-md-4">
+                                <strong>Peso 2</strong>
+                                <input type="text" class="form-control input_clean input_ficha" readonly id="peso_2_g" />
+                            </div>
+                            <div class="col-md-4">
+                                <strong>Peso T</strong>
+                                <input type="text" class="form-control input_clean input_ficha" readonly id="peso_t_g" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <strong>Pesador</strong>
+                                <input type="text" class="form-control input_clean input_ficha" id="pesador_g" readonly />
+                            </div>
+                            <div class="col-md-6">
+                                <strong>Chofer</strong>
+                                <input type="text" class="form-control input_clean input_ficha" id="chofer_g" readonly />
+                            </div>
+                            <div class="col-md-6">
+                                <strong>Placas</strong>
+                                <input type="text" class="form-control input_clean input_ficha" id="placas_g" readonly />
+                            </div>
+                            <div class="col-md-6">
+                                <strong>Vehículo</strong>
+                                <input type="text" class="form-control input_clean input_ficha" id="vehiculo_g" readonly />
+                            </div>
+
+                            <div class="col-md-12">
+                                <strong>Comprador</strong>
+                                <input type="text" class="form-control input_clean input_ficha" id="comprador_g" readonly />
+                            </div>
+                            @*<div class="col-md-2 p-3">
+                                    <button class="btn btn_beta_icon" onclick="AgregarVacaTabla();"><i class="fa fa-plus"></i></button>
+                                </div>*@
+                        </div>
+                    </div>
+
+                    <div class="col-md-12"><hr /></div>
+
+                    <div class="col-md-12">
+                        <div class="table-responsive">
+                            <div id="div_aretes_salidas"></div>
+                        </div>
+                    </div>
+
+
+
+
+                    <div class="col-md-12 text-right">
+                        <br />
+                        <div style="border-top: 1px solid #2e87d7"></div>
+                        <br />
+                        <button class="btn btn_beta" onclick="GenerarSGanado();">GENERAR SALIDA</button>
+                    </div>
+
+                </div>
+            </div>
+        }
+        @if (permisos.Contains(14))
+        {
+            <div id="reporte_detalle" class="tab-pane fade in">
+                <h3 class="text-center">Reporte Salidas de Ganado Detalle</h3>
+                <div class="row">
+                    <div class="col-md-3">
+                        <strong>ESTABLO</strong>
+                        <select class="form-control id_establo_select" id="id_establo_consulta">
+                            <option value="0">TODOS</option>
+                            @*@{ Html.RenderAction("ConsultarEstablosSelect", "SALIDASGANADO"); }*@
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <strong>FECHA INICIO</strong>
+                        <input type="date" value="@DateTime.Now.ToShortDateString()" class="form-control" id="fecha_inicio" />
+                    </div>
+                    <div class="col-md-2">
+                        <strong>FECHA FIN</strong>
+                        <input type="date" value="@DateTime.Now.ToShortDateString()" class="form-control" id="fecha_fin" />
+                    </div>
+                    <div class="col-md-1 text-left">
+                        <br />
+                        <button class="btn btn_beta_icon" onclick="ConsultarSalidasEstablo();"><i class="fa fa-search"></i></button>
+                    </div>
+                    <div class="col-md-2 text-right" style="padding-top:26px">
+                        <button class="btn btn_beta" onclick="ExportarSalidasGanadoExcel();"><i class="fa fa-file"></i>  Exportar excel</button>
+                    </div>
+                </div>
+                <br />
+                <div class="table-responsive">
+                    <div id="div_tabla_salidas"></div>
+                </div>
+            </div>
+        }
+
+        <div id="edicion_carga" class="tab-pane fade">
+            <h3 class="text-center">EDICION DE CARGA DE ARETES</h3>
+            <div class="row">
+                <div class="col-md-3">
+                    <strong>Establo</strong>
+                    <select class="form-control id_establo_select" id="id_establo_edicion"></select>
+                </div>
+                <div class="col-md-3">
+                    <strong>Folio de la salida de ganado:</strong>
+                    <input type="text" class="form-control" id="folio_edicion" />
+                </div>
+                <div class="col-md-3 p-3">
+                    <button class="btn btn_beta_icon" onclick="ConsultarSalidaGanadoModificar();"><i class="fa fa-search"></i></button>
+                </div>
+            </div>
+            <div>
+                <div id="div_datatable_edicion"></div>
+            </div>
+        </div>
+
+        <div id="bitacora" class="tab-pane fade">
+            <h3 class="text-center">Bitacora</h3>
+            <div class="row">
+                <div class="col-md-3">
+                    <strong>ESTABLO</strong>
+                    <select class="form-control id_establo_select id_select_todos" id="id_establo_bitacora">
+                        <option value="0">TODOS</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <strong>FECHA INICIO</strong>
+                    <input type="date" value="@DateTime.Now.ToShortDateString()" class="form-control" id="fecha_inicio_bitacora" />
+                </div>
+                <div class="col-md-2">
+                    <strong>FECHA FIN</strong>
+                    <input type="date" value="@DateTime.Now.ToShortDateString()" class="form-control" id="fecha_fin_bitacora" />
+                </div>
+                <div class="col-md-2">
+                    <strong>TIPO SALIDA</strong>
+                    <select class="form-control id_select_todos" id="id_tipo_salida_bitacora">
+                        @{ Html.RenderAction("ConsultarTiposSalidaSelect", "SALIDASGANADO"); }
+                    </select>
+                </div>
+                <div class="col-md-1 text-right p-3">
+                    <button class="btn btn_beta_icon" onclick="ConsultarBitacoraCarga();"><i class="fa fa-search"></i></button>
+                </div>
+            </div>
+            <div class="table-responsive">
+                <div id="div_datatable_bitacora"></div>
+            </div>
+        </div>
+
+        <div id="reporte_indicadores" class="tab-pane fade">
+            <h3 class="text-center">Reporte Salidas de Ganado Detalle</h3>
+            <div class="row">
+                <div class="col-md-3">
+                    <strong>ESTABLO</strong>
+                    <select class="form-control id_establo_select id_select_todos" id="id_establo_indicadores">
+                        <option value="0">TODOS</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <strong>FECHA INICIO</strong>
+                    <input type="date" value="@DateTime.Now.ToShortDateString()" class="form-control" id="fecha_inicio_indicadores" />
+                </div>
+                <div class="col-md-2">
+                    <strong>FECHA FIN</strong>
+                    <input type="date" value="@DateTime.Now.ToShortDateString()" class="form-control" id="fecha_fin_indicadores" />
+                </div>
+                <div class="col-md-2">
+                    <strong>TIPO SALIDA</strong>
+                    <select class="form-control id_select_todos" id="id_tipo_salida_indicadores">
+                        @{ Html.RenderAction("ConsultarTiposSalidaSelect", "SALIDASGANADO"); }
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <strong>TIPO MUERTE</strong>
+                    <select class="form-control id_select_todos" id="tipo_muerte_indicadores">
+                        @{ Html.RenderAction("SelectTiposCausaMuerte", "SALIDASGANADO"); }
+                    </select>
+                </div>
+                <div class="col-md-1 text-right">
+                    <br />
+                    <button class="btn btn_beta_icon" onclick="ConsultarGraficasReporteSalidasGanado();"><i class="fa fa-search"></i></button>
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-md-4">
+                    <div style="width: 100%; height: 600px;" id="div_chart_tipos_muerte"></div>
+                </div>
+                <div class="col-md-8">
+                    <div style="width: 100%; height: 600px;" id="div_chart_causas_muerte"></div>
+                </div>
+            </div>
+            <div class="table-responsive">
+                <div id="div_datatable_indicadores"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="div_pdf_salida"></div>
+
+<div class="modal fade" id="m_ganado_pendiente" tabindex="1" role="dialog" aria-labelledby="m_ganado_pendiente" aria-hidden="true">
+    <div class="modal-dialog" role="document" style="min-width:90%;">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h2 class="modal-title" id="m_ganado_pendiente_lbl">Ganado Pendiente</h2>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <div class="table-responsive">
+                    <div id="div_ganado_pendiente"></div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn_beta_danger" data-dismiss="modal">Cerrar</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+@*@Scripts.Render("~/bundles_SalidasGanado/js")*@
+@Scripts.Render("~/bundles_Prueba/js")
+@Scripts.Render("~/bundles_Propiedades/js")
+
+<script type="text/javascript">
+    $(window).on("load", function () {
+        SelectCausaMuerte();
+        DeshabilitarCamara();
+        CalcularTotales();
+        ConsultarEstablosUsuarioSelect(0);
+        GenerarFolioEstablo();
+        TiposSalidasClasificacionesSelect();
+        ConsultarCondicionesClasificacion();
+        //$('.id_establo_select option[value="4"]').remove();
+        $('#id_establo_consulta').prepend($('<option value="0" selected>TODOS</option>'));
+        $('.id_select_todos').prepend($('<option value="0" selected>TODOS</option>'));
+
+        SelectSalaEstablo();
+        CaracteresControl();
+    });
+
+
+    function ReImpresionFichaDirecto(ficha, establo) {
+        jsShowWindowLoad();
+        $.ajax({
+            type: "POST",
+            url: "../BASCULASAB/ReimprecionFichaPDF",
+            data: {
+                fichas: ficha,
+                id_establo: establo
+            },
+            success: function (response) {
+                jsRemoveWindowLoad();
+                if (response != "") {
+                    var newTab = window.open('', '_blank');
+                    newTab.document.open();
+                    newTab.document.write(response);
+                    newTab.document.close();
+                    newTab.onload = function () {
+                        newTab.print();
+                        newTab.close();
+                    };
+                }
+                else {
+                    //newTab.close();
+                    iziToast.warning({
+                        title: 'Aviso',
+                        message: 'No se encontró la ficha',
+                    });
+                    $("#reimp_ficha").val("");
+                }
+            },
+            error: function (xhr, status, error) {
+                //newTab.close();
+                console.error(error);
+                jsRemoveWindowLoad();
+                iziToast.warning({
+                    title: 'Aviso',
+                    message: 'No se encontró la ficha',
+                });
+            }
+        });
+    }
+</script>
+
+<style>
+    /* Efecto de parpadeo */
+    #arete.flash {
+        background-color: #ffff99 !important;
+        transition: background-color 0.5s ease;
+    }
+</style>
+
+<script>
+    var bufferCodigoBarras = "";
+    var tiempoUltimaTecla = Date.now();
+    var escaneando = false;
+
+    $(document).ready(function () {
+        $(document).on("keydown", function (e) {
+            const ahora = Date.now();
+            const tiempoEntreTeclas = ahora - tiempoUltimaTecla;
+            tiempoUltimaTecla = ahora;
+
+            const elementoActivo = document.activeElement;
+            const esEditable = $(elementoActivo).is("input, textarea, select");
+
+            if (tiempoEntreTeclas > 100) {
+                bufferCodigoBarras = "";
+                escaneando = false;
+            }
+
+            if (e.key.length === 1) {
+                bufferCodigoBarras += e.key;
+                if (tiempoEntreTeclas < 50) {
+                    escaneando = true;
+                }
+            }
+
+            if (e.key === "Enter" && escaneando && bufferCodigoBarras.length > 0) {
+                if ($("#carga_arete").hasClass("active")) {
+                    e.preventDefault();
+                    const $arete = $("#arete");
+                    $arete.val(bufferCodigoBarras);
+                    $arete.focus();
+
+                    // Efecto visual
+                    $arete.addClass("flash");
+                    setTimeout(() => $arete.removeClass("flash"), 500);
+
+                    // Scroll al campo
+                    $arete[0].scrollIntoView({ behavior: "smooth", block: "center" });
+
+                    bufferCodigoBarras = "";
+                    escaneando = false;
+                    ConsultarInformacionArete();
+                }
+            }
+
+            if (escaneando && esEditable) {
+                e.preventDefault(); // evita que se escriba accidentalmente
+            }
+        });
+    });
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/quagga/0.12.1/quagga.min.js"></script>

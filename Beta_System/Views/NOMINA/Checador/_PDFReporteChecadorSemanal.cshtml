@@ -1,0 +1,100 @@
+﻿@model IEnumerable<Beta_System.Models.C_nomina_inasistencias>
+@{
+    DateTime fecha1 = ViewBag.fecha_falta_1;
+    DateTime fecha2 = ViewBag.fecha_falta_2;
+}
+<style>
+    .pdf-table th, .pdf-table td {
+        padding: 2px !important; /* Reduce padding */
+        margin: 0 !important; /* Remove margin */
+        vertical-align: middle; /* Align content vertically */
+        font-size: 10px; /* Ensure the font size is small */
+    }
+
+    .pdf-table th {
+        font-size: 11px;
+    }
+
+    .pdf-table label {
+        font-size: 10px;
+    }
+
+    .header_2 {
+        padding: 2px !important;
+    }
+</style>
+@if (Model != null)
+{
+    <div class="row">
+        <div class="col-md-3">
+            <div style="width:70%; text-align:center;">
+                <img src="~/Content/img_layout/logo_beta_new.png" class="img-responsive" />
+            </div>
+        </div>
+        <div class="col-md-6 text-center">
+            <div class="col-md-12" style="padding-top:10px;">
+                <h1 class="text-center" style="font-size: 18px;">REPORTE DE FALTAS GENERALES</h1>
+            </div>
+            <div class="col-md-12 text-center">
+                <strong>Del @fecha1.ToShortDateString() al @fecha2.ToShortDateString()</strong>
+            </div>
+            <div class="col-md-12">
+                <br />
+            </div>
+        </div>
+
+    </div>
+    foreach (var items in Model.GroupBy(x => x.Empleado_id).Select(g => g.First()))
+    {
+        <div class="col-md-12 table-container">
+            <table class="table table-sm table-condensed small table-bordered pdf-table pdf-content " id="datatable_@items.Empleado_id">
+                <thead class="table-header">
+                    <tr class="bg-dark text-white header_2" style="font-size: 10px; padding: 2px; background-color: black; color:white;">
+                        <th colspan="4">
+                            <div class="row">
+                                <div class="col-md-4 text-left">
+                                    <label style="font-size:10px; padding-left:10px;">@items.C_nomina_empleados.Nombres @items.C_nomina_empleados.Apellido_paterno @items.C_nomina_empleados.Apellido_paterno</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="col-md-6 text-left">
+                                        <label style="font-size:10px;">PUESTO: @items.C_nomina_empleados.C_nomina_puestos.nombre_puesto</label>
+                                    </div>
+                                    <div class="col-md-4 text-left">
+                                        <label style="padding-left: 5px; font-size: 10px;">@items.C_nomina_empleados.C_nomina_departamentos.nombre_departamento</label>
+                                    </div>
+                                    <div class="col-md-2 text-left">
+                                        <label style="padding-left: 5px; font-size: 10px;">FALTAS: @Model.Where(x => x.Empleado_id == items.Empleado_id).Count()</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </th>
+                    </tr>
+                    <tr class="bg-beta text-center" style="font-size:10px;">
+                        <th>Fecha falta</th>
+                        <th>Usuario registró</th>
+                        <th>Fecha registro</th>
+                        <th>Observaciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Where(x => x.Empleado_id == items.Empleado_id))
+                    {
+                        <tr style="font-size:8px; padding:0px;">
+                            <td style="width:10%" class="dias_inasistencia_asignados">@String.Format(@item.fecha_inasistencia.Value.ToShortDateString(), "dd/MM/yyyy")</td>
+                            <td style="width: 30%; padding-left: 10px !important;" class="text-left">@item.C_usuarios_corporativo.C_empleados.nombres @item.C_usuarios_corporativo.C_empleados.apellido_paterno @item.C_usuarios_corporativo.C_empleados.apellido_materno</td>
+                            <td style="width:10%" class="dias_inasistencia_asignados">@String.Format(@item.fecha_registro.Value.ToShortDateString(), "dd/MM/yyyy")</td>
+                            <td style="width:50%">@item.observaciones</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+}
+else
+{
+    <div class="col-md-12 text-center">
+        <h1 style="color:red">ES NECESARIO ASIGNAR FALTAS AL EMPLEADO</h1>
+        <h2 style="color:red">(El empleado no cuenta con faltas)</h2>
+    </div>
+}

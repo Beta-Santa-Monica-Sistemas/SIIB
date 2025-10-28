@@ -1,0 +1,83 @@
+﻿@model IEnumerable<Beta_System.Models.C_salida_ganado_d>
+@{
+    decimal contador = 0;
+}
+@if (Model.Count() > 0)
+{
+    <label id="id_salida_ganado_bascula_g" style="display:none">@Model.FirstOrDefault().id_salida_gan_g</label>
+    <table class="table table-striped table-bordered" id="tabla_aretes_establo">
+        <thead>
+            <tr class="bg-beta text-center">
+                <th># Arete</th>
+                <th>Clasificación</th>
+                <th>Causa de la baja</th>
+                <th>Causa de la muerte</th>
+                <th>Condición</th>
+                <th>Observaciones</th>
+                <th>Sala</th>
+                <th>Edad</th>
+                <th>Cantidad</th>
+                <th>Peso Neto</th>
+                <th>Foto</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td class="text-center">@item.arete</td>
+                    <td>@item.clasifica</td>
+                    <td>@item.C_salida_ganado_causas_muerte.C_salida_ganado_causas_muerte_tipos.tipo_muerte</td>
+                    <td>@item.C_salida_ganado_causas_muerte.causa_muerte</td>
+                    <td>@item.cond_ind</td>
+                    <td>@item.causa_b</td>
+                    <td>@item.sala</td>
+                    <td>@item.edad</td>
+                    <td>@item.cantidad</td>
+                    @{
+                        contador = contador + Convert.ToDecimal(item.cantidad);
+                    }
+                    <td><label class="peso_vaca_total">@item.peso</label></td>
+                    <td class="text-center">
+                        <div class="mb-2">
+                            @if (item.path != null || item.path_2 != null)
+                            {
+                                <div class="d-flex justify-content-center gap-2">
+                                    @if (item.path != null)
+                                    {
+                                        <a class="btn btn_beta_icon" href="@item.path" target="_blank"><i class="fa fa-eye"></i></a>
+                                    }
+                                    @if (item.path_2 != null)
+                                    {
+                                        <a class="btn btn_beta_icon" href="@item.path_2" target="_blank"><i class="fa fa-eye"></i></a>
+                                    }
+                                </div>
+                            }
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <div class="col-md-12"><br /></div>
+
+    <div class="col-md-12 text-center">
+        <div class="col-md-4">
+            <strong>Cantidad Total</strong>
+            <input type="number" class="form-control input_clean" id="cantidad_total" readonly value="@contador" />
+        </div>
+        <div class="col-md-4">
+            <strong>Total Kilos</strong>
+            <input type="number" class="form-control input_clean" id="kilos_total" readonly />
+        </div>
+        <div class="col-md-4">
+            <strong>Importe Total</strong>
+            <input type="number" class="form-control input_clean" id="importes_total" readonly value="0.00" />
+        </div>
+    </div>
+}
+else
+{
+    <h3 class="text-center" style="color:red">NO SE ENCONTRO INFORMACION CON EL FOLIO INGRESADO</h3>
+}

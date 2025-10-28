@@ -1,0 +1,53 @@
+﻿@model List<Beta_System.Models.C_evaluaciones_d_conceptos>
+
+@if (Model.Count() > 0)
+{
+    var conceptos = Model.Where(x => x.activo == true).Select(x => x.C_evaluaciones_conceptos_rubros).Distinct().OrderBy(x => x.nombre_concepto);
+
+    <table class="table table-striped table-bordered">
+        <tr class="text-center">
+            <th>EMPLEADO</th>
+            @foreach (var concepto in conceptos)
+            {
+                <th>@concepto.nombre_concepto</th>
+            }
+        </tr>
+        @foreach (var item in Model.OrderBy(x => x.C_evaluaciones_d_empleados.C_nomina_empleados.Apellido_paterno).GroupBy(x => x.id_evaluacion_d_empleado))
+        {
+            var id_empleado = item.FirstOrDefault().id_evaluacion_d_empleado;
+            var empleado = item.FirstOrDefault().C_evaluaciones_d_empleados.C_nomina_empleados;
+
+            <tr>
+                <td>@empleado.Apellido_paterno @empleado.Apellido_materno @empleado.Nombres</td>
+                @foreach (var concepto in conceptos)
+                {
+                    var valid_valor = Model.Where(x => x.id_evaluacion_d_empleado == item.FirstOrDefault().id_evaluacion_d_empleado && x.id_evaluacion_concepto_rubro == concepto.id_evaluacion_concepto_rubro && x.activo == true)
+                        .GroupBy(x => x.id_usuario_registra);
+                    if (valid_valor != null)
+                    {
+                        <td>
+                            @foreach (var evaluacion in valid_valor)
+                            {
+                                int porcentaje = Convert.ToInt32(evaluacion.FirstOrDefault().porcentaje_calificacion);
+                                int calificacion = Convert.ToInt32(evaluacion.FirstOrDefault().calificacion);
+                                string comentarios = evaluacion.FirstOrDefault().comentarios;
+
+                                string data = evaluacion.FirstOrDefault().C_usuarios_corporativo.usuario + " " + porcentaje + "% " + " - " + calificacion + " pts \n" + comentarios + "\n";
+                                
+                                @data
+                            }
+                        </td>
+                    }
+                    else
+                    {
+                        <td>@concepto.nombre_concepto</td>
+                    }
+                }
+            </tr>
+        }
+    </table>
+
+
+}
+
+

@@ -1,0 +1,64 @@
+﻿@model List<Beta_System.Models.C_evaluaciones_d_empleados>
+
+@if (Model.Count() > 0)
+{
+    <table class="table table table-bordered table-striped" id="datatable_evaluaciones">
+        <thead>
+            <tr class="bg-beta text-center">
+                <th>Empleado</th>
+                <th>Calificaciones</th>
+                <th>Calificacion final</th>
+                <th>Estatus</th>
+                <th>Evaluar</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr class="text-center">
+                    <td class="text-left">@item.C_nomina_empleados.Apellido_paterno @item.C_nomina_empleados.Apellido_materno @item.C_nomina_empleados.Nombres</td>
+                    <td class="text-left">
+                        @try
+                        {
+                            if (item.C_evaluaciones_d_calificaciones.Where(x => x.activo == true).Count() > 0) {
+                                foreach (var evaluacion in item.C_evaluaciones_d_calificaciones)
+                                {
+                                    <strong>@evaluacion.C_usuarios_corporativo.usuario: @Convert.ToInt32(evaluacion.calificacion_final)%</strong>
+                                    <br />
+                                }
+                            }
+                        }
+                        catch (Exception)
+                        {
+
+                        }
+                    </td>
+                    <td>
+                        @try
+                        {
+                            if (item.calificacion_final > 0) { <h4 class="porcentaje">@Convert.ToInt32(item.calificacion_final)%</h4>}
+                        }
+                        catch (Exception)
+                        {
+
+                        }
+                    </td>
+                    <td>
+                        <button style="background-color:@item.C_evaluaciones_status.color; color:white;" class="btn">@item.C_evaluaciones_status.nombre_status</button>
+                    </td>
+                    <td>
+                        @if (item.id_evaluacion_status != 3 && item.id_evaluacion_status != 4)
+                        {
+                            <button class="btn btn_beta_icon" onclick="ConsultarRubrosEvaluacionEmpleado(@item.id_evaluacion_g, @item.id_evaluacion_d_empleado);"><i class="fa fa-edit"></i></button>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <h3 class="text-center text-danger">NO SE ENCONTRARON REGISTROS</h3>
+}
+

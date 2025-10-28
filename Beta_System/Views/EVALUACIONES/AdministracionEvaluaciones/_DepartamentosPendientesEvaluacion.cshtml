@@ -1,0 +1,70 @@
+﻿@model List<Beta_System.Models.C_evaluaciones_d_empleados>
+
+@if (Model.Count() > 0)
+{
+    <h4 class="bg-beta p-3">DEPARTAMENTOS PENDIENTES DE EVALUAR</h4>
+
+
+
+    foreach (var evaluacion in Model.OrderBy(x => x.C_evaluaciones_departamentos.nombre_departamento).GroupBy(x => x.id_departamento))
+    {
+        <div class="" id="heading_@evaluacion.FirstOrDefault().id_evaluacion_d_empleado">
+            <div class="w-100 collapsed" style="border: 1px solid black; background-color: rgb(236, 244, 251);">
+                <div class="row">
+                    <div class="col-md-4 text-left ml-4">
+                        <br />
+                        <strong>@evaluacion.FirstOrDefault().C_evaluaciones_departamentos.nombre_departamento</strong>
+                    </div>
+                    <div class="col-md-3 text-left">
+                        <br />
+                        <strong>Evaluaciones pendientes: @evaluacion.Count()</strong>
+                    </div>
+                    <div class="col-md-1 text-center">
+                        <div class="col-md-6 text-center"><button class="btn btn_beta_icon" data-toggle="collapse" data-target="#collapse_@evaluacion.FirstOrDefault().id_evaluacion_d_empleado" aria-expanded="false" aria-controls="collapse_@evaluacion.FirstOrDefault().id_evaluacion_d_empleado"><i class="fa fa-bars"></i></button></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="collapse_@evaluacion.FirstOrDefault().id_evaluacion_d_empleado" class="collapse" aria-labelledby="heading_@evaluacion.FirstOrDefault().id_evaluacion_d_empleado" data-parent="#accordionEvaluaciones">
+            <div class="p-4" style="border: 2px solid black; background-color: rgb(236, 244, 251);">
+                <div class="porcentaje-container row">
+                    <table class="table table-striped table-bordered small">
+                        <thead>
+                            <tr class="bg-beta text-center">
+                                <th>Empleado</th>
+                                <th>Puesto</th>
+                                <th>Evaluaciones</th>
+                                <th>Evaluar</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in evaluacion)
+                            {
+                                <tr class="text-center">
+                                    <td class="text-left"><h4>@item.C_nomina_empleados.Nombres @item.C_nomina_empleados.Apellido_paterno @item.C_nomina_empleados.Apellido_materno</h4></td>
+                                    <td><h4>@item.C_nomina_empleados.C_nomina_puestos.nombre_puesto</h4></td>
+                                    <td>
+                                        @foreach (var evalua in item.C_evaluaciones_d_calificaciones)
+                                        {
+                                            <h4 style="margin:0px;" class="text-left">@evalua.C_usuarios_corporativo.C_empleados.nombres @evalua.C_usuarios_corporativo.C_empleados.apellido_paterno: @Convert.ToInt32(evalua.calificacion_final.Value)</h4>
+                                        }
+                                    </td>
+                                    <td>
+                                        <button class="btn btn_beta_icon" onclick="ConsultarRubrosEvaluacionEmpleado(@item.id_evaluacion_g, @item.id_evaluacion_d_empleado);"><i class="fa fa-edit"></i></button>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    }
+
+}
+else
+{
+    <h3>NO SE ENCONTRARON REGISTROS</h3>
+}
+

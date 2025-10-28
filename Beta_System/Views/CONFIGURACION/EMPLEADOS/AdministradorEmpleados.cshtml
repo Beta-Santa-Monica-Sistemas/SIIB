@@ -1,0 +1,262 @@
+﻿
+@{
+    ViewBag.Title = "AdministradorEmpleados";
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+    List<int> permisos = Session["PermisosModulo"] as List<int>;
+}
+
+<div class="page_title">
+    <div class="counter_section">
+        <h1>Administracion de usuarios/roles</h1>
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="nav nav-tabs">
+                    @if (permisos.Contains(1))
+                    {
+                        <li class="active"> <a data-toggle="tab" href="#admin_empleados">ADMINISTRAR USUARIOS <i class="fa fa-2x fa-group ml-2"></i></a> </li>
+                    }
+                    @if (permisos.Contains(8))
+                    {
+                        <li> <a data-toggle="tab" href="#admin_roles">ADMINISTRAR ROLES<i class="fa fa-2x fa-user-secret ml-2"></i></a></li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="row column2 counter_section">
+    <div class="tab-content">
+
+        <div id="admin_empleados" class="tab-pane fade in active show">
+            <div class="row">
+                <div class="col-md-10">
+                    <button class="btn btn_beta" onclick="ConsultarEmpleadosSistema();"><i class="fa fa-refresh"></i> Actualizar</button>
+                </div>
+                @if (permisos.Contains(2))
+                {
+                    <div class="col-md-2">
+                        <button class="btn btn_beta" onclick="AddEditEmpleado(2);"><i class="fa fa-plus"></i> Agregar Empleado</button>
+                    </div>
+                }
+            </div>
+            <div class="table-responsive" id="table_empleados_admin"></div>
+        </div>
+
+        <div id="admin_roles" class="tab-pane fade in">
+            <div class="row">
+                <div class="col-md-10">
+                    <button class="btn btn_beta" onclick="ConsultarRolesSistema();"><i class="fa fa-refresh"></i> Actualizar</button>
+                </div>
+                @if (permisos.Contains(5))
+                {
+                    <div class="col-md-2">
+                        <button class="btn btn_beta" onclick="AddEditRol(2);"><i class="fa fa-plus"></i> Agregar ROL</button>
+                    </div>
+                }
+            </div>
+            <div class="table-responsive" id="table_roles_sistema" style="width:100%;"></div>
+        </div>
+    </div>
+
+</div>
+
+
+@*----------- MODAL DE EMPLEADOS *@
+<div class="modal fade" id="m_add_edit_empleado" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="lbl_add_edit_empleado">EDITAR DATOS PERSONALES</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        <strong>Nombre:</strong>
+                        <input type="text" class="form-control input_clear_emp solo-letras" id="nombre_empleado" onkeyup="LimpiarKeyPressEMP();" />
+                    </div>
+                    <div class="col-md-4">
+                        <strong>Apellido paterno:</strong>
+                        <input type="text" class="form-control input_clear_emp solo-letras" id="ap_paterno" onkeyup="LimpiarKeyPressEMP();" />
+                    </div>
+                    <div class="col-md-4">
+                        <strong>Apellido materno:</strong>
+                        <input type="text" class="form-control input_clear_emp solo-letras" id="ap_materno" onkeyup="LimpiarKeyPressEMP();" />
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-6">
+                        <strong>Correo:</strong>
+                        <input type="text" class="form-control input_clear_emp" id="correo" onkeyup="LimpiarKeyPressEMP(); ValidarCorreosEmpleado();" />
+                        <label id="mensaje_correo"></label>
+                    </div>
+                    <div class="col-md-6">
+                        <strong>Teléfono:</strong>
+                        <input type="text" class="form-control input_clear_emp" id="telefono" onkeyup="LimpiarKeyPressEMP(); ValidarTelefonoEmpleado();" />
+                        <label id="mensaje_telefono"></label>
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn_beta_danger" data-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn_beta" id="btn_add_edit_emplado" onclick="GuardarEmpleado();">GUARDAR</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*------------ MODAL DE USUARIOS*@
+<div class="modal fade" id="m_add_edit_usuario" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document" style="min-width: 70%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="lbl_add_edit_usuario">REGISTRAR USUARIO</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <strong>Usuario:</strong>
+                                <input type="text" class="form-control input_clear_emp" id="usuario" onkeyup="LimpiarKeyPressUSU();" />
+                            </div>
+                            <div class="col-md-12">
+                                <br />
+                                <strong>ROL en el sistema:</strong>
+                                <select id="id_rol" class="form-control">
+                                    @{ Html.RenderAction("ConsultarRoles", "ROLES", new { id_status = 1 }); }
+                                </select>
+                            </div>
+                            <div class="col-md-12">
+                                @if (permisos.Contains(4) || permisos.Contains(10))
+                                {
+                                    <br />
+                                    <hr />
+                                    <button type="button" class="btn btn_beta btn-block" id="btn_add_edit_usuario" onclick="RegistrarUsuario();">GUARDAR</button>
+                                    <br />
+                                    <br />
+                                    <button type="button" class="btn btn_beta_danger btn-block" id="btn_add_edit_usuario_cancel" onclick="AddEditUsuario(2);">CANCELAR</button>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <h3 class="text-center">Usuarios pertenecientes</h3>
+                        <div class="table-responsive" id="table_usuarios_admin"></div>
+                    </div>
+                </div>
+
+
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn_beta_danger" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*------------ MODAL DE USUARIOS / ROL*@
+<div class="modal fade" id="m_usuarios_rol" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">USUARIOS CON EL ROL</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body p-4">
+                <div class="row">
+                    <div class="col-md-12">
+                        <br />
+                        <h3 class="text-center">Usuarios pertenecientes</h3>
+                        <div class="table-responsive" id="table_roles_admin"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn_beta_danger" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*------------ MODAL DE ROLES*@
+<div class="modal fade" id="m_add_edit_rol" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="lbl_add_edit_rol">REGISTRAR ROL</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body p-4 text-center">
+                <strong>Nombre del rol:</strong>
+                <input type="text" class="form-control input_clear_rol" id="txt_nobre_rol" onkeyup="LimpiarKeyPressBorder();" />
+                <br />
+                <strong>Tipo de rol</strong>
+                <select class="form-control" id="id_tipo_usuario">@{ Html.RenderAction("ConsultarTipoUsuarios", "ROLES"); } </select>
+                <br />
+                <hr />
+
+                <button id="btn_add_update_rol" class="btn btn_beta">GUARDAR</button>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn_beta_danger" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@Scripts.Render("~/bundles_Empleado/js")
+@Scripts.Render("~/bundles_Usuario/js")
+@Scripts.Render("~/bundles_Rol/js")
+@Scripts.Render("~/bundles_Password/js")
+@Scripts.Render("~/bundles_Propiedades/js")
+
+@if (permisos.Contains(1))
+{
+    <script>ConsultarEmpleadosSistema();</script>
+}
+
+@if (permisos.Contains(8))
+{
+    <script>ConsultarRolesSistema();</script>
+}
+
+<script>
+    $(window).on("load", function () {
+        CaracteresControl();
+        $("#telefono").on("input", function () {
+            const valorIngresado = $(this).val();
+            const valorNumerico = valorIngresado.replace(/[^0-9]/g, '');
+            $(this).val(valorNumerico);
+        });
+        //SIN ESPACIOS
+        //$("#usuario").on("input", function () {
+        //    const valorIngresado = $(this).val();
+        //    const valorNumerico = valorIngresado.replace(/[^A-Z^a-z]/g, '');
+        //    $(this).val(valorNumerico);
+        //});
+        //CON ESPACIOS
+        //$("#usuario").on("input", function () {
+        //    const valorIngresado = $(this).val();
+        //    const valorAlfabetico = valorIngresado.replace(/[^A-Za-z\s]/g, '');
+        //    $(this).val(valorAlfabetico);
+        //});
+
+    });
+</script>

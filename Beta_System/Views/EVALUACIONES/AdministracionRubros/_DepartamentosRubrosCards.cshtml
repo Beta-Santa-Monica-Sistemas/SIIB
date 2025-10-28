@@ -1,0 +1,40 @@
+﻿@model List<Beta_System.Models.C_evaluaciones_departamentos>
+
+@if (Model.Count() > 0)
+{
+    <div class="porcentaje-container row">
+        @foreach (var depa in Model)
+        {
+            <div class="col-md-4">
+                <div class="porcentaje-card">
+                    <h3 style="margin:5px;">@depa.nombre_departamento</h3>
+                    <div class="table-responsive" style="overflow:auto; overflow-x:hidden; height:200px; min-height:200px;">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Rubro</th>
+                                    <th>Porcentaje</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var concepto in depa.C_evaluaciones_departamentos_rubros.Where(x => x.activo == true))
+                                {
+                                    <tr>
+                                        <td>@concepto.C_evaluaciones_rubros.nombre_rubro</td>
+                                        <td>@Convert.ToInt32(concepto.C_evaluaciones_rubros.porcentaje)%</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    <hr />
+                    <button class="btn btn_beta_icon" onclick="ConsultarRubrosDepartamentoCard(@depa.id_evaluacion_departamento, '@depa.nombre_departamento');"><i class="fa fa-edit"></i></button>
+                </div>
+            </div>
+        }
+    </div>
+}
+else
+{
+    <h3 class="text-center text-danger">NO SE ENCONTRARON REGISTROS</h3>
+}

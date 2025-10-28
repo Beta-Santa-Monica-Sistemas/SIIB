@@ -1,0 +1,634 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+    int id_rol = (int)Session["LoggedIdRol"];
+}
+
+<style>
+    .select2-id_nuevo_articulo-container{
+        z-index: 999999;
+    }
+</style>
+
+<div class="page_title">
+    <div class="counter_section">
+        <h1>Requisiciones a autorización</h1>
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="nav nav-tabs">
+                    <li class="active"> <a data-toggle="tab" href="#revisar_requisicion" id="consultar_requi">PRIMERA FIRMA<i class="fa fa-pencil fa-2x ml-2"></i></a></li>
+                    @*<li class="active"> <a data-toggle="tab" href="#validar_requisicion">Requisicion a Validar-Autorizar<i class="fa fa-file-text fa-2x ml-2"></i></a></li>*@
+                    <li class="active"> <a data-toggle="tab" href="#orden_requisicion">SEGUNDA FIRMA<i class="fa fa-file-text fa-2x ml-2"></i></a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row column2 counter_section">
+    <div class="tab-content">
+        <!--PRIMERA FIRMA-->
+        <div id="revisar_requisicion" class="tab-pane fade in active show">
+            <h3 class="text-center">REVISAR-VALIDAR NECESIDAD</h3>
+            <div class="row">
+                <div class="col-md-4">
+                    <strong>Cargo contable</strong>
+                    <select class="form-control" id="id_cargo_search_1">
+                        <option value="0">TODOS</option>
+                        @*@{ Html.RenderAction("CargoContableUsuariosSelect", "CATALOGOS", new { id_usuario = (int)Session["LoggedId"] }); }*@
+                        @{ Html.RenderAction("CargoContableCuentaUsuariosSelect", "CATALOGOS", new { id_usuario = (int)Session["LoggedId"] }); }
+
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <strong>Folio</strong>
+                    <input class="form-control solo-letras-numeros" id="requi_search" type="text" />
+                </div>
+                <div class="col-md-2 text-center">
+                    <br />
+                    <button class="btn btn_beta_icon" onclick="ConsultarRequisiciones(1);"><i class="fa fa-search"></i></button>
+                </div>
+            </div>
+            <hr />
+            <div class="table-responsive">
+                <div id="div_requis_revision"></div>
+            </div>
+        </div>
+
+        <!--STAND BY-->
+        @*<div id="validar_requisicion" class="tab-pane">
+                <h3 class="text-center">Requisiciónes a validar-autorizar</h3>
+                <div class="row">
+                    <div class="col-md-4">
+                        <strong>Cargo contable</strong>
+                        <select class="form-control" id="id_cargo_search_2">
+                            <option value="0">TODOS</option>
+                            @{ Html.RenderAction("CargoContableUsuariosSelect", "CATALOGOS", new { id_usuario = (int)Session["LoggedId"] }); }
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <strong>Folio</strong>
+                        <input class="form-control solo-letras-numeros" id="requi_search" type="text" />
+                    </div>
+                    <div class="col-md-2 text-center">
+                        <br />
+                        <button class="btn btn_beta_icon" onclick="ConsultarRequisiciones(2);"><i class="fa fa-search"></i></button>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <div id="div_requis_revision_d"></div>
+                </div>
+            </div>*@
+
+        <!--SEGUNDA FIRMA-->
+        <div id="orden_requisicion" class="tab-pane">
+            <h3 class="text-center">AUTORIZAR REQUISICIÓN</h3>
+            <div class="row">
+                <div class="col-md-4">
+                    <label id="rol_usuario" style="display:none">@id_rol</label>
+                    <strong>Cargo contable</strong>
+                    <select class="form-control" id="id_cargo_search_2">
+                        <option value="0">TODOS</option>
+                        @*@{ Html.RenderAction("CargoContableUsuariosSelect", "CATALOGOS", new { id_usuario = (int)Session["LoggedId"] }); }*@
+                        @{ Html.RenderAction("CargoContableCuentaUsuariosSelect", "CATALOGOS", new { id_usuario = (int)Session["LoggedId"] }); }
+                    </select>
+                    <br />
+                </div>
+                <div class="col-md-2 text-center">
+                    <br />
+                    <button class="btn btn_beta_icon" onclick="ConsultarRequisicionesAutFinal(@ViewBag.modo);"><i class="fa fa-search"></i></button>
+                </div>
+            </div>
+            @if (ViewBag.modo == 2)
+            {
+                <div class="col-md-12 text-left" style="font-size:24px;">
+                    <strong>Requisiciones seleccionadas: <label id="contador_autorizaciones"></label></strong>
+                </div>
+            }
+            <hr />
+            <div id="div_requisiciones_por_firmar" class="table-responsive" style="overflow:auto; height:600px; min-height:600px;"></div>
+            <br />
+            @if (ViewBag.modo == 2)
+            {
+                <div class="row">
+                    <div class="col-md-8" style="padding-top:15px">
+                        <strong style="font-size:20px;">TOTAL: <strong id="monto_total"></strong></strong>
+                    </div>
+                    <div class="col-md-4 text-right">
+                        <button class="btn btn_beta" onclick="AutorizarRequisicionesFinalMaster(2);">AUTORIZAR<i class="fa fa-plus"></i></button>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<!-- Modal REVISION DE REQUI-->
+<div class="modal fade" id="m_detalle_requi_revision" tabindex="-1" role="dialog" aria-labelledby="m_detalle_requi_revision" aria-hidden="true">
+    <div class="modal-dialog" role="document" style="min-width:98%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="m_detalle_requi_revision_lbl">Detalle de requisición</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="div_requis_revision_detalle"></div>
+                <br />
+                <hr />
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn_beta_danger" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal REVISION DE REQUI (1RA FIRMA)-->
+<div class="modal fade" id="m_detalle_requi_revision" tabindex="-1" role="dialog" aria-labelledby="m_detalle_requi_revision" aria-hidden="true">
+    <div class="modal-dialog" role="document" style="min-width:98%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="m_detalle_requi_revision_lbl">Detalle de requisición</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="div_requis_revision_detalle"></div>
+                <br />
+                <hr />
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn_beta_danger" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal REVISION DE REQUI (2DA FIRMA) -->
+<div class="modal fade" id="m_detalle_requi_aut_final" tabindex="-1" role="dialog" aria-labelledby="m_detalle_requi_aut_finalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document" style="min-width:98%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="m_detalle_requi_aut_finalLabel">Detalle de requisición</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="div_requisiciones_detalle"></div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn_beta_danger" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal RECOTIZAR AUT FINAL-->
+<div class="modal fade" id="m_recotizar_aut_final" tabindex="-1" role="dialog" aria-labelledby="m_rechazar_aut_finallLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document" style="min-width:40%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="m_rechazar_aut_finallLabel">JUSTIFICACION</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <h3 class="text-center">Justificacion de rechazo</h3>
+                <br />
+                <div class="row">
+                    <div class="col-md-3">
+                        <strong>Asunto: </strong>
+                    </div>
+                    <div class="col-md-9">
+                        <input type="text" id="concepto_recotizar_aut_final" class="form-control" readonly />
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-3">
+                        <strong>Mensaje: </strong>
+                    </div>
+                    <div class="col-md-9">
+                        <textarea class="form-control" rows="4" id="justificacion_recotizar_aut_final"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn_beta" data-dismiss="modal">Regresar</button>
+                <button type="button" class="btn btn_beta_danger" id="btn_rechazar_aut_final">Recotizar requisicion</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal SOLICITAR AUT FINAL-->
+<div class="modal fade" id="m_solicita_aut_final" tabindex="-1" role="dialog" aria-labelledby="m_solicita_aut_finalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document" style="min-width:40%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="m_solicita_aut_finalLabel">SOLICITA AUTORIZACIÓN</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <h3 class="text-center">Justificacion de la solicitud</h3>
+                <br />
+                <div class="row">
+                    <div class="col-md-3">
+                        <strong>Asunto: </strong>
+                    </div>
+                    <div class="col-md-9">
+                        <input type="text" id="concepto_solicita_aut_final" class="form-control" readonly />
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-3">
+                        <strong>Mensaje: </strong>
+                    </div>
+                    <div class="col-md-9">
+                        <textarea class="form-control" rows="4" id="justificacion_solicita_aut_final"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn_beta" data-dismiss="modal">Regresar</button>
+                <button type="button" class="btn btn_beta_warning" id="btn_solicita_aut_final_enviar">Solicitar autorización</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal AUT REQUI FINAL CON JUSTIFICACIÓN SIN AFECTAR PPTO-->
+<div class="modal fade" id="m_aut_final" tabindex="-1" role="dialog" aria-labelledby="m_aut_finalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document" style="min-width:40%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="m_aut_finalLabel">SOLICITA AUTORIZACIÓN</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <h3 class="text-center">Justificacion</h3>
+                <br />
+                <div class="row">
+                    <div class="col-md-3">
+                        <strong>Asunto: </strong>
+                    </div>
+                    <div class="col-md-9">
+                        <input type="text" id="concepto_aut_final" class="form-control" readonly />
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-3">
+                        <strong>Mensaje: </strong>
+                    </div>
+                    <div class="col-md-9">
+                        <textarea class="form-control" rows="4" id="justificacion_aut_final"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn_beta" data-dismiss="modal">Regresar</button>
+                <button type="button" class="btn btn_beta_warning" id="btn_aut_final_enviar">Solicitar autorización sin afectar presupuesto</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- MODAL EDITAR ARTICULO REQUISICION -->
+<div class="modal fade" id="m_editar_articulo_requisicion_auth" tabindex="-1" role="dialog" aria-labelledby="editar_articulo_utileriaLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document" style="min-width:50%; width:50%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editar_articulo_utileriaLabel">Editar articulo requisición</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="col-md-12 text-center">
+                    <h4 style="margin:5px;">Articulo a modificar:</h4>
+                    <h3 style="margin:5px;" id="txt_nombre_articulo_ediar"></h3>
+                    <hr />
+
+                    <h3>Nuevo artículo</h3>
+                    <select class="form-control" id="id_nuevo_articulo_editar">
+                        @*@{ Html.RenderAction("ConsultarArticulosSistemaRubro", "ARTICULOS", new { id_rubro = 1, almacenable = 1 }); }*@
+                    </select>
+                    <br />
+
+                    <strong>Cargo contable</strong>
+                    <select class="form-control" id="select_cargo_editar" onchange="ConsultarCuentasContablesCargosSelect();">
+                        <option value="select_cargo">SELECCIONAR CARGO CONTABLE</option>
+                        @{ Html.RenderAction("ConsultarCargosContables", "CATALOGOS"); };
+                    </select>
+                    <br />
+                    <strong>Cuenta contable </strong>
+                    <select class="form-control select_cuenta" id="select_cuenta_editar">
+                        <option value="selecte_cuenta">SELECCIONAR CUENTA</option>
+                    </select>
+                    <br />
+                    <strong>Cantidad:</strong>
+                    <input type="number" id="cantidad_articulo_editar" class="form-control" />
+                    <br />
+                    <strong>Observaciones</strong>
+                    <textarea id="obsercacion_articulo_editar" rows="3" class="form-control"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn_beta_danger" data-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn_beta" id="btn_actualizar_articulo_editar">Actualizar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script>var usuario_modo = 0;</script>
+
+@Scripts.Render("~/bundles_Requisiciones/js")
+@Scripts.Render("~/bundles_Propiedades/js")
+
+<script>
+    $(window).on("load", function () {
+        CaracteresControl();
+        ConsultarRequisicionesAutFinal(@ViewBag.modo);
+        ConsultarRequisiciones(1);
+    });
+
+    function ConsultarRequisicionesAutFinalDetalle(id_requi_g, modo) {
+        jsShowWindowLoad();
+        $.ajax({
+            type: "POST",
+            async: true,
+            timeput: 900000,
+            url: "../REQUISICIONES/ConsultarRequisicionesAutFinalDetalle",
+            data: { id_requi_g: id_requi_g, modo: modo },
+            success: function (response) {
+                jsRemoveWindowLoad();
+                $("#div_requisiciones_detalle").html(response);
+                $("#m_detalle_requi_aut_final").modal("show");
+                if (modo == 1 || modo == 3 || modo == 4) {
+                    ValidarCondiciones();
+                }
+                else {
+                    $("#btn_solicita_aut_final").css("display", "none");
+                    $("#div_botones_autorizacion").css("display", "block");
+                    $("#btn_aut_requi_canc").css("display", "block");
+                    $("#btn_aut_requi_ok").css("display", "block");
+                }
+
+                $(".btn_detalle_requi_aut").each(function () {
+                    $(this).addClass("show");
+                });
+            },
+            error: function (xhr, status, error) {
+                console.error(error);
+            }
+        });
+    }
+
+    function ValidarCondiciones() {
+        var counts = 0;
+        var requis = [];
+
+        var id_cuentas_contables = [];
+        var resultado_orden = [];
+        var importe_final = $("#firma_importe_total").text();
+
+        //$(".disponible_orden").each(function () {
+        //    disponible_orden[counts] = ($(this).attr('id'));
+        //    counts++;
+        //});
+        //counts = 0;
+
+        $(".cuenta_orden").each(function () {
+            id_cuentas_contables[counts] = ($(this).attr('id'));
+            counts++;
+        });
+        counts = 0;
+        $(".resultado_orden").each(function () {
+            resultado_orden[counts] = ($(this).attr('id'));
+            counts++;
+        });
+        counts = 0;
+
+        var id_tipo_requi = $(".id_tipo_requisicion_firma").first().text();
+        //var id_requi_g = $(".id_requisicion_firma_g")[0].text();
+
+        if (usuario_modo != 2) {
+            $.ajax({
+                type: "POST",
+                async: false,
+                url: "../REQUISICIONES/ValidarCondiciones",
+                data: {
+                    id_cuentas_contables: id_cuentas_contables,
+                    resultado_orden: resultado_orden,
+                    monto_requi: importe_final,
+                    id_tipo_requi: id_tipo_requi
+                },
+                success: function (response) {
+                    $("#div_botones_autorizacion").css("display", "block");
+
+
+                    $("#btn_solicita_aut_final").css("display", "block");
+                    $("#btn_aut_requi_canc").css("display", "none");
+                    $("#btn_aut_requi_ok").css("display", "none");
+
+                    //-----NO CUMPLE EL MONTO DE AUTORIZACIÓN O EXCEDE EL PRESUPUESTO Y DIFERENCIA ES NEGATIVA
+                    if (response == 1) {
+                        $("#btn_aut_requi_ok").css("display", "none");
+                        $("#btn_aut_requi_canc").css("display", "block");
+                        //$("#btn_solicita_aut_final").css("display", "block");
+
+                        if (usuario_modo == 3) {
+                            $("#btn_solicita_aut_final").css("display", "none");
+                            $("#btn_aut_requi_canc").css("display", "block");
+                        }
+
+                    }
+
+                    //-----CUMPLE CONDICIONES
+                    if (response == 2) {
+                        if (usuario_modo == 3) {
+                            $("#btn_solicita_aut_final").css("display", "none");
+                            $("#btn_aut_requi_canc").css("display", "block");
+                        }
+                        else {
+                            $("#btn_aut_requi_canc").css("display", "block");
+                            $("#btn_aut_requi_ok").css("display", "block");
+                            $("#btn_solicita_aut_final").css("display", "none");
+                        }
+                    }
+
+
+                    //------SIN PERMISO PARA FIRMAR POR ASIGNACION DEL CARGO
+                    if (response == 3) {
+                        $("#btn_aut_requi_ok").css("display", "none");
+                        $("#btn_aut_requi_canc").css("display", "none");
+                        //$("#btn_solicita_aut_final").css("display", "block");
+                    }
+
+                    //-----SIN PERMISO PARA FIRMAR INVERSIONES
+                    if (response == 4) {
+                        iziToast.warning({
+                            title: 'Este usuario no está autorizado para firmar requisiciones de inversión',
+                            message: '',
+                        });
+                    }
+
+                    //----- PERMISO PARA FIRMAR INVERSIONES
+                    if (response == 5) {
+                        $("#btn_aut_requi_canc").css("display", "none");
+                        $("#btn_aut_requi_ok").css("display", "block");
+                    }
+
+                    //PERMISO QUE FUNJE COMO MASTER Y NORMAL
+                    if (response == 6) {
+                        $("#btn_solicita_aut_final").css("display", "none");
+                        $("#btn_aut_requi_canc").css("display", "block");
+                        $("#btn_aut_requi_ok").css("display", "block");
+                    }
+
+
+                },
+                error: function (xhr, status, error) {
+                    console.error(error);
+                }
+            });
+        }
+        else {
+            $("#div_botones_autorizacion").css("display", "none");
+        }
+    }
+
+    function CalcularTotalRequis() {
+        var total = 0;
+        var monetario = 0;
+        var counts = 0;
+        var requis = [];
+        var checks = $("input[type='checkbox']:checked");
+        checks.each(function () {
+            requis[counts] = ($(this).attr('id'));
+            counts++;
+        });
+        if (requis.length > 0) {
+            $.ajax({
+                type: "POST",
+                async: false,
+                url: "../REQUISICIONES/CalcularTotalRequi",
+                data: {
+                    requis: requis
+                },
+                success: function (response) {
+                    response = response.replace(",", "");
+                    total = parseFloat(response);
+                    monetario = total.toLocaleString('es-MX', { style: 'currency', currency: 'MXN' });
+                    $("#monto_total").text(monetario);
+                    $("#contador_autorizaciones").text(counts)
+                },
+                error: function (xhr, status, error) {
+                    console.error(error);
+                }
+            });
+        }
+        else {
+            monetario = total.toLocaleString('es-MX', { style: 'currency', currency: 'MXN' });
+            $("#monto_total").text(monetario);
+            $("#contador_autorizaciones").text(0)
+        }
+    }
+
+
+    //--------AUTORIZACION SIN AFECTAR EL PRESUPUESTO
+    function ShowAutorizarJustificarAutFinal(id_requisicion, modo, concepto_requi) {
+        $("justificacion_aut_final").val("");
+        $("#concepto_aut_final").val(concepto_requi);
+        if (modo == 4) { $("#btn_aut_final_enviar").text("Autorizar requisición y afectar presupuesto"); }
+        if (modo == 3) { $("#btn_aut_final_enviar").text("Autorizar requisición sin afectar presupuesto"); }
+        $("#btn_aut_final_enviar").attr("onclick", "AutorizarRequisicionesSinPresupuesto(" + id_requisicion + ", " + modo + ");");
+        $("#m_aut_final").modal("show");
+    }
+
+
+    function AutorizarRequisicionesSinPresupuesto(id_requisicion, modo) {
+        var justificacion = $("#justificacion_aut_final").val();
+        if (justificacion == "") {
+            iziToast.error({
+                title: 'Ingrese una justificación',
+                message: '',
+            });
+        }
+        else if (justificacion.length <= 20) {
+            iziToast.error({
+                title: 'Ingrese una justificación de mas de 20 caracteres',
+                message: '',
+            });
+        }
+        else {
+            jsShowWindowLoad();
+            $.ajax({
+                type: "POST",
+                async: true,
+                timeout: 900000,
+                url: "../REQUISICIONES/SolicitarAutorizacionDireccion",
+                data: {
+                    id_requisicion: id_requisicion,
+                    justificacion: justificacion,
+                    modo: modo
+                },
+                success: function (response) {
+                    jsRemoveWindowLoad();
+                    if (response == 0) {
+                        if (modo == 3 || modo == 4) {
+                            iziToast.success({
+                                title: 'Justificación de autorización enviada correctamente',
+                                message: '',
+                            });
+                        }
+                        else {
+                            iziToast.success({
+                                title: 'Solicitud de autorización enviada correctamente',
+                                message: '',
+                            });
+                        }
+                        AutorizarRequisicionesFinal(id_requisicion, modo);
+                        $("#m_aut_final").modal('hide');
+                        $("#m_detalle_requi_aut_final").modal("hide");
+                        $("#justificacion_aut_final").val("");
+                    }
+                    else {
+                        iziToast.error({
+                            title: 'Ocurrió un error al generar la autorización',
+                            message: '',
+                        });
+                    }
+                },
+                error: function (xhr, status, error) {
+                    jsRemoveWindowLoad();
+                    console.error(error);
+                }
+            });
+        }
+    }
+
+
+</script>

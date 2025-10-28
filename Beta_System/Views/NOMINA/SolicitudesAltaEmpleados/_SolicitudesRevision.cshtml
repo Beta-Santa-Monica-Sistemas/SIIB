@@ -1,0 +1,41 @@
+﻿@model List<Beta_System.Models.C_nomina_empleados_solicitudes>
+
+@{ 
+    int modo = ViewBag.modo;
+    string nombre_datatable;
+    if (modo == 1) { nombre_datatable = "datatable_solicitudes_validar"; }
+    else { nombre_datatable = "datatable_solicitudes_autorizar"; }
+}
+
+
+<table class="table table-bordered table-striped" id="@nombre_datatable">
+    <thead>
+        <tr class="bg-beta text-center">
+            <th>Folio</th>
+            <th>Nombre empleado</th>
+            <th>Despartamento</th>
+            <th>Puesto</th>
+            <th>Fecha registro</th>
+            <th>Usuario registró</th>
+            <th>Ver</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr class="text-center">
+                <td>@item.id_empleado_solicitud</td>
+                <td class="text-left">@item.Nombres @item.Apellido_paterno @item.Apellido_materno</td>
+                <td>@item.C_nomina_departamentos.nombre_departamento</td>
+                <td>@item.C_nomina_puestos.nombre_puesto</td>
+                <td>@string.Format(item.fecha_registro.Value.ToShortDateString(), "dd/MM/yyyy")</td>
+                <td>@item.C_usuarios_corporativo2.C_empleados.nombres @item.C_usuarios_corporativo2.C_empleados.apellido_paterno</td>
+                <td>
+                    <button class="btn btn_beta_icon" onclick="ConsultarSolciitudAltaEmpleado(@item.id_empleado_solicitud, @modo);"><i class="fa fa-bars"></i></button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
